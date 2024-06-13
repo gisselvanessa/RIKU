@@ -1,0 +1,494 @@
+<section class="section--spacing admin_add__user bg-blue">
+  <div class="jakay-container">
+    <div class="back-to-page d-flex">
+      <span (click)="back()" style="cursor: pointer"
+        ><img src="assets/images/backarrow.svg"
+      /></span>
+      <div class="ms-3 section-header">
+        <h3 class="text-primary font-38 fw-semibold">
+          {{ typeOfMeeting | translate }} {{ "Appointment" | translate }}
+        </h3>
+        <!-- <h3 class="text-primary font-24 mb-5 fw-semibold">Schedule Appointment</h3> -->
+        <p class="text-primary-light mt-2 font-14">
+          {{ "Schedule an appointment for inspection and visit" | translate }}
+        </p>
+      </div>
+    </div>
+    <form
+      [formGroup]="appointmentForm"
+      (ngSubmit)="submitAppointmentDetails()"
+      #scheduleAppointmentForm="ngForm"
+    >
+      <div class="row">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">
+              {{ "Date" | translate }}
+              <sup class="text-danger font-14">*</sup>
+            </label>
+            <input
+              #meetingDate
+              class="form-control input-meeting-date map"
+              type="text"
+              placeholder="{{ 'Enter Date' | translate }}"
+              (keydown)="(false)"
+              bsDatepicker
+              [minDate]="minDate"
+              [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+              formControlName="meeting_date"
+            />
+            <img
+              (click)="meetingDate.click()"
+              src="assets/images/calender.svg"
+              class="input-icon"
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                scheduleAppointmentForm.submitted &&
+                appointmentForm.controls['meeting_date'].invalid
+              "
+            >
+              {{ "Date is required" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ "Time" | translate }}
+              <sup class="text-danger font-14">*</sup>
+            </label>
+            <input
+              #meetingTime
+              class="form-control input-meeting-date map"
+              type="text"
+              (focus)="timeDrop.toggle()"
+              placeholder="{{ 'Enter Time' | translate }}"
+              formControlName="meeting_time"
+            />
+            <img
+              src="assets/images/time.svg"
+              (click)="timeDrop.toggle()"
+              class="input-icon"
+            />
+            <div ngbDropdown #timeDrop="ngbDropdown" class="doropdown_radio">
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu br-12 px-3 dropdown-scroll"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Search Time' | translate }}"
+                        [(ngModel)]="searchTime"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li *ngFor="let time of timeList | filter : searchTime">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="location"
+                          (change)="setMeetingTime($event)"
+                          id="{{ time }}"
+                          value="{{ time }}"
+                        />
+                        <label class="form-check-label" for="{{ time }}">{{
+                          time
+                        }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="
+                scheduleAppointmentForm.submitted &&
+                appointmentForm.controls['meeting_time'].invalid
+              "
+            >
+              {{ "Time is required" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-lg-6">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ "Location Reference" | translate }}
+              <sup class="text-danger font-14">*</sup>
+            </label>
+            <input
+              class="form-control map"
+              #meetingLocation
+              type="text"
+              placeholder="{{ 'Location Reference' | translate }}"
+              formControlName="meeting_location"
+            />
+            <img src="assets/images/location.svg" class="input-icon" />
+            <div
+              class="text-danger"
+              *ngIf="
+                scheduleAppointmentForm.submitted &&
+                appointmentForm.controls['meeting_location'].invalid
+              "
+            >
+              {{ "Location Reference is required" | translate }}
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-sm-6 col-xl-4">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Location' | translate }}</label>
+            <input
+              class="form-control"
+              type="text"
+              #meetingLocation
+              placeholder="{{'Location' | translate}}"
+              formControlName="meeting_location"
+            />
+            <img src="assets/images/location.svg" class="input-icon" />
+            <div
+              class="text-danger"
+              *ngIf="
+                scheduleAppointmentForm.submitted &&
+                appointmentForm.controls['meeting_location'].invalid
+              "
+            >
+              {{ 'Location is required' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-6 col-xl-6">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ 'Place Reference' | translate }} ({{ 'Optional' | translate }})</label
+            >
+            <input
+              class="form-control input-meeting-date-time"
+              type="text"
+              formControlName="additional_address"
+              placeholder="{{'Enter Place Reference' | translate}}"
+            />
+          </div>
+        </div> -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ "Province" | translate
+              }}<sup class="text-danger font-14">*</sup></label
+            >
+            <div ngbDropdown class="doropdown_radio">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{
+                  'text-secondary': appointmentForm.controls['province'].value
+                }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <ng-container>
+                  <span *ngIf="appointmentForm.controls['province'].value">{{
+                    appointmentForm.controls["province"].value | titlecase
+                  }}</span>
+                  <span *ngIf="!appointmentForm.controls['province'].value">{{
+                    "Select" | translate
+                  }}</span>
+                </ng-container>
+              </button>
+              <ul
+                ngbDropdownMenu
+                aria-labelledby="vehicle-type"
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Search Province' | translate }}"
+                        [(ngModel)]="searchProvince"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li
+                  *ngFor="
+                    let province of provinceList | filter : searchProvince;
+                    index as i
+                  "
+                >
+                  <a class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check br-12">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [checked]="
+                            appointmentForm.controls['province'].value ==
+                            province
+                          "
+                          (click)="setProvice(province)"
+                          name="province"
+                          id="province_{{ i }}"
+                          value="{{ province }}"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="province_{{ i }}"
+                          >{{ province | titlecase }}</label
+                        >
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div
+              *ngIf="scheduleAppointmentForm.submitted && appointmentForm.controls['province'].errors?.['required']"
+              class="text-danger"
+            >
+              {{ "Province is required" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ "City" | translate
+              }}<sup class="text-danger font-14">*</sup></label
+            >
+            <div ngbDropdown class="doropdown_radio">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{
+                  'text-secondary': appointmentForm.controls['city'].value
+                }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <ng-container>
+                  <span *ngIf="appointmentForm.controls['city'].value">{{
+                    appointmentForm.controls["city"].value | titlecase
+                  }}</span>
+                  <span *ngIf="!appointmentForm.controls['city'].value">{{
+                    "Select" | translate
+                  }}</span>
+                </ng-container>
+              </button>
+              <ul
+                ngbDropdownMenu
+                aria-labelledby="vehicle-type"
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Search City' | translate }}"
+                        [(ngModel)]="searchCity"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li
+                  *ngFor="
+                    let city of cityList | filter : searchCity;
+                    index as i
+                  "
+                >
+                  <a class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check br-12">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [checked]="
+                            appointmentForm.controls['city'].value == city
+                          "
+                          (click)="setCity(city)"
+                          name="city"
+                          id="city_{{ i }}"
+                          value="{{ city }}"
+                        />
+                        <label class="form-check-label" for="city_{{ i }}">{{
+                          city | titlecase
+                        }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li *ngIf="cityList.length == 0">
+                  <a class="dropdown-item" href="javascript:void(0)">
+                    {{ "No Cities Found" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div
+              *ngIf="scheduleAppointmentForm.submitted && appointmentForm.controls['city'].errors?.['required']"
+              class="text-danger"
+            >
+              {{ "City is required" | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+              >{{ "Parish" | translate
+              }}<sup class="text-danger font-14">*</sup></label
+            >
+            <div ngbDropdown class="doropdown_radio">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{
+                  'text-secondary': appointmentForm.controls['parish'].value
+                }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <ng-container>
+                  <span *ngIf="appointmentForm.controls['parish'].value">{{
+                    appointmentForm.controls["parish"].value | titlecase
+                  }}</span>
+                  <span *ngIf="!appointmentForm.controls['parish'].value">{{
+                    "Select" | translate
+                  }}</span>
+                </ng-container>
+              </button>
+              <ul
+                ngbDropdownMenu
+                aria-labelledby="vehicle-type"
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Search Parish' | translate }}"
+                        [(ngModel)]="searchParish"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li
+                  *ngFor="
+                    let parish of parishList | filter : searchParish;
+                    index as i
+                  "
+                >
+                  <a class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check br-12">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [checked]="
+                            appointmentForm.controls['parish'].value == parish
+                          "
+                          (click)="setParish(parish)"
+                          name="parish"
+                          id="parish_{{ i }}"
+                          value="{{ parish }}"
+                        />
+                        <label class="form-check-label" for="parish_{{ i }}">{{
+                          parish | titlecase
+                        }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li *ngIf="parishList.length == 0">
+                  <a class="dropdown-item" href="javascript:void(0)">
+                    {{ "No Parish Found" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              *ngIf="scheduleAppointmentForm.submitted && appointmentForm.controls['parish'].errors?.['required']"
+              class="text-danger"
+            >
+              {{ "Parish is required" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-sm-flex">
+        <button
+          class="btn primary-btn btn-sm btn--small border-1 me-sm-3"
+          [disabled]="loading"
+          type="submit"
+        >
+          <span
+            class="spinner-border text-primary btn-sm btn--small mt-3 mt-sm-0"
+            *ngIf="loading"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ "Submit" | translate }}
+        </button>
+        <button
+          class="btn primary-btn-outline btn-sm btn--small mt-3 mt-sm-0"
+          type="button"
+          (click)="back()"
+        >
+          {{ "Cancel" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

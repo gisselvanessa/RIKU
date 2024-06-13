@@ -1,0 +1,351 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="section-header">
+        <div class="back-to-page d-flex">
+          <span
+            style="cursor: pointer"
+            (click)="back()"
+            ><img
+              src="assets/images/backarrow.svg"
+          /></span>
+          <h3 class="font-38 text-primary ms-4 fw-semibold">
+            {{ teamMemberId ? ("Edit" | translate) : ("Add" | translate) }}
+            {{ "Team Member" | translate }}
+          </h3>
+        </div>
+      </div>
+      <div class="section-header" *ngIf="teamMemberId">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="switch-wrp d-flex align-items-center pe-3">
+            <p class="font-16 text-primary me-3" for="">
+              {{ teamMemberDetail.status | translate }}
+            </p>
+            <button data-bs-toggle="modal" data-bs-target="#deactivateuser">
+              <input
+                type="checkbox"
+                id="switch1"
+                (click)="changeStatus($event)"
+                [checked]="teamMemberDetail.status == 'Active'"
+              /><label class="switch" for="switch1">Toggle</label>
+            </button>
+            <button
+              *ngIf="modulePermissions.can_delete"
+              class="d-flex align-items-center ms-5"
+              (click)="deleteUser()"
+            >
+              <img
+                src="assets/images/view_vehicle/delete_red.svg"
+                alt="delete"
+              />
+              <span class="ms-2 text-red font-18">{{
+                "Delete" | translate
+              }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="memberForm" #form="ngForm">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Select Role" | translate
+              }}</label>
+              <div ngbDropdown class="doropdown_radio">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                  type="button"
+                  id="Role type"
+                  [ngClass]="{ 'item-shown': selectedRole, 'text-secondary':selectedRole }"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span [ngClass]="{ 'selected-label': selectedRole }">{{
+                    "Role" | translate
+                  }}</span>
+                  <span [ngClass]="{ 'selected-item': selectedRole }">{{
+                    selectedRole
+                  }}</span>
+                </button>
+                <ul
+                  ngbDropdownMenu
+                  class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                >
+                  <li>
+                    <label>{{ "Select Role" | translate }}</label>
+                  </li>
+                  <ng-container *ngIf="roleList.length > 0">
+                    <li *ngFor="let role of roleList">
+                      <input
+                        ngbDropdownItem
+                        class="form-control"
+                        type="text"
+                        href="javascript:void(0)"
+                        [ngClass]="{
+                          'selected-dropdown-item': selectedRole == role.name
+                        }"
+                        (click)="setRole(role)"
+                        [value]="role.name"
+                      />
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+              <div
+                *ngIf="
+                  memberForm.controls['company_role_id'].invalid &&
+                  memberForm.controls['company_role_id'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                memberForm.controls['company_role_id'].errors?.['required']
+              "
+                  class="text-danger"
+                >
+                  {{ "Company Role is required" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Select Company" | translate
+              }}</label>
+              <div ngbDropdown class="doropdown_radio">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                  type="button"
+                  id="Role type"
+                  [ngClass]="{ 'item-shown': selectedCompany, 'text-secondary':selectedCompany }"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span [ngClass]="{ 'selected-label': selectedCompany }">{{
+                    "Company" | translate
+                  }}</span>
+                  <span [ngClass]="{ 'selected-item': selectedCompany }">{{
+                    selectedCompany
+                  }}</span>
+                </button>
+                <ul
+                  ngbDropdownMenu
+                  class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                >
+                  <li>
+                    <label>{{ "Select Company" | translate }}</label>
+                  </li>
+                  <ng-container *ngIf="companyList.length > 0">
+                    <li *ngFor="let company of companyList">
+                      <input
+                        ngbDropdownItem
+                        class="form-control"
+                        href="javascript:void(0)"
+                        [ngClass]="{
+                          'selected-dropdown-item':
+                            selectedCompany == company.name
+                        }"
+                        (click)="setCompany(company)"
+                        [value]="company.name"
+                        type="text"
+                      />
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+
+              <div
+                *ngIf="
+                  memberForm.controls['company_id'].invalid &&
+                  memberForm.controls['company_id'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                  memberForm.controls['company_id'].errors?.['required']
+                "
+                  class="text-danger"
+                >
+                  {{ "Company is required" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Name" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                AlphaNumeric
+                placeholder="{{ 'Enter Name' | translate }}"
+                formControlName="first_name"
+                maxlength="20"
+              />
+              <div
+                *ngIf="
+                  memberForm.controls['first_name'].invalid &&
+                  memberForm.controls['first_name'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                  memberForm.controls['first_name'].errors?.['required']
+                "
+                  class="text-danger"
+                >
+                  {{ "Name is required" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Surname" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                AlphaNumeric
+                placeholder="{{ 'Enter Surname' | translate }}"
+                formControlName="last_name"
+                maxlength="20"
+              />
+              <div
+                *ngIf="
+                  memberForm.controls['last_name'].invalid &&
+                  memberForm.controls['last_name'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                  memberForm.controls['last_name'].errors?.['required']
+                "
+                  class="text-danger"
+                >
+                  {{ "Surname is required" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Email" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="{{ 'Enter Email' | translate }}"
+                formControlName="email"
+              />
+              <div
+                *ngIf="
+                  memberForm.controls['email'].invalid &&
+                  memberForm.controls['email'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                  memberForm.controls['email'].errors?.['required']
+                "
+                  class="text-danger"
+                >
+                  {{ "Email is required" | translate }}
+                </div>
+              </div>
+
+              <div
+                *ngIf="
+                  memberForm.controls['email'].errors?.['pattern']
+                "
+                class="text-danger"
+              >
+                {{ "Enter Valid Email" | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                "Mobile Number" | translate
+              }}</label>
+              <ngx-intl-tel-input
+                [cssClass]="'form-control w-100'"
+                [preferredCountries]="preferredCountries"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[
+                  SearchCountryField.Iso2,
+                  SearchCountryField.Name
+                ]"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="CountryISO.Ecuador"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [separateDialCode]="separateDialCode"
+                [numberFormat]="PhoneNumberFormat.National"
+                (countryChange)="clearCountrySearchBox()"
+                name="mobile_no"
+                (input)="formatNumber($event)"
+                formControlName="mobile_no"
+              >
+              </ngx-intl-tel-input>
+
+              <div
+                *ngIf="
+                  form.form.value.mobile_no &&
+                  form.form.controls['mobile_no'].errors
+                "
+                class="text-danger"
+              >
+                {{ "Please enter valid mobile number" | translate }}
+              </div>
+
+              <div
+                *ngIf="
+                  memberForm.controls['mobile_no'].invalid &&
+                  memberForm.controls['mobile_no'].touched
+                "
+              >
+                <div
+                  *ngIf="
+                  memberForm.controls['mobile_no'].errors?.['required']
+                "
+                  class="text-danger"
+                >
+                  {{ "Mobile Number is required" | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-grp mt-5 d-flex">
+        <button
+          class="btn primary-btn me-3 border-1"
+          type="submit"
+          (click)="addUpdateMember()"
+        >
+          {{ "Submit" | translate }}
+        </button>
+        <a
+          [routerLink]="['/admin/team-members/members-list']"
+          class="btn primary-btn-outline"
+          >{{ "Cancel" | translate }}</a
+        >
+      </div>
+    </form>
+  </div>
+</section>

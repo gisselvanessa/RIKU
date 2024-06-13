@@ -1,0 +1,341 @@
+<div class="summary-wrp" *ngIf="loanDetail">
+  <div class="applicant-doc-wrp">
+    <ng-template #showDocuments let-documents="documentList">
+      <div class="doc-box">
+        <div
+          class="bg-white px-3 px-md-3 px-xl-3 py-3 py-md-4 br-5 border-blue"
+        >
+          <h4 class="font-20 fw-semibold text-secondary mb-4">
+            {{ "Personal Documents" | translate }}
+          </h4>
+          <div class="row">
+            <ng-container
+              *ngFor="let document of documents['personal']['primary']"
+            >
+              <div class="col-md-6 col-lg-4">
+                <div class="check-form">
+                  <div class="form-group">
+                    <div class="radio-check checkbox-check br-12">
+                      <div class="form-check form-check-inline check-bg-none">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="personal-doc"
+                          id="check-{{ document.key }}"
+                          [checked]="
+                            loanDocuments[document.key] &&
+                            loanDocuments[document.key].is_verified
+                          "
+                        />
+                        <label class="form-check-label text-primary fw-medium font-17">{{
+                          document.name | translate
+                        }}</label>
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                  <div class="d-flex">
+                    <div
+                      class="document-uploded-wrp mb-3 justify-content-center"
+                    >
+                      <div class="position-relative doc-wrp">
+                        <div class="uploded-document">
+                          <a
+                            [href]="loanDocuments[document.key].url"
+                            target="_blank"
+                          >
+                            <img
+                              src="assets/images/expert-evolution/report-2.png"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container> -->
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="documents['personal']['additional']">
+            <h4 class="font-20 fw-semibold text-secondary mb-4 mt-5">
+              {{ "Additional documents" | translate }}
+              {{ "(Optional)" | translate }}
+            </h4>
+            <div class="row">
+              <ng-container
+                *ngFor="let document of documents['personal']['additional']"
+              >
+                <div class="col-md-6 col-lg-4 col-xl-4">
+                  <div class="check-form">
+                    <div class="form-group">
+                      <div class="radio-check checkbox-check br-12">
+                        <div class="form-check form-check-inline check-bg-none">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="personal-doc"
+                            id="check-{{ document.key }}"
+                            [checked]="
+                              loanDocuments[document.key] &&
+                              loanDocuments[document.key].is_verified
+                            "
+                          />
+                          <label class="form-check-label text-primary fw-medium font-17">{{
+                            document.name | translate
+                          }}</label>
+                          <span class="check-checkmark"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                    <div class="d-flex">
+                      <div
+                        class="document-uploded-wrp mb-3 justify-content-center"
+                      >
+                        <div class="position-relative doc-wrp">
+                          <div class="uploded-document">
+                            <a
+                              [href]="loanDocuments[document.key].url"
+                              target="_blank"
+                            >
+                              <img
+                                src="assets/images/expert-evolution/report-2.png"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container> -->
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="doc-box" *ngIf="documents['income']">
+        <div
+          class="bg-white px-3 px-md-3 px-xl-3 py-3 py-md-4 br-5 border-blue"
+        >
+          <h4 class="font-20 fw-semibold text-secondary mb-4">
+            {{ "Justification Of Income" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-md-6 col-lg-4 col-xl-4"
+              *ngFor="let document of documents['income']['primary']"
+            >
+              <div class="check-form">
+                <div class="form-group">
+                  <div class="radio-check checkbox-check br-12">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="personal-doc"
+                        id="check-{{ document.key }}"
+                        [checked]="
+                          loanDocuments[document.key] &&
+                          loanDocuments[document.key].is_verified
+                        "
+                      />
+                      <label class="form-check-label text-primary fw-medium font-17">{{
+                        document.name | translate
+                      }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                <div class="d-flex">
+                  <div class="document-uploded-wrp mb-3 justify-content-center">
+                    <div class="position-relative doc-wrp">
+                      <div class="uploded-document">
+                        <a
+                          [href]="loanDocuments[document.key].url"
+                          target="_blank"
+                        >
+                          <img
+                            src="assets/images/expert-evolution/report-2.png"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container> -->
+            </div>
+          </div>
+          <ng-container *ngIf="documents['income']['additional']">
+            <h4 class="font-20 fw-semibold text-secondary mb-4 mt-5">
+              {{ "Additional documents" | translate }}
+              {{ "(Optional)" | translate }}
+            </h4>
+            <div class="row">
+              <div
+                *ngFor="let document of documents['income']['additional']"
+                [ngClass]="documents['income']['additional'].length === 4 ? 'col-lg-3' : documents['income']['additional'].length === 3 ?  'col-lg-4': documents['income']['additional'].length < 3 ?  'col-lg-6': 'col-lg-12'"
+              >
+                <div class="check-form">
+                  <div class="form-group">
+                    <div class="radio-check checkbox-check br-12">
+                      <div class="form-check form-check-inline check-bg-none">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="personal-doc"
+                          id="check-{{ document.key }}"
+                          [checked]="
+                            loanDocuments[document.key] &&
+                            loanDocuments[document.key].is_verified
+                          "
+                        />
+                        <label class="form-check-label text-primary fw-medium font-17">{{
+                          document.name | translate
+                        }}</label>
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                  <div class="d-flex">
+                    <div
+                      class="document-uploded-wrp mb-3 justify-content-center"
+                    >
+                      <div class="position-relative doc-wrp">
+                        <div class="uploded-document">
+                          <a
+                            [href]="loanDocuments[document.key].url"
+                            target="_blank"
+                          >
+                            <img
+                              src="assets/images/expert-evolution/report-2.png"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container> -->
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="doc-box pb-0" *ngIf="documents['heritage']">
+        <div
+          class="bg-white px-3 px-md-3 px-xl-3 py-3 py-md-4 br-5 border-blue"
+        >
+          <h4 class="font-20 fw-semibold text-secondary mb-4">
+            {{ "Heritage" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-sm-6 col-lg-4"
+              *ngFor="let document of documents['heritage']['primary']"
+            >
+              <div class="check-form">
+                <div class="form-group">
+                  <div class="radio-check checkbox-check br-12">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="personal-doc"
+                        id="check-{{ document.key }}"
+                        [checked]="
+                          loanDocuments[document.key] &&
+                          loanDocuments[document.key].is_verified
+                        "
+                      />
+                      <label class="form-check-label text-primary fw-medium font-17">{{
+                        document.name | translate
+                      }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                <div class="d-flex">
+                  <div class="document-uploded-wrp mb-3 justify-content-center">
+                    <div class="position-relative doc-wrp">
+                      <div class="uploded-document">
+                        <a
+                          [href]="loanDocuments[document.key].url"
+                          target="_blank"
+                        >
+                          <img
+                            src="assets/images/expert-evolution/report-2.png"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container> -->
+            </div>
+          </div>
+          <h4 class="font-20 fw-semibold text-secondary mb-4 mt-5">
+            {{ "Additional documents" | translate }}
+            {{ "(Optional)" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-md-4"
+              *ngFor="let document of documents['heritage']['additional']"
+            >
+              <div class="check-form">
+                <div class="form-group">
+                  <div class="radio-check checkbox-check br-12">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="personal-doc"
+                        id="check-{{ document.key }}"
+                        [checked]="
+                          loanDocuments[document.key] &&
+                          loanDocuments[document.key].is_verified
+                        "
+                      />
+                      <label class="form-check-label text-primary fw-medium font-17">{{
+                        document.name | translate
+                      }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ng-container *ngIf="loanDocuments[document.key]">
+                <div class="d-flex">
+                  <div class="document-uploded-wrp mb-3 justify-content-center">
+                    <div class="position-relative doc-wrp">
+                      <div class="uploded-document">
+                        <a
+                          [href]="loanDocuments[document.key].url"
+                          target="_blank"
+                        >
+                          <img
+                            src="assets/images/expert-evolution/report-2.png"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="showDocuments; context: ctx">
+    </ng-container>
+  </div>
+</div>

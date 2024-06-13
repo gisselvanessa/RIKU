@@ -1,0 +1,947 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <ng-container *ngIf="!loading">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="section-header">
+          <div class="back-to-page d-flex">
+            <span (click)="goback()">
+              <a href="javascript:void(0)"
+                ><img src="assets/images/backarrow.svg"
+              /></a>
+            </span>
+            <div
+              class="d-flex section-header justify-content-between w-100 align-items-center"
+            >
+              <h3 class="ms-3 font-38 text-primary fw-semibold">
+                {{ expertId ? ("Edit" | translate) : ("Add" | translate) }}
+                {{ "Expert User" | translate }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="section-header" *ngIf="expertId">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="switch-wrp d-flex align-items-center pe-3">
+              <p
+                class="font-16 text-primary me-3"
+                *ngIf="expertDetail.is_active == true"
+                for=""
+              >
+                {{ "Active" | translate }}
+              </p>
+              <p
+                class="font-16 text-primary me-3"
+                *ngIf="expertDetail.is_active == false"
+                for=""
+              >
+                {{ "Inactive" | translate }}
+              </p>
+              <button data-bs-toggle="modal" data-bs-target="#deactivateuser">
+                <input
+                  type="checkbox"
+                  id="switch1"
+                  (click)="changeStatus($event)"
+                  [checked]="expertDetail.is_active == true"
+                /><label class="switch" for="switch1">Toggle</label>
+              </button>
+              <button
+                *ngIf="modulePermissions.can_delete"
+                class="d-flex align-items-center ms-5"
+                (click)="deleteExpert()"
+              >
+                <img
+                  src="assets/images/view_vehicle/delete_red.svg"
+                  alt="delete"
+                />
+                <span class="ms-2 text-red font-18">{{
+                  "Delete" | translate
+                }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-xl-3 col-lg-8"></div>
+        <div class="col-xl-9 col-lg-6"></div>
+        <div class="col-xl-2 col-lg-6 text-center">
+          <div class="add__user-img mb-4 mb-lg-0">
+            <div class="admin__add-img">
+              <img
+                [src]="profileImageURL"
+                *ngIf="profileImageURL"
+                alt="admin-img"
+              />
+              <img
+                src="assets/images/user.png"
+                *ngIf="!profileImageURL"
+                alt="admin-img"
+              />
+            </div>
+            <input
+              type="file"
+              class="d-none"
+              accept="image/*"
+              (change)="onProfilePhotoChange($event)"
+              #profilePhotoInput
+            />
+            <ng-container *ngIf="!expertId">
+              <button
+                class="btn btn-orange mt-4 d-block mx-auto"
+                (click)="profilePhotoInput.click()"
+              >
+                <span
+                  *ngIf="isProfileImageUpdating"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ "Upload Image" | translate }}
+              </button>
+              <a
+                class="text-primary-light font-16 mt-4"
+                *ngIf="profileImageURL"
+                (click)="deleteProfilePhoto()"
+                >{{ "Remove Image" | translate }}</a
+              >
+            </ng-container>
+            <a
+              *ngIf="expertId"
+              class="upload-pic-link"
+              (click)="profilePhotoInput.click()"
+              href="javascript:void(0)"
+            >
+              <span
+                *ngIf="isProfileImageUpdating"
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              {{ "Change Photo" | translate }}
+            </a>
+          </div>
+        </div>
+        <div class="col-xl-9 col-lg-6">
+          <form [formGroup]="expertInfoForm" #form="ngForm">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Name" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      OnlyAlphabets
+                      placeholder="{{ 'Enter Name' | translate }}"
+                      formControlName="first_name"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.first_name.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.first_name.invalid &&
+                        expertInfoFormControls.first_name.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.first_name.errors?.required
+                        "
+                      >
+                        {{ "Name is required" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.first_name.errors?.minlength
+                        "
+                      >
+                        {{
+                          "Name must be at least 3 characters long"
+                            | translate
+                        }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.first_name.errors
+                            ?.cannotContainSpace
+                        "
+                      >
+                        {{ "Name can not contain space" | translate }}.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Surname" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'Enter Surname' | translate }}"
+                      OnlyAlphabets
+                      formControlName="last_name"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.last_name.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.last_name.invalid &&
+                        expertInfoFormControls.last_name.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.last_name.errors?.required
+                        "
+                      >
+                        {{ "Surname is required" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.last_name.errors?.minlength
+                        "
+                      >
+                        {{
+                          "Surname must be at least 3 characters long"
+                            | translate
+                        }}.
+                      </small>
+                    </div>
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        expertInfoFormControls.last_name.errors
+                          ?.cannotContainSpace
+                      "
+                    >
+                      {{ "Surname can not contain space" | translate }}.
+                    </small>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">
+                      {{ "Email ID" | translate }}</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'Enter Email ID' | translate }}"
+                      formControlName="email"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.email.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.email.invalid &&
+                        expertInfoFormControls.email.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="expertInfoFormControls.email.errors?.required"
+                      >
+                        {{ "Email is required" | translate }}.
+                      </small>
+
+                      <small
+                        class="text-danger"
+                        *ngIf="expertInfoFormControls.email.errors?.pattern"
+                      >
+                        {{ "Please enter valid Email ID" | translate }}.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <ngx-intl-tel-input
+                      [cssClass]="'form-control w-100'"
+                      [preferredCountries]="preferredCountries"
+                      [enableAutoCountrySelect]="true"
+                      [enablePlaceholder]="true"
+                      [searchCountryFlag]="true"
+                      [searchCountryField]="[
+                        searchCountryField.Iso2,
+                        searchCountryField.Name
+                      ]"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.mobile_no.invalid
+                      }"
+                      [selectFirstCountry]="false"
+                      [selectedCountryISO]="countryISO.Ecuador"
+                      [maxLength]="15"
+                      [phoneValidation]="true"
+                      [separateDialCode]="separateDialCode"
+                      (countryChange)="clearCountrySearchBox()"
+                      name="mobile_no"
+                      formControlName="mobile_no"
+                    >
+                    </ngx-intl-tel-input>
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.mobile_no.invalid &&
+                        expertInfoFormControls.mobile_no.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.mobile_no.errors
+                            ?.validatePhoneNumber?.valid == false
+                        "
+                      >
+                        {{
+                          "Please enter valid Mobile Number according to selected country"
+                            | translate
+                        }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.mobile_no.errors?.required
+                        "
+                      >
+                        {{ "Mobile Number is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Expert License" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      AlphaNumericWithoutSpace
+                      minlength="6"
+                      maxlength="6"
+                      formControlName="expert_code"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.expert_code.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.expert_code.invalid &&
+                        expertInfoFormControls.expert_code.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.expert_code.errors?.required
+                        "
+                      >
+                        {{ "Expert License is required" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          isFormSubmitted &&
+                          (expertInfoFormControls.expert_code.errors
+                            ?.minlength ||
+                            expertInfoFormControls.expert_code.errors
+                              ?.maxlength)
+                        "
+                      >
+                        {{
+                          "Expert License must be 17 characters long"
+                            | translate
+                        }}.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">Code Number System</label>
+                    <input type="text" class="form-control" AlphaNumericWithoutSpace minlength="4" maxlengt="10"
+                      placeholder="Enter Code Number System" formControlName="code_num_system" [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  expertInfoForm.invalid &&
+                                  expertInfoFormControls.code_num_system.invalid
+                              }" />
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                expertInfoFormControls.code_num_system.invalid &&
+                                expertInfoFormControls.code_num_system.errors
+                              ">
+                      <small class="text-danger" *ngIf="
+                                  expertInfoFormControls.code_num_system.errors?.required
+                                ">
+                        Code Number System is required.
+                      </small>
+                      <small class="text-danger" *ngIf="
+                                  expertInfoFormControls.code_num_system.errors?.minlength
+                                ">
+                        Code Number System must be at least 4 characters long.
+                      </small>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Address" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="additional_address"
+                      #additionalAddress
+                      placeholder="{{ 'Enter Address' | translate }}"
+                    />
+                    <img src="assets/images/location.svg" class="input-icon" />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.additional_address.invalid &&
+                        expertInfoFormControls.additional_address.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          expertInfoFormControls.additional_address.errors
+                            ?.required
+                        "
+                      >
+                        {{ "Address is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Province" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'Enter Province' | translate }}"
+                      OnlyAlphabets
+                      formControlName="province"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoFormControls.province.invalid
+                      }"
+                      type="text"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.province.invalid &&
+                        expertInfoFormControls.province.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="expertInfoFormControls.province.errors?.required"
+                      >
+                        {{ "Province is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "City" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'Enter City' | translate }}"
+                      OnlyAlphabets
+                      formControlName="city"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.city.errors
+                      }"
+                      type="text"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.city.invalid &&
+                        expertInfoFormControls.city.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="expertInfoFormControls.city.errors?.required"
+                      >
+                        {{ "City is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Parish" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'Enter Parish' | translate }}"
+                      formControlName="parish"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          expertInfoForm.invalid &&
+                          expertInfoFormControls.parish.errors
+                      }"
+                      type="text"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        expertInfoFormControls.parish.invalid &&
+                        expertInfoFormControls.parish.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="expertInfoFormControls.parish.errors?.required"
+                      >
+                        {{ "Parish is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div> -->
+
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Province" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span *ngIf="expertInfoFormControls['province'].value">{{
+                            expertInfoFormControls['province'].value | titlecase
+                            }}</span>
+                          <span *ngIf="!expertInfoFormControls['province'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search Province' | translate}}"
+                                [(ngModel)]="searchProvince" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let province of provinceList
+                            | filter : searchProvince;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                expertInfoFormControls['province'].value ==
+                                  province
+                                " (click)="setProvice(province)" name="province" id="province_{{ i }}"
+                                  value="{{ province }}" />
+                                <label class="form-check-label" for="province_{{ i }}">{{ province | titlecase
+                                  }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="isSubmitted && expertInfoFormControls['province'].errors?.['required']"
+                      class="text-danger"
+                    >
+                      {{ "Province is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "City" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span *ngIf="expertInfoFormControls['city'].value">{{
+                            expertInfoFormControls['city'].value | titlecase
+                            }}</span>
+                          <span *ngIf="!expertInfoFormControls['city'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search City' | translate}}"
+                                [(ngModel)]="searchCity" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let city of cityList | filter : searchCity;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                expertInfoFormControls['city'].value == city
+                                " (click)="setCity(city)" name="city" id="city_{{ i }}" value="{{ city }}" />
+                                <label class="form-check-label" for="city_{{ i }}">{{ city | titlecase }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li *ngIf="cityList.length == 0">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            {{ 'No Cities Found' | translate }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                    *ngIf="isSubmitted && expertInfoFormControls['city'].errors?.['required']"
+                    class="text-danger"
+                  >
+                    {{ "City is required" | translate }}
+                  </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Parish" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span *ngIf="expertInfoFormControls['parish'].value">{{
+                            expertInfoFormControls['parish'].value | titlecase
+                            }}</span>
+                          <span *ngIf="!expertInfoFormControls['parish'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search Parish' | translate}}"
+                                [(ngModel)]="searchParish" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let parish of parishList | filter : searchParish;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                expertInfoFormControls['parish'].value == parish
+                                " (click)="setParish(parish)" name="parish" id="parish_{{ i }}"
+                                  value="{{ parish }}" />
+                                <label class="form-check-label" for="parish_{{ i }}">{{ parish | titlecase }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li *ngIf="parishList.length == 0">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            {{ 'No Parish Found' | translate }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div
+                    *ngIf="isSubmitted && expertInfoFormControls['parish'].errors?.['required']"
+                    class="text-danger"
+                  >
+                    {{ "Parish is required" | translate }}
+                  </div>
+                  </div>
+                </div>
+
+                <div class="user-selection-wrp mb-4 row">
+                  <div class="col-12 col-xl-8 user-type-wrp">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Gender" | translate
+                    }}</label>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              id="Male"
+                              (change)="setGender('male')"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  expertInfoFormControls.gender.invalid
+                              }"
+                              [checked]="
+                                expertInfoFormControls.gender.value == 'male'
+                              "
+                            />
+                            <label class="form-check-label" for="Male">{{
+                              "Male" | translate
+                            }}</label>
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              (change)="setGender('female')"
+                              id="Female"
+                              value="female"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  expertInfoFormControls.gender.invalid
+                              }"
+                              [checked]="
+                                expertInfoFormControls.gender.value == 'female'
+                              "
+                            />
+                            <label class="form-check-label" for="Female">{{
+                              "Female" | translate
+                            }}</label>
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              (change)="setGender('other')"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  expertInfoFormControls.gender.invalid
+                              }"
+                              id="Others"
+                              value="other"
+                              [checked]="
+                                expertInfoFormControls.gender.value == 'other'
+                              "
+                            />
+                            <label class="form-check-label" for="Others">{{
+                              "Others" | translate
+                            }}</label>
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          isFormSubmitted &&
+                          expertInfoFormControls.gender.invalid &&
+                          expertInfoFormControls.gender.errors
+                        "
+                      >
+                        <small
+                          class="text-danger"
+                          *ngIf="expertInfoFormControls.gender.errors?.required"
+                        >
+                          {{ "Gender is required" | translate }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-12 col-xl-8">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Upload Documents" | translate
+                    }}</label>
+                    <input
+                      type="file"
+                      class="d-none c-none"
+                      #expertDocument
+                      accept="image/*, application/pdf"
+                      (change)="onDocumentChange($event)"
+                      multiple
+                    />
+                    <span
+                      *ngIf="isDocumentUploading"
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <div class="vehicle__uploaded-photo mt-3">
+                      <div class="d-flex flex-wrap">
+                        <div
+                          class="photo-wrp me-2 mb-2 c-poiner"
+                          *ngIf="expertDocuments.length == 0"
+                        >
+                          <a
+                            href="javascript:void(0)"
+                            (click)="expertDocument.click()"
+                            ><img
+                              src="assets/images/upload-icon.svg"
+                              class="uplode-icon upload-expert-icon p-4 br-12"
+                          /></a>
+                        </div>
+                        <ng-container *ngIf="expertDocuments.length > 0">
+                          <div
+                            class="photo-wrp me-2 mb-2"
+                            *ngFor="let document of expertDocuments; index as i"
+                          >
+                            <span (click)="deleteDocument(i)">×</span>
+                            <ng-container
+                              *ngIf="
+                                getFileType(document.download_url) == 'image'
+                              "
+                            >
+                              <a
+                                href="{{ document.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  [src]="document.download_url"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="
+                                getFileType(document.download_url) == 'pdf'
+                              "
+                            >
+                              <a
+                                href="{{ document.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/pdf_icon.png"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="
+                                getFileType(document.download_url) == 'doc'
+                              "
+                            >
+                              <a
+                                href="{{ document.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/doc_icon.png"
+                              /></a>
+                            </ng-container>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex flex-wrap">
+              <button
+                class="btn primary-btn me-3 mb-2 border-1"
+                type="submit"
+                (click)="addUpdateExpert()"
+              >
+                <span
+                  *ngIf="savingDetail"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span
+                >{{ expertId ? ("Save" | translate) : ("Submit" | translate) }}
+              </button>
+              <a
+                class="btn primary-btn-outline mb-2"
+                [routerLink]="['/admin/experts']"
+                >{{ "Cancel" | translate }}</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <app-loader></app-loader>
+    </ng-container>
+  </div>
+</section>

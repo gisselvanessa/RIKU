@@ -1,0 +1,502 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Team Members" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+        "Search" | translate
+      }}</label>
+      <div class="row">
+        <div class="col-xl-9 col-md-6">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="searchText"
+                placeholder="{{ 'Search by Keyword' | translate }}"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="getFilterTeamMemberList()">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-3" *ngIf="modulePermissions.can_create">
+          <div class="form-group search-grp add-vehicle ms-2">
+            <a
+              routerLink="/admin/team-members/add-members"
+              class="btn primary-btn btn-sm br-12 py-3"
+            >
+              + {{ "Add Team Member" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Filters" | translate
+        }}</label>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myRoleDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="multipledata-hide">{{
+                  selectedRole.length > 0
+                    ? selectedRole.join(", ")
+                    : ("Role" | translate)
+                }}</span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let roleData of roleList">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="Status"
+                          (change)="selectValue($event, 'role', roleData.name)"
+                          id="{{ roleData.uuid }}"
+                          value="{{ roleData.uuid }}"
+                          [checked]="selectedRoleId.indexOf(roleData.uuid) > -1"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ roleData.uuid }}"
+                          >{{ roleData.name | translate }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myRoleDrop.close(); getFilterTeamMemberList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myCompanyDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedCompany.length > 0 }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="multipledata-hide">
+                  {{
+                    selectedCompany.length > 0
+                      ? selectedCompany.join(", ")
+                      : ("Company" | translate)
+                  }}
+                </span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let companyData of companyList">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="Status"
+                          (change)="
+                            selectValue($event, 'company', companyData.name)
+                          "
+                          id="{{ companyData.uuid }}"
+                          value="{{ companyData.uuid }}"
+                          [checked]="
+                            selectedCompanyId.indexOf(companyData.uuid) > -1
+                          "
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ companyData.uuid }}"
+                          >{{ companyData.name | translate }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myCompanyDrop.close(); getFilterTeamMemberList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myStatusDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedStatus }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{
+                  selectedStatus
+                    ? (selectedStatus | translate)
+                    : ("Status" | translate)
+                }}
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let statusData of statusList">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="Status"
+                          (change)="
+                            selectValue($event, 'status', statusData.status)
+                          "
+                          id="{{ statusData.id }}"
+                          value="{{ statusData.id }}"
+                          [checked]="statusData.status === selectedStatus"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ statusData.id }}"
+                          >{{ statusData.status | translate }}</label
+                        >
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myStatusDrop.close(); getFilterTeamMemberList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center" *ngIf="searchApplied">
+          <h3 class="text-primary fw-semibold font-28">
+            {{ "Search Results" | translate }}
+          </h3>
+          <a
+            href="javascript:void(0)"
+            (click)="clearAll()"
+            class="ms-4 text-secondary text-underline"
+            >{{ "Clear All Filters" | translate }}</a
+          >
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <ng-container *ngFor="let role of selectedRole">
+          <span class="pill"
+            >{{ role
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="removeRole(role)"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+
+        <ng-container *ngFor="let company of selectedCompany">
+          <span class="pill"
+            >{{ company
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="removeCompany(company)"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+
+        <ng-container *ngIf="selectedStatus">
+          <span class="pill"
+            >{{ selectedStatus | translate
+            }}<a class="ms-3" href="javascript:void(0)" (click)="removeStatus()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+    <div class="condition-tabs pb-5">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+            <table class="table mb-0 p-1">
+              <thead>
+                <th>
+                  <span>{{ "Sr. No." | translate }}</span>
+                </th>
+                <th (click)="setSorting('FIRST_NAME')">
+                  <span
+                    >{{ "Name" | translate }}
+                    <img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th (click)="setSorting('LAST_NAME')">
+                  <span
+                    >{{ "Surname" | translate }}
+                    <img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th (click)="setSorting('ROLE')">
+                  <span
+                    >{{ "Role" | translate }}
+                    <img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th (click)="setSorting('COMPANY')">
+                  <span
+                    >{{ "Company" | translate }}
+                    <img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th>
+                  <span>{{ "Email" | translate }}</span>
+                </th>
+                <th>
+                  <span>{{ "Mobile Number" | translate }}</span>
+                </th>
+                <th (click)="setSorting('CREATED_DATE')">
+                  <span
+                    >{{ "Created Date" | translate }}
+                    <img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th>
+                  <span>{{ "Active/Inactive" | translate }}</span>
+                </th>
+                <th>
+                  <span>{{ "Actions" | translate }}</span>
+                </th>
+              </thead>
+              <tbody *ngIf="!modulePermissions.can_list">
+                <tr class="text-center">
+                  <td colspan="10">
+                    {{ "You Can't Access to these Data" | translate }}
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="modulePermissions.can_list">
+                <ng-container *ngIf="!loading; else loadingTemplate">
+                  <ng-container
+                    *ngIf="teamMemberList.length > 0; else noRecordsTemplate"
+                  >
+                    <tr
+                      *ngFor="let teamMember of teamMemberList; let i = index"
+                    >
+                      <td>{{ limit * (page - 1) + (i + 1) }}</td>
+                      <td>{{ teamMember.first_name | titlecase }}</td>
+                      <td>{{ teamMember.last_name | titlecase }}</td>
+
+                      <td
+                        *ngIf="
+                          teamMember.company_role[0].company_role_name === 'NA';
+                          else assignedRole
+                        "
+                        class="text-danger"
+                      >
+                        {{ teamMember.company_role[0].company_role_name }}
+                      </td>
+
+                      <ng-template #assignedRole>
+                        <td>
+                          {{
+                            teamMember.company_role[0].company_role_name
+                              | titlecase
+                          }}
+                        </td>
+                      </ng-template>
+                      <td>
+                        {{
+                          teamMember.company_role[0].company.company_name
+                            | titlecase
+                        }}
+                      </td>
+                      <td>{{ teamMember.email }}</td>
+                      <td>
+                        {{ teamMember.country_code }} {{ teamMember.mobile_no }}
+                      </td>
+                      <td>{{ teamMember.created_at | date : "MM-dd-YYYY" }}</td>
+                      <td>
+                        <div
+                          class="switch-wrp d-flex align-items-center mb-2"
+                          *ngIf="modulePermissions.can_edit"
+                        >
+                          <input
+                            type="checkbox"
+                            [checked]="teamMember.status == 'Active'"
+                            name="checkbox-list"
+                            (click)="changeStatus($event, i)"
+                            value="{{ teamMember.status }}"
+                            id="switch0{{ i }}"
+                          /><label class="switch" for="switch0{{ i }}"
+                            >Toggle</label
+                          >
+                        </div>
+                      </td>
+                      <td>
+                        <a
+                          href="javascript:void(0)"
+                          *ngIf="modulePermissions.can_view_details"
+                          routerLink="/admin/team-members/team-member-details/{{
+                            teamMember.user_id
+                          }}"
+                        >
+                          <img src="assets/images/eye-open.svg" class="ms-3"
+                        /></a>
+                        <a
+                          *ngIf="modulePermissions.can_edit"
+                          href="javascript:void(0);"
+                          (click)="editUser(teamMember.user_id)"
+                        >
+                          <img
+                            src="assets/images/vehicle-list/pen-purple-icon.svg"
+                            class="ms-3"
+                          />
+                        </a>
+                        <a
+                          href="javascript:void(0);"
+                          *ngIf="modulePermissions.can_delete"
+                          (click)="deleteUser(i)"
+                        >
+                          <img
+                            src="assets/images/vehicle-list/del-icon.svg"
+                            class="ms-3"
+                          />
+                        </a>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-template #noRecordsTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">{{ "No records found" | translate }}</td>
+                    </tr>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingTemplate>
+                  <tr class="text-center">
+                    <td colspan="10">
+                      <app-loader></app-loader>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngIf="paginationData?.total_pages && !loading">
+          <pagination
+            [paginationData]="paginationData"
+            (selectedPage)="jumpToThePage($event)"
+          >
+          </pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

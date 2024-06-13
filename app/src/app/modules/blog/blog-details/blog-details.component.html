@@ -1,0 +1,95 @@
+<ng-container *ngIf="loading; else dataLoaded">
+    <app-loader></app-loader>
+</ng-container>
+<ng-template #dataLoaded>
+    <section class="section  bg-blue section-p-100">
+        <div class="jakay-container">
+            <div class="back-to-page d-flex">
+                <span (click)="goback()"><img src="assets/images/backarrow.svg"></span>
+                <h3 class="ms-3 section-header font-38 text-primary fw-semibold ">Blog Details</h3>
+            </div>
+            <!-- code for blog card component -->
+            <div class="blogs">
+                <div class="row">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="blog_details_section mb-4">
+                            <div class="card_img position-relative mb-5 pb-3" *ngIf="blogDetails.asset_type === 'image'">
+                                <img [src]="blogDetails.cover_asset_url | safeUrl" class="img-fluid" alt="car-1">
+                              </div>
+                              <div class="card-vid position-relative mb-5 pb-3" *ngIf="blogDetails.asset_type === 'video'">
+                                <video [muted]="true"
+                                  [autoplay]="false"
+                                  width="350px" height="195px"
+                                  class="img"
+                                  controls
+                                >
+                                    <source [src]="blogDetails.cover_asset_url | safeUrl" />
+                                </video>
+                              </div>
+                              <div class="card-vid position-relative mb-5 pb-3" *ngIf="blogDetails.asset_type !== 'image' && blogDetails.asset_type !== 'video'">
+                                <iframe width="420" height="315"
+                                  [src]="embeddedUrl(blogDetails.cover_asset_url) | safeUrl" frameborder="0" allowfullscreen>
+                                </iframe>
+                              </div>
+                            <div class="card_text-box p-3">
+                                <p class="text-primary-light font-20 mb-2">{{blogDetails.created_at | date : 'MMMM dd, yyyy'}}</p>
+                                <div class="result-pills mb-4" *ngIf="blogDetails?.tags?.length">
+                                    <span *ngFor="let chips of blogDetails.tags; let i = index" class="pill">
+                                      {{ chips }}
+                                    </span>
+                                </div>
+                                <h5 class="font-38 text-primary fw-semibold mb-5">{{blogDetails.title}}</h5>
+                                <div class="text-purple-2 font-20 line-32 ck-editor" [innerHtml]="blogDetails.html"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blogs__details-slider pt-4" *ngIf="relatedBlogList?.length">
+                        <h3 class="  font-38 text-primary fw-semibold section-header ">Related blogs</h3>
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                <swiper [config]="swiperReview"
+                                    [direction]="'horizontal'"
+                                    [spaceBetween]="30"
+                                    [mousewheel]="true"
+                                    [loopFillGroupWithBlank]="true"
+                                    [navigation]="true" class="review-swiper">
+                                    <ng-template swiperSlide class="swiper-slide" *ngFor="let blog of relatedBlogList; let i = index">
+                                            <div class="blogs__listing_cards bg-white mb-4">
+                                                <div class="rel_card_img position-relative d-flex justify-content-center align-items-center" *ngIf="blog.asset_type === 'image'">
+                                                    <img [src]="blog.cover_asset_url | safeUrl" class="img-fluid" alt="car-1">
+                                                  </div>
+                                                  <div class="card-vid position-relative d-flex justify-content-center align-items-center" *ngIf="blog.asset_type === 'video'">
+                                                    <video [muted]="true"
+                                                      [autoplay]="false"
+                                                      width="350px" height="195px"
+                                                      class="img"
+                                                      controls
+                                                    >
+                                                        <source [src]="blog.cover_asset_url | safeUrl" />
+                                                    </video>
+                                                  </div>
+                                                  <div class="rel_card-vid position-relative" *ngIf="blog.asset_type !== 'image' && blog.asset_type !== 'video'">
+                                                    <iframe width="420" height="315"
+                                                      [src]="embeddedUrl(blog.cover_asset_url) | safeUrl" frameborder="0" allowfullscreen>
+                                                    </iframe>
+                                                  </div>
+                                                <div class="card_text-box p-3">
+                                                    <h5 class="font-24 text-primary fw-semibold mb-3">{{ blog.title.length > 70 ? blog.title.slice(0, 60) + '...' : blog.title}}</h5>
+                                                    <p class="text-purple-2 font-16 pb-3" [innerHtml]="blog.html.length > 160 ? blog.html.slice(0, 150)+'...' : blog.html"></p>
+                                                        <div class="d-flex pt-4 card-footer  border-top">
+                                                            <span class="text-primary-light font-14">{{blog.created_at | date : 'MMMM dd, yyyy'}}</span>
+                                                            <a routerLink="/blogs/{{blog.id}}" class=" ms-auto blog-read-more font-14">Read More <img class="ms-1" src="assets/images/arrow-right.svg" alt=""></a>
+                                                        </div>
+                    
+                                            </div>
+                                        </div>
+                                    </ng-template>                                    
+                                </swiper>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</ng-template>

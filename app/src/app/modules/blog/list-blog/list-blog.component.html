@@ -1,0 +1,109 @@
+<section class="section vehicle__listing buyer--listing bg-blue">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">{{ 'Blogs' | translate }}</h3>
+        <!-- <p class="text-primary-light font-16">
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+          nonumy eirmod tempor invidunt ut labore.
+        </p>   -->
+      </div>
+    </div>
+    <div class="blogs">
+      <ng-container *ngIf="!loading; else loadingTemplate">
+        <ng-container *ngIf="blogList.length > 0; else noRecordsTemplate">
+          <div class="row">
+            <div
+              class="col-md-6 col-xl-4 mb-4"
+              *ngFor="let blog of blogList; let i = index"
+            >
+              <div class="blogs__listing_cards bg-white mb-4">
+                <div
+                  class="card_img position-relative d-flex justify-content-center align-items-center"
+                  *ngIf="blog.asset_type === 'image'"
+                >
+                  <img
+                    [src]="blog.cover_asset_url | safeUrl"
+                    class="img-fluid"
+                    alt="car-1"
+                  />
+                </div>
+                <div
+                  class="card-vid position-relative  d-flex justify-content-center align-items-center"
+                  *ngIf="blog.asset_type === 'video'"
+                >
+                  <video
+                    [muted]="true"
+                    [autoplay]="false"
+                    width="350px"
+                    height="195px"
+                    class="img"
+                    controls
+                  >
+                    <source [src]="blog.cover_asset_url | safeUrl" />
+                  </video>
+                </div>
+                <div
+                  class="card-vid position-relative"
+                  *ngIf="
+                    blog.asset_type !== 'image' && blog.asset_type !== 'video'
+                  "
+                >
+                  <iframe
+                    width="420"
+                    height="315"
+                    [src]="embeddedUrl(blog.cover_asset_url) | safeUrl"
+                    frameborder="0"
+                    allowfullscreen
+                  >
+                  </iframe>
+                </div>
+                <div class="card_text-box p-3">
+                  <h5 class="font-24 text-primary fw-semibold mb-3" *ngIf="blog?.title">
+                    {{ blog.title.length > 70 ? blog.title.slice(0, 60) + '...' : blog.title}}
+                  </h5>
+                  <p
+                    class="text-purple-2 font-16 pb-3"
+                    [innerHtml]="
+                      blog.html.length > 160
+                        ? blog.html.slice(0, 150) + '...'
+                        : blog.html
+                    "
+                  ></p>
+                  <div class="d-flex pt-4 card-footer  border-top">
+                    <span class="text-primary-light font-14">{{
+                      blog.created_at | date : "MMMM dd, yyyy"
+                    }}</span>
+                    <a routerLink="/blogs/{{ blog.id }}" class="ms-auto font-14"
+                      >{{ 'Read More' | translate }}
+                      <img class="ms-1" src="images/arrow-right.svg" alt=""
+                    /></a>
+                    <!-- <a href="#" class=" ms-auto blog-read-more font-14">Read More <img class="ms-1" src="images/arrow-right.svg" alt=""></a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="paginationData?.total_pages && !loading">
+              <pagination
+                [paginationData]="paginationData"
+                (selectedPage)="jumpToThePage($event)"
+              >
+              </pagination>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noRecordsTemplate>
+          <tr class="text-center">
+            <td colspan="10">{{ 'No records found' | translate }}</td>
+          </tr>
+        </ng-template>
+      </ng-container>
+      <ng-template #loadingTemplate>
+        <app-loader></app-loader>
+      </ng-template>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('Cross click')"
+    aria-label="Close"
+  ></button>
+</div>
+<div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Warning" | translate }}
+    </h3>
+    <p
+      class="text-center font-14 text-primary-light mb-3"
+      *ngIf="loggedInUserType === 'seller'"
+    >
+      {{ 'EditConfirmationMessageSeller' | translate }}
+    </p>
+    <p
+      class="text-center font-14 text-primary-light mb-3"
+      *ngIf="loggedInUserType === 'buyer'"
+    >
+      {{ 'EditConfirmationMessageBuyer' | translate }}
+    </p>
+  </div>
+
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      class="btn btn-outline-purple"
+      (click)="activeModal.dismiss('Cross click')"
+    >
+      {{ 'Cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-bs-dismiss="modal"
+      (click)="proceed(); activeModal.dismiss('proceed')"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteconfirmModal"
+    >
+       {{ 'Proceed' | translate }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,220 @@
+@import '../../../../../../function';
+@import '../../../../../../variables';
+
+// .condition-tabs {
+//   & .tabs-list {
+//     padding: 8px;
+//     width: fit-content;
+//     background-color: $white;
+//   }
+
+//   & .nav-item {
+//     @include for-phone-only {
+
+//       width: 100%;
+//     }
+//   }
+
+//   & .nav-link {
+//     min-width: 150px;
+//     padding: 12px 15px;
+//     border-radius: 12px;
+//     color: $thired-color;
+//     font-size: 1.125rem;
+
+//     @include for-phone-only {
+
+//       width: 100%;
+//     }
+
+//     &.active {
+//       background-color: $secondary-color;
+//       color: $white;
+//     }
+//   }
+// }
+
+.Signature__tabs--btngrp{
+  .nav-pills{
+      .nav-item{
+          .nav-link{
+              &.active{
+                  background-color: #fff;
+              }
+          }
+      }
+  }
+}
+.tabs-wrp{
+  .tab-content{
+      background-color: #fff;
+      height:350px;
+      overflow: auto;
+      .heading-wrp{
+          padding-left: 50px;
+      }
+      .form-check-inline label{
+          padding:10px 10px;
+          padding-left:50px;
+      }
+      .uplaod-signature{
+          text-align: center;
+          border:1px dashed #191919;
+          width: 100%;
+          border-radius: 12px;
+          padding:20px;
+      }
+  }
+}
+
+.draw-box {
+  border: 1px solid rgb(226, 229, 236);
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 10px;
+  @media (max-width: 575px) {
+    margin-bottom: 15px;
+  }
+  .draw-title {
+    margin: 0;
+    color: #464a4c;
+    font-size: 14px;
+  }
+
+  .draw-canvas {
+    width: 80%;
+    height: 150px;
+  }
+
+  .button-row {
+    .btn {
+      font-size: 14px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      padding: 8px 10px !important;
+      position: relative;
+      padding-left: 25px;
+      float: right;
+      border-radius: 3px !important;
+      @media (max-width: 767px) {
+        font-size: 12px;
+        .text {
+          display: none;
+        }
+        .icon-cross {
+          display: block;
+        }
+      }
+    }
+
+    .icon {
+      position: absolute;
+      left: 7px;
+      top: 44%;
+      font-size: 20px;
+      transform: translateY(-50%);
+    }
+
+    .icon-cross {
+      display: none;
+    }
+  }
+
+  &.upload-sign {
+    height: 206px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    .draw-title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .icon {
+        margin-bottom: 15px;
+
+        .icon img {
+          object-fit: contain;
+          height: 35px;
+        }
+      }
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+
+      &.show {
+        display: block;
+      }
+
+      &.show + .draw-title {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .draw-box {
+    .draw-canvas {
+      height: 140px;
+    }
+
+    &.upload-sign {
+      height: 185px;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .draw-box .draw-canvas {
+    height: 158px;
+  }
+}
+
+@media (max-width: 767px) {
+  .draw-box .draw-canvas {
+    height: 100px;
+  }
+}
+
+@media (max-width: 575px) {
+  .draw-box {
+    .draw-title {
+      font-size: 12px;
+
+      .icon {
+        img {
+          height: 25px;
+          object-fit: contain;
+        }
+      }
+    }
+
+    &.upload-sign {
+      height: 130px;
+    }
+
+    .button-row .btn {
+      font-size: 12px;
+      padding: 6px !important;
+      padding-left: 20px;
+
+      .icon {
+        font-size: 18px;
+        left: 4px;
+      }
+    }
+  }
+}
+@media (max-width: 360px) {
+  .draw-box .draw-canvas {
+    height: 70px;
+  }
+}

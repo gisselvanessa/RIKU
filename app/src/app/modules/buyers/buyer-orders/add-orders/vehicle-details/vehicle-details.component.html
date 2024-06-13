@@ -1,0 +1,297 @@
+<h3 class="text-purple-3 font-24 mb-3 mb-md-4 mb-xl-5 fw-semibold">
+  {{ "Vehicle Information" | translate }}
+</h3>
+<div class="row gy-4">
+  <div class="col-lg-8 br-12 bg-white h-100 p-3 p-md-4">
+    <div class="row">
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/tag.svg"
+                alt="Tag"
+                class="option-icon-item"
+              />
+            </div>
+            <div class="col-8">
+              <div class="col-6 col-md-3">
+                <div class="mb-3 mb-md-4">
+                  <label
+                    class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Make" | translate }}</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    {{ vehicleDetail.make }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/shaded-car.svg"
+                alt="Car"
+                class="option-icon-item"
+                style="margin-top: 40%"
+              />
+            </div>
+            <div class="col-8">
+              <div class="col col-md-3">
+                <div class="mb-3 mb-md-4">
+                  <label
+                    class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Model" | translate }}</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    {{ vehicleDetail.model }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/cal-preord.svg"
+                alt="Tag"
+                class="option-icon-item"
+              />
+            </div>
+            <div class="col-8">
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4">
+                  <label
+                    class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Year" | translate }}</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    {{ vehicleDetail.year }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <button
+                routerLink="/user/vehicles/vehicle-details/{{
+                  vehicleDetail.id
+                }}"
+                class=" primary-btn btn-sm br-12 btn-view"
+              >
+                {{ "View" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/clasic-car.svg"
+                alt="Tag"
+                class="option-icon-item"
+                style="margin-top: 40%"
+              />
+            </div>
+            <div class="col-8">
+              <div class="col-6 col-md-3">
+                <div class="mb-3 mb-md-4">
+                  <label
+                    class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Body Type" | translate }}</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    {{ vehicleDetail.body_type }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/plate.svg"
+                alt="Tag"
+                class="option-icon-item"
+                style="margin-top: 40%"
+              />
+            </div>
+            <div class="col-8">
+              <div
+                class="col-6 col-md-3 w-100"
+                *ngIf="vehicleDetail.number_plate != ''"
+              >
+                <div class="mb-3 mb-md-4">
+                  <label
+                    class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Number Plate" | translate }}</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    {{ vehicleDetail.number_plate | numberPlate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row">
+            <div class="col-4">
+              <img
+                src="assets/images/moneybag.svg"
+                alt="Tag"
+                class="option-icon-item"
+                style="margin-top: 40%"
+              />
+            </div>
+            <div class="col-8">
+              <div class="col-6 col-md-3">
+                <div class="mb-3 mb-md-4">
+                  <label class="mb-1 mb-md-2 text-purple-3 font-14 fw-regular"
+                    >{{ "Price" | translate }} $</label
+                  >
+                  <p class="text-purple-1 font-16 fw-regular">
+                    ${{ vehicleDetail.price | spanishNumber }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <label class="text-primary fw-medium font-16 d-block mb-2">{{
+            "Images" | translate
+          }}</label>
+          <div class="scroll-container">
+            <div
+              class="vehicle-image-wrp me-3 me-xl-4 mb-2"
+              *ngFor="let image of sliderImages"
+            >
+              <img [src]="image" width="100%" height="100%" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-sm-12">
+    <div class="br-12 bg-white h-100 p-4">
+      <h4 class="text-primary font-22 mb-3 mb-md-4">
+        {{ "Information1" | translate }}
+        {{
+          sellerType.includes("dealer")
+            ? ("Dealer" | translate)
+            : ("Seller" | translate)
+        }}
+      </h4>
+      <div class="row gy-3 gy-md-4 d-flex flex-row">
+        <div class="mb-0 col-4">
+          <img src="assets/images/user.png" class="usr-img" />
+        </div>
+        <div class="col" style="margin-top: 14%; margin-left: 5%">
+          <div class="mb-0">
+            <p class="text-primary font-20 fw-regular">
+              {{ sellerDetails.username }}
+            </p>
+          </div>
+          <div class="d-flex align-items-center mb-4">
+            <div class="rating d-flex align-items-center me-3">
+              <p class="font-18 text-secondary">
+                {{ sellerDetails.ratingInStar }}
+              </p>
+              <img
+                class="ms-2"
+                src="assets/images/seller-img/star.svg"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row gy-3 gy-md-4" style="margin-top: 5%">
+        <!-- <div class="col-12 col-sm-6 col-md-3">
+          <div class="mb-0">
+            <label class="mb-1 mb-md-2 text-gray font-14 fw-regular">{{
+              "Username" | translate
+            }}</label>
+            <p class="text-primary font-16 fw-regular">
+              {{ sellerDetails.username }}
+            </p>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col-12">
+            <div class="mb-0">
+              <label class="mb-1 mb-md-2 text-gray font-20 fw-regular">{{
+                "Dealership Location" | translate
+              }}</label>
+              <p class="text-primary font-20 fw-regular">
+                {{
+                  sellerDetails.location.parish
+                    ? (sellerDetails.location.parish + ", " | titlecase)
+                    : ("" | titlecase)
+                }}
+                {{
+                  sellerDetails.location.city
+                    ? (sellerDetails.location.city + ", " | titlecase)
+                    : ""
+                }}
+                {{
+                  sellerDetails.location.province
+                    ? (sellerDetails.location.province | titlecase)
+                    : ""
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="mb-0">
+              <label class="mb-1 mb-md-2 text-gray font-20 fw-regular">{{
+                "Total Ratings" | translate
+              }}</label>
+              <p class="text-primary font-20 fw-regular">
+                {{ sellerDetails.totalRatings | spanishNumber }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <button class="btn me-3 btn-lg primary-btn-outline" (click)="back()">
+      <p href="">
+        {{ "Back" | translate }}
+      </p>
+    </button>
+    <button
+      class="btn primary-btn me-3 btn-lg border-1"
+      (click)="submitOrder()"
+    >
+      <p>
+        {{
+          currentOrder.expert_evaluation.is_expert_evaluation == null
+            ? ("Next" | translate)
+            : ("Next" | translate)
+        }}
+      </p>
+    </button>
+  </div>
+</div>

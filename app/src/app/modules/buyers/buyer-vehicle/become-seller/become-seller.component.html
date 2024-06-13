@@ -1,0 +1,101 @@
+<section class="section vehicle__listing bg-blue pb-5">
+  <div class="jakay-container">
+    <div class="section-header">
+      <h3 class="font-38 mb-3 text-primary fw-semibold">
+        {{ 'Select Vehicle Types' | translate }}
+      </h3>
+      <p class="text-purple-2 font-14">
+        {{ 'Please select the Vehicle Type you want to sell as a seller' | translate }}
+      </p>
+    </div>
+    <div class="vehicle__selection">
+      <form [formGroup]="vehicleForm" (submit)="onSubmit()">
+        <div class="user-selection-wrp row">
+          <div class="col-md-12 user-selected-wrp">
+            <p class="usertype-is mb-3">{{ 'Select Vehicle Type' | translate }}<span></span></p>
+          </div>
+          <div class="col-md-12 user-type-wrp">
+            <div class="row">
+              <div
+                class="col-md-4 mb-3"
+                *ngFor="let vType of vehicleTyp; let i = index"
+              >
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    (change)="onCheckValue($event)"
+                    name="Model"
+                    id="{{ vType }}"
+                    [value]="vType"
+                  />
+                  <label class="form-check-label" for="{{ vType }}">{{
+                    vType
+                  }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="this.vehicleForm.controls['vehicle_types'].errors?.['required']"
+          class="invalid-feedback"
+        >
+         {{ 'Vehicle Type is required' | translate }}
+        </div>
+
+        <div class="btn-grp pt-5">
+          <button
+            type="submit"
+            class="btn primary-btn me-4 border-1"
+            data-bs-toggle="modal"
+            data-bs-target="#becomesellerConfirmModal"
+            [disabled]="vehicleForm.invalid"
+          >
+            {{ 'Confirm' | translate }}
+          </button>
+          <button
+            class="btn primary-btn-outline"
+            type="button"
+            (click)="redirect()"
+          >
+            {{ 'Cancel' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<ng-template #success let-d="dismiss">
+  <div class="modal-header border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="d('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="../../../../assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Registered as a Seller!!' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3 w-75 mx-auto">
+
+      {{ 'You have successfully registered as a seller. you can log in as a seller user now' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn px-5"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="d('ok')">{{ 'OK' | translate }}
+    </button>
+  </div>
+</ng-template>

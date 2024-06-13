@@ -1,0 +1,6 @@
+<svg id="car" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <path id="Path_1239" data-name="Path 1239" d="M0,0H36V36H0Z" fill="none"/>
+  <ellipse id="Ellipse_193" data-name="Ellipse 193" cx="3.717" cy="3.717" rx="3.717" ry="3.717" transform="translate(5.891 22.758)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+  <ellipse id="Ellipse_194" data-name="Ellipse 194" cx="3.717" cy="3.717" rx="3.717" ry="3.717" transform="translate(22.884 22.758)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+  <path id="Path_1240" data-name="Path 1240" d="M5.89,24.822H3V14.555L6.422,6h15.4l6.844,8.555h1.711A3.422,3.422,0,0,1,33.8,17.978v6.844h-2.48m-8.64,0H14M3,14.555H28.665m-10.266,0V6" transform="translate(-0.399 1.607)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+</svg>

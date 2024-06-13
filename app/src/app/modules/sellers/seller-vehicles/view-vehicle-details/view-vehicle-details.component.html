@@ -1,0 +1,733 @@
+<section class="section view-vehicle">
+  <div class="jakay-container">
+    <div class="back-to-page section-header d-flex">
+      <span>
+        <a (click)="goBack()"><img src="assets/images/backarrow.svg" /> </a
+      ></span>
+      <h3 class="ms-3 font-38 text-primary fw-semibold">
+        {{ "Vehicle Details" | translate }}
+      </h3>
+    </div>
+    <div class="view-vehicle__details">
+      <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="swiper-container-wrapper">
+            <div class="swiper-container gallery-top buyer-detail--swiper">
+              <img
+                *ngIf="sliderImages.length == 0"
+                width="400"
+                src="assets/images/no_image.png"
+              />
+              <ng-container *ngIf="sliderImages.length > 0">
+                <swiper
+                  [navigation]="{
+                    enabled: true,
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                  }"
+                  [thumbs]="{ swiper: thumbsSwiper }"
+                  class="swiper-wrapper"
+                >
+                  <ng-template
+                    *ngFor="let image of sliderImages; index as i"
+                    swiperSlide
+                  >
+                    <img
+                      [src]="image"
+                      (click)="openGallery(sliderImages, i)"
+                      class="pointer"
+                      (error)="handleMissingImage($event)"
+                    />
+                  </ng-template>
+                </swiper>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+              </ng-container>
+            </div>
+            <!-- <div
+              *ngIf="
+                sliderImages.length > 0 &&
+                vehicleDetail.other_img_urls.length > 0
+              "
+              class="swiper-container gallery-thumbs"
+            >
+              <ng-container>
+                <swiper
+                  (swiper)="thumbsSwiper = $event"
+                  [spaceBetween]="10"
+                  [slidesPerView]="5"
+                  [freeMode]="true"
+                  [watchSlidesProgress]="true"
+                  class="swiper-wrapper"
+                >
+                  <ng-template
+                    *ngFor="let image of sliderImages; index as i"
+                    swiperSlide
+                  >
+                    <img [src]="image" (error)="handleMissingImage($event)" />
+                  </ng-template>
+                </swiper>
+              </ng-container>
+            </div> -->
+            <div *ngIf="sliderImages.length > 0 && vehicleDetail.other_img_urls.length > 0" class="swiper-container gallery-thumbs">
+              <div class="swiper-wrapper-cont">
+                <div class="swiper-wrapper">
+                  <ng-container>
+                    <swiper
+                      (swiper)="thumbsSwiper = $event"
+                      [spaceBetween]="10"
+                      [slidesPerView]="2"
+                      [freeMode]="true"
+                      [watchSlidesProgress]="true"
+                      class="swiper-wrapper"
+                    >
+                      <ng-template
+                        *ngFor="let image of sliderImages; index as i"
+                        swiperSlide
+                      >
+                        <img [src]="image" class="pointer c-pointer" />
+                      </ng-template>
+                    </swiper>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="swiper-navigation">
+                  <div class="custom-button swiper-button-prev"></div>
+                  <div class="custom-button swiper-button-next"></div>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-6">
+          <div
+            class="d-flex align-items-center align-items-md-start justify-content-between"
+          >
+            <!-- <p class="text-secondary">{{vehicleDetail.number_plate}}</p> -->
+            <p class="text-green">
+              <ng-container
+                class="text-purple draft"
+                *ngIf="vehicleDetail.status == 'draft'"
+              >
+                <img
+                  class="me-2"
+                  src="assets/images/vehicle-list/draft.svg"
+                  alt=""
+                /><span class="text-purple draft">{{
+                  "Saved as Draft" | translate
+                }}</span>
+              </ng-container>
+              <ng-container *ngIf="vehicleDetail.status == 'pending'">
+                <img
+                  class="me-2"
+                  src="assets/images/vehicle-list/draft.svg"
+                  alt=""
+                /><span class="text-purple draft">{{
+                  "Awaiting for Approval" | translate
+                }}</span>
+              </ng-container>
+              <ng-container *ngIf="vehicleDetail.status == 'approved'">
+                <img
+                  class="me-2"
+                  src="assets/images/view_vehicle/green_check.svg"
+                  alt=""
+                />{{ "Approved" | translate }}
+              </ng-container>
+              <ng-container *ngIf="vehicleDetail.status == 'rejected'">
+                <span class="text-danger reject">
+                  {{ "Rejected" | translate }}
+                  <div ngbDropdown class="d-inline position-unset">
+                    <button
+                      *ngIf="vehicleDetail.rejection_reason"
+                      ngbDropdownToggle
+                      class="dropdown-toggle btn-dropdown"
+                      type="button"
+                      id="vehicle-type"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span></span>
+                    </button>
+                    <ul
+                      ngbDropdownMenu
+                      class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                    >
+                      <li>
+                        {{ vehicleDetail.rejection_reason }}
+                      </li>
+                    </ul>
+                  </div>
+                </span>
+              </ng-container>
+            </p>
+            <div class="d-flex justify-content-end" *ngIf="showSharing">
+              <share-buttons
+                theme="circles-dark"
+                ngClass="my-3"
+                [include]="['copy', 'facebook', 'whatsapp']"
+                [showIcon]="true"
+                [showText]="false"
+                [url]="currentURL"
+                class=""
+              >
+              </share-buttons>
+            </div>
+            <a href="javascript:void(0)" (click)="showSharing = !showSharing">
+              <img src="assets/images/view_vehicle/share.svg" alt="" />
+            </a>
+          </div>
+          <div class="car_details">
+            <h2 class="text-primary fw-semibold car_model">
+              {{ vehicleDetail.model_year }} {{ vehicleDetail.make }}
+              {{ vehicleDetail.make_model }}
+            </h2>
+            <h3 class="text-secondary car_price">
+              ${{ vehicleDetail.price | spanishNumber }}
+            </h3>
+            <p class="text-purple">
+              {{
+                !vehicleDetail.is_negotiable
+                  ? ("Not Negotiable" | translate)
+                  : ("Negotiable" | translate)
+              }}
+            </p>
+          </div>
+          <div class="d-sm-flex align-items-center my-3 my-dm-4">
+            <p
+              class="text-purple-2 font-22"
+              *ngIf="vehicleDetail.location?.city"
+            >
+              <img src="assets/images/view_vehicle/location.svg" alt="" />
+              {{ vehicleDetail.location.city | titlecase }},
+              {{ vehicleDetail.location.province | titlecase }}
+            </p>
+            <span class="mx-2 mx-md-3 mx-lg-4"></span>
+            <p class="text-purple-2 font-22">
+              <img src="assets/images/view_vehicle/menu.svg" alt="" />
+              {{ vehicleDetail.created_at | date : "d-MMMM-yyyy" }}
+            </p>
+          </div>
+          <div class="details_labels">
+            <label
+              for="exampleFormControlInput1"
+              *ngIf="vehicleDetail.fuel_type"
+              class="form-label details__label me-1 me-sm-3"
+              >{{ vehicleDetail.fuel_type | titlecase }}</label
+            >
+            <label
+              for="exampleFormControlInput1"
+              *ngIf="vehicleDetail.distance_travelled"
+              class="form-label details__label"
+              >{{ vehicleDetail.distance_travelled | spanishNumber }}
+              {{
+                vehicleDetail.distance_travelled_unit == "Kilometers"
+                  ? "km"
+                  : "mi"
+              }}</label
+            >
+          </div>
+          <div class="details-btn-grp mt-3">
+            <button
+              class="btn btn--editable btn-outline-purple"
+              routerLink="/seller/vehicles/edit-vehicle/{{ vehicleId }}"
+            >
+              <img
+                class="me-2"
+                width="24px"
+                src="assets/images/view_vehicle/edit_purple.svg"
+                alt=""
+              />
+              {{ "Edit" | translate }}
+            </button>
+            <button
+              class="btn btn--editable btn-outline-red ms-3"
+              (click)="deleleVehicle()"
+            >
+              <img
+                class="me-2"
+                width="24px"
+                src="assets/images/view_vehicle/delete_red.svg"
+                alt=""
+              />{{ "Delete" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section--spacing description">
+  <div class="jakay-container jk-container">
+    <div class="content-container pt-4" style="background-color: white;">
+      <h3 class="font-38 section-header text-primary fw-semibold">
+        {{ "Description" | translate }}
+      </h3>
+      <!-- <p class="font-22 ">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+        invidunt ut labore
+        et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum.</p> -->
+      
+      <p class="font-22" [innerHTML]="getDescription(vehicleDetail.description)">  </p>
+    </div>
+  </div>
+</section>
+
+<!-- section basic before start -->
+<!-- <section class="basic">
+  <div class="jakay-container">
+    <h3 class="section-header font-28 font-md-34 text-primary fw-semibold">
+      {{ "Basic" | translate }}
+    </h3>
+    <div class="basic-box basic-box--rechange">
+      <div class="row gy-3 gy-xl-4">
+        <div class="col-sm-6 col-xl-4 col-xxl-3 specifications__wrapper--text">
+          <p class="text-primary-light mb-2">
+            {{ "Vehicle Type" | translate }}
+          </p>
+          <h5 class="text-primary">
+            {{ vehicleDetail.vehicle_type | translate }}
+          </h5>
+        </div>
+        <div class="col-sm-6 col-xl-4 col-xxl-3 specifications__wrapper--text">
+          <p class="text-primary-light mb-2">
+            {{ "Registration Year" | translate }}
+          </p>
+          <h5 class="text-primary">{{ vehicleDetail.registration_year }}</h5>
+        </div>
+        <div class="col-sm-6 col-xl-4 col-xxl-3 specifications__wrapper--text">
+          <p class="text-primary-light mb-2">
+            {{ "Number Plate" | translate }}
+          </p>
+          <h5 class="text-primary">{{ vehicleDetail.number_plate }}</h5>
+        </div>
+        <div class="col-sm-6 col-xl-4 col-xxl-3 specifications__wrapper--text">
+          <p class="text-primary-light mb-2">
+            {{ "License Number" | translate }}
+          </p>
+          <h5 class="text-primary">{{ vehicleDetail.licence_number }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- section basic before end -->
+
+<section class="section--spacing specifications pt-0">
+  <div class="jakay-container jk-container">
+    <div class="specifications__wrapper content-container pb-0">
+      <h3 class="section-header font-38 font-md-34 text-primary fw-semibold pt-3">
+        {{ "Basic" | translate }}
+      </h3>
+
+      <div class="row">
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/car.svg" alt="gear" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Vehicle Type" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.vehicle_type | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/calendar.png" alt="car" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Registration Year" | translate }}</label>
+              <h5>{{ vehicleDetail.registration_year }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/plate.svg" alt="fuel" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Number Plate" | translate }}</label>
+              <h5>{{ vehicleDetail.number_plate | titlecase | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/vin-number.png" alt="fuel" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "License Number" | translate }}</label>
+              <h5 class="license-number">{{ vehicleDetail.licence_number | titlecase | translate }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h3 class="section-header font-38 font-md-34 text-primary fw-semibold">
+        {{ "Specifications" | translate }}
+      </h3>
+
+      <div class="row">
+        <!-- <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/speedometer.svg"
+                alt="milage"
+              />
+            </div>
+            <div *ngIf="vehicleDetail.mileage" class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ 'Mileage' | translate }}</label>
+              <h5>
+                {{ vehicleDetail.mileage | spanishNumber }} {{ vehicleDetail.mileage_unit | translate }}
+              </h5>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/gear.svg" alt="gear" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Transmission" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.transmission | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/car.svg" alt="car" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Body Type" | translate }}</label>
+              <h5>{{ vehicleDetail.body_type }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/fuel.svg" alt="fuel" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Fuel Type" | translate }}</label>
+              <h5>{{ vehicleDetail.fuel_type | titlecase | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/engine.svg" alt="engine" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Engine" | translate }}</label>
+              <h5>{{ vehicleDetail.engine_size | spanishNumber }} cc</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/paint_gun.svg"
+                alt="paint_gun"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Outside Color" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.color | titlecase | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/doors.svg" alt="fuel" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Passenger Doors" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.passanger_doors }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/icon-sitting.svg"
+                alt="Passenger"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Passenger Capacity" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.passanger_capacity }}</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img src="assets/images/view_vehicle/break.svg" alt="Break" />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Brakes" | translate }}</label>
+              <h5>{{ vehicleDetail.break_type | titlecase | translate }}</h5>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/bodywork.svg"
+                alt="Body Work"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ 'Body Work' | translate }}</label>
+              <h5>{{ vehicleDetail.body_work | titlecase }}</h5>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-lg-4 col-sm-6 mb-5">
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/car-glasses.svg"
+                alt="Glasses"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{ "Glasses" | translate }}</label>
+              <h5>{{ vehicleDetail.glass_type }}</h5>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-lg-4 col-sm-6 mb-5"
+          *ngIf="
+            vehicleDetail.vehicle_type == 'Heavy' ||
+            vehicleDetail.vehicle_type == 'Work Machinery'
+          "
+        >
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/view_vehicle/ton.svg"
+                alt="Tonnage Capacity"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-4">
+              <label for="" class="mb-2">{{
+                "Tonnage Capacity" | translate
+              }}</label>
+              <h5>{{ vehicleDetail.tonage_capacity | titlecase }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section
+  class="section--spacing pt-0"
+  *ngIf="
+    vehicleDetail?.technologies?.length ||
+    vehicleDetail?.comforts?.length ||
+    vehicleDetail?.securities?.length ||
+    vehicleDetail?.entertainments?.length
+  "
+>
+  <div class="jakay-container jk-container">
+    <div class="content-container py-4" style="background-color: white;">
+      <h3 class="font-38 section-header text-primary fw-semibold">
+        {{ "Highlights" | translate }}
+      </h3>
+      <div class="row gy-3 gy-lg-4">
+        <ng-container *ngIf="vehicleDetail?.technologies?.length">
+          <div
+            class=""
+            [ngClass]="
+              vehicleDetail.technologies.length <= 7
+                ? 'col-lg-4'
+                : vehicleDetail.technologies.length <= 11
+                ? 'col-lg-12'
+                : 'col-lg-12'
+            "
+          >
+            <div class="highlights__box h-100">
+              <h5 class="highlights__box--title text-violet font-28 mb-4">
+                {{ "Technology" | translate }}
+              </h5>
+              <div>
+                <ul class="highlights__box--list d-flex">
+                  <li style="margin: 10px 0;"
+                    class=""
+                    [ngClass]="
+                      vehicleDetail.technologies.length <= 7
+                        ? 'col-12'
+                        : vehicleDetail.technologies.length <= 11
+                        ? 'col-6'
+                        : 'col-4'
+                    "
+                    *ngFor="let items of vehicleDetail.technologies"
+                  >
+                  <div class="d-flex">
+                    <div style="margin-top: 5px;">
+                      <span class="highlights__box--items"></span>
+                    </div>
+                    <span>
+                      {{ items | translate }}
+                    </span>
+                  </div>                  
+                </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="vehicleDetail?.comforts?.length">
+          <div
+            class=""
+            [ngClass]="
+              vehicleDetail.comforts.length <= 7
+                ? 'col-lg-4'
+                : vehicleDetail.comforts.length <= 11
+                ? 'col-lg-12'
+                : 'col-lg-12'
+            "
+          >
+            <div class="highlights__box h-100">
+              <h5 class="highlights__box--title text-violet font-28 mb-4">
+                {{ "Comfort" | translate }}
+              </h5>
+              <div>
+                <ul class="highlights__box--list d-flex">
+                  <li style="margin: 10px 0;"
+                    class=""
+                    [ngClass]="
+                      vehicleDetail.comforts.length <= 7
+                        ? 'col-12'
+                        : vehicleDetail.comforts.length <= 11
+                        ? 'col-6'
+                        : 'col-4'
+                    "
+                    *ngFor="let confort of vehicleDetail.comforts"
+                  >
+                  <div class="d-flex">
+                    <div style="margin-top: 5px;">
+                      <span class="highlights__box--items"></span>
+                    </div>
+                    <span>
+                      {{ confort | translate }}
+                    </span>
+                  </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="vehicleDetail?.securities?.length">
+          <div
+            class=""
+            [ngClass]="
+              vehicleDetail.securities.length <= 7
+                ? 'col-lg-4'
+                : vehicleDetail.securities.length <= 11
+                ? 'col-lg-12'
+                : 'col-lg-12'
+            "
+          >
+            <div class="highlights__box h-100">
+              <h5 class="highlights__box--title text-violet font-28 mb-4">
+                {{ "Security" | translate }}
+              </h5>
+              <div>
+                <ul class="highlights__box--list d-flex">
+                  <li style="margin: 10px 0;"
+                    class=""
+                    [ngClass]="
+                      vehicleDetail.securities.length <= 7
+                        ? 'col-12'
+                        : vehicleDetail.securities.length <= 11
+                        ? 'col-6'
+                        : 'col-4'
+                    "
+                    *ngFor="let security of vehicleDetail.securities"
+                  >
+                  <div class="d-flex">
+                    <div style="margin-top: 5px;">
+                      <span class="highlights__box--items"></span>
+                    </div>
+                    <span>
+                      {{ security | titlecase | translate }}
+                    </span>
+                  </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="vehicleDetail?.entertainments?.length">
+          <div
+            class=""
+            [ngClass]="
+              vehicleDetail.entertainments.length <= 7
+                ? 'col-lg-4'
+                : vehicleDetail.entertainments.length <= 11
+                ? 'col-lg-12'
+                : 'col-lg-12'
+            "
+          >
+            <div class="highlights__box h-100">
+              <h5 class="highlights__box--title text-violet font-28 mb-4">
+                {{ "Entertainment" | translate }}
+              </h5>
+              <div>
+                <ul class="highlights__box--list d-flex">
+                  <li style="margin: 10px 0;"
+                    class=""
+                    [ngClass]="
+                      vehicleDetail.entertainments.length <= 7
+                        ? 'col-12'
+                        : vehicleDetail.entertainments.length <= 11
+                        ? 'col-6'
+                        : 'col-4'
+                    "
+                    *ngFor="let entertainment of vehicleDetail.entertainments"
+                  >
+                  <div class="d-flex">
+                    <div style="margin-top: 5px;">
+                      <span class="highlights__box--items"></span>
+                    </div>
+                    <span>
+                      {{ entertainment | translate }}
+                    </span>
+                  </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,111 @@
+<div class="col-12">
+  <ng-container *ngIf="!loading; else loader">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="bg-white br-12 p-4">
+          <div class="cusotmer-heading">
+            <h4 class="font-24 text-primary fw-semibold">
+              {{ "Total buyers registrations" | translate }}
+            </h4>
+          </div>
+          <div class="cutomer-data-wrp">
+            <div class="row">
+              <div class="col-lg-3">
+                <span class="data-count font-34 text-secondary">{{
+                  userStats.buyer.active + userStats.buyer.inactive
+                  }}</span>
+              </div>
+              <div class="col-lg-4 border-right d-inline-flex justify-content-center">
+                <p class="fw-regular font-14 text-start">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.buyer.active
+                    }}</span>
+                  {{ "users" | translate }} <br />{{ "Active" | translate }}
+                </p>
+              </div>
+              <div class="col-lg-5 justify-content-center d-inline-flex">
+                <p class="fw-regular font-14">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.buyer.inactive
+                    }}</span>
+                  {{ "users" | translate }} <br />{{ "Inactive" | translate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="bg-white br-12 p-4">
+          <div class="cusotmer-heading">
+            <h4 class="font-24 text-primary fw-semibold">
+              {{ "Total dealers registrations" | translate }}
+            </h4>
+          </div>
+          <div class="cutomer-data-wrp">
+            <div class="row">
+              <div class="col-lg-3">
+                <span class="data-count font-34 text-secondary">{{
+                  userStats.dealer.active + userStats.dealer.inactive
+                  }}</span>
+              </div>
+              <div class="col-lg-4 border-right d-inline-flex justify-content-center">
+                <p class="fw-regular font-14 text-start">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.dealer.active
+                    }}</span>
+                  {{ "users" | translate }}<br />{{ "Active" | translate }}
+                </p>
+              </div>
+              <div class="col-lg-5 justify-content-center d-inline-flex">
+                <p class="fw-regular font-14">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.dealer.inactive
+                    }}</span>
+                  {{ "users" | translate }}<br />{{ "Inactive" | translate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="bg-white br-12 p-4">
+          <div class="cusotmer-heading">
+            <h4 class="font-24 text-primary fw-semibold">
+              {{ "Total sellers registrations" | translate }}
+            </h4>
+          </div>
+          <div class="cutomer-data-wrp">
+            <div class="row">
+              <div class="col-lg-3">
+                <span class="data-count font-34 text-secondary">{{
+                  userStats.seller.active + userStats.seller.inactive
+                  }}</span>
+              </div>
+              <div class="col-lg-4 border-right d-inline-flex justify-content-center">
+                <p class="fw-regular font-14 text-start">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.seller.active
+                    }}</span>
+                  {{ "users" | translate }} <br /> {{ "Active" | translate }}
+                </p>
+              </div>
+              <div class="col-lg-5 justify-content-center d-inline-flex">
+                <p class="fw-regular font-14">
+                  <span class="d-block fw-semibold font-16 mb-2 text-primary">{{
+                    userStats.seller.inactive
+                    }}</span>
+                  {{ "users" | translate }}<br />{{ "Inactive" | translate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #loader>
+    <app-loader></app-loader>
+  </ng-template>
+</div>

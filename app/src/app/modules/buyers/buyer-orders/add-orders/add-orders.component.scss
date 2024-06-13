@@ -1,0 +1,326 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.order-process {
+  &__wrapper {
+    .vehicle-image-wrp {
+      width: 90px;
+      border-radius: 15px;
+      overflow: hidden;
+
+      img {
+        object-fit: cover;
+      }
+    }
+
+    .rating {
+      background-color: rgba(47, 119, 156, 0.1);
+      padding: 5px 15px;
+      border-radius: 32px;
+    }
+
+    .vehicle-review-wrp {
+      .form-check-inline input[type="radio"]:checked + label,
+      .form-check-inline input[type="checkbox"]:checked + label {
+        background-color: transparent;
+      }
+
+      .dot-checkmark {
+        left: 0px;
+      }
+
+      .form-check-inline label {
+        padding-left: 40px;
+        font-size: 1rem;
+        height: auto !important;
+      }
+
+      .textarea-wrp {
+        .dot-checkmark {
+          top: 8%;
+        }
+
+        .text-label-wrp {
+          padding-left: 40px;
+        }
+
+        textarea {
+          max-width: 70%;
+        }
+      }
+    }
+
+    .offer-label {
+      color: $light-purple-2;
+      font-size: 22px;
+      background-color: rgba(98, 65, 105, 0.1);
+      border-radius: 5px;
+
+      &.accepted {
+        color: $secondary-color;
+        background-color: rgba(47, 119, 156, 0.1);
+      }
+    }
+  }
+}
+
+.order-steps {
+  .steps-wrp {
+    width: 100%;
+    display: inline-flex;
+    padding-bottom: 25px;
+    margin-bottom: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    @include for-tablet-portrait-up {
+      overflow-x: unset;
+      overflow-y: unset;
+    }
+    @include for-laptop {
+      padding-left: 0px;
+      margin-bottom: 25px;
+    }
+    .step {
+      flex-grow: 1;
+
+      &:last-child {
+        flex-grow: 0;
+      }
+
+      div {
+        .step-round {
+          margin-left: 10px;
+          color: #ec8f67;
+          background-color: transparent;
+          border: 1px solid #ec8f67;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          padding: 3px;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            display: inline-block;
+            visibility: hidden;
+            opacity: 0;
+            width: 7px;
+            height: 13px;
+            border-bottom: 3px solid #fff;
+            border-right: 3px solid #fff;
+            @include for-laptop {
+            }
+          }
+        }
+
+        h6 {
+          position: absolute;
+          left: 50%;
+          top: 36px;
+          transform: translateX(-50%);
+          color: #ec8f67;
+          font-size: min(max(0.5rem, 0.83vw), 1rem);
+          font-weight: 500;
+          @include for-laptop {
+            top: 45px;
+          }
+        }
+      }
+
+      .line {
+        background-color: #ec8f67;
+        border-radius: 0px;
+        height: 0.5px;
+        flex-grow: 1;
+        width: 100%;
+      }
+
+      &.active,
+      &.completed {
+        div {
+          .step-round {
+            background-color: $white;
+            border-color: $secondary-color;
+            color: $secondary-color;
+          }
+
+          h6 {
+            color: $secondary-color;
+            width: 90px;
+          }
+        }
+
+        .line {
+          background-color: $secondary-color;
+        }
+      }
+
+      &.completed {
+        div {
+          .step-round {
+            // background-color: $secondary-color;
+            // color: $secondary-color;
+            position: relative;
+
+            &::after {
+              // visibility: visible;
+              // opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-light {
+  background-color: $thired-color;
+}
+
+.expert {
+  &__wrapper {
+    &--radio {
+      & .form-check-inline {
+        width: 230px;
+
+        display: block;
+
+        & label {
+          padding-block: 14px;
+        }
+
+        & input:checked {
+          & ~ label {
+            & img[src][data-card] {
+              content: url("../../../../../assets/images/card-blue.svg");
+            }
+
+            & img[src][data-cash] {
+              content: url("../../../../../assets/images/cash-blue.svg");
+            }
+
+            & img[src][data-bank] {
+              content: url("../../../../../assets/images/bank-blue.svg");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.steps-wrp {
+  .step {
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    color: $thired-color;
+
+    span {
+      color: $white;
+      background-color: $thired-color;
+      border-radius: 50%;
+      height: 34px;
+      width: 34px;
+      margin-right: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.active {
+      color: $primary-color;
+
+      span {
+        background-color: $secondary-color;
+      }
+    }
+  }
+
+  .line {
+    width: 15px;
+    height: 0.5px;
+    background-color: #b1a0b4;
+    margin-left: 10px;
+    transform: rotate(90deg);
+    margin-right: 10px;
+    display: block;
+
+    @include for-tablet-portrait-up {
+      display: inline-flex;
+      margin-left: 25px;
+      transform: rotate(0deg);
+      width: 70px;
+    }
+  }
+}
+.btn-light {
+  background-color: #89708f;
+}
+.order-process__wrapper .offer-label {
+  color: #624169;
+  font-size: 22px;
+  background-color: rgba(98, 65, 105, 0.1);
+  border-radius: 5px;
+}
+
+.principal-img {
+  position: relative;
+  left: 890px;
+  bottom: 105px;
+  width: 30%;
+}
+.vehicle-det-images{
+  border-radius: 10px;
+  border: 1px solid #2F779C;
+}
+
+@media screen and (max-width: 421px) {
+  .principal-img {
+    position: relative;
+    left: 196px;
+    bottom: -10px;
+    width: 35%;
+  }
+}
+@media screen and (max-width: 422px) and (max-width: 554px) {
+  .principal-img {
+    position: relative;
+    left: 20px;
+    bottom: -10px;
+    width: 75%;
+  }
+}
+@media screen and (min-width: 555px) and (max-width: 800px) {
+  .principal-img {
+    position: relative;
+    left: 196px;
+    bottom: -10px;
+    width: 35%;
+  }
+}
+/*@media screen and (min-width: 768px){
+  .principal-img {
+    position: relative;
+    left: 196px;
+    bottom: -10px;
+    width: 35%;
+  }
+}
+ @media screen and (max-width: 465px) {
+  .principal-img {
+    position: relative;
+    left:10px;
+    bottom: 0px;
+    width: 45%;
+  }
+} */
+
+.section-header{
+  margin-bottom: 0;
+}

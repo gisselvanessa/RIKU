@@ -1,0 +1,38 @@
+<div class="notification-drawer1">
+    <ng-container *ngIf="!loading; else loader">
+        <ng-container *ngIf="notificationList.length; else noNotification">
+            <ul class="notification__box position-relative bg-white w-100 br-12">
+                <ng-container *ngFor="let notification of notificationList; let i = index;">
+                    <li
+                        class="m-0 mb-3  p-4"
+                        (click)="markAsReadSingle(notification, i)"
+                        [ngClass]="notification.status === 'unread' ? 'active':''"
+                    >
+                        <div class="d-flex align-items-sm-start">
+                            <div class="text-box">
+                                <h5 class=" font-22 text-primary fw-medium mb-2">{{notification.title}}</h5>
+                                <p class="text-purple-2 font-16 mb-3"> {{ notification.type != 'CHAT_NEW_MESSAGE' ? notification.message : ('Sent you a message' | translate ) + ' : ' + notification.message }}</p>
+                                <p class="text-purple-2 font-12">
+                                    {{notification.created_at | date : 'hh:mm a'}}
+                                    <span class="px-3 text-purple-2 font-12">{{notification.created_at | date : 'dd-MMM-yyyy'}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <hr class="ms-0" *ngIf="notificationList.length - 1 > i"/>
+                </ng-container>
+            </ul>
+            <button class="btn primary-btn-outline ms-0 w-100" [routerLink]="['/notifications']">{{"Show All" | translate}}</button>
+        </ng-container>
+        <ng-template #noNotification>
+            <div class="notification__box position-relative bg-white w-100 p-4 br-12 mb-3">
+                <div class="text-box">
+                    <h5 class=" font-22 text-primary fw-medium mb-2 text-center">{{"No notification exist" | translate}}</h5>
+                </div>
+            </div>
+        </ng-template>
+    </ng-container>
+    <ng-template #loader>
+        <app-loader></app-loader>
+    </ng-template>
+</div>

@@ -1,0 +1,139 @@
+@import "../../../../../../variables";
+@import "../../../../../../function";
+
+.input-meeting-date {
+  background-color: white;
+}
+
+.input-icon{
+  position: absolute;
+  right: 10px;
+  top: 72%;
+  transform: translateY(-50%);
+}
+.input2-icon{
+  position: absolute;
+  right: 90%;
+  top: 68%;
+  transform: translateY(-50%);
+}
+
+.doropdown_radio {
+  &.doropdown_selection {
+    position: absolute;
+    top: 41px;
+    right: 5px;
+
+    .btn {
+      width: 140px;
+
+      &.dropdown-toggle {
+        &:after {
+          right: 10px;
+        }
+      }
+    }
+  }
+
+  &.dropdown-images {
+    li {
+      a {
+        .form-check-inline label {
+          padding-left: 10px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+
+  .btn {
+    padding: 15px 20px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+
+    &.dropdown-toggle {
+      &:after {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid $secondary-color;
+        transform: rotate(225deg);
+        border-left: 2px solid $secondary-color;
+        border-right: unset;
+        border-bottom: unset;
+        top: 42%;
+        right: 25px;
+        position: absolute;
+      }
+    }
+  }
+
+  ul {
+    box-shadow: 0px 3px 16px #00000029;
+    border: 0px;
+  }
+
+  li {
+    margin-top: 15px;
+
+    a {
+      border: 0px;
+      padding: 0px;
+
+      &:hover {
+        border: 0px;
+      }
+
+      .form-check-inline label {
+        text-align: left;
+        padding: 12px 20px;
+        padding-left: 45px;
+        white-space: normal;
+      }
+    }
+  }
+}
+
+.input-meeting-date-time:read-only {
+  background: rgba(137, 112, 143, 0.1);
+}
+
+.search-grp {
+  input {
+    padding-left: 40px;
+  }
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+  }
+}
+
+.custom-shadow {
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) !important;
+}
+
+.status-btn {
+  padding-inline: 60px; 
+}
+
+.accepted-btn {
+  background-color: rgba(10, 191, 83, 0.2);
+  color: #0ABF53;
+}
+
+.pending-btn {
+  background-color: rgba(158, 67, 143, 0.2);
+  color: #4E1F4F;
+}
+
+.reschedule-btn {
+  background-color: rgba(60, 117, 154, 0.26);
+  color: $secondary-color;
+}
+
+.pending-btn {
+
+}

@@ -1,0 +1,711 @@
+<section class="section admin_add__user mb-3 bg-blue">
+  <div class="jakay-container">
+    <ng-container *ngIf="!loading; else loader">
+      <div class="back-to-page d-flex">
+        <span style="cursor: pointer" (click)="back()"><img src="assets/images/backarrow.svg" /></span>
+        <div class="ms-3 section-header">
+          <h3 class="mb-3 font-38 text-primary fw-semibold">
+            {{ "Appointment Details" | translate }}
+          </h3>
+          <p class="text-primary-light font-14">
+            {{
+              "It is important to review the total summary of the details since they are evidence of the work carried out by the expert for the client."
+                | translate
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="d-flex justify-content-between mb-3 w-100 flex-wrap">
+          <h3 class="text-primary font-24 pb-4 fw-semibold">
+            {{ "Details" | translate }}
+          </h3>
+          <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto">
+            <p
+              class="label in-progress d-inline-block d-lg-block nowrap"
+              *ngIf="appointmentDetails.meetings.length === 0"
+            >
+              {{ "Pending" | translate }}
+            </p>
+            <p
+              class="label completed d-inline-block d-lg-block nowrap"
+              *ngIf="appointmentDetails.appraisal_report_status === 'completed'"
+            >
+              {{ "Appraisal Report Submitted" | translate }}
+            </p>
+            <ng-container
+              *ngIf="
+                appointmentDetails.appraisal_report_status === 'in_pending'
+              "
+            >
+              <ng-container
+                *ngIf="
+                  appointmentDetails.meetings.length > 0 &&
+                  appointmentDetails.meetings.length <= 2
+                "
+              >
+                <p class="label scheduled d-inline-block d-lg-block">
+                  {{ "Scheduled" | translate }}
+                </p>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-12">
+                <div class="bg-white p-4 br-12 mb-3 pb-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-2">
+                        <div class="col-6">
+                          <h3 class="font-24 fw-semibold text-primary mb-4">
+                            {{ "Selected Service" | translate }}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 col-4">
+                      <h3 class="font-16 text-primary mb-1">
+                        {{
+                          appointmentDetails.package_details
+                            ? appointmentDetails.package_details.package_name
+                            : "-"
+                        }}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="col-12"
+                *ngIf="appointmentDetails.vehicle_information"
+              >
+                <div class="bg-white p-4 br-12 mb-3 pb-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                          <h3 class="text-primary font-24 mb-2 fw-semibold">
+                            {{ "Vehicle Information" | translate }}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Make" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information.make
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Model" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information.model
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Year" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information.year
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-4 col-sm-6 col-12"
+                      *ngIf="
+                        appointmentDetails?.order_id ||
+                        appointmentDetails?.vehicle_information?.is_insider ==
+                          true
+                      "
+                    >
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Body Type" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information.body_type
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Number Plate" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information
+                                  .number_plate
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-4 col-sm-6 col-12"
+                      *ngIf="
+                        appointmentDetails?.order_id ||
+                        appointmentDetails?.vehicle_information?.is_insider ==
+                          true
+                      "
+                    >
+                      <div class="form-group">
+                        <label class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Price" | translate }} $</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          ${{
+                            appointmentDetails.vehicle_information
+                              ? appointmentDetails.vehicle_information.price
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Vehicle Source" | translate }}</label
+                        >
+                        <p
+                          class="text-primary font-18 mb-0 fw-semibold"
+                          *ngIf="
+                            appointmentDetails?.order_id ||
+                            appointmentDetails?.vehicle_information
+                              ?.is_insider == true
+                          "
+                        >
+                          {{ "Riku Insider" | translate }}
+                        </p>
+                        <p
+                          class="text-primary font-18 mb-0 fw-semibold"
+                          *ngIf="
+                            !appointmentDetails?.order_id &&
+                            appointmentDetails?.vehicle_information
+                              ?.is_insider == false
+                          "
+                        >
+                          {{ "Outsider" | translate }}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-12 col-md-12 col-12"
+                      *ngIf="
+                        appointmentDetails?.order_id ||
+                        appointmentDetails?.vehicle_information?.is_insider ==
+                          true
+                      "
+                    >
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Images" | translate }}</label
+                        >
+                        <div class="d-flex">
+                          <div
+                            class="vehicle-image-wrp me-4"
+                            *ngFor="
+                              let image of appointmentDetails
+                                .vehicle_information.images
+                            "
+                          >
+                            <img [src]="image" width="100%" height="100%" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12" *ngIf="appointmentDetails.payment">
+                <div class="bg-white p-4 br-12 mb-3 pb-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-2">
+                        <div class="col-6">
+                          <h3 class="font-24 fw-semibold text-primary mb-4">
+                            {{ "Payment Method" | translate }}
+                          </h3>
+                        </div>
+                        <div class="col-6 text-end">
+                          <!-- <h4
+                                        *ngIf="orderDetails.payment.status === 'success'"
+                                        class="offer-status py-1 px-2 br-5 accepted fw-regular d-inline-block"
+                                      >
+                                        Paid
+                                      </h4> -->
+
+                          <!-- <h4
+                                        *ngIf="
+                                          orderDetails.payment.status === 'pending' ||
+                                          orderDetails.payment.status === 'failed' ||
+                                          orderDetails.payment.status == null
+                                        "
+                                        class="offer-status py-1 px-2 br-5 in-progress fw-regular d-inline-block label in-progress"
+                                      >
+                                        Pending
+                                      </h4> -->
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container>
+                      <div class="col-sm-4 col-4">
+                        <label
+                          class="text-secondary"
+                          *ngIf="appointmentDetails?.payment?.method == 'cash'"
+                          ><img
+                            class="me-1"
+                            data-cash
+                            src="assets/images/cash-blue.svg"
+                            alt="cash"
+                          />
+                          {{ "Cash" | translate }}</label
+                        >
+                        <label
+                          class="text-secondary"
+                          *ngIf="appointmentDetails.payment?.method == 'bank'"
+                          ><img
+                            class="me-1"
+                            data-cash
+                            src="assets/images/bank-blue.svg"
+                            alt="bank"
+                          />
+                          {{ "Bank Transfer" | translate }}</label
+                        >
+                        <label
+                          class="text-secondary"
+                          *ngIf="appointmentDetails.payment?.method == 'card'"
+                          ><img
+                            class="me-1"
+                            data-cash
+                            src="assets/images/card-blue.svg"
+                            alt="card"
+                          />
+                          {{ "Card" | translate }}</label
+                        >
+                      </div>
+                      <div class="col-sm-4 col-4">
+                        <span class="text-primary-light font-16 mx-2 mb-2"
+                          >{{ "Amount" | translate }}:</span
+                        >
+                        <label class="text-secondary"
+                          >${{
+                            appointmentDetails.payment.amount | spanishNumber
+                          }}</label
+                        >
+                      </div>
+                    </ng-container>
+                    <!-- </div> -->
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-12"
+                *ngIf="
+                  appointmentDetails.appraisal_report_status === 'completed'
+                "
+              >
+                <div class="bg-white p-4 br-12 mb-4">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-3">
+                        <div class="col-md-6">
+                          <h5 class="font-24 fw-semibold text-primary mb-4">
+                            {{ "Expert Evaluation" | translate }}
+                          </h5>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                          <button
+                            routerLink="/expert/appraisal-report/view/{{
+                              appointmentDetails.id
+                            }}"
+                            class="btn primary-btn btn-sm br-12"
+                          >
+                            {{ "View Appraisal Report" | translate }}
+                          </button>
+                        </div>
+                        <!-- <div class="col-lg-12 col-md-12 col-12">
+                        <div class="form-group">
+                          <label class="text-primary-light font-14 d-block mb-2">Expert Appraisal Report</label>
+                          <div class="d-flex">
+                            <div class="vehicle-image-wrp me-4">
+                              <img src="{{ orderDetails.vehicle.primary_image }}" width="100%" height="100%" />
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+                      </div>
+                    </div>
+                    <div class="col-lg-10 col-md-12 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Expert Comment" | translate }}</label
+                        >
+                        <p class="mb-2 text-primary font-16 fw-regular">
+                          {{
+                            appointmentDetails.appraisal_report
+                              .additional_criteria
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="col-12"
+                *ngIf="
+                  appointmentDetails.appraisal_report_status === 'in_pending'
+                "
+              >
+                <div class="row mb-5 pb-3">
+                  <div class="col-12">
+                    <div
+                      class="col-lg-12 col-sm-6 col-12"
+                      *ngIf="
+                        appointmentDetails.meetings.length > 0 &&
+                        appointmentDetails.meetings.length <= 2
+                      "
+                    >
+                      <button
+                        class="btn-for-appraisal br-12"
+                        (click)="addAppraisalReport()"
+                      >
+                        <u
+                          ><span class="text-secondary font-24"
+                            >+ {{ "Add Appraisal Report" | translate }}</span
+                          ></u
+                        >
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-12"
+                *ngIf="
+                  appointmentDetails.appraisal_report_status === 'in_pending'
+                "
+              >
+                <div class="row mb-5 pb-3">
+                  <div class="col-12">
+                    <div
+                      class="col-lg-6 col-sm-6 col-12"
+                      *ngIf="appointmentDetails.meetings.length === 0"
+                    >
+                      <button
+                        class="btn primary-btn btn-schedule border-1"
+                        (click)="scheduleMeeting('Schedule', expertReviewId)"
+                      >
+                        {{ "Schedule Appointment" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-12" *ngIf="appointmentDetails.contact_info">
+                <div class="bg-white p-4 br-12 mb-3 pb-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                          <h3 class="text-primary font-24 mb-2 fw-semibold">
+                            {{ "Contact Information" | translate }}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Full Name" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{ appointmentDetails.contact_info.full_name }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Cedula ID" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.cadula_id
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Email" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.email
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Mobile Number" | translate }}</label
+                        >
+
+                        <p
+                          *ngIf="
+                            appointmentDetails.contact_info.mobile_no.includes(
+                              '+'
+                            )
+                          "
+                          class="text-primary font-18 mb-0 fw-semibold"
+                        >
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.mobile_no
+                              : "-"
+                          }}
+                        </p>
+                        <p
+                          *ngIf="
+                            !appointmentDetails.contact_info.mobile_no.includes(
+                              '+'
+                            )
+                          "
+                          class="text-primary font-18 mb-0 fw-semibold"
+                        >
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.country_code
+                              : "-"
+                          }}
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.mobile_no
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <label
+                          class="text-primary-light font-14 d-block mb-2"
+                          >{{ "Address" | translate }}</label
+                        >
+                        <p class="text-primary font-18 mb-0 fw-semibold">
+                          {{
+                            appointmentDetails.contact_info
+                              ? appointmentDetails.contact_info.location.address
+                                  .split(",")
+                                  .join(", ")
+                              : "-"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-12"
+                *ngIf="appointmentDetails.meetings.length > 0"
+              >
+                <div class="bg-white p-4 br-12 mb-3 pb-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                          <h3 class="text-primary font-24 mb-2 fw-semibold">
+                            {{ "Meeting Details" | translate }}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngFor="let meetingDetails of appointmentDetails.meetings"
+                    >
+                      <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label
+                            class="text-primary-light font-14 d-block mb-2"
+                            >{{ "Date" | translate }}</label
+                          >
+                          <p class="text-primary font-18 mb-0 fw-semibold">
+                            {{ meetingDetails.date | date : "dd-MMMM-YYYY" }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label
+                            class="text-primary-light font-14 d-block mb-2"
+                            >{{ "Time" | translate }}</label
+                          >
+                          <p class="text-primary font-18 mb-0 fw-semibold">
+                            {{ meetingDetails.time }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label
+                            class="text-primary-light font-14 d-block mb-2"
+                            >{{ "Location" | translate }}</label
+                          >
+                          <p class="text-primary font-18 mb-0 fw-semibold">
+                            <!-- {{
+                              meetingDetails.location.address
+                                ? meetingDetails.location.address
+                                    .split(",")
+                                    .join(", ")
+                                : "-"
+                            }} -->
+                            {{
+                              meetingDetails.location.address
+                                ? meetingDetails.location.address
+                                : ""
+                            }}
+                            {{
+                              meetingDetails.location.parish && !meetingDetails.location.address?.includes(meetingDetails.location.parish)
+                                ? ", " + meetingDetails.location.parish + ", "
+                                : ""
+                            }}
+                            {{
+                              meetingDetails.location.city && !meetingDetails.location.address?.includes(meetingDetails.location.city)
+                                ? meetingDetails.location.city + ", "
+                                : ""
+                            }}
+                            {{
+                              meetingDetails.location.province && !meetingDetails.location.address?.includes(meetingDetails.location.province)
+                                ? meetingDetails.location.province
+                                : ""
+                            }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-sm-6 col-12"></div>
+                      <!-- <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label class="text-primary-light font-14 d-block mb-2"
+                            >{{ 'Place Reference' | translate }}</label
+                          >
+                          <p class="text-primary font-18 mb-0 fw-semibold">
+                            {{
+                              meetingDetails.location.additional_address
+                                ? meetingDetails.location.additional_address
+                                    .split(",")
+                                    .join(", ")
+                                : "-"
+                            }}
+                          </p>
+                        </div>
+                      </div> -->
+                    </ng-container>
+                    <ng-container
+                      *ngIf="
+                        appointmentDetails.appraisal_report_status ===
+                        'in_pending'
+                      "
+                    >
+                      <ng-container
+                        *ngIf="
+                          appointmentDetails.meetings.length > 0 &&
+                          appointmentDetails.meetings.length < 2
+                        "
+                      >
+                        <div class="col-lg-6 col-sm-6 col-12">
+                          <div class="form-group">
+                            <button
+                              class="btn primary-btn btn-schedule br-12"
+                              (click)="
+                                scheduleMeeting('Reschedule', expertReviewId)
+                              "
+                            >
+                              {{ "Reschedule Appointment" | translate }}
+                            </button>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div
+          class="btn-grp mt-5 mb-5 d-flex"
+          *ngIf="appointmentDetails.meetings.length === 0"
+        >
+          <button
+            class="btn primary-btn me-3 btn-lg border-1"
+            (click)="scheduleMeeting('Schedule', expertReviewId)"
+          >
+            Schedule Meeting
+          </button>
+        </div> -->
+      </div>
+    </ng-container>
+    <ng-template #loader>
+      <app-loader></app-loader>
+    </ng-template>
+  </div>
+</section>

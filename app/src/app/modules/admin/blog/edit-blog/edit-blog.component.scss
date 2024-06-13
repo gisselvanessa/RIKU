@@ -1,0 +1,270 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.chips {
+  float: left;
+  border: 1px solid grey;
+  border-radius: 30px;
+  padding: 5px 20px;
+  margin: 0 5px 10px 5px;
+}
+
+.img-css {
+  cursor: pointer;
+}
+
+.condition-tabs {
+  & .tabs-list {
+    padding: 8px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  & .nav-link {
+    min-width: 160px;
+    padding: 14px 30px;
+    border-radius: 12px;
+    color: $thired-color;
+    font-size: 1rem;
+
+    &.active {
+      background-color: $secondary-color;
+      color: $white;
+    }
+  }
+}
+
+.admin_add__user {
+  padding-bottom: 80px;
+  & .check-checkmark {
+    z-index: 1;
+  }
+  & .add__user-img img {
+    height: 220px;
+    border-radius: 50%;
+    width: 100%;
+    object-fit: cover;
+  }
+  & .admin__add-img{
+    width: 220px;
+    border-radius: 50%;
+  }
+  & .form-check-inline {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    @include for-tablet-portrait-up {
+      margin-bottom: 0;
+    }
+    & label {
+      background-color: $white;
+    }
+  }
+  & .doropdown_radio .btn {
+    padding: 20px;
+  }
+  & .btn-grp {
+    & .btn {
+      min-width: 180px;
+    }
+  }
+  & .form-group {
+    & .input-icon {
+      top: 54px;
+      @include for-laptop {
+        top: 65px;
+      }
+      @include for-phone-only {
+        top: 50px;
+      }
+      &.uplode-icon {
+        top: 28px;
+      }
+    }
+  }
+  & .vehicle__uploaded-photo {
+    & .photo-wrp {
+      width: 65px;
+      height: 65px;
+      position: relative;
+      & img{
+        border-radius: 12px;
+        height: 68px;
+        width: 68px;
+        object-fit: cover;
+        object-position: center;
+      }
+      & span{
+        background-color: #B1A0B4;
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        color: #fff;
+        font-size: 20px;
+        line-height: 22px;
+      }
+    }
+  }
+}
+.steps-wrp {
+  .active {
+    color: $primary-color !important;
+  }
+  .step {
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    color: $thired-color;
+
+    span {
+      color: $white;
+      background-color: $thired-color;
+      border-radius: 50%;
+      height: 34px;
+      width: 34px;
+      margin-right: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .active {
+      color: $primary-color;
+
+      span {
+        background-color: $secondary-color;
+      }
+    }
+  }
+
+  .line {
+    width: 15px;
+    height: .5px;
+    background-color: #B1A0B4;
+    margin-left: 10px;
+    transform: rotate(90deg);
+    margin-right: 10px;
+    display: block;
+
+    @include for-tablet-portrait-up {
+      display: inline-flex;
+      margin-left: 25px;
+      transform: rotate(0deg);
+      width: 70px;
+    }
+  }
+}
+.switch-wrp {
+  input[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    position: fixed;
+  }
+
+  label.switch {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 40px;
+    height: 18px;
+    background-color: rgba($color: $secondary-color, $alpha: 0.2);
+    display: block;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  label:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 14px;
+    transition: 0.1s;
+  }
+
+  input:checked+label {
+    background: $secondary-color;
+  }
+
+  input:checked+label:after {
+    right: 2px;
+    left: unset;
+
+  }
+
+  label:active:after {
+    width: 40px;
+  }
+}
+
+.form-steps {
+  margin-top: 30px;
+}
+
+.usertype-is {
+  color: $thired-color;
+  font-size: 14px;
+
+  span {
+    color: $secondary-color;
+  }
+}
+
+
+.c-none{
+  display: none;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.username-list li{
+  margin-bottom: 10px !important;
+}
+.username-label{
+  padding:12px 10px !important;
+  text-align: center !important;
+}
+
+.b-date{
+  background-color:  white !important;
+}
+
+.change_mobile_number{
+  position: absolute;
+  right: 5%;
+  top: 55px;
+}
+
+
+.suggestions{
+  background-color: rgba($color: $purple-grey, $alpha: 0.15);
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.result-pills {
+  padding-bottom: 30px;
+
+  & .pill {
+    padding: 15px 20px;
+    margin-right: 1.125rem;
+    background-color: $secondary-color-05;
+    border-radius: 12px;
+    color: $secondary-color;
+    vertical-align: middle;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}

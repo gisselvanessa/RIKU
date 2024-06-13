@@ -1,0 +1,221 @@
+<div class="row">
+  <div class="col-lg-8 mt-4">
+    <div class="bg-white br-12 p-4">
+      <div class="d-flex align-items-start justify-content-between">
+        <h5 class="font-18 text-primary fw-regular mt-2">
+          {{ "Earnings" | translate }}
+        </h5>
+        <div class="filter-box cusotmer-heading ms-3">
+          <div class="form-group position-relative mb-0">
+            <div ngbDropdown class="doropdown_radio" [autoClose]="true">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown text-primary font-12 fw-regular"
+                type="button"
+                id="filter"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ earningStartDate | date : "MMMM dd, yyyy" }} -
+                {{ earningEndDate | date : "MMMM dd, yyyy" }} &nbsp;<img
+                  src="assets/images/calender.svg"
+                  class="input-icon"
+                />
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let filter of filters">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    [ngClass]="{
+                      'selected-dropdown-item': earningStatFilter == filter
+                    }"
+                    (click)="onChangeEarningFilter(filter)"
+                    >{{ filter | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <span
+              bsDaterangepicker
+              #drp="bsDaterangepicker"
+              placement="right"
+              [maxDate]="today"
+              [bsConfig]="bsConfig"
+              [bsValue]="bsRangeValue"
+              (bsValueChange)="getEarningDateValues($event)"
+            ></span>
+          </div>
+        </div>
+      </div>
+      <div class="data-wrp">
+        <div
+          class="chart-container"
+          *ngIf="totalEarnings && totalEarnings.length > 0"
+          style="height: 345px"
+        >
+          <canvas id="lineChart"></canvas>
+        </div>
+        <p
+          *ngIf="totalEarnings && totalEarnings.length == 0"
+          class="font-14 text-primary p-4"
+        >
+          {{ "No records available for this duration" | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 mt-4">
+    <div class="bg-white br-12 p-4">
+      <ng-container *ngIf="orderStats; else loader">
+        <div
+          class="cusotmer-heading d-flex align-items-start justify-content-between"
+        >
+          <h5 class="font-18 text-primary fw-regular mt-2">
+            {{ "Order Related" | translate }}
+          </h5>
+          <div class="form-group position-relative mb-0">
+            <div ngbDropdown class="doropdown_radio">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown text-primary font-12 fw-regular"
+                type="button"
+                id="filter"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{ startDate | date : "MMMM dd, yyyy" }} -
+                {{ endDate | date : "MMMM dd, yyyy" }} &nbsp;<img
+                  src="assets/images/calender.svg"
+                  class="input-icon"
+                />
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let filter of filters">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    [ngClass]="{
+                      'selected-dropdown-item': orderStatFilter == filter
+                    }"
+                    (click)="onChangeFilter(filter)"
+                    >{{ filter | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <span
+            bsDaterangepicker
+            #odrp="bsDaterangepicker"
+            placement="right"
+            [maxDate]="today"
+            [bsConfig]="bsConfig"
+            [bsValue]="bsRangeValue"
+            (bsValueChange)="getDateValues($event)"
+          ></span>
+        </div>
+        <div class="cutomer-data-wrp">
+          <div class="row mt-4">
+            <div class="col-lg-3 border-right">
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.total_orders }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Total orders" | translate
+                }}</span>
+              </p>
+            </div>
+            <div
+              class="col-lg-4 border-right d-inline-flex justify-content-center"
+            >
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.in_review }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Vehicles in review stage" | translate
+                }}</span>
+              </p>
+            </div>
+            <div class="col-lg-5 d-inline-flex justify-content-center">
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.in_price_negotiation }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Vehicles in price negotiation process" | translate
+                }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-lg-3 border-right">
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.delivered }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Vehicles delivered" | translate
+                }}</span>
+              </p>
+            </div>
+            <div
+              class="col-lg-4 border-right d-inline-flex justify-content-center"
+            >
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.out_for_delivery }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Vehicles out for delivery" | translate
+                }}</span>
+              </p>
+            </div>
+            <div class="col-lg-5 d-inline-flex justify-content-center">
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.in_vehicle_procedure }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "Vehicle in vehicular transfer process" | translate
+                }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-lg-3">
+              <p class="fw-regular font-14 text-start">
+                <span
+                  class="small-data-count data-count font-16 text-secondary"
+                  >{{ orderStats.cancelled }}</span
+                >
+                <span class="d-block text-break font-14 mt-2">{{
+                  "canceled orders" | translate
+                }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loader>
+        <app-loader></app-loader>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="swiper-customise-modal">
+  <swiper style="--swiper-navigation-color: rgb(27, 25, 25);--swiper-pagination-color: rgb(27, 25, 25)"
+    [initialSlide]="index" [zoom]="true" [navigation]="true" [pagination]="{
+      clickable: true
+    }" class="gallery-swiper">
+    <ng-template *ngFor="let image of swiperImages; index as i" swiperSlide>
+      <div class="swiper-zoom-container">
+        <img [src]="image" (error)="handleMissingImage($event)" />
+      </div>
+    </ng-template>
+  </swiper>
+</div>

@@ -1,0 +1,353 @@
+@import "../../../../function";
+@import "../../../../variables";
+
+// range slider for price //
+.loan-range-slider1 {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 10px;
+
+  & .custom-slider1 {
+    & .ngx-slider {
+      .ngx-slider-bar {
+        //background: rgb(235, 164, 58);
+        background: #994c98 !important;
+      }
+
+      & .ngx-slider-selection {
+        background: rgb(216, 213, 209);
+      }
+
+      & .ngx-slider-pointer {
+        background: #994c98 !important;
+        border-color: #994c98 !important;
+      }
+      & .ngx-slider-bubble {
+        text-align: center;
+        display: block;
+        line-height: 1;
+        padding: 4px 9px;
+        color: #994c98 !important;
+        border-radius: 0.125rem;
+        background: #fff !important;
+        font-size: 1rem;
+        border-radius: 12px;
+        bottom: 25px;
+        transform: translate(-50%, 0);
+        box-shadow: 0px 3px 6px rgb(0 0 0 / 16%);
+        min-width: 75px;
+
+        &::before {
+          position: absolute;
+          content: "";
+          left: 50%;
+          bottom: -8px;
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border: 4px solid transparent;
+          border-top-color: #fff;
+        }
+      }
+
+      .ngx-slider-bubble.ngx-slider-limit {
+        bottom: -25px !important;
+        min-width: unset;
+        padding: unset;
+        background-color: transparent;
+        box-shadow: none;
+        font-size: 1rem;
+
+        &::before {
+          display: none;
+        }
+      }
+      & .ngx-slider-active {
+        border-color: #994c98 !important;
+        &:after {
+          background: white !important;
+        }
+      }
+    }
+  }
+
+  & .price-tooltip {
+    position: absolute;
+    top: -25px;
+
+    & span {
+      position: absolute;
+      text-align: center;
+      display: block;
+      line-height: 1;
+      padding: 4px 9px;
+      // padding: 5px;
+      color: #e98d69 !important;
+      border-radius: 0.125rem;
+      background: #fff;
+      font-size: 1.25rem;
+      border-radius: 15px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      box-shadow: 0px 3px 6px #00000029;
+
+      &:before {
+        position: absolute;
+        content: "";
+        left: 50%;
+        bottom: -8px;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border: 4px solid transparent;
+        border-top-color: #fff;
+      }
+    }
+  }
+}
+
+.vehicle-image-wrp {
+  height: 75px;
+  width: 100px;
+  border-radius: 15px;
+  overflow: hidden;
+  img {
+    object-fit: cover;
+  }
+}
+
+.invalid-feedback {
+  display: block !important;
+}
+
+.btn-loan-type {
+  padding-top: 17px;
+  padding-bottom: 17px;
+  border: 1px solid rgba(137, 112, 143, 0.5);
+  border-radius: 12px;
+}
+
+div.text {
+  position: relative;
+}
+
+div.text input {
+  padding-left: 15px;
+  margin-left: 4px;
+}
+
+// div.text:after {
+//   position: absolute;
+//   left: 8px;
+//   top: 12px;
+//   content: "$";
+//   color: #3b1144;
+//   @include for-big-desktop {
+//     top: 18px;
+//   }
+// }
+
+div.text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translate(-50%, -50%);
+  background-image: url('../../../../assets/images/calendar.svg');
+  height: 21px;
+  width: 21px;
+  pointer-events: none;
+  background-size: cover;
+}
+
+div.text::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  background-image: url('../../../../assets/images/money.svg');
+  height: 16px;
+  width: 19px;
+  pointer-events: none;
+  background-size: cover;
+}
+
+.info-icon {
+  height: 20px;
+  width: 20px;
+  font-size: 12px;
+}
+
+.btn-loan-type::after {
+  margin-left: 11rem !important;
+}
+
+.doropdown_radio {
+  &.doropdown_selection {
+    position: absolute;
+    top: 41px;
+    right: 5px;
+
+    .btn {
+      width: 140px;
+
+      &.dropdown-toggle {
+        &:after {
+          right: 10px;
+        }
+      }
+    }
+  }
+
+  &.dropdown-images {
+    li {
+      a {
+        .form-check-inline label {
+          padding-left: 10px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+
+  .btn {
+    padding: 15px 20px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+
+    &.dropdown-toggle {
+      &:after {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid $secondary-color;
+        transform: rotate(225deg);
+        border-left: 2px solid $secondary-color;
+        border-right: unset;
+        border-bottom: unset;
+        top: 42%;
+        right: 25px;
+        position: absolute;
+        background-image: url('../../../../assets/images/dropdown-icon.svg');
+      }
+    }
+  }
+
+  ul {
+    box-shadow: 0px 3px 16px #00000029;
+    border: 0px;
+  }
+
+  li {
+    margin-top: 15px;
+
+    a {
+      border: 0px;
+      padding: 0px;
+
+      &:hover {
+        border: 0px;
+      }
+
+      .form-check-inline label {
+        text-align: left;
+        padding: 12px 20px;
+        padding-left: 45px;
+        white-space: normal;
+      }
+    }
+  }
+}
+
+.details-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.icome-details-input {
+  padding-left: 53px;
+}
+
+.custom-dropdown-toggle::after {
+  content: "";
+  display: none !important;
+}
+
+// right icon of dropdown
+
+.custom-dropdown-toggle {
+  position: relative;
+  border: 1px solid rgba(137, 112, 143, 0.5) !important;
+  border-radius: 10px;
+}
+
+.custom-dropdown-toggle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-color: #2F779C;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.custom-dropdown-toggle::before {
+  content: url('../../../../assets/images/arrow-down.svg');
+}
+
+.la-text {
+  color: $violet !important;
+}
+
+.price {
+  color: $orange !important;
+}
+
+a.dropdown-item:active {
+  background-color: transparent;
+}
+
+.complete-loan-btn {
+  padding-inline: 4rem;
+}
+
+.custom-close-btn {
+  background-color: rgba(158, 67, 143, 0.29);
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+}
+
+.custom-shadow {
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) !important;
+}
+.font {
+  &-16 {
+    font-size: 16px;
+    @media (max-width: 1400px){
+        font-size: 14px !important;
+    }
+  }
+  &-18 {
+    font-size: 18px;
+    @media (max-width: 1400px){
+        font-size: 16px !important;
+    }
+  }
+
+}

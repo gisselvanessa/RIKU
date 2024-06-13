@@ -1,0 +1,444 @@
+<app-dealer-plans *ngIf="!receivedReceipt" (receiptSubmitted)="receiveReceipt($event)"></app-dealer-plans>
+
+<div *ngIf="receivedReceipt" class="page-wrapper">
+  <div class="add-vehicle-wrp dealer-vehicle-add">
+    <div
+      class="add-background-image"
+      [ngClass]="{ 'edit-background-image': vehicleId }"
+    >
+      <img
+        [ngClass]="{ 'img-add-vehicle': vehicleId }"
+        class="w-100"
+        src="assets/images/add-vehicle-bg.png"
+      />
+      <div class="vehicle-detail-wrp">
+        <div class="back-to-page d-flex">
+          <span
+            ><img
+              src="assets/images/backarrow.svg"
+              style="cursor: pointer"
+              routerLink="/dealer/vehicles/vehicle-list"
+          /></span>
+          <h3 class="ms-3 font-38 text-white fw-semibold mb-0">
+            {{ vehicleId ? ("Edit" | translate) : "Add" | translate }} {{ 'Vehicle' | translate }}
+          </h3>
+        </div>
+        <div class="select-vehicle-detail-wrp mt-5 d-flex">
+          <div
+            class="vehicle-dropdown bg-white d-inline-flex flex-grow-1 br-12"
+          >
+            <div ngbDropdown class="first-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-20 fw-regular"
+                [ngClass]="{ 'item-shown': selectedVehicleCondition }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedVehicleCondition }"
+                  >{{ 'Vehicle Condition' | translate }}</span
+                >
+                <span
+                  [ngClass]="{ 'selected-item': selectedVehicleCondition }"
+                  >{{ selectedVehicleCondition | titlecase | translate }}</span
+                >
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 p-3"
+                aria-labelledby="vehicle-type"
+              >
+                <label>{{ 'Vehicle Condition' | translate }}</label>
+                <ng-container>
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleCondition == 'new'
+                      }"
+                      (click)="selectedVehicleCondition = 'new';onEditVehicle()"
+                      >{{ 'New' | translate }}</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleCondition == 'used'
+                      }"
+                      (click)="selectedVehicleCondition = 'used';onEditVehicle()"
+                      >{{ 'Used' | translate }}</a
+                    >
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+            <div ngbDropdown class="first-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-20 fw-regular"
+                [ngClass]="{ 'item-shown': selectedVehicleType }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedVehicleType }"
+                  >{{ 'Vehicle Type' | translate }}</span
+                >
+                <span [ngClass]="{ 'selected-item': selectedVehicleType }">{{
+                  selectedVehicleType | translate
+                }}</span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 p-3"
+                aria-labelledby="vehicle-type"
+              >
+                <label>{{ 'Vehicle Type' | translate }}</label>
+                <ng-container *ngFor="let vehicle of vehicleTypes">
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleType == vehicle.type
+                      }"
+                      (click)="
+                        getVehicleMake(vehicle.id);
+                        selectedVehicleType = vehicle.type;
+                        typeId = vehicle.id;
+                        onEditVehicle()
+                      "
+                      >{{ vehicle.type | translate}}</a
+                    >
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+            <div ngbDropdown class="second-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-20 fw-regular"
+                type="button"
+                id="vehicle-type"
+                [ngClass]="{ 'item-shown': selectedVehicleMake }"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedVehicleMake }"
+                  >{{ 'Make' | translate }}</span
+                >
+                <span [ngClass]="{ 'selected-item': selectedVehicleMake }">{{
+                  selectedVehicleMake
+                }}</span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="searchMake"
+                        (input)="searchInput($event, 'makes')"
+                        placeholder="{{ 'Search By Make' | translate }}"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li *ngIf="popularMakes.length > 0">
+                  <label> {{ 'Popular Makes' | translate }}</label>
+                </li>
+                <li class="make-brand-logo" *ngIf="popularMakes.length > 0">
+                  <ul
+                    class="d-flex align-items-center"
+                    *ngFor="let items of popularMakes"
+                  >
+                    <li
+                      *ngFor="let vehicleMake of items"
+                      (click)="
+                        getVehicleMakeYear(vehicleMake.id);
+                        selectedVehicleMake = vehicleMake.name;
+                        searchMake = '';
+                        onEditVehicle()
+                      "
+                    >
+                      <a
+                        ngbDropdownItem
+                        class="make-logo"
+                        [ngClass]="{
+                          'selected-dropdown-item':
+                            selectedVehicleMake == vehicleMake.name
+                        }"
+                        href="javascript:void(0)"
+                      >
+                        <img [src]="vehicleMake.icon_url" alt="" />
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li><label>{{ 'More Makes' | translate }}</label></li>
+                <ng-container *ngIf="nonPopularMakes.length > 0">
+                  <li *ngFor="let vehicleMake of nonPopularMakes">
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleMake == vehicleMake.name
+                      }"
+                      (click)="
+                        getVehicleMakeYear(vehicleMake.id);
+                        selectedVehicleMake = vehicleMake.name;
+                        searchMake = '';onEditVehicle()
+                      "
+                    >
+                      {{ vehicleMake.name }}
+                    </a>
+                  </li>
+                </ng-container>
+                <li *ngIf="vehicleMakes?.length == 0">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    >{{ 'No makes found for this vehicle types' | translate }}.</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div ngbDropdown class="first-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-20 fw-regular"
+                type="button"
+                id="vehicle-type"
+                [ngClass]="{ 'item-shown': selectedVehicleMakeYear }"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedVehicleMakeYear }"
+                  >{{ 'Year' | translate }}</span
+                >
+                <span
+                  [ngClass]="{ 'selected-item': selectedVehicleMakeYear }"
+                  >{{ selectedVehicleMakeYear }}</span
+                >
+              </button>
+
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="searchYear"
+                        placeholder="{{ 'Search Year' | translate }}"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li><label>{{ 'Year' | translate }}</label></li>
+                <ng-container *ngIf="vehicleMakeYears.length > 0">
+                  <ng-container
+                    *ngFor="
+                      let vehicleMakeYear of vehicleMakeYears
+                        | filter : searchYear
+                    "
+                  >
+                    <li>
+                      <a
+                        ngbDropdownItem
+                        class="dropdown-item"
+                        href="javascript:void(0)"
+                        [ngClass]="{
+                          'selected-dropdown-item':
+                            selectedVehicleMakeYear == vehicleMakeYear
+                        }"
+                        (click)="
+                          getVehicleModel(vehicleMakeYear);
+                          selectedVehicleMakeYear = vehicleMakeYear;
+                          searchYear = '';onEditVehicle()
+                        "
+                        >{{ vehicleMakeYear }}</a
+                      >
+                    </li>
+                  </ng-container>
+                </ng-container>
+                <li *ngIf="vehicleMakeYears?.length == 0">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    >{{ 'No years found for this vehicle make' | translate }}.</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div ngbDropdown class="first-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-20 fw-regular"
+                type="button"
+                id="vehicle-type"
+                [ngClass]="{ 'item-shown': selectedVehicleModel }"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedVehicleModel }"
+                  >{{ 'Model' | translate }}</span
+                >
+                <span [ngClass]="{ 'selected-item': selectedVehicleModel }">{{
+                  selectedVehicleModel
+                }}</span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="searchModel"
+                        placeholder="{{ 'Search Model' | translate }}"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li><label>{{ 'Model Name' | translate }}</label></li>
+                <ng-container *ngIf="vehicleModels.length > 0">
+                  <li
+                    *ngFor="
+                      let vehicleModel of vehicleModels | filter : searchModel
+                    "
+                  >
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleModel == vehicleModel.name
+                      }"
+                      (click)="
+                        selectedVehicleModel = vehicleModel.name;
+                        modelId = vehicleModel.id;
+                        searchModel = '';
+                        setVehicleModel(vehicleModel.id);onEditVehicle()
+                      "
+                      >{{ vehicleModel.name }}</a
+                    >
+                  </li>
+                </ng-container>
+                <li *ngIf="vehicleModels?.length == 0">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    >{{ 'No model founds for this year' | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <!-- <div ngbDropdown class="first-dropdown dropdown">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white  dropdown-toggle btn-dropdown font-20 fw-regular"
+                type="button"
+                id="vehicle-type"
+                [ngClass]="{ 'item-shown': selectedDuration }"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span [ngClass]="{ 'selected-label': selectedDuration }"
+                  >{{ 'Post Time' | translate }}</span
+                >
+                <span [ngClass]="{ 'selected-item': selectedDuration }">{{
+                  selectedDuration
+                }}</span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+              >
+                <!-- <li>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="searchModel"
+                        placeholder="Search Model "
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li> 
+                <li><label>{{ 'Post Time' | translate }}</label></li>
+                <ng-container *ngIf="selectDuration.length > 0">
+                  <li *ngFor="let duration of selectDuration">
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                      [ngClass]="{
+                        'selected-dropdown-item': selectedDuration == duration.option
+                      }"
+                      (click)="
+                        selectedDuration = duration.option;
+                        setDuration(duration);onEditVehicle()
+                      "
+                      >{{ duration.option | translate }}</a
+                    >
+                  </li>
+                </ng-container>
+              </ul>
+            </div> -->
+          </div>
+          <button
+            *ngIf="!vehicleId"
+            class="btn primary-btn ms-3 br-12 btn-md font-20 fw-regular"
+            (click)="submitAddForm()"
+            type="button"
+          >
+            {{ 'Add' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

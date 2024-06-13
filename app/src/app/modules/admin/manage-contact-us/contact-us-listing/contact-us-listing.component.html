@@ -1,0 +1,253 @@
+<section class="section order__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Manage Contact Us" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Search" | translate}}</label>
+      <div class="row">
+        <div class="col-lg-9 col-md-8">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="searchKeyword"
+                (keyup.enter)="setSearchText(searchKeyword)"
+                placeholder="{{'Search by Email, Subject or Name' | translate}}"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="setSearchText(searchKeyword)">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center" *ngIf="searchApplied">
+          <h3 class="text-primary fw-semibold font-28">{{"Search Results" | translate}}</h3>
+          <a
+            href="javascript:void(0)"
+            (click)="searchKeyword = ''; clearAll()"
+            class="ms-4 text-secondary text-underline"
+            >{{"Clear All Filters" | translate}}</a
+          >
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <span class="pill"
+          >{{ searchKeyword }}
+          <a
+            class="ms-3"
+            href="javascript:void(0)"
+            (click)="
+              searchKeyword = '';
+              searchApplied = false;
+              contactUsList({
+                page: this.page,
+                limit: this.limit,
+                status: this.selectedTab
+              })
+            "
+            ><img src="assets/images/vehicle-list/blue-cross.svg" alt=""
+          /></a>
+        </span>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-all-tab"
+                [ngClass]="{ active: selectedTab == 'open' }"
+                (click)="selectTab('open')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-all"
+                aria-selected="true"
+              >
+                {{"Open" | translate}}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-approval-tab"
+                [ngClass]="{ active: selectedTab == 'closed' }"
+                (click)="selectTab('closed')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-approval"
+                aria-selected="false"
+              >
+                {{"Close" | translate}}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="order__listing--cards buyer-cards">
+        <div class="tab-content pb-5">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('id')">
+                    <span
+                      >{{"ID" | translate}}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('created_at')">
+                    <span
+                      >{{"Date" | translate}}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('first_name')">
+                    <span>
+                      {{"Name" | translate}}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('last_name')">
+                    <span>
+                      {{"Surname" | translate}}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th><span>{{"Email" | translate}}</span></th>
+                  <th><span>{{"Mobile Number" | translate}}</span></th>
+                  <th><span>{{"Subject" | translate}}</span></th>
+                  <th><span>{{"Status" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="
+                        manageContactUsList.length > 0;
+                        else noRecordsTemplate
+                      "
+                    >
+                      <tr
+                        *ngFor="
+                          let contactUs of manageContactUsList;
+                          let i = index
+                        "
+                      >
+                        <td>{{ contactUs.id.slice(0, 6) | uppercase }}</td>
+                        <td>{{ contactUs.date | date : "dd-MMMM-YYYY" }}</td>
+                        <td>{{ contactUs.first_name | titlecase }}</td>
+                        <td>{{ contactUs.last_name | titlecase }}</td>
+                        <td>{{ contactUs.email }}</td>
+                        <td>
+                          {{ contactUs.mobile_no }}
+                        </td>
+                        <td>
+                          {{ (contactUs.subject | slice : 0 : 10) + "...." }}
+                        </td>
+                        <td>
+                          <label
+                            class="pending-approval"
+                            *ngIf="contactUs.status == 'open'"
+                            >{{"Open" | translate}}</label
+                          >
+
+                          <label
+                            class="approved"
+                            *ngIf="contactUs.status == 'closed'"
+                            >{{"Closed" | translate}}</label
+                          >
+                        </td>
+                        <!-- <td class="action-class">
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_view_details"
+                            routerLink="/admin/orders/details/{{ order.id }}"
+                            class="p-2"
+                          >
+                            <img src="assets/images/eye-open.svg"
+                          /></a>
+                        </td> -->
+                        <td class="action-class">
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_view_details"
+                            routerLink="/admin/manage-contact-us/view-detail/{{
+                              contactUs.id
+                            }}"
+                            class="p-2"
+                          >
+                            <img src="assets/images/eye-open.svg"
+                          /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

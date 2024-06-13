@@ -1,0 +1,299 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.bg-blue {
+  background-color: $bg-blue;
+}
+
+.vehicle {
+  &__listing {
+    &--search {
+      & .vehicle-dropdown-menu li a.dropdown-car-brand {
+        padding: 12px 0;
+        color: $primary-color;
+        text-align: center;
+        border: 0.5px solid $thired-color;
+        border-radius: 12px;
+      }
+
+      & .make-brand-logo {
+        & * {
+          margin-inline: 2px;
+        }
+
+        & ul {
+          box-shadow: none;
+        }
+
+        & .make-logo {
+          width: 100px;
+          height: 100px;
+          background-color: $white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+
+          &:hover,
+          :active {
+            box-shadow: 0px 0px 6px #2f779c80;
+          }
+        }
+      }
+
+      & .doropdown_radio {
+        &.dropdown-images li a .form-check-inline label {
+          padding: 12px 20px;
+          padding-left: 45px;
+        }
+
+        & .search-grp {
+          & input.form-control {
+            border: 0.5px solid $thired-color;
+            min-width: 230px;
+          }
+
+          & .search-icon {
+            left: 4%;
+          }
+        }
+      }
+    }
+
+    &--result {
+      .doropdown_radio .btn {
+        background-color: transparent;
+        padding: 5px 20px;
+
+        &::after {
+          right: 0px;
+        }
+      }
+
+      .result-pills {
+        padding-bottom: 60px;
+
+        & *+* {
+          margin-left: 1.125rem;
+        }
+
+        & .pill {
+          padding: 15px 20px;
+          background-color: $secondary-color-05;
+          border-radius: 12px;
+          color: $secondary-color;
+          vertical-align: middle;
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    &--cards {
+      & .listing_cards {
+        border-radius: 32px;
+
+        &:hover {
+          box-shadow: 0px 34px 50px -4px rgba(47, 119, 156, 0.51);
+          border-radius: 32px;
+          transition: all ease-in-out 0.5s;
+        }
+      }
+
+      & .card_img {
+        border-top-left-radius: 32px;
+        border-top-right-radius: 32px;
+
+        & img {
+          width: 100%;
+        }
+      }
+
+      & .card_text-box {
+        background-color: $white;
+        border-bottom-left-radius: 32px;
+        border-bottom-right-radius: 32px;
+
+        & .details_labels {
+          & .details__label {
+            font-size: 1rem;
+            background-color: $secondary-color-10;
+            padding: 5px;
+            min-width: 100px;
+            border-radius: 5px;
+            text-align: center;
+            color: #2f779c;
+          }
+        }
+
+        & .details_location-date {
+          p img {
+            width: 16px;
+          }
+        }
+
+        & .details-btn-grp {
+          display: flex;
+          justify-content: space-between;
+          padding: 15px 0;
+          border-top: 1px solid #dee2e6;
+
+          & .btn-outline-purple,
+          .btn-outline-red {
+            width: 50%;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-grp {
+  & input.form-control {
+    padding-left: 45px !important;
+  }
+
+  & .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+  }
+
+  & .search-btn {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+  }
+}
+
+.condition-tabs {
+  & .tabs-list {
+    padding: 8px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  & .nav-link {
+    min-width: 150px;
+    padding: 12px 5px;
+    border-radius: 12px;
+    color: $thired-color;
+    font-size: 1.125rem;
+
+    &.active {
+      background-color: $secondary-color;
+      color: $white;
+    }
+  }
+}
+
+.admin {
+  &--listing {
+    .condition-tabs {
+      & .nav-link {
+        min-width: 150px;
+        padding: 12px 40px;
+        font-size: 1rem;
+      }
+    }
+
+    &-table {
+      box-shadow: 0px 3px 10px #B1A0B470;
+
+      table {
+        thead {
+          border-radius: 6px;
+          background: rgba($color: $secondary-color, $alpha: 0.1);
+
+          th {
+            color: #191919;
+            font-size: 14px;
+            padding: 15px 10px;
+            font-weight: 600;
+            cursor: pointer;
+
+            span {
+              display: flex;
+              align-items: center;
+              padding: 0px;
+            }
+          }
+
+          th:first-child {
+            border-radius: 10px 0 0 10px;
+            padding-left: 20px;
+          }
+
+          th:last-child {
+            border-radius: 0 10px 10px 0;
+            padding-right: 20px;
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #D5DCE6;
+
+            &:last-child {
+              border-bottom: 0px transparent;
+            }
+          }
+
+          td {
+            vertical-align: middle;
+            padding: 15px 10px;
+
+
+            &:first-child {
+              padding-left: 20px;
+            }
+
+            &:last-child {
+              padding-right: 20px;
+            }
+
+            .small-img-list {
+              border-radius: 12px;
+              overflow: hidden;
+              width: 40px;
+              height: 40px;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            label {
+              font-size: 14px;
+              font-weight: 400;
+              border-radius: 25px;
+              padding: 8px 15px;
+              background-color: rgba($color: #4DB143, $alpha: 0.1);
+              color: #46BC39;
+
+              &.pending-approval {
+                color: #994C98;
+                background-color: rgba($color: #8D5099, $alpha: 0.1);
+              }
+
+              &.approved {
+                color: #46BC39;
+                background-color: rgba($color: #4DB143, $alpha: 0.1);
+              }
+
+              &.rejected {
+                color: #EE3232;
+                background-color: rgba($color: #DE3F34, $alpha: 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,407 @@
+<section class="bg-blue">
+  <ng-container *ngIf="!isPaymentMethodSelected">
+    <!-- <div class="back-to-page d-flex">
+      <span><img src="assets/images/backarrow.svg" (click)="back()" /></span>
+      <div class="ms-3 section-header">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">Buy Now</h3>
+        <p class="text-primary-light font-14">
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+          nonumy eirmod tempor invidunt ut labore.
+        </p>
+      </div>
+    </div> -->
+    <div class="payment_wrapper">
+      <p class="font-22 fw-semibold text-primary mb-3 mb-lg-4 mt-4 mt-xl-0">
+        {{ "Expert Payment" | translate }}
+      </p>
+      <ng-container *ngIf="completedStep > expertReviewStepNumber.PAYMENT">
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Total Paid Amount" | translate }} : ${{ expertPackagePrice | spanishNumber }}
+        </p>
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Payment Method" | translate }} :
+          {{ currentExpertReview.payment.method | titlecase }}
+        </p>
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Payment received successfully" | translate }}
+        </p>
+        <div class="row">
+          <div class="btn-grp mt-5 d-flex">
+            <button
+              class="btn primary-btn-outline me-3 btn-lg"
+              (click)="setPreviousStep()"
+            >
+              {{ "Previous" | translate }}
+            </button>
+            <button
+              class="btn primary-btn btn-lg border-1"
+              (click)="setNextStep()"
+            >
+              {{ "Next" | translate }}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="currentExpertReview?.bank_receipt?.is_bank_receipt">
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Total Paid Amount" | translate }} : ${{ expertPackagePrice | spanishNumber }}
+        </p>
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Payment Method" | translate }} :
+          {{ currentExpertReview.payment.method | titlecase }}
+        </p>
+        <p
+          class="font-18 text-secondary mb-3 mb-lg-4"
+          *ngIf="completedStep <= expertReviewStepNumber.PAYMENT"
+        >
+          {{
+            currentExpertReview.payment.method == "cash"
+              ? ("Cash Confirmation Message" | translate)
+              : ("Bank Confirmation Message" | translate)
+          }}
+        </p>
+        <p
+          class="font-18 text-secondary mb-3 mb-lg-4"
+          *ngIf="completedStep > expertReviewStepNumber.PAYMENT"
+        >
+          {{ "Payment received successfully" | translate }}
+        </p>
+        <div class="row">
+          <div class="mt-4 d-sm-flex">
+            <button
+              class="btn primary-btn-outline btn-sm btn--small me-sm-3"
+              (click)="setPreviousStep()"
+            >
+              {{ "Previous" | translate }}
+            </button>
+            <button
+              class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0"
+              (click)="setNextStep()"
+            >
+              {{ "Next" | translate }}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          completedStep <= expertReviewStepNumber.PAYMENT &&
+          !currentExpertReview?.bank_receipt?.is_bank_receipt
+        "
+      >
+        <p class="font-18  text-secondary mb-3 mb-lg-4">
+          {{ "Total Payable Amount" | translate }} : ${{
+            currentExpertReview.package_details?.package_price | spanishNumber
+          }}
+        </p>
+        <div class="row">
+          <div class="col-lg-12">
+            <p class="font-22 fw-semibold text-primary mb-4">
+              {{ "Select Payment Method" | translate }}
+            </p>
+            <div class="payment_wrapper--radio br-12">
+              <div class="form-check form-check-inline mb-3 mb-xl-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="payment"
+                  id="card"
+                  value="card"
+                  (click)="selectPaymentMethod($event)"
+                  [checked]="selectedPaymentMethod == 'card'"
+                />
+                <label class="form-check-label font-15 fw-semibold" for="card">
+                  <img
+                    class="me-3"
+                    data-card
+                    src="assets/images/card-purple.svg"
+                    alt="card"
+                  />
+                  {{ "Credit Card" | translate }}</label
+                >
+                <span class="dot-checkmark"></span>
+              </div>
+
+              <div class="form-check form-check-inline mb-3 mb-xl-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="payment"
+                  id="cash"
+                  [checked]="selectedPaymentMethod == 'cash'"
+                  value="cash"
+                  (click)="selectPaymentMethod($event)"
+                />
+                <label class="form-check-label font-15 fw-semibold" for="cash">
+                  <img
+                    class="me-3"
+                    data-cash
+                    src="assets/images/cash-purple.svg"
+                    alt="cash"
+                  />
+                  {{ "Transfer or Deposit" | translate }}</label
+                >
+                <span class="dot-checkmark"></span>
+              </div>
+              <!-- <div class="form-check form-check-inline mb-3 mb-xl-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="payment"
+                  id="bank"
+                  value="bank"
+                  [checked]="selectedPaymentMethod == 'bank'"
+                  (click)="selectPaymentMethod($event)"
+                />
+                <label class="form-check-label" for="bank">
+                  <img
+                    class="me-3"
+                    data-bank
+                    src="assets/images/bank-purple.svg"
+                    alt="bank"
+                  />
+                  {{ "Bank Transfer" | translate }}</label
+                >
+                <span class="dot-checkmark"></span>
+              </div> -->
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="mt-4 d-sm-flex">
+                <button
+                  class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+                  (click)="setPreviousStep()"
+                >
+                  {{ "Previous" | translate }}
+                </button>
+                <button
+                  class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+                  (click)="confirm()"
+                >
+                  {{ "Next" | translate }}
+                </button>
+              </div>
+              <div class="mt-4 d-sm-flex">
+                <button
+                  class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+                  (click)="
+                      cancelExpertReview(currentExpertReview.expert_review_id)
+                    "
+                >
+                  {{ "Cancel Expert Review" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isPaymentMethodSelected">
+    <!-- <div class="mb-4">
+      <h5 class="font-28 fw-semibold text-primary mb-3 mt-4 mt-xl-0">
+        {{ "Bank Details" | translate }}
+      </h5>
+      <p class="font-22 font-sm-10 text-primary">
+        {{ "Bank Account Information" | translate }}
+      </p>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="bg-white p-3 p-md-4 br-12">
+          <div class="row align-items-center mb-3 mb-md-4">
+            <div class="col-sm-5">
+              <label class="text-primary-light font-14 d-block">{{
+                "Account Number" | translate
+              }}</label>
+            </div>
+            <div class="col-sm-7">
+              <p class="text-primary font-16 mb-0 fw-semibold">
+                {{ banckDetails?.account_number }}
+              </p>
+            </div>
+          </div>
+          <div class="row align-items-center mb-3 mb-md-4">
+            <div class="col-sm-5">
+              <label class="text-primary-light font-14 d-block">{{
+                "Bank Name" | translate
+              }}</label>
+            </div>
+            <div class="col-sm-7">
+              <p class="text-primary font-16 mb-0 fw-semibold">
+                {{ banckDetails?.bank_name }}
+              </p>
+            </div>
+          </div>
+          <div class="row align-items-center mb-3 mb-md-4">
+            <div class="col-sm-5">
+              <label class="text-primary-light font-14 d-block">{{
+                "Routing Number" | translate
+              }}</label>
+            </div>
+            <div class="col-sm-7">
+              <p class="text-primary font-16 mb-0 fw-semibold">
+                {{ banckDetails?.routing_number }}
+              </p>
+            </div>
+          </div>
+          <div class="row align-items-center">
+            <div class="col-sm-5">
+              <label class="text-primary-light font-14 d-block">{{
+                "Swift Code" | translate
+              }}</label>
+            </div>
+            <div class="col-sm-7">
+              <p class="text-primary font-16 mb-0 fw-semibold">
+                {{ banckDetails?.swift_code }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <app-payment-deposit-transfer
+      [bankDetails]="banckDetails" [currentOrder]="currentOrder" [currentExpertReview]="currentExpertReview"
+    ></app-payment-deposit-transfer>
+    <div class="upload--report mt-4 mt-xl-5">
+      <p class="font-16 fw-bold font-sm-10 text-primary mb-sm-3 mb-0">
+        {{ "Upload Deposit/Transfer Receipt" | translate }}
+      </p>
+      <div class="form-group mb-0">
+        <input
+          type="file"
+          class="c-none"
+          placeholder="Upload Deposit Receipt"
+          #document
+          (change)="onDocumentChange($event)"
+          placeholder="Receipt Document"
+        />
+        <input
+          type="text"
+          readonly
+          class="form-control c-pointer"
+          *ngIf="!isReceiptSubmited"
+          (click)="document.click()"
+          placeholder="{{ 'Upload Receipt' | translate }}"
+        />
+        <img
+          src="assets/images/upload-icon.svg"
+          *ngIf="!isReceiptSubmited"
+          (click)="document.click()"
+          class="input-icon uplode-icon"
+        />
+        <span
+          *ngIf="isReceiptUploading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        >
+        </span>
+        <div *ngIf="!receiptURL.length && isFormSubmitted">
+          <span class="text-danger font-17">{{
+            "Please upload deposit receipt" | translate
+          }}</span>
+        </div>
+
+        <div
+          class="vehicle__uploaded-photo mt-3 mt-lg-4"
+          *ngIf="receiptURL.length > 0"
+        >
+          <div class="d-flex flex-wrap">
+            <div
+              class="photo-wrp me-2 mb-2"
+              *ngFor="let document of receiptURL; index as i"
+            >
+              <span (click)="deleteLegalDocument(i)">×</span>
+              <ng-container
+                *ngIf="getFileType(document.download_url) == 'image'"
+              >
+                <a href="{{ document.download_url }}" target="_blank"
+                  ><img class="br-12" [src]="document.download_url"
+                /></a>
+              </ng-container>
+              <ng-container *ngIf="getFileType(document.download_url) == 'pdf'">
+                <a href="{{ document.download_url }}" target="_blank"
+                  ><img class="br-12" src="assets/images/pdf_icon.png"
+                /></a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 d-sm-flex">
+      <a
+        class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+        (click)="changePaymentMethod()"
+        >{{ "Previous" | translate }}</a
+      >
+      <button
+        class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+        [disabled]="isReceiptUploading"
+        (click)="submitReceipt()"
+      >
+        {{ "Send" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</section>
+
+<ng-template #openTermsForCashPayement let-d="dismiss">
+  <div class="modal-header position-relative border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{
+        selectedPaymentMethod === "cash"
+          ? ("Cash Deposit" | translate)
+          : ("Payment with bank transfer" | translate)
+      }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="d('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 px-4">
+        <!-- <p class="font-14 fw-bold font-sm-10 text-primary mb-sm-3 mb-0">
+          {{
+            selectedPaymentMethod === "cash"
+              ? ("I accept the following conditions to proceed with the payment of the service in deposit straight."
+                | translate)
+              : ("I accept the following conditions to proceed with the payment of the service."
+                | translate)
+          }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{
+            "You have accepted contracts for services and management of the platform, after make the appraisal deposit there will be no refund. Once the inspection, a respective report will be issued that allows evidence of the work carried out by the expert, for which the users authorize the platform The service of expertise."
+              | translate
+          }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{
+            "Riku is not responsible for damages caused by any negligence or omission by transactions made outside of the Riku platform processes. For more information review terms and conditions with payment policies and service cancellations."
+              | translate
+          }}
+        </p> -->
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "ExpertPaymentParagraph" | translate }}
+        </p>
+      </div>
+      <div class="modal-footer d-flex justify-content-left border-0">
+        <button
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="proceed()"
+        >
+          {{ "Accept" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

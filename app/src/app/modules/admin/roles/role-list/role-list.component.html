@@ -1,0 +1,279 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <h3 class="mb-3 font-38 text-primary fw-semibold">
+        {{ "Roles & Permissions Management" | translate }}
+      </h3>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+        "Search" | translate
+      }}</label>
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="updatedSearchText"
+                placeholder="{{ 'Search by Role Title' | translate }}"
+                (keyup.enter)="getFilterRoleList(true)"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="getFilterRoleList(true)">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3">
+          <div
+            class="form-group search-grp add-vehicle ms-2"
+            *ngIf="modulePermissions.can_create"
+          >
+            <a
+              routerLink="/admin/roles/add"
+              class="btn primary-btn btn-sm br-12 py-3"
+            >
+              + {{ "Add New Role" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myStatusDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedStatus }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <ng-container *ngIf="selectedStatus != ''">
+                  {{ selectedStatus }}
+                </ng-container>
+                <ng-container *ngIf="!selectedStatus">
+                  {{ "Role Status" | translate }}
+                </ng-container>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let status of statusList">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="Status"
+                          (click)="setStatus($event, status)"
+                          id="status_{{ status }}"
+                          value="status"
+                          [checked]="selectedStatus == status"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="status_{{ status }}"
+                          >{{ status | translate }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myStatusDrop.close(); getFilterRoleList(true)"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div
+        class="d-flex justify-content-between align-items-center mb-5"
+        *ngIf="searchApplied && (selectedStatus != '' || searchText != '')"
+      >
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">
+            {{ "Search Results" | translate }}
+          </h3>
+          <a
+            href="javascript:void(0)"
+            (click)="clearAll()"
+            class="ms-4 text-secondary text-underline"
+            >{{ "Clear All Filters" | translate }}</a
+          >
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <span class="pill" *ngIf="searchText != ''">
+          {{ searchText
+          }}<a
+            class="ms-3"
+            href="javascript:void(0)"
+            (click)="
+              searchText = ''; updatedSearchText = ''; getFilterRoleList(true)
+            "
+            ><img src="assets/images/vehicle-list/blue-cross.svg" alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedStatus != ''">
+          {{ selectedStatus | translate
+          }}<a
+            class="ms-3"
+            href="javascript:void(0)"
+            (click)="selectedStatus = ''; getFilterRoleList(true)"
+            ><img src="assets/images/vehicle-list/blue-cross.svg" alt="" /></a
+        ></span>
+      </div>
+    </div>
+    <div class="condition-tabs mt-5 pb-5">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>{{ "Sr. No." | translate }}</span>
+                  </th>
+                  <th (click)="setSorting('name')">
+                    <span>
+                      {{ "Role Title" | translate }}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th>
+                    <span> {{ "Active/Inactive" | translate }} </span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="roleList.length > 0; else noRecordsTemplate"
+                    >
+                      <tr *ngFor="let role of roleList; let i = index">
+                        <td>{{ limit * (page - 1) + (i + 1) }}</td>
+                        <td>{{ role.role_name }}</td>
+                        <td>
+                          <div
+                            class="switch-wrp d-flex align-items-center mb-2"
+                            *ngIf="modulePermissions.can_edit"
+                          >
+                            <input
+                              type="checkbox"
+                              [(ngModel)]="roleList[i].status"
+                              [checked]="roleList[i].status"
+                              name="checkbox-list"
+                              id="role_{{ i }}"
+                              (click)="changeStatus($event, i)"
+                            /><label class="switch" for="role_{{ i }}"
+                              >Toggle</label
+                            >
+                          </div>
+                        </td>
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_view_details"
+                            routerLink="/admin/roles/details/{{ role.id }}"
+                          >
+                            <img src="assets/images/eye-open.svg" class="ms-3"
+                          /></a>
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_edit"
+                            routerLink="/admin/roles/edit/{{ role.id }}"
+                          >
+                            <img
+                              src="assets/images/vehicle-list/pen-purple-icon.svg"
+                              class="ms-3"
+                            />
+                          </a>
+                          <a
+                            href="javascript:void(0);"
+                            *ngIf="modulePermissions.can_delete"
+                            (click)="deleteRole(role.id)"
+                          >
+                            <img
+                              src="assets/images/vehicle-list/del-icon.svg"
+                              class="ms-3"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="4">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="4">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

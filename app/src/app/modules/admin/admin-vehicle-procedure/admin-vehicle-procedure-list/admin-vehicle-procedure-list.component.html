@@ -1,0 +1,177 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container">
+    <div class="d-flex justify-content-between align-items-center section-header">
+      <h3 class="mb-3 font-38 text-primary fw-semibold">{{"Vehicle Procedure" | translate}}</h3>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Search" | translate}}</label>
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="updatedSearchText"
+                placeholder="{{'Search by Keyword' | translate}}"
+                (keyup)="searchTextChange($event)"
+                (keyup.enter)="getFilterUserList(true)"
+              />
+              <img src="assets/images/vehicle-list/grey-search.svg" class="search-icon"/>
+              <button class="search-btn" (click)="getFilterUserList(true)">
+                <img src="assets/images/vehicle-list/search-btn.svg" alt="search-btn"/>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="condition-tabs mt-5">
+      <div class="form-group">
+          <div class="tabs-list br-12">
+            <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="Condition-all-tab"
+                  [ngClass]="{ active: selectedTab == 'in_progress' }"
+                  (click)="selectTab('in_progress')"
+                  data-bs-toggle="pill"
+                  type="button"
+                  role="tab"
+                  aria-controls="Condition-all"
+                  aria-selected="true"
+                >
+                  {{"In Progress" | translate}}
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="Condition-approval-tab"
+                  [ngClass]="{ active: selectedTab == 'completed' }"
+                  (click)="selectTab('completed')"
+                  data-bs-toggle="pill"
+                  type="button"
+                  role="tab"
+                  aria-controls="Condition-approval"
+                  aria-selected="false"
+                >
+                  {{"Past" | translate}}
+                </button>
+              </li>
+            </ul>
+          </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content  pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('id')">
+                    <span>
+                      {{"Order ID" | translate}}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2"/>
+                    </span>
+                  </th>
+                  <th><span> {{"Image" | translate}} </span></th>
+                  <th (click)="setSorting('vehicle')">
+                    <span>
+                      {{"Vehicle" | translate}}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2"/>
+                    </span>
+                  </th>
+                  <th (click)="setSorting('location')">
+                      <span>
+                        {{"Location" | translate}}
+                        <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2"/>
+                      </span>
+                  </th>
+                  <th><span> {{"Order Date" | translate}} </span></th>
+                  <th><span> {{"Total Amount" | translate}} </span></th>
+                  <th><span> {{"Vehicle Procedure Status" | translate}} </span></th>
+                  <th><span> {{"Actions" | translate}} </span></th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="9">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="companyList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let company of companyList; let i = index">
+                        <td>{{ company.order_id.slice(0,6) | uppercase }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="company?.vehicle?.cover_img; else noImage">
+                              <img [src]="company.vehicle.cover_img" />
+                            </ng-container>
+                            <ng-template #noImage>
+                              <img src="assets/images/no_preview.jpeg" />
+                            </ng-template>
+                          </div>
+                        </td>
+                        <td>{{ company?.vehicle?.model}}, {{ company?.vehicle?.make}}, {{ company?.vehicle?.year}}</td>
+                        <td>
+                          <!-- {{ company?.vehicle?.location?.city | titlecase }},
+                          {{ company?.vehicle?.location?.parish | titlecase }}, -->
+                          {{ company?.vehicle?.location?.province | titlecase }}
+                        </td>
+                        <td>{{ company.created_at | date : "dd-MMMM-YYYY"}} </td>
+                        <td>${{ company.total_amount | spanishNumber}}</td>
+                        <td>
+                          <label class="pending-approval" *ngIf="company.status === 'in_progress'">
+                            {{"In Progress" | translate}}
+                          </label>
+                          <label class="rejected" *ngIf="company.status == 'cancelled' || company.status == 'rejected'">
+                            {{"Canceled" | translate}}
+                          </label>
+                          <label class="approved" *ngIf="company.status == 'completed'">
+                            {{"Complete" | translate}}
+                          </label>
+                        </td>
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_view_details"
+                            (click)="gotoCompanyDetail(company)"
+                          >
+                            <img src="assets/images/eye-open.svg" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="9">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="9">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

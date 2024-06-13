@@ -1,0 +1,31 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.bg-blue {
+  background-color: #EEF4F7;
+}
+
+.faq{
+  &__accordion{
+    padding-bottom: 50px;
+    &  .accordion-item{
+      border: none;
+      border-bottom: 0.5px solid $purple-grey;
+
+
+    }
+  }
+  &__sub-accordion{
+    & .accordion-button{
+      box-shadow: none;
+    }
+  }
+}
+
+.line-32{
+  line-height: 32px;
+}
+
+.box-shadow{
+  box-shadow: 0px 3px 10px #B1A0B470;
+}

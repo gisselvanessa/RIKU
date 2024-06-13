@@ -1,0 +1,140 @@
+<h3 class="text-primary plus-jakarta font-24 fw-semibold mt-4 mt-xl-0 mb-3">
+  {{ "Vehicle Review" | translate }}
+</h3>
+<p class="text-primary font-15 fw-medium">
+  {{
+    "Select the purchase status after knowing the vehicle to continue"
+      | translate
+  }}
+</p>
+<form #vehicleReviewForm="ngForm" class="mt-3 mt-md-3 mt-xl-3">
+  <div class="vehicle-review-wrp col-6 shw-card">
+    <ng-container
+      *ngIf="
+        (currentOrder.vehicle_review &&
+          !currentOrder.vehicle_review.vehicle_review_status) ||
+        !currentOrder.vehicle_review
+      "
+    >
+      <div class="form-check form-check-inline mb-4">
+        <input
+          class="form-check-input custom-checkbox"
+          type="radio"
+          name="buyingPrice"
+          id="acceptedRadio"
+          [value]="vehicleReviewStatus.AS_EXPECTED"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="reviewStatus"
+        />
+        <label
+          class="form-check-label font-16 bg-none border-0 py-0 fw-semibold"
+          for="acceptedRadio"
+        >
+          {{ "Everything as expected, continue shopping" | translate }}
+        </label>
+        <span class="dot-checkmark"></span>
+      </div>
+      <div class="form-check form-check-inline textarea-wrp">
+        <input
+          class="form-check-input custom-checkbox"
+          type="radio"
+          name="buyingPrice"
+          id="rejectedRadio"
+          [value]="vehicleReviewStatus.NOT_AS_EXPECTED"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="reviewStatus"
+        />
+        <div class="text-label-wrp">
+          <label
+            class="form-check-label font-16 bg-none border-0 py-0 px-0 mb-3 no-loger-purchase fw-semibold"
+            for="rejectedRadio"
+          >
+            {{ "I no longer wish to purchase" | translate }}
+          </label>
+          <textarea
+            class="border-0 br-12 text-primary-light font-14"
+            [(ngModel)]="noPurchaseReason"
+            [hidden]="reviewStatus == vehicleReviewStatus.AS_EXPECTED"
+            [ngModelOptions]="{ standalone: true }"
+            [required]="reviewStatus == vehicleReviewStatus.AS_EXPECTED"
+            placeholder="{{ 'Please provide reason' | translate }}...."
+          ></textarea>
+        </div>
+        <span
+          class="dot-checkmark"
+          [ngClass]="{
+            'reject-checkmark':
+              reviewStatus == vehicleReviewStatus.NOT_AS_EXPECTED
+          }"
+        ></span>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="
+        currentOrder.vehicle_review &&
+        currentOrder.vehicle_review.vehicle_review_status
+      "
+    >
+      <div class="form-check form-check-inline mb-0 mb-md-4">
+        <label
+          class="approved font-16 bg-none border-0 py-0"
+          *ngIf="
+            currentOrder.vehicle_review.vehicle_review_status ==
+            vehicleReviewStatus.AS_EXPECTED
+          "
+        >
+          {{ "Everything as Expected" | translate }}
+        </label>
+        <label
+          class="rejected font-16 bg-none border-0 py-0"
+          *ngIf="
+            currentOrder.vehicle_review.vehicle_review_status ==
+            vehicleReviewStatus.NOT_AS_EXPECTED
+          "
+        >
+          {{ "Not as Expected" | translate }}
+        </label>
+      </div>
+      <div
+        class="form-check form-check-inline textarea-wrp"
+        *ngIf="
+          currentOrder.vehicle_review.vehicle_review_status ==
+          vehicleReviewStatus.NOT_AS_EXPECTED
+        "
+      >
+        <div class="text-label-wrp">
+          {{ currentOrder.vehicle_review.vehicle_review_comment }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="mt-4 d-sm-flex">
+    <button
+      class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+      (click)="setPreviousStep()"
+    >
+      {{ "Previous" | translate }}
+    </button>
+    <button
+      class="btn primary-btn mt-3 mt-sm-0 btn-sm btn--small border-1 shw"
+      *ngIf="
+        currentOrder.vehicle_review &&
+        !currentOrder.vehicle_review.vehicle_review_status
+      "
+      (click)="onSubmit()"
+    >
+      {{ "Submit1" | translate }}
+    </button>
+    <button
+      class="btn primary-btn mt-3 mt-sm-0 btn--small btn-sm border-1 shw"
+      *ngIf="
+        currentOrder.vehicle_review &&
+        currentOrder.vehicle_review.vehicle_review_status ==
+          vehicleReviewStatus.AS_EXPECTED
+      "
+      (click)="setNextStep()"
+    >
+      {{ "Next" | translate }}
+    </button>
+  </div>
+</form>

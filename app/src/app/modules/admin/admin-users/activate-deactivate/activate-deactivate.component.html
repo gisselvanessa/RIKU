@@ -1,0 +1,205 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('cancel')"
+    aria-label="Close"
+  ></button>
+</div>
+<div *ngIf="error_message">
+  <p class="text-danger text-center">{{ error_message }}</p>
+</div>
+<div *ngIf="userId">
+  <div class="modal-body border-0">
+    <div *ngIf="userStatus == 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Deactivate" | translate }} {{ userType | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ ("Are you sure you want to Deactivate " + userType + "?") | translate }}
+      </p>
+    </div>
+    <div *ngIf="userStatus == 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Activate" | translate }} {{ userType | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ ("Are you sure you want to Activate " + userType + "?") | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      class="btn btn-outline-purple"
+      (click)="activeModal.dismiss('cancel')"
+      type="button"
+    >
+      No
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="onSubmit()"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="userStatus == 'Inactive'"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{ "Yes" | translate }}, {{ "Activate" | translate }}
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="onSubmit()"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="userStatus == 'Active'"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{ "Yes" | translate }}, {{ "Deactivate" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="teamMemberId">
+  <div class="modal-body border-0">
+    <div *ngIf="statusTeamMember == 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Deactivate Team Member" | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{
+          "Are you sure you want to deactivate this team member" | translate
+        }}
+      </p>
+    </div>
+    <div *ngIf="statusTeamMember == 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Activate Team Member" | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Are you sure you want to Activate this team member" | translate }} ?
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      class="btn btn-outline-purple"
+      (click)="activeModal.dismiss('cancel')"
+      type="button"
+    >
+      No
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="onSubmit()"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="statusTeamMember == 'Inactive'"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{ "Yes" | translate }}, {{ "Activate" | translate }}
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="onSubmit()"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="statusTeamMember == 'Active'"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{ "Yes" | translate }}, {{ "Deactivate" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="expertId">
+  <div class="modal-body border-0">
+    <div *ngIf="expertStatus == true">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Deactivate Expert User" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to Deactivate this Expert User" | translate}}?
+      </p>
+    </div>
+    <div *ngIf="expertStatus == false">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Activate Expert User" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to Activate this Expert User" | translate}}?
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      class="btn btn-outline-purple"
+      (click)="activeModal.dismiss('cancel')"
+      type="button"
+    >
+      No
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="onSubmit()"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="expertStatus == false"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{"Yes" | translate}}, {{"Activate" | translate}}
+    </button>
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="onSubmit()"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteconfirmModal"
+      *ngIf="expertStatus == true"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{"Yes" | translate}}, {{"Deactivate" | translate}}
+    </button>
+  </div>
+</div>

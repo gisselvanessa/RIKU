@@ -1,0 +1,275 @@
+<section class="section vehicle__listing bg-blue">
+  <div class="jakay-container">
+    <div class="seller__info">
+      <div class="back-to-page d-flex">
+        <span class="c-pointer" (click)="goback()" ><img class="arrowbg" src="assets/images/backarrow.svg"/></span>
+        <div class="d-flex justify-content-between w-100">
+          <h3 class="ms-3 section-header font-38 text-primary fw-semibold">
+            {{ "Seller Profile" | translate }}
+          </h3>
+        </div>
+      </div>
+
+      <div class="seller__info--box justify-content-between align-items-center">
+        <div
+          class="d-flex flex-column flex-lg-row align-items-lg-start align-items-center"
+        >
+          <div>
+            <div class="user-img-wrp">
+              <img
+                [src]="
+                  sellerDetail?.profile_img_url
+                    ? sellerDetail?.profile_img_url
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                "
+                alt=""
+              />
+            </div>
+          </div>
+
+          <div class="seller-info ms-0 ms-lg-4 mt-lg-0 mt-3">
+            <h5 class="font-28 text-primary fw-semibold">
+              {{ sellerDetail?.first_name }} {{ sellerDetail?.last_name }}
+            </h5>
+            <div
+              class="d-flex align-items-center justify-content-center justify-content-lg-start"
+            >
+              <div class="rating d-flex align-items-center me-lg-3 me-0">
+                <p class="font-18 text-secondary">
+                  {{ sellerDetail?.avg_rating }}
+                </p>
+                <img
+                  class="ms-2"
+                  src="assets/images/seller-img/star.svg"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col mx-lg-5 mx-0 my-3 my-lg-0">
+            <label class="font-18 mb-3" for="">{{
+              "Dealership Location" | translate
+            }}</label>
+            <h5 class="font-24">
+              {{
+                sellerDetail?.location?.parish
+                  ? (sellerDetail?.location?.parish + ", " | titlecase)
+                  : ""
+              }}
+              {{
+                sellerDetail?.location?.city
+                  ? (sellerDetail?.location?.city + ", " | titlecase)
+                  : ""
+              }}
+              {{
+                sellerDetail?.location?.province
+                  ? (sellerDetail?.location?.province | titlecase)
+                  : ""
+              }}
+            </h5>
+          </div>
+          <div class="col mb-3 mb-lg-0">
+            <label class="font-18 mb-3" for="">{{
+              "Total Ratings" | translate
+            }}</label>
+            <h5 class="font-24">{{ sellerDetail?.total_reviews }}</h5>
+          </div>
+          <div *ngIf="userSellerBoolean">
+            <div class="contact-details d-flex col align-items-center">
+              <a
+                class="contact-wrp"
+                (click)="openContact('Call', sellerDetail)"
+              >
+                <img src="assets/images/seller-img/phone.svg" alt="" />
+              </a>
+
+              <a
+                class="contact-wrp"
+                (click)="openContact('Chat', sellerDetail)"
+              >
+                <img src="assets/images/seller-img/msg.svg.svg" alt="" />
+              </a>
+            </div>
+          </div>
+          <div *ngIf="!userSellerBoolean">
+            <div class="contact-details d-flex col align-items-center">
+              <a
+                class="contact-wrp"
+                (click)="openContact('Call', sellerDetail)"
+              >
+                <img src="assets/images/seller-img/phone.svg" alt="" />
+              </a>
+
+              <a
+                class="contact-wrp"
+                (click)="openContact('Chat', sellerDetail)"
+              >
+                <img src="assets/images/seller-img/msg.svg.svg" alt="" />
+              </a>
+
+              <!-- <a
+                style="cursor: pointer"
+                class="contact-wrp"
+                (click)="openBseller()"
+              >
+                <img src="assets/images/seller-img/profile-icon.svg" alt="" />
+              </a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <label class="vehicle_listed" style="white-space: nowrap;">{{
+        "Vehicles Listed By Seller" | translate
+      }}</label>
+
+      <div class="vehicle__listing--cards buyer-cards" style="margin-top: 45px">
+        <div class="tab-content" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-home"
+            role="tabpanel"
+            aria-labelledby="Condition-home-tab"
+          >
+            <div
+              class="row"
+              *ngFor="let vehicleList of vehicleDataArray; let j = index"
+            >
+              <div
+                class="col-md-6 col-xl-4 c-pointer"
+                *ngFor="let vehicleArray of vehicleList; let i = index"
+              >
+                <div class="listing_cards mb-4">
+                  <div class="card_img position-relative">
+                    <img
+                      src="{{ vehicleArray?.cover_img_url }}"
+                      routerLink="/buyer/vehicles/vehicle-details/{{
+                        vehicleArray?.id
+                      }}"
+                      (error)="handleMissingImage($event)"
+                      alt="car-1"
+                    />
+
+                    <a
+                      href="javascript:void(0)"
+                      class="card_img-fav"
+                      style="cursor: pointer"
+                      *ngIf="!this.favVehicleId.includes(vehicleArray.id)"
+                      (click)="favVehicle(j, i)"
+                    >
+                      <img
+                        class="fav-icon"
+                        src="assets/images/vehicle-list/purple-heart.svg"
+                        alt=""
+                      />
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      class="card_img-fav"
+                      style="cursor: pointer"
+                      *ngIf="this.favVehicleId.includes(vehicleArray.id)"
+                      (click)="favVehicle(j, i)"
+                    >
+                      <img
+                        class="fav-icon"
+                        src="assets/images/view_vehicle/red-heart.svg"
+                        alt=""
+                      />
+                    </a>
+                  </div>
+                  <div class="card_text-box py-3">
+                    <div class="d-flex justify-content-between mt-3 py-3 px-3">
+                      <h5
+                        class="text-secondary car_model text-primary font-22 fw-semibold vehicle-card-title"
+                      >
+                        {{ vehicleArray?.model_year }} {{ vehicleArray?.make }}
+                        {{ vehicleArray?.make_model }}
+                      </h5>
+                      <h4 class="text-green font-28 car_price">
+                        ${{ vehicleArray?.price | spanishNumber }}
+                      </h4>
+                    </div>
+                    <div
+                      class="d-flex align-items-center my-4 details_location-date px-3"
+                    >
+                      <p class="text-purple-2 font-16">
+                        <img
+                          src="assets/images/view_vehicle/location.svg"
+                          alt=""
+                        />
+                        {{ vehicleArray?.location?.city | titlecase }}
+                      </p>
+                    </div>
+                    <div class="details_labels px-3">
+                      <label
+                        for="exampleFormControlInput1"
+                        class="form-label details__label me-3"
+                        >{{
+                          vehicleArray?.condition | titlecase | translate
+                        }}</label
+                      >
+                      <label
+                        for="exampleFormControlInput1"
+                        class="form-label details__label me-3"
+                        >{{
+                          vehicleArray?.fuel_type | titlecase | translate
+                        }}</label
+                      >
+                      <label
+                        for="exampleFormControlInput1"
+                        class="form-label details__label"
+                        >{{ vehicleArray?.distance_travelled }}
+                        {{ vehicleArray?.distance_travelled_unit }}</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row mt-5">
+          <div class="col-12">
+            <div class="pagination justify-content-center align-items-center">
+              <a href="#">
+                <img
+                  src="assets/images/vehicle-list/page-arrow-left.svg"
+                  alt=""
+                />
+                <span class="text-primary mx-4">Prev</span></a
+              >
+
+              <a href="" class="pagination-arrow me-3"
+                ><img src="assets/images/vehicle-list/chevron-right.svg" alt=""
+              /></a>
+              <a href="" class="pagination-arrow active">
+                <img
+                  src="assets/images/vehicle-list/chevron-right-white.svg"
+                  alt=""
+              /></a>
+
+              <a href="#"
+                ><span class="text-primary mx-4">Next</span>
+                <img
+                  src="assets/images/vehicle-list/page-arrow-right.svg"
+                  alt=""
+              /></a>
+            </div>
+            <p class="text-center pt-4 pb-5 text-primary">
+              Page <span class="fw-semibold">12</span> of total
+              <span class="fw-semibold">25</span> pages
+            </p>
+          </div>
+        </div> -->
+        <div *ngIf="vehicleListData?.pagination?.total_pages && !loading">
+          <pagination
+            [paginationData]="vehicleListData.pagination"
+            (selectedPage)="jumpToThePage($event)"
+          >
+          </pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

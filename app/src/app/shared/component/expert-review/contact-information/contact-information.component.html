@@ -1,0 +1,535 @@
+<form
+  [formGroup]="contactForm"
+  *ngIf="contactForm"
+  autocomplete="off"
+  #form="ngForm"
+  (ngSubmit)="submitInformation()"
+>
+  <div class="row justify-content-between">
+    <!-- <h3 class="text-primary font-24 mt-4 mt-xl-0 pb-4 fw-semibold">
+      {{ "Enter your contact Information" | translate }}
+    </h3> -->
+    <div class="col-12 col-sm-6">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Full Name" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="{{ 'Enter Full Name' | translate }}"
+          type="text"
+          formControlName="full_name"
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls.full_name.valid
+          }"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.full_name.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ "Full Name is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--Province-->
+    <!--City-->
+    <div class="col-12 col-sm-6">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Cedula ID" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control"
+          type="text"
+          maxlength="10"
+          minlength="10"
+          (blur)="validateCedulaId($event)"
+          OnlyNumber
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls?.cadula_id.valid
+          }"
+          placeholder="{{ 'Enter Cedula Id' | translate }}"
+          formControlName="cadula_id"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.cadula_id.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ "Cedula Id is required" | translate }}
+        </div>
+        <div
+          *ngIf="
+            formControls?.cadula_id.errors?.minlength ||
+            formControls?.cadula_id.errors?.maxlength
+          "
+          class="invalid-feedback"
+        >
+          {{ "Cedula Id must be of 10 digits" | translate }}
+        </div>
+        <div *ngIf="!isValidCedula" class="invalid-feedback">
+          {{ "Invalid Cedula Id" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Email" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control"
+          type="text"
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls.email.valid
+          }"
+          placeholder="{{ 'Enter Email' | translate }}"
+          formControlName="email"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.email.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ "Email is required" | translate }}
+        </div>
+        <div
+          *ngIf="formControls?.email.errors?.pattern"
+          class="invalid-feedback"
+        >
+          {{ "Email must be a valid email address" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Mobile Number" | translate
+        }}</label>
+        <ngx-intl-tel-input
+          [cssClass]="'form-control w-100'"
+          [preferredCountries]="preferredCountries"
+          [enableAutoCountrySelect]="true"
+          [enablePlaceholder]="true"
+          [searchCountryFlag]="true"
+          [searchCountryField]="[
+            SearchCountryField.Iso2,
+            SearchCountryField.Name
+          ]"
+          [selectFirstCountry]="false"
+          [selectedCountryISO]="CountryISO.Ecuador"
+          [maxLength]="15"
+          [phoneValidation]="true"
+          [separateDialCode]="separateDialCode"
+          [numberFormat]="PhoneNumberFormat.National"
+          (countryChange)="clearCountrySearchBox()"
+          name="mobile_no"
+          formControlName="mobile_no"
+          [disabled]="currentExpertReview?.payment?.status === 'success'"
+        >
+        </ngx-intl-tel-input>
+        <div
+          *ngIf="
+            formControls?.mobile_no.value &&
+            formControls?.mobile_no.errors &&
+            submitting
+          "
+          class="text-danger"
+        >
+          {{ "Please enter a valid number" | translate }}
+        </div>
+
+        <div
+          *ngIf="
+            form.submitted &&
+            formControls?.mobile_no.errors?.required &&
+            submitting
+          "
+          class="text-danger"
+          style="font-size: 0.875em"
+        >
+          {{ "Mobile Number is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--Address-->
+    <div class="col-12">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Address" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control map"
+          formControlName="additional_address"
+          #additionalAddress
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          [ngClass]="{
+            'is-invalid':
+              form.submitted && !formControls.additional_address.valid
+          }"
+          placeholder="{{ 'Enter Address' | translate }}"
+        />
+        <!-- <img src="assets/images/location.svg" class="input-icon" /> -->
+
+        <div
+          *ngIf="
+            form.submitted && formControls?.additional_address.errors?.required
+          "
+          class="invalid-feedback"
+        >
+          {{ "Address is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--Address-->
+
+    <!--Province-->
+    <!-- <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Province' | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="province"
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          OnlyAlphabets
+          type="text"
+          placeholder="{{ 'Enter Province' | translate }}"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls.province.valid
+          }"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.province.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ 'Province is required' | translate }}
+        </div>
+      </div>
+    </div> -->
+    <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Province" | translate
+        }}</label>
+        <div ngbDropdown class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+            type="button"
+            id="vehicle-type"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <ng-container>
+              <span class="font-13" *ngIf="formControls['province'].value">{{
+                formControls["province"].value | titlecase
+              }}</span>
+              <span *ngIf="!formControls['province'].value">{{
+                "Select" | translate
+              }}</span>
+            </ng-container>
+          </button>
+          <ul
+            ngbDropdownMenu
+            aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Search Province' | translate }}"
+                    [(ngModel)]="searchProvince"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <li
+              *ngFor="
+                let province of provinceList | filter : searchProvince;
+                index as i
+              "
+            >
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [checked]="formControls['province'].value == province"
+                      (click)="setProvice(province)"
+                      name="province"
+                      id="province_{{ i }}"
+                      value="{{ province }}"
+                    />
+                    <label class="form-check-label" for="province_{{ i }}">{{
+                      province | titlecase
+                    }}</label>
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div
+          *ngIf="submitting && formControls['province'].errors?.['required']"
+          class="text-danger"
+        >
+          {{ "Province is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--Province-->
+
+    <!--City-->
+    <!-- <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'City' | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="city"
+          OnlyAlphabets
+          type="text"
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          placeholder="{{ 'Enter City' | translate }}"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls.city.valid
+          }"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.city.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ 'City is required' | translate }}
+        </div>
+      </div>
+    </div> -->
+    <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "City" | translate
+        }}</label>
+        <div ngbDropdown class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+            type="button"
+            id="vehicle-type"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <ng-container>
+              <span class="font-13" *ngIf="formControls['city'].value">{{
+                formControls["city"].value | titlecase
+              }}</span>
+              <span *ngIf="!formControls['city'].value">{{
+                "Select" | translate
+              }}</span>
+            </ng-container>
+          </button>
+          <ul
+            ngbDropdownMenu
+            aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Search City' | translate }}"
+                    [(ngModel)]="searchCity"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <li *ngFor="let city of cityList | filter : searchCity; index as i">
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [checked]="formControls['city'].value == city"
+                      (click)="setCity(city)"
+                      name="city"
+                      id="city_{{ i }}"
+                      value="{{ city }}"
+                    />
+                    <label class="form-check-label" for="city_{{ i }}">{{
+                      city | titlecase
+                    }}</label>
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li *ngIf="cityList.length == 0">
+              <a class="dropdown-item" href="javascript:void(0)">
+                {{ "No Cities Found" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div
+          *ngIf="submitting && formControls['city'].errors?.['required']"
+          class="text-danger"
+        >
+          {{ "City is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--City-->
+
+    <!--Parish-->
+    <!-- <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Parish' | translate }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [readOnly]="currentExpertReview?.payment?.status === 'success'"
+          placeholder="{{ 'Enter Parish' | translate }}"
+          type="text"
+          formControlName="parish"
+          [ngClass]="{
+            'is-invalid': form.submitted && !formControls.parish.valid
+          }"
+        />
+        <div
+          *ngIf="form.submitted && formControls?.parish.errors?.required"
+          class="invalid-feedback"
+        >
+          {{ 'Parish is required' | translate }}
+        </div>
+      </div>
+    </div> -->
+    <div class="col-12 col-sm-6 col-md-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+          "Parish" | translate
+        }}</label>
+        <div ngbDropdown class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+            type="button"
+            id="vehicle-type"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <ng-container>
+              <span class="font-13" *ngIf="formControls['parish'].value">{{
+                formControls["parish"].value | titlecase
+              }}</span>
+              <span *ngIf="!formControls['parish'].value">{{
+                "Select" | translate
+              }}</span>
+            </ng-container>
+          </button>
+          <ul
+            ngbDropdownMenu
+            aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Search Parish' | translate }}"
+                    [(ngModel)]="searchParish"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <li
+              *ngFor="
+                let parish of parishList | filter : searchParish;
+                index as i
+              "
+            >
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [checked]="formControls['parish'].value == parish"
+                      (click)="setParish(parish)"
+                      name="parish"
+                      id="parish_{{ i }}"
+                      value="{{ parish }}"
+                    />
+                    <label class="form-check-label" for="parish_{{ i }}">{{
+                      parish | titlecase
+                    }}</label>
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          *ngIf="submitting && formControls['parish'].errors?.['required']"
+          class="text-danger"
+        >
+          {{ "Parish is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <!--Parish-->
+
+    <div class="d-sm-flex mt-4" *ngIf="!loading">
+      <button
+        class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+        (click)="previous()"
+      >
+        {{ "Previous" | translate }}
+      </button>
+      <button
+        type="submit"
+        *ngIf="!currentExpertReview?.payment?.method"
+        class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+      >
+        {{ "Submit1" | translate }}
+      </button>
+      <button
+        *ngIf="currentExpertReview?.payment?.method"
+        class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+        (click)="next()"
+      >
+        {{ "Next" | translate }}
+      </button>
+    </div>
+  </div>
+</form>

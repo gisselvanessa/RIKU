@@ -1,0 +1,2320 @@
+<div class="order-process__wrapper">
+  <ng-container *ngIf="currentLoanDetail">
+    <div class="row">
+      <div class="col-lg-7 col-sm-12 mb-4">
+        <div class="br-12 bg-white p-3 p-md-4 d-flex flex-row overflow-auto" style="height: 422px;">
+          <div class="position-relative">
+            <!-- <div class="row align-items-center mb-3">
+              <div class="col-md-8">
+                <h3 class="text-primary font-24 mb-3 mb-md-0 fw-semibold">
+                  {{ "Vehicle Information" | translate }}
+                </h3>
+              </div>
+              <div class="col-md-4 text-md-end">
+                <button
+                  routerLink="/buyer/vehicles/vehicle-details/{{
+                    vehicleInfo.id
+                  }}"
+                  class="btn primary-btn btn-sm br-12"
+                >
+                  {{ "View" | translate }}
+                </button>
+              </div>
+            </div> -->
+            <div class="view-btn-movil-container pb-3">
+              <button
+                routerLink="/buyer/vehicles/vehicle-details/{{
+                  vehicleInfo.id
+                }}"
+                class="btn primary-btn btn-sm br-12 btn-view"
+              >
+                {{ "View" | translate }}
+              </button>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex">
+                  <img src="assets/images/tag.svg" alt="Tag" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Make" | translate }}</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      {{ vehicleInfo.make ? vehicleInfo.make : "-" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex align-items-center">
+                  <img src="assets/images/car.svg" alt="Car" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Model" | translate }}</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      {{ vehicleInfo.model ? vehicleInfo.model : "-" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex align-items-center">
+                  <img src="assets/images/loan-application/calendar.svg" alt="Calendar" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Year" | translate }}</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      {{ vehicleInfo.year ? vehicleInfo.year : "-" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex align-items-center">
+                  <img src="assets/images/view_vehicle/car.svg" alt="Calendar" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Body Type" | translate }}</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      {{ vehicleInfo.body_type ? vehicleInfo.body_type : "-" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex">
+                  <img src="assets/images/plate.svg" alt="Plate" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Number Plate" | translate }}</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      {{
+                        vehicleInfo.number_plate ? vehicleInfo.number_plate : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-4">
+                <div class="mb-3 mb-md-4 d-flex">
+                  <img src="assets/images/moneybag.svg" alt="Money bag" width="45" height="45">
+                  <div class="ps-3">
+                    <label
+                      class="mb-1 mb-md-2 text-primary font-14 fw-medium"
+                      >{{ "Price" | translate }} $</label
+                    >
+                    <p class="text-violet font-16 fw-bold">
+                      ${{
+                        vehicleInfo.price
+                        ? (vehicleInfo.price | spanishNumber)
+                        : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <label
+                  class="mb-1 mb-md-2 text-primary font-14 fw-medium pb-3"
+                  style="padding-left: 61px;"
+                  >{{ "Images" | translate }}</label
+                >
+                <div class="d-flex">
+                  <div
+                    class="vehicle-image-wrp me-4"
+                    *ngFor="let image of sliderImages"
+                  >
+                    <img [src]="image" width="100%" height="100%" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="view-btn-container " >
+
+            <button
+              routerLink="/user/vehicles/vehicle-details/{{
+                vehicleInfo.id
+              }}"
+              class="btn primary-btn btn-sm br-12 btn-view"
+            >
+              {{ "View" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!isFromSummary">
+        <div class="loan-table-wrp col-sm-12 col-lg-5 overflow-auto" style="height: 422px;">
+          <div class="bg-white br-12 px-3 pt-3 loan-table-wrp--table">
+            <div class="d-flex justify-content-between bg-blue br-5">
+              <label
+                class="fw-bold font-18 px-2 px-sm-3 px-md-4 py-2 text-secondary"
+                >{{ "Loan Type" | translate }}</label
+              >
+              <label
+                class="fw-bold font-18 px-2 px-sm-3 px-md-4 py-2 text-secondary label-border-left"
+                >{{ "Variable" | translate }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Vehicle Price" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  vehicleInfo.price ? (vehicleInfo.price | spanishNumber) : "-"
+                }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Deposit Initial" | translate }}
+                {{ currentLoanDetail.deposit_percentage }}%</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  currentLoanDetail.deposit_amount
+                    ? (currentLoanDetail.deposit_amount | spanishNumber)
+                    : "-"
+                }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-secondary"
+                >{{ "Loan Amount" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-secondary label-border-left"
+                >${{ loanAmount ? (loanAmount | spanishNumber) : "-" }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Vehicle Insurance" | translate }} {{ "&" | translate }}
+                {{ "Tracking" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  currentLoanDetail?.charges?.vehicle_insurance_and_tracking
+                    ? (currentLoanDetail?.charges?.vehicle_insurance_and_tracking
+                      | spanishNumber)
+                    : "-"
+                }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Administrative Cost for Financing" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  currentLoanDetail?.charges?.administrative_charges
+                    ? currentLoanDetail?.charges?.administrative_charges
+                    : "-"
+                }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Financing Equity Contribution" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  currentLoanDetail?.charges?.financing_equity
+                    ? currentLoanDetail?.charges?.financing_equity
+                    : "-"
+                }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-secondary"
+                >{{ "Total To Be Financed" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-secondary label-border-left"
+                >${{ totalToBeFinancedValue | spanishNumber }}</label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5 border-bottom">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Term" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >{{ currentLoanDetail.terms ? currentLoanDetail.terms : "-" }}
+                {{ currentLoanDetail.terms == 1 ? ("month" | translate) : ("months" | translate) }}</label
+              >
+            </div>
+            <div
+              *ngIf="currentLoanDetail.is_grace_period"
+              class="d-flex justify-content-between br-5 border-bottom"
+            >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Grace Period" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >{{ currentLoanDetail.grace_period }} 
+                {{ currentLoanDetail.grace_period == 1 ? ("month" | translate) : ("months" | translate) }}
+                </label
+              >
+            </div>
+            <div class="d-flex justify-content-between br-5">
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary"
+                >{{ "Monthly Payment" | translate }}</label
+              >
+              <label
+                class="fw-semibold font-15 px-2 px-sm-3 px-md-4 py-2 text-primary label-border-left"
+                >${{
+                  currentLoanDetail.monthly_payment
+                    ? (currentLoanDetail.monthly_payment | spanishNumber)
+                    : "-"
+                }}</label
+              >
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="col-lg-5 col-sm-12 mb-4 text-end d-flex align-items-center" *ngIf="isFromSummary">
+        <div class="bg-white d-inline-block p-3 request-status-container">
+          <div class="status-label mb-5 d-inline-block text-center">
+            <label class="text-primary mb-3 font-18 w-100 fw-semibold">
+              {{ "Loan Application Status" | translate }} &nbsp; &nbsp;
+            </label>
+            <p
+              class="label in-progress d-inline-block"
+              *ngIf="
+                loanDetail?.status == loanStatus.PENDING ||
+                loanDetail?.status == loanStatus.QUALIFIED
+              "
+            >
+              {{
+                loanDetail?.status == loanStatus.PENDING
+                  ? ("Pending" | translate)
+                  : ("Qualified" | translate)
+              }}
+            </p>
+            <p
+              class="label completed d-inline-block fw-semibold font-15"
+              *ngIf="
+                loanDetail?.status == loanStatus.APPROVED ||
+                loanDetail?.status == loanStatus.COMPLETED
+              "
+            >
+              {{
+                loanDetail?.status == loanStatus.APPROVED
+                  ? ("Pre-Approved" | translate)
+                  : ("Completed" | translate)
+              }}
+            </p>
+            <p
+              class="label cancelled d-inline-block text-red font-15"
+              style="
+                background-color: red;
+                opacity: 0.5;
+                color: white;
+              "
+              *ngIf="
+                loanDetail?.status == loanStatus.REJECTED ||
+                loanDetail?.status == loanStatus.CANCELLED
+              "
+            >
+              {{
+                loanDetail?.status == loanStatus.REJECTED
+                  ? ("Rejected" | translate)
+                  : ("Cancelled" | translate)
+              }}
+            </p>
+          </div>
+          <div *ngIf="loanDetail?.status == loanStatus.APPROVED" class="d-flex justify-content-center mb-5">
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            &nbsp;&nbsp;
+            <button
+              class="btn primary-btn btn-sm font-14 fw-semibold custom-shadow"
+              [disabled]="loading"
+              *ngIf="!loanDetail.order?.id"
+              (click)="purchaseWithLoan()"
+            >
+              {{ "Go see the vehicle" | translate }}
+            </button>
+            <button
+              class="btn primary-btn btn-sm font-14 fw-semibold ms-3 px-4 custom-shadow"
+              [disabled]="loading"
+              *ngIf="!loanDetail.order?.id"
+              (click)="purchaseWithLoanNegotiation()"
+            >
+              {{ "I already know the vehicle" | translate }}
+            </button>
+            <button
+              class="btn primary-btn btn-sm font-16"
+              [disabled]="loading"
+              *ngIf="loanDetail.order.id"
+              (click)="continueOrderProcess(loanDetail.order.id)"
+            >
+              {{ "Continue Order Process" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="appraisal-report__wrapper">
+      <div class="report__accordion" id="report-accordian" style="padding-bottom: 0;">
+        <div class="accordion-item bg-transparent App-info-wrp mb-4" style="border-bottom: none;" *ngIf="!isFromSummary">
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2 bg-white position-relative pe-3 dropdown-container mt-5"
+            (click)="selectAccordian(accordianName.APPLICANTINFORMATION, 0)"
+            id="report-1"
+          >
+            <img src="assets/images/loan-application/usr.svg" alt="" class="position-absolute left-icon">
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-primary font-20 fw-semibold"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#report1"
+              [ngClass]="{
+                collapsed:
+                  accordianName.APPLICANTINFORMATION != selectedAccordian ||
+                  (accordianName.APPLICANTINFORMATION == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+              style="padding-left: 63px !important"
+            >
+              {{ "Applicant Information" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.APPLICANTINFORMATION === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0 pt-3">
+              <div class="bg-white mb-4 br-12 p-3 p-md-4 rounded-0 custom-shadow">
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 fw-semibold">
+                      {{ "Personal Information" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Cedula ID" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        currentLoanDetail.cedula_id
+                          ? currentLoanDetail.cedula_id
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Full Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.full_name
+                          ? applicantInfo.personal_info.full_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Date of Birth" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.dob
+                          ? (applicantInfo.personal_info.dob
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Marital Status" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.marital_status
+                          ? (applicantInfo.marital_status
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Separation Of Assets" | translate
+                    }}</label>
+                    <p
+                      *ngIf="
+                        applicantInfo.personal_info.is_separation_of_assets
+                      "
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Yes" | translate }}
+                    </p>
+                    <p
+                      *ngIf="
+                        !applicantInfo.personal_info.is_separation_of_assets
+                      "
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      No
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Email" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.email
+                          ? applicantInfo.personal_info.email
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Sex" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.sex
+                          ? (applicantInfo.personal_info.sex
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Education Level" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.education_level
+                          ? (applicantInfo.personal_info.education_level
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Number Family Charges" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      0{{
+                        applicantInfo.personal_info.no_of_family_charges
+                          ? applicantInfo.personal_info.no_of_family_charges
+                          : "0"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.country_code
+                          ? applicantInfo.personal_info.country_code
+                          : "-"
+                      }}
+                      {{
+                        applicantInfo.personal_info.mobile_no
+                          ? applicantInfo.personal_info.mobile_no
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Dependency Relationship" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.personal_info.dependency_relationship
+                          ? (applicantInfo.personal_info.dependency_relationship
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Nationality" | translate
+                    }}</label>
+                    <p
+                      *ngIf="applicantInfo.personal_info.is_foreigner"
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Foreigner" | translate }}
+                    </p>
+                    <p
+                      *ngIf="!applicantInfo.personal_info.is_foreigner"
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Ecudorian" | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Address" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.address
+                          ? applicantInfo.address_info.address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Province" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.province
+                          ? applicantInfo.address_info.province
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "City" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.city
+                          ? applicantInfo.address_info.city
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Parish" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.parish
+                          ? applicantInfo.address_info.parish
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Neighborhood" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.neighborhood
+                          ? applicantInfo.address_info.neighborhood
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2"
+                      >{{ "Zip Code" | translate }}({{
+                        "optional" | translate
+                      }})</label
+                    >
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.zip_code
+                          ? applicantInfo.address_info.zip_code
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Place Reference" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.additional_address
+                          ? applicantInfo.address_info.additional_address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Home Status" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.home_status
+                          ? (applicantInfo.address_info.home_status
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Move-in-Date" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.address_info.move_in_date
+                          ? (applicantInfo.address_info.move_in_date
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Employment" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Employee Type" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.type
+                          ? (applicantInfo.employment_info.type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Type of Business" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.business_type
+                          ? (applicantInfo.employment_info.business_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Economy Activity" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.economic_activity
+                          ? (applicantInfo.employment_info.economic_activity
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Company Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.company_name
+                          ? applicantInfo.employment_info.company_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="applicantInfo.employment_info.job_title"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Job Title" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.job_title
+                          ? (applicantInfo.employment_info.job_title
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="applicantInfo.employment_info.starting_date"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Starting Date At This Job" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.starting_date
+                          ? (applicantInfo.employment_info.starting_date
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="applicantInfo.employment_info.position"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Position" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.position
+                          ? applicantInfo.employment_info.position
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Business Activities" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.business_activities
+                          ? (applicantInfo.employment_info.business_activities
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Monthly Income" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      ${{
+                        applicantInfo.employment_info.monthly_income
+                          ? (applicantInfo.employment_info.monthly_income
+                            | spanishNumber)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="applicantInfo.employment_info.contract_type"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Type of Contract" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.contract_type
+                          ? (applicantInfo.employment_info.contract_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Size of Company" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.company_size
+                          ? (applicantInfo.employment_info.company_size
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address and Place of Work" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        applicantInfo.employment_info.address
+                          ? applicantInfo.employment_info.address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    class="col-12 mb-4"
+                    *ngIf="
+                      applicantInfo.employment_info.additional_income_1_type ||
+                      applicantInfo.employment_info.additional_income_2_type ||
+                      applicantInfo.employment_info.additional_income_3_type
+                    "
+                  >
+                    <h5 class="font-18 fw-semibold text-primary">
+                      {{ "Additional income" | translate }}
+                    </h5>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        applicantInfo.employment_info.additional_income_1_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          applicantInfo.employment_info.additional_income_1_type
+                            | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="applicantInfo.employment_info.additional_income_1"
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          applicantInfo.employment_info.additional_income_1
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        applicantInfo.employment_info.additional_income_2_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          applicantInfo.employment_info.additional_income_2_type
+                            | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="applicantInfo.employment_info.additional_income_2"
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          applicantInfo.employment_info.additional_income_2
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        applicantInfo.employment_info.additional_income_3_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          applicantInfo.employment_info.additional_income_3_type
+                            | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="applicantInfo.employment_info.additional_income_3"
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          applicantInfo.employment_info.additional_income_3
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Personal References" | translate }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Full Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.full_name
+                          ? referenceInfo?.full_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address and Place of Work" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.address ? referenceInfo?.address : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="referenceInfo?.mobile_no"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Phone Number" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.country_code
+                          ? referenceInfo?.country_code
+                          : "-"
+                      }}
+                      {{
+                        referenceInfo?.mobile_no
+                          ? referenceInfo?.mobile_no
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Reference Type" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.reference_type
+                          ? (referenceInfo?.reference_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="applicantInfo.is_co_applicant"
+          class="accordion-item bg-transparent App-info-wrp mb-4"
+        >
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2"
+            (click)="selectAccordian(accordianName.COAPPLICANTINFORMATION, 1)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-secondary font-22 fw-semibold"
+              type="button"
+              [ngClass]="{
+                collapsed:
+                  accordianName.COAPPLICANTINFORMATION != selectedAccordian ||
+                  (accordianName.COAPPLICANTINFORMATION == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              {{ "Cosigner Information" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.COAPPLICANTINFORMATION === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div class="bg-white mb-4 br-12 p-3 p-md-4">
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Personal Information" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Cedula ID" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.cedula_id
+                          ? coApplicantInfo.cedula_id
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Full Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.full_name
+                          ? coApplicantInfo.personal_info.full_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Date of Birth" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.dob
+                          ? (coApplicantInfo.personal_info.dob
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Marital Status" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.marital_status
+                          ? (coApplicantInfo.personal_info.marital_status
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Separation Of Assets" | translate
+                    }}</label>
+                    <p
+                      *ngIf="
+                        coApplicantInfo.personal_info.is_separation_of_assets
+                      "
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Yes" | translate }}
+                    </p>
+                    <p
+                      *ngIf="
+                        !coApplicantInfo.personal_info.is_separation_of_assets
+                      "
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      No
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Email" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.email
+                          ? coApplicantInfo.personal_info.email
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Sex" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.sex
+                          ? (coApplicantInfo.personal_info.sex
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Education Level" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.education_level
+                          ? (coApplicantInfo.personal_info.education_level
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Number Family Charges" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      0{{
+                        coApplicantInfo.personal_info.no_of_family_charges
+                          ? coApplicantInfo.personal_info.no_of_family_charges
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.country_code
+                          ? coApplicantInfo.personal_info.country_code
+                          : "-"
+                      }}
+                      {{
+                        coApplicantInfo.personal_info.mobile_no
+                          ? coApplicantInfo.personal_info.mobile_no
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Dependency Relationship" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.personal_info.dependency_relationship
+                          ? (coApplicantInfo.personal_info
+                              .dependency_relationship
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Nationality" | translate
+                    }}</label>
+                    <p
+                      *ngIf="coApplicantInfo.personal_info.is_foreigner"
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Foreigner" | translate }}
+                    </p>
+                    <p
+                      *ngIf="!coApplicantInfo.personal_info.is_foreigner"
+                      class="text-primary fw-regular font-16 mb-0"
+                    >
+                      {{ "Ecudorian" | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Address" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.address
+                          ? coApplicantInfo.address_info.address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Province" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.province
+                          ? coApplicantInfo.address_info.province
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "City" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.city
+                          ? coApplicantInfo.address_info.city
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Parish" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.parish
+                          ? coApplicantInfo.address_info.parish
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Neighborhood" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.neighborhood
+                          ? coApplicantInfo.address_info.neighborhood
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2"
+                      >{{ "Zip Code" | translate }}({{
+                        "optional" | translate
+                      }})</label
+                    >
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.zip_code
+                          ? coApplicantInfo.address_info.zip_code
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Place Reference" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.additional_address
+                          ? coApplicantInfo.address_info.additional_address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Home Status" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.home_status
+                          ? (coApplicantInfo.address_info.home_status
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Move-in-Date" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.address_info.move_in_date
+                          ? (coApplicantInfo.address_info.move_in_date
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 mb-4">
+                    <h3 class="text-primary font-24 mb-2 fw-semibold">
+                      {{ "Employment" | translate }}
+                    </h3>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Employee Type" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.type
+                          ? (coApplicantInfo.employment_info.type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Type of Business" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.business_type
+                          ? (coApplicantInfo.employment_info.business_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Economy Activity" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.economic_activity
+                          ? (coApplicantInfo.employment_info.economic_activity
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Company Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.company_name
+                          ? coApplicantInfo.employment_info.company_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="coApplicantInfo.employment_info.job_title"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Job Title" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.job_title
+                          ? (coApplicantInfo.employment_info.job_title
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="coApplicantInfo.employment_info.starting_date"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Starting Date At This Job" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.starting_date
+                          ? (coApplicantInfo.employment_info.starting_date
+                            | date : "dd-MMMM-YYYY")
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="coApplicantInfo.employment_info.position"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Position" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.position
+                          ? coApplicantInfo.employment_info.position
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Business Activities" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.business_activities
+                          ? (coApplicantInfo.employment_info.business_activities
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Monthly Income" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      ${{
+                        coApplicantInfo.employment_info.monthly_income
+                          ? (coApplicantInfo.employment_info.monthly_income
+                            | spanishNumber)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="coApplicantInfo.employment_info.contract_type"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Type of Contract" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.contract_type
+                          ? (coApplicantInfo.employment_info.contract_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Size of Company" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.company_size
+                          ? (coApplicantInfo.employment_info.company_size
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address and Place of Work" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        coApplicantInfo.employment_info.address
+                          ? coApplicantInfo.employment_info.address
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    class="col-12 mb-4"
+                    *ngIf="
+                      coApplicantInfo.employment_info
+                        .additional_income_1_type ||
+                      coApplicantInfo.employment_info
+                        .additional_income_2_type ||
+                      coApplicantInfo.employment_info.additional_income_3_type
+                    "
+                  >
+                    <h5 class="font-18 fw-semibold text-primary">
+                      {{ "Additional income" | translate }}
+                    </h5>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_1_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          coApplicantInfo.employment_info
+                            .additional_income_1_type | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_1
+                      "
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          coApplicantInfo.employment_info.additional_income_1
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_2_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          coApplicantInfo.employment_info
+                            .additional_income_2_type | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_2
+                      "
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          coApplicantInfo.employment_info.additional_income_2
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-3 mb-4 d-inline-flex">
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_3_type
+                      "
+                      class="me-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Economic Activity" | translate }}</label
+                      >
+                      <p class="text-primary fw-regular font-16 mb-0">
+                        {{
+                          coApplicantInfo.employment_info
+                            .additional_income_3_type | translate
+                        }}
+                      </p>
+                    </div>
+                    <div
+                      *ngIf="
+                        coApplicantInfo.employment_info.additional_income_3
+                      "
+                      class="ms-3"
+                    >
+                      <label
+                        class="font-14 text-primary-light fw-regular mb-2"
+                        >{{ "Monthly Income" | translate }}</label
+                      >
+                      <p class="text-secondary fw-regular font-16 mb-0">
+                        ${{
+                          coApplicantInfo.employment_info.additional_income_3
+                            | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- dropdown of personal references start -->
+        <!-- <div class="accordion-item bg-transparent App-info-wrp mb-4 border border-secondary">
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2"
+            (click)="selectAccordian(accordianName.PERSONALREFERENCES, 2)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-secondary font-22 fw-semibold"
+              type="button"
+              data-bs-target="#report1"
+              [ngClass]="{
+                collapsed:
+                  accordianName.PERSONALREFERENCES != selectedAccordian ||
+                  (accordianName.PERSONALREFERENCES == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              {{ "Personal References" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.PERSONALREFERENCES === selectedAccordian && isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div class="bg-white mb-4 br-12 p-3 p-md-4">
+                <div class="row border border-primary">
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Full Name" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.full_name
+                          ? referenceInfo?.full_name
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Address and Place of Work" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.address ? referenceInfo?.address : "-"
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    *ngIf="referenceInfo?.mobile_no"
+                    class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4"
+                  >
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Phone Number" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.country_code
+                          ? referenceInfo?.country_code
+                          : "-"
+                      }}
+                      {{
+                        referenceInfo?.mobile_no
+                          ? referenceInfo?.mobile_no
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-md-4">
+                    <label class="font-14 text-primary-light fw-regular mb-2">{{
+                      "Reference Type" | translate
+                    }}</label>
+                    <p class="text-primary fw-regular font-16 mb-0">
+                      {{
+                        referenceInfo?.reference_type
+                          ? (referenceInfo?.reference_type
+                            | removeUnderscore
+                            | titlecase
+                            | translate)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <!-- dropdown of personal references end -->
+
+        <h2
+          class="font-18 fw-semibold text-primary mb-2 pb-4"
+          *ngIf="isFromSummary && currentLoanDetail.status == 'approved'"
+        >
+          {{ "Applicant Documents" | translate }}
+        </h2>
+        <div
+          class="bg-white br-12 p-3 p-md-4"
+          *ngIf="isFromSummary && currentLoanDetail.status == 'approved'"
+          #eleApplicantDoc
+        >
+
+          <app-summary
+            [loanDetail]="loanDetail"
+            (onUploadDocuments)="updateLoanSummary($event)"
+            [userDocuments]="applicantDocuments"
+            [employmentType]="
+              loanDetail?.applicant_info?.employment_info.type
+            "
+            [isCoApplicant]="false"
+          ></app-summary>
+        </div>
+        <div style="height: 48px;"></div>
+
+        <!-- <div style="height: 60px;"></div> -->
+
+        <!-- before container of upload documents start -->
+        <!-- <div
+          class="accordion-item bg-transparent App-info-wrp mb-4"
+          *ngIf="isFromSummary && currentLoanDetail.status == 'approved'"
+        >
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2"
+            (click)="selectAccordian(accordianName.APPLICANT_DOCUMENTS, 3)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-secondary font-22 fw-semibold"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#report1"
+              [ngClass]="{
+                collapsed:
+                  accordianName.APPLICANT_DOCUMENTS != selectedAccordian ||
+                  (accordianName.APPLICANT_DOCUMENTS == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              {{ "Applicant Documents" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse border border-3"
+            [ngClass]="
+              accordianName.APPLICANT_DOCUMENTS === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div
+                class="bg-white mb-4 br-12 p-3 p-md-4 border border-3 border-primary"
+                #eleApplicantDoc
+              >
+                <app-summary
+                  [loanDetail]="loanDetail"
+                  (onUploadDocuments)="updateLoanSummary($event)"
+                  [userDocuments]="applicantDocuments"
+                  [employmentType]="
+                    loanDetail?.applicant_info?.employment_info.type
+                  "
+                  [isCoApplicant]="false"
+                ></app-summary>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <!-- before container of upload documents end -->
+
+        <div
+          class="accordion-item bg-transparent App-info-wrp mb-4"
+          *ngIf="
+            isFromSummary &&
+            loanDetail?.co_applicant_info?.personal_info &&
+            currentLoanDetail.status == 'approved'
+          "
+        >
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2"
+            (click)="selectAccordian(accordianName.CO_APPLICANT_DOCUMENTS, 4)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-secondary font-22 fw-semibold"
+              type="button"
+              [ngClass]="{
+                collapsed:
+                  accordianName.CO_APPLICANT_DOCUMENTS != selectedAccordian ||
+                  (accordianName.CO_APPLICANT_DOCUMENTS == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              {{ "Cosigner Documents" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.CO_APPLICANT_DOCUMENTS === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div class="bg-white mb-4 br-12 p-3 p-md-4 border border-3 border-primary">
+                <app-summary
+                  [loanDetail]="loanDetail"
+                  (onUploadDocuments)="updateLoanSummary($event)"
+                  [userDocuments]="coApplicantDocuments"
+                  [employmentType]="
+                    loanDetail?.co_applicant_info?.employment_info.type
+                  "
+                  [isCoApplicant]="true"
+                ></app-summary>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isFromSummary">
+
+      <div class="terms-condition row">
+        <div class="col-md-12">
+          <p class="fw-medium font-15 text-primary">
+            {{ "The financing terms and conditions are not subject to modification as they are internal policies of the Pilahuin Tio Ltda. savings and credit cooperative for the provision of its services." | translate }}
+          </p>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="radio-check checkbox-check br-12 me-3 mt-3">
+              <div class="form-check form-check-inline terms-condition check-bg-none">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="terms and policy"
+                  id="terms and policy"
+                  (click)="agreeTerms($event)"
+                />
+
+                <!-- <label class="form-check-label" for="terms and policy"
+                  >{{ "I accept terms & conditions" | translate }}
+                </label> -->
+
+                <label class="font-15 form-check-label d-inline-block fw-medium text-primary" for="terms and policy">
+                  {{ "I have read and accept the" | translate }} <a routerLink="/policies/terms_and_condition">{{ "Terms and Conditions"
+                    | translate }}</a>
+                  {{ "and the" | translate }}
+                  <a routerLink="/policies/financing_policy">
+                    {{ "Financing Policies" | translate }}
+                  </a>
+                </label>
+                <span class="check-checkmark"></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="pb-4 d-sm-flex" *ngIf="!isFromSummary">
+      <button
+        type="button"
+        (click)="setPreviousStep()"
+        class="btn primary-btn-outline btn--small btn-sm me-sm-3 fw-semibold font-16"
+      >
+        {{ "Previous" | translate }}
+      </button>
+      <button
+        class="btn primary-btn border-1 btn--small btn-sm mt-3 mt-sm-0 fw-semibold font-16"
+        type="button"
+        (click)="submit()"
+      >
+        {{ "Submit" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</div>
+<ng-template #approved>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3">
+      {{ "Congrats" | translate }}!
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "Your loan application is approved successfully" | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #rejected>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3 text-red">
+      {{ "Rejected" | translate }}!
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "Your loan application is Rejected" | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #pending>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3">
+      {{ "Pending" | translate }}....
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "Your loan application is Pending" | translate }}...
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #cancelled>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3">
+      {{ "Cancelled" | translate }}!
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "Your loan application is cancelled" | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #qualified>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3">
+      {{ "QUALIFIED" | translate }}!
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "You are qualified for the loan application" | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #completed>
+  <div class="modal-header position-relative border-0">
+    <button
+      type="button"
+      class="btn-close p-4"
+      (click)="modalRef.dismiss('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-3">
+      {{ "Completed" | translate }}!
+    </h3>
+    <p
+      class="text-primary-light text-center fw-regular font-14 mb-0 edit-number d-block"
+    >
+      {{ "Your loan application is completed successfully" | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      class="btn primary-btn btn-sm next-btn ms-3"
+      (click)="modalRef.dismiss('Cross click')"
+    >
+      {{ "Ok" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #documentUpload>
+  <div class="modal-header position-relative border-0 pb-0 px-4 pt-4">
+    <button
+      type="button"
+      class="btn-close p-4 custom-close-btn"
+      (click)="modalRef.close(false)"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0 pt-0" style="padding-inline: 31px;">
+    <div class="d-flex justify-content-center pb-4">
+      <img src="assets/images/document-upload-icon.svg" alt="Document upload icon">
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-bold mb-3 font-26">
+      {{ "Upload Documents" | translate }}
+    </h3>
+    <p
+      class="text-primary text-justify fw-semibold font-15 mb-0 edit-number d-block"
+    >
+      {{
+        "Please make sure to upload all required documents to complete the loan application"
+          | translate
+      }}
+    </p>
+  </div>
+  <div class="modal-footer mb-4 mx-2 border-0">
+    <div class="d-flex flex-row align-items-center">
+      <button
+        type="button"
+        class="btn primary-btn me-3 custom-shadow fw-semibold font-16"
+        (click)="scrollToUploadDocuments(); modalRef.close(false)"
+      >
+        {{ "Upload Now" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn primary-btn-outline custom-shadow fw-semibold font-16"
+        (click)="modalRef.close(true)"
+      >
+        <!-- {{ "Continue with Purchase" | translate }} -->
+        {{ "Go see the vehicle" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #documentUploadAkv>
+  <div class="modal-header position-relative border-0 pb-0 px-4 pt-4">
+    <button
+      type="button"
+      class="btn-close p-4 custom-close-btn"
+      (click)="modalRef.close(false)"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0 pt-0" style="padding-inline: 31px;">
+    <div class="d-flex justify-content-center pb-4">
+      <img src="assets/images/document-upload-icon.svg" alt="Document upload icon">
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-bold mb-3 font-26">
+      {{ "Upload Documents" | translate }}
+    </h3>
+    <p
+      class="text-primary text-justify fw-semibold font-15 mb-0 edit-number d-block"
+    >
+      {{
+        "Please make sure to upload all required documents to complete the loan application"
+          | translate
+      }}.
+    </p>
+  </div>
+  <div class="modal-footer mb-4 mx-2 border-0">
+    <div class="d-flex flex-row align-items-center">
+      <button
+        type="button"
+        class="btn primary-btn me-3 custom-shadow fw-semibold font-16"
+        (click)="scrollToUploadDocuments(); modalRef.close(false)"
+      >
+        {{ "Upload Now" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn primary-btn-outline custom-shadow fw-semibold font-16"
+        (click)="modalRef.close(true)"
+      >
+        <!-- {{ "Continue with Purchase" | translate }} -->
+        {{ "I already know the vehicle" | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

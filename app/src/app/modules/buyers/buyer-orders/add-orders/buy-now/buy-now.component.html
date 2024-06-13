@@ -1,0 +1,561 @@
+<section class="bg-blue">
+  <ng-container *ngIf="!isPaymentMethodSelected">
+    <div class="payment_wrapper">
+      <p class="font-24 text-primary mb-3 mb-lg-4 mt-4 mt-xl-0 fw-semibold">
+        {{
+          currentOrder.loan
+            ? ("Initial Entry Payment" | translate)
+            : ("Initial Entry Deposit 40%" | translate)
+        }}
+      </p>
+      <!-- <p class="font-24 text-primary mb-3 mb-lg-4 mt-4 mt-xl-0 fw-semibold">
+        {{ "Initial Entry Payment" | translate }}
+      </p> -->
+      <div class="row loan_payment_row">
+        <!-- <div class="row" *ngIf="currentOrder.loan">
+          <div class="row mb-3">
+            <div class="col-md-6 col-lg-6">
+              <label class="mb-1 text-primary font-14 fw-regular">{{
+                "Loan Amount" | translate
+              }}</label>
+              <p class="mb-2 text-secondary font-16 fw-regular mt-2">
+                ${{
+                  currentOrder.loan.amount
+                    ? (currentOrder.loan.amount | spanishNumber)
+                    : "-"
+                }}
+              </p>
+            </div>
+            <div class="col-md-6 col-lg-6">
+              <label class="mb-1 text-primary font-14 fw-regular">{{
+                "Vehicle Price" | translate
+              }}</label>
+              <p class="mb-2 text-secondary font-16 fw-regular mt-2">
+                ${{
+                  currentOrder.loan.deposit_percentage
+                    ? currentOrder.loan.deposit_percentage
+                    : "0"
+                }}
+              </p>
+            </div>
+          </div>
+        </div> -->
+        <ng-container
+          *ngIf="
+            currentOrder.vehicle_procedure.is_vehicle_procedure === true;
+            else noVehicleProcedure
+          "
+        >
+          <div class="row">
+            <div class="col-6" *ngIf="currentOrder.loan">
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium"> <!--Importe del prestamo -->
+                {{ "Loan Import" | translate }}
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{ loanDetail?.amount | spanishNumber }}
+              </p>
+            </div>
+            <div class="col-6">
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium">
+                {{ "Vehicle Price" | translate }}
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{ orderPrice | spanishNumber }}
+              </p>
+            </div>
+            <div class="col-6" *ngIf="!currentOrder.loan">
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium">
+                Pago inicial 40%
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{ orderPrice*0.4 | spanishNumber }}
+              </p>
+            </div>
+            <div class="col-6" *ngIf="!currentOrder.loan">
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium">
+                {{ "Vehicle Procedure" | translate }}
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{
+                  (250 | spanishNumber)
+                }}
+              </p>
+            </div>
+            <div class="col-6" *ngIf="!currentOrder.loan"> 
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium">
+                {{ "Outstanding Balance to be Paid" | translate }}
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{
+                  (orderPrice + 250 - (orderPrice*0.4) | spanishNumber)
+                }}
+              </p>
+            </div>
+
+            <div class="col-6" *ngIf="currentOrder.loan">               <!--Pago de entrada inicial -->
+              <p class="font-18 text-primary mb-3 mb-lg-4 fw-medium">
+                {{ "Initial Entry Payment" | translate }} {{currentOrder.loan.deposit_percentage}}%
+              </p>
+              <!-- <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{ loanDetail?.deposit_amount | spanishNumber }}
+              </p> -->
+              <p class="font-18 text-secondary mb-3 mb-lg-4 fw-semibold">
+                ${{ depositAmount | spanishNumber }}
+              </p>
+            </div>
+            <!-- <div class="col-6">
+
+              <p class="font-18 text-primary mb-3 mb-lg-4">
+                {{
+                  currentOrder.loan
+                    ? ("Initial Entry Deposit" | translate)
+                    : ("Total Payable Amount" | translate)
+                }}: 
+              </p>
+              <p class="font-18 text-secondary mb-3 mb-lg-4">
+                ${{
+                  currentOrder.loan
+                    ? (orderPrice + 250 - currentOrder.loan.amount | spanishNumber)
+                    : (orderPrice + 250 | spanishNumber)
+                }}
+              </p>
+            </div> -->
+          </div>
+        </ng-container>
+        <ng-template #noVehicleProcedure>
+          <label class="mb-1 text-primary font-14 fw-regular">{{
+            "Initial Entry Deposit" | translate
+          }}</label>
+          <p class="font-18 text-secondary mb-3 mb-lg-4">
+            <!-- {{
+              currentOrder.loan
+                ? ("Initial Entry Deposit" | translate)
+                : ("Total Payable Amount" | translate)
+            }}:  -->${{
+              currentOrder.loan
+                ? (orderPrice - currentOrder.loan.amount | spanishNumber)
+                : (orderPrice | spanishNumber)
+            }}
+          </p>
+        </ng-template>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <p class="font-24 text-primary mb-3 mt-3 fw-semibold">
+            {{ "Select Payment Method" | translate }}
+          </p>
+          <p class="font-20 text-primary mb-4 fw-medium">
+            <img
+              height="30px"
+              width="20px"
+              src="assets/images/sand-timer.gif"
+            />
+            {{ "Please select payment method in" | translate }}
+            <b class="text-danger">{{ secondsConter }} min, </b>
+            {{ "after that you'll redirected to my orders page." | translate }}
+          </p>
+          <div class="payment_wrapper--radio br-12">
+            <div class="form-check form-check-inline mb-2 mb-md-3 mb-xl-4">
+              <input
+                class="form-check-input custom-checkbox"
+                type="radio"
+                name="payment"
+                id="card"
+                value="card"
+                (click)="selectPaymentMethod($event)"
+                [checked]="selectedPaymentMethod == 'card'"
+              />
+              <label class="form-check-label fw-medium font-15" for="card">
+                <img
+                  class="me-3"
+                  data-card
+                  src="assets/images/card-purple.svg"
+                  alt="card"
+                />
+                {{ "Credit Card" | translate }}</label
+              >
+              <span class="dot-checkmark"></span>
+            </div>
+            <div class="form-check form-check-inline mb-2 mb-md-3 mb-xl-4">
+              <input
+                class="form-check-input custom-checkbox"
+                type="radio"
+                name="payment"
+                id="cash"
+                [checked]="selectedPaymentMethod == 'cash'"
+                value="cash"
+                (click)="selectPaymentMethod($event)"
+              />
+              <label class="form-check-label fw-medium font-15" for="cash">
+                <img
+                  class="me-3"
+                  data-cash
+                  src="assets/images/cash-purple.svg"
+                  alt="cash"
+                />
+                {{ "Transfer or Deposit" | translate }}</label
+              >
+              <span class="dot-checkmark"></span>
+            </div>
+          </div>
+          <div class="btn-grp mt-5 d-md-flex">
+            <button 
+              class="btn primary-btn-outline btn-lg btn-sm me-md-3 shw"
+              (click)="managePreviousStep()"
+            >
+              {{ "Previous" | translate }}
+            </button>
+            <button
+              class="btn primary-btn mt-3 mt-md-0 btn-lg btn-sm border-1 shw"
+              (click)="confirm()"
+            >
+              {{ "Confirm" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isPaymentMethodSelected">
+    <ng-container *ngIf="completedStep >= orderCurrentStepNumber.BUY_NOW">
+      <!--Card Payment Success || Failed -->
+      <ng-container *ngIf="!currentOrder.bank_receipt.is_bank_receipt">
+        <p class="font-18 text-secondary mb-3 mb-lg-4 mt-3">
+          {{ "Total Paid Amount" | translate }} :
+          <span
+            [ngClass]="{
+              'text-disabled': currentOrder.payment.status != 'success'
+            }"
+            >${{
+              currentOrder.loan
+                ? (depositAmount + 250 | spanishNumber)
+                : (orderPrice + 250 | spanishNumber)
+            }}</span
+          >
+        </p>
+        <p class="font-18 text-secondary mb-3 mb-lg-4">
+          {{ "Payment Method" | translate }} :
+          {{
+            currentOrder.payment.type == "cash"
+              ? ("Cash Deposit" | translate)
+              : (currentOrder.payment.type | titlecase)
+          }}
+        </p>
+        <p
+          class="font-18 text-secondary mb-3 mb-lg-4"
+          *ngIf="currentOrder.payment.status == 'success'"
+        >
+          {{ "Payment received successfully" | translate }}
+        </p>
+      </ng-container>
+      <!--Cash or Bank Payment Success || Failed -->
+      <ng-container *ngIf="currentOrder.bank_receipt.is_bank_receipt">
+        <h3 class="fw-semibold plus-jakarta font-24 mb-3">
+          {{ "Payment Summary" | translate }}
+        </h3>
+        <div class="row">
+          <div class=" col-md-6 col-sm-12 bg-white br-12 p-3 shw-card">
+            <p class="font-15 fw-medium text-primary mb-3 mb-lg-4 mt-3">
+              {{ "Total Paid Amount" | translate }}:
+              <span
+                [ngClass]="{
+                  'text-disabled': currentOrder.payment.status != 'success'
+                }"
+                class="font-15 fw-medium text-primary mb-3 mb-lg-4"
+                >${{
+                  currentOrder.loan
+                    ? (depositAmount | spanishNumber)
+                    : ((orderPrice*0.4) | spanishNumber)
+                }}</span
+              >
+            </p>
+            <p class="font-15 fw-medium text-secondary mb-3 mb-lg-4">
+              {{ "Payment Method" | translate }} :
+              {{
+                currentOrder.payment.type == "cash"
+                  ? ("Transfer Deposit" | translate)
+                  : (currentOrder.payment.type | titlecase)
+              }}
+            </p>
+            
+            
+          </div>
+        </div>
+        <p
+            class="font-18 text-primary mb-3 mb-lg-4 mt-3 "
+            *ngIf="
+              completedStep <= orderCurrentStepNumber.BUY_NOW &&
+              !currentOrder.payment.status
+            "
+          >
+            <b *ngIf="currentOrder.payment.status != 'failed'">
+              {{
+                currentOrder.payment.type == "cash"
+                  ? ("Cash Confirmation Message" | translate)
+                  : ("Bank Confirmation Message" | translate)
+              }}
+            </b>
+          </p>
+        <p
+            class="font-18 fw-semibold text-danger mb-3 mb-lg-4 mt-3"
+            *ngIf="currentOrder.payment.status == 'failed'"
+          >
+            {{ "You payment has been rejected by Riku" | translate }}
+          </p>
+  
+          <!-- <p
+            class="font-18 text-secondary mb-3 mb-lg-4 mt-3"
+            *ngIf="
+              completedStep > orderCurrentStepNumber.BUY_NOW &&
+              currentOrder.payment.status == 'success'
+            "
+          >
+            {{ "Payment received successfully" | translate }}
+          </p> -->
+          <p
+            class="font-18 text-secondary mb-3 mb-lg-4 mt-3"
+            *ngIf="
+              completedStep >= orderCurrentStepNumber.BUY_NOW &&
+              currentOrder.payment.status == 'success'
+            "
+          >
+            {{ "Payment received successfully" | translate }}
+          </p>
+      </ng-container>
+      <div class="row">
+        <div class="btn-grp mt-5 d-md-flex">
+          <button 
+            class="btn primary-btn-outline btn-sm shw btn-lg me-md-3"
+            (click)="managePreviousStep()"
+          >
+            {{ "Previous" | translate }}
+          </button>
+          <button
+            class="btn primary-btn btn-sm shw me-3 btn-lg border-1"
+            *ngIf="currentOrder.payment.status != 'failed'"
+            (click)="setNextStep()"
+            [disabled]="currentOrder.payment.status != 'success'"
+          >
+            {{ "Next" | translate }}
+          </button>
+          <button
+            class="btn primary-btn btn-sm shw me-3 btn-lg border-1"
+            *ngIf="currentOrder.payment.status == 'failed'"
+            (click)="resetPaymentMethod()"
+          >
+            {{ "Re-Confirm Payment" | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!isReceiptUploaded">
+      <div class="mb-4">
+        <!-- <span (click)="back()"><img src="assets/images/backarrow.svg" /></span> -->
+        <div class="section-header">
+          <h3 class="mb-3 text-primary fw-semibold">
+            {{ "Bank Details" | translate }}
+          </h3>
+
+          <p class="font-16 fw-bold font-sm-10 text-primary">
+            {{ "Bank Account Information" | translate }}
+          </p>
+        </div>
+        <div *ngFor="let detail of banckDetails" class="row mb-3">
+          <div class="col-md-6 col-sm_12">
+            <div class="bg-white pb-2 px-3 br-12 shw-card">
+              <div class="form-check form-check-inlineP mb-0 mb-xl-3 px-0">
+                <label
+                  class="form-check-label text-primary fw-bold mt-2 px-0"
+                  for="{{ detail.bank_name }}"
+                >
+                  {{ detail.bank_name }}
+                </label>
+              </div>
+
+              <div class="row">
+                <div class="col-3">
+                  <img
+                    src="{{ detail.bank_logo }}"
+                    alt="{{ detail.bank_name }}"
+                    width="100px"
+                    class="img-fluid"
+                  />
+                </div>
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="mb-3 font-14 text-primary fw-semibold">
+                        {{ "Account Type" | translate }}:
+                      </p>
+                      <p class="mb-3 font-14 text-primary fw-semibold">
+                        {{ "Account Number" | translate }}:
+                      </p>
+                      <p class="mb-3 font-14 text-primary fw-semibold">
+                        {{ "Account Name" | translate }}:
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <p class="mb-3 font-14 text-primary fw-bold">
+                        {{ detail.type_account }}
+                      </p>
+                      <p class="mb-3 font-14 text-primary fw-bold">
+                        {{ detail.account_number }}
+                      </p>
+                      <p class="mb-3 font-14 text-primary fw-bold">
+                        {{ detail.account_name }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 d-flex justify-content-end">
+            <a
+              class="fw-bold"
+              href="../../../../assets/images/RIKU_TRANSFERENCIA_BANCARIA.pdf"
+              download="Instrucciones.pdf"
+              >Descargar Instrucciones</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="upload--report mt-4 mt-xl-5">
+        <p class="font-17 fw-bold font-sm-10 text-primary mb-sm-3 mb-0">
+          {{ "Upload Deposit Receipt" | translate }}
+        </p>
+        <div class="form-group mb-0">
+          <input
+            type="file"
+            class="c-none"
+            placeholder="Upload Deposit Receipt"
+            #document
+            (change)="onDocumentChange($event)"
+            placeholder="Receipt Document"
+          />
+          <input
+            type="text"
+            readonly
+            class="form-control c-pointer font-17"
+            (click)="document.click()"
+            placeholder="{{ 'Upload Receipt' | translate }}"
+          />
+          <img
+            src="assets/images/upload-icon.svg"
+            (click)="document.click()"
+            class="input-icon uplode-icon"
+          />
+
+          <span
+            *ngIf="isDocumentUploading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          >
+          </span>
+          <div *ngIf="!receiptURL.length && isFormSubmitted">
+            <span class="text-danger font-17">{{
+              "Please upload deposit receipt" | translate
+            }}</span>
+          </div>
+
+          <div
+            class="vehicle__uploaded-photo mt-3"
+            *ngIf="receiptURL.length > 0"
+          >
+            <div class="d-flex flex-wrap">
+              <div
+                class="photo-wrp me-2 mb-2"
+                *ngFor="let document of receiptURL; index as i"
+              >
+                <span (click)="deleteLegalDocument(i)">×</span>
+                <ng-container
+                  *ngIf="getFileType(document.download_url) == 'image'"
+                >
+                  <a href="{{ document.download_url }}" target="_blank"
+                    ><img class="br-12" [src]="document.download_url"
+                  /></a>
+                </ng-container>
+                <ng-container
+                  *ngIf="getFileType(document.download_url) == 'pdf'"
+                >
+                  <a href="{{ document.download_url }}" target="_blank"
+                    ><img class="br-12" src="assets/images/pdf_icon.png"
+                  /></a>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 d-sm-flex">
+        <button
+          class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+          (click)="resetPaymentMethod()"
+          >{{ "Previous" | translate }}</button
+        >
+        <button
+          class="btn primary-btn btn--small btn-sm border-1 mt-3 mt-sm-0 shw"
+          (click)="submitReceipt()"
+        >
+          {{ "Send" | translate }}
+        </button>
+      </div>
+    </ng-container>
+  </ng-container>
+</section>
+
+<ng-template #openTermsForCashPayement let-d="dismiss">
+  <div class="modal-header position-relative border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{
+        selectedPaymentMethod === "cash"
+          ? ("Purchase with Cash" | translate)
+          : ("Bank Transfer" | translate)
+      }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="d('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 px-4">
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph1" | translate }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph2" | translate }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph3" | translate }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph4" | translate }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph5" | translate }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{ "cash_bank_modal_text_paragraph6" | translate }}
+        </p>
+      </div>
+      <div class="modal-footer d-flex justify-content-left border-0">
+        <button
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="proceed()"
+        >
+          {{ "Accept" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

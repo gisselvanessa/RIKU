@@ -1,0 +1,73 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('Cross click')"
+    aria-label="Close"
+  ></button>
+</div>
+
+<div *ngIf="userId">
+  <form [formGroup]="userTypeForm" (submit)="onSubmit()">
+    <div class="modal-body border-0">
+      <div class="round-icon-wrp">
+        <img src="assets/images/vehicle-list/del-icon.svg" alt="" />
+      </div>
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Delete User" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Please select the User type which you want to delete for this user" | translate}}.
+      </p>
+
+      <div class="col-md-12 user-type-wrp">
+        <div class="row d-flex justify-content-center">
+          <div class="col-md-4" *ngFor="let uType of userType; let i = index">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                (change)="onCheckValue($event)"
+                name="Model"
+                id="label_{{ uType }}"
+                [value]="uType"
+              />
+              <label class="form-check-label" for="label_{{ uType }}">{{
+                uType | translate
+              }}</label>
+              <span class="check-checkmark"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+      <button
+        class="btn btn-outline-purple"
+        (click)="activeModal.dismiss('cancel')"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        type="button"
+      >
+        {{"Cancel" | translate}}
+      </button>
+      <button
+        type="submit"
+        class="btn btn-danger"
+        data-bs-dismiss="modal"
+        [disabled]="userTypeForm.invalid"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteconfirmModal"
+      >
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        {{"Confirm" | translate}}
+      </button>
+    </div>
+  </form>
+</div>

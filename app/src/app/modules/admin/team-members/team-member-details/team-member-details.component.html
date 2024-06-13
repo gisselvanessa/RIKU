@@ -1,0 +1,133 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="back-to-page d-flex">
+      <span>
+        <a href="javascript:void(0)" (click)="goback()"
+          ><img src="assets/images/backarrow.svg" /></a
+      ></span>
+      <div
+        class="d-flex section-header justify-content-between w-100 align-items-center"
+      >
+        <h3 class="ms-3 font-38 text-primary fw-semibold">
+          {{"Team Member Detail" | translate}}
+        </h3>
+        <div class="d-flex">
+          <button
+            *ngIf="modulePermissions.can_edit"
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{"Edit" | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="admin_user-detail">
+      <div class="row justify-content-between">
+        <div class="col-xl-12 col-lg-6">
+          <div class="bg-white p-4 br-12">
+            <div class="row admin_detail-wrp">
+              <div class="col-12">
+                <div class="form-group">
+                  <p class="text-primary-light font-20">
+                    {{"Created Date" | translate}}:
+                    <span class="text-secondary ms-2 font-22">
+                      {{
+                        teamMemberDetails.created_at | date : "MM-dd-YYYY"
+                      }}</span
+                    >
+                  </p>
+                  <hr />
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Name" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ teamMemberDetails.first_name | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Surname" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ teamMemberDetails.last_name | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Company Type" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{
+                      teamMemberDetails.company_role[0].company.company_name
+                        | titlecase
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Role" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{
+                      teamMemberDetails.company_role[0].company_role_name
+                        | titlecase
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Email" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ teamMemberDetails.email }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Mobile Number" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ teamMemberDetails.country_code }}
+                    {{ teamMemberDetails.mobile_no }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Status" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ teamMemberDetails.status | titlecase }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

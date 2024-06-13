@@ -1,0 +1,26 @@
+<div class="row">
+  <ng-container *ngIf="vehicleProcedureData?.assets.length; else noDoc">
+    <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center"
+      *ngFor="let image of vehicleProcedureData.assets; let index =  index;">
+      <div class="position-relative">
+        <div class="uploded-document ">
+          <a class="d-block" [href]="image.url" target="_blank">
+            <img *ngIf="getFileType(image.url) == 'image'" [src]="image.url">
+            <img *ngIf="getFileType(image.url) == 'pdf'" src="./assets/images/pdf_icon.png">
+            <img *ngIf="getFileType(image.url) == 'doc'" src="./assets/images/doc_icon.png">
+          </a>
+        </div>
+        <span class="delete-doc  c-pointer" *ngIf="isCompleted" (click)="deleteDocument(image.id, index)">
+          &times;
+        </span>
+      </div>
+      <!-- <p class="font-10 fw-light text-purple mt-2">{{fileName(image.url)}}</p> -->
+      <a class="download-icon c-pointer" (click)="downloadFile(image.url)"><img
+          src="./assets/images/expert-evolution/white-download.svg"></a>
+    </div>
+  </ng-container>
+  <ng-template #noDoc>
+    <p class="font-22 fw-light text-purple mt-5 text-center">{{"Documents are not uploaded yet from Buyer/Seller/Dealer
+      side" | translate}}.</p>
+  </ng-template>
+</div>

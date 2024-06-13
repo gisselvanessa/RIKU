@@ -1,0 +1,96 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+/* loan */
+.label-border-left {
+  min-width: 200px;
+  border-left: 1px solid #dee2e6 !important;
+  text-align: right;
+}
+
+.condition-padding {
+  padding-left: 35px;
+}
+
+.report{
+  &__accordion{
+    padding-bottom: 50px;
+    &  .accordion-item{
+      border: none;
+      border-bottom: 0.5px solid $purple-grey;
+      border-radius: 0;
+
+    }
+    &  .accordion-button{
+
+      // border-bottom: 0.5px solid $purple-grey;
+      box-shadow: none;
+
+      &::after{
+        background-image: url(/assets/images/contact/chevron-down.svg);
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+      }
+      &:not(.collapsed)::after{
+        background-image: url(/assets/images/contact/chevron-up.svg);
+      }
+    }
+  }
+  &__sub-accordion{
+    & .accordion-button{
+      box-shadow: none;
+      &::after{
+        background-image: url(/assets/images/contact/round-plus.svg);
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+      }
+      &:not(.collapsed)::after{
+        background-image: url(/assets/uimages/contact/round-minus.svg);
+
+      }
+    }
+  }
+
+  &__accordion {
+      .title {
+          margin-top: 75px;
+      }
+  }
+}
+
+.vehicle-image-wrp {
+  height: 90px;
+  width: 90px;
+  border-radius: 15px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+
+.status-label .label{
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  &.in-progress {
+    color: rgb(153, 76, 152);
+    background-color: rgba(153, 76, 152, 0.1);
+  }
+  &.completed{
+    color: #46BC39;
+    background-color: rgba(70, 188, 57, .1);
+  }
+  &.cancelled{
+    color: $red;
+    background-color: rgba(241, 64, 64, .1);
+  }
+}
+.loan-payment-status{
+  background-color: rgba(47, 119, 156, 0.1);
+  padding: 4px 16px;
+  border-radius: 32px;
+}

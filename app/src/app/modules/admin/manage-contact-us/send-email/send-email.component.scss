@@ -1,0 +1,15 @@
+@import '../../../../../function';
+@import '../../../../../variables';
+
+.status-label {
+    color: rgb(241, 64, 64);
+    background-color: rgba(241, 64, 64, 0.1);
+}
+
+.border-bottom {
+    border-bottom: 1px solid #D5DCE6;
+}
+
+.readonly {
+    background-color: rgba($color: $light-purple-2, $alpha: 0.1);
+}

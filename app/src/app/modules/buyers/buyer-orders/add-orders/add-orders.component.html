@@ -1,0 +1,410 @@
+<!-- <app-schedule-meeting></app-schedule-meeting> -->
+<section class="bg-blue section--spacing">
+  <div class="jakay-container px-4">
+    <div
+      class="back-to-page d-flex"
+      *ngIf="currentStep !== orderCurrentStepNumber.EXPERT_EVALUATION"
+    >
+      <span (click)="back()"><img src="assets/images/backarrow.svg" /></span>
+      <div class="ms-3 section-header">
+        <div class="row">
+          <div class="col-10">
+          <h3 class="mb-3 font-38 text-primary fw-semibold">
+            {{ "My Order" | translate }}
+          </h3>
+          <p class="text-primary-light font-14">
+            {{
+              "Complete the process, to finalize the purchase of your vehicle."
+                | translate
+            }}
+          </p>
+        </div>
+        </div>
+        <div class="col-2 principal-img">
+          <img
+            [src]="orderDetail.vehicle.primary_image"
+            width="100%"
+            class="vehicle-det-images"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="vehicle__steps order-steps d-flex align-items-center justify-content-center"
+      #orderStepsWrapper
+    >
+      <div
+        class="steps-wrp"
+        *ngIf="currentStep !== orderCurrentStepNumber.EXPERT_EVALUATION"
+      >
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentStep > orderCurrentStepNumber.PLACED,
+            active: currentStep == orderCurrentStepNumber.PLACED
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentStep ==
+                    orderCurrentStepNumber.PLACED ||
+                  currentStep >
+                    orderCurrentStepNumber.PLACED
+                    ? 'assets/images/vehicle-orders/icon-informacion-vehiculo azul.svg'
+                    : 'assets/images/vehicle-orders/icon-informacion-vehiculo naranja.svg'
+                "
+              />
+              <h6 class="text-center fw-semibold font-17">
+                {{ "Vehicle Information" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentStep > orderCurrentStepNumber.EXPERT_EVALUATION &&
+              orderDetail.expert_evaluation.is_expert_evaluation,
+            active: currentStep == orderCurrentStepNumber.EXPERT_EVALUATION
+          }"
+          [hidden]="
+            currentStep > orderCurrentStepNumber.EXPERT_EVALUATION &&
+            !orderDetail.expert_evaluation.is_expert_evaluation
+          "
+        >
+          <div>
+            <span class="step-round"
+              ><img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.EXPERT_EVALUATION ||
+              currentStep >
+                orderCurrentStepNumber.EXPERT_EVALUATION
+                ? 'assets/images/vehicle-orders/icon-experto-azul.svg'
+                : 'assets/images/vehicle-orders/icon-experto-naranja.svg'
+            "
+              />
+              <h6 class="text-center">
+                {{ "Order Expert Evaluation" | translate }}<br />{{
+                  "(Optional)" | translate
+                }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentStep > orderCurrentStepNumber.SCHEDULE_MEETING,
+            active: currentStep == orderCurrentStepNumber.SCHEDULE_MEETING
+          }"
+          [hidden]="
+            currentStep > orderCurrentStepNumber.EXPERT_EVALUATION &&
+            orderDetail.expert_evaluation.is_expert_evaluation
+          "
+        >
+          <div>
+            <span class="step-round"
+              ><!-- {{
+                currentStep > orderCurrentStepNumber.EXPERT_EVALUATION &&
+                !orderDetail.expert_evaluation.is_expert_evaluation
+                  ? "2"
+                  : "3"
+              }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.SCHEDULE_MEETING ||
+              currentStep >
+                orderCurrentStepNumber.SCHEDULE_MEETING
+                ? 'assets/images/vehicle-orders/icon-reunion-azul.svg'
+                : 'assets/images/vehicle-orders/icon-reunion-naranja.svg'
+            "
+              />
+              <h6 class="text-center">{{ "Schedule Meeting" | translate }}</h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentStep > orderCurrentStepNumber.VEHICLE_REVIEW,
+            active: currentStep == orderCurrentStepNumber.VEHICLE_REVIEW
+          }"
+        >
+          <div>
+            <span class="step-round"
+              ><!-- {{ getVehicleReviewStepNumber() }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.VEHICLE_REVIEW ||
+              currentStep >
+                orderCurrentStepNumber.VEHICLE_REVIEW
+                ? 'assets/images/vehicle-orders/icon-resumen-reunion-azul.svg'
+                : 'assets/images/vehicle-orders/icon-resumen-reunion-naranja.svg'
+            "
+              />
+              <h6 class="text-center">{{ "Vehicle Review" | translate }}</h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentStep > orderCurrentStepNumber.PRICE_NEGOTIATION &&
+              orderDetail.negotiation_details.is_price_negotiating,
+            active: currentStep == orderCurrentStepNumber.PRICE_NEGOTIATION
+          }"
+          [hidden]="
+            (currentStep > orderCurrentStepNumber.PRICE_NEGOTIATION && 
+            orderDetail.negotiation_details.is_price_negotiating === null) ||
+            (orderDetail.negotiation_details &&
+            orderDetail.negotiation_details.is_price_negotiating === false)
+          "
+        >
+          <div>
+            <span class="step-round"
+              ><!-- {{ getVehicleReviewStepNumber() + 1 }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.PRICE_NEGOTIATION ||
+              currentStep >
+                orderCurrentStepNumber.PRICE_NEGOTIATION
+                ? 'assets/images/vehicle-orders/icon-negociacionprecio-azul.svg'
+                : 'assets/images/vehicle-orders/icon-negociacionprecio-naranja.svg'
+            "
+              />
+              <h6 class="text-center">
+                {{ "Price Negotiation" | translate }}<br />{{
+                  "(Optional)" | translate
+                }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentStep > orderCurrentStepNumber.BUY_NOW,
+            active: currentStep == orderCurrentStepNumber.BUY_NOW
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <!-- {{ getBuyNowStepNumber() }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.BUY_NOW ||
+              currentStep >
+                orderCurrentStepNumber.BUY_NOW
+                ? 'assets/images/vehicle-orders/icon-pagodepositoinicial-azul.svg'
+                : 'assets/images/vehicle-orders/icon-depositoinicial-naranja.svg'
+            "
+              />
+              <h6 class="text-center">{{ "Initial Entry Payment" | translate }}</h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentStep > orderCurrentStepNumber.LOAN && orderDetail.loan?.id,
+            active: currentStep == orderCurrentStepNumber.LOAN
+          }"
+          [hidden]="!orderDetail.loan"
+        >
+          <div>
+            <span class="step-round">
+              <!-- {{ getLoanDataStepNumber() }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.LOAN ||
+              currentStep >
+                orderCurrentStepNumber.LOAN
+                ? 'assets/images/vehicle-orders/icon-validaciondocumentos-azul.svg'
+                : 'assets/images/vehicle-orders/icon-validaciondocumentos-naranja.svg'
+            "
+            width="80%"
+              />
+              <h6 class="text-center">
+                {{ "Loan Data Verification" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentStep > orderCurrentStepNumber.VEHICLE_PROCEDURE &&
+              orderDetail.vehicle_procedure.is_vehicle_procedure,
+            active: currentStep == orderCurrentStepNumber.VEHICLE_PROCEDURE
+          }"
+          [hidden]="
+            orderDetail.vehicle_procedure &&
+            orderDetail.vehicle_procedure.is_vehicle_procedure === false
+          "
+        >
+          <div>
+            <span class="step-round">
+              <!-- {{ getVehicleProcedureStepNumber() }} -->
+              <img
+              [src]="
+              currentStep ==
+                orderCurrentStepNumber.VEHICLE_PROCEDURE ||
+              currentStep >
+                orderCurrentStepNumber.VEHICLE_PROCEDURE
+                ? 'assets/images/vehicle-orders/icon-tramitevehicular-azul.svg'
+                : 'assets/images/vehicle-orders/icon-tramitevehicular-naranja.svg'
+            "
+            width="80%"
+              />
+              <h6 class="text-center">
+                {{ "Vehicle Procedure" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <!-- <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentStep > orderCurrentStepNumber.VEHICLE_DELIVERY_STATUS,
+            active: currentStep > orderCurrentStepNumber.VEHICLE_DELIVERY_STATUS
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <!-- {{ getDeliveryStepNumber() }}
+              <img
+                [src]="
+                  'assets/images/vehicle-orders/icon-tramitevehicular-naranja.svg'
+                "
+                width="80%"
+              />
+              <h6 class="text-center">
+                {{ "Vehicle Delivery" | translate }}
+              </h6></span
+            >
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+    <div class="order-process__wrapper" *ngIf="!loading">
+      <div
+        class="step-1 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.PLACED"
+      >
+        <app-vehicle-details
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-vehicle-details>
+      </div>
+      <div
+        class="step-2 py-4 px-3"
+        *ngIf="currentStep == orderCurrentStepNumber.EXPERT_EVALUATION"
+      >
+        <app-expert-review
+          [currentOrder]="orderDetail"
+          [currentStep]="currentStep"
+          (onSubmitDetails)="setNextStep($event)"
+          [hideClass]="false"
+        ></app-expert-review>
+      </div>
+      <div
+        class="step-3 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.SCHEDULE_MEETING"
+      >
+        <app-schedule-meeting
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-schedule-meeting>
+      </div>
+      <div
+        class="step-4 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.VEHICLE_REVIEW"
+      >
+        <app-review-vehicle
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-review-vehicle>
+      </div>
+      <div
+        class="step-5 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.PRICE_NEGOTIATION"
+      >
+        <app-price-negotiation
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-price-negotiation>
+      </div>
+      <div
+        class="step-7 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.BUY_NOW"
+      >
+        <app-buy-now
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-buy-now>
+      </div>
+      <div
+        class="step-8 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.LOAN"
+      >
+        <app-loan-documents
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-loan-documents>
+      </div>
+
+      <div
+        class="step-9 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.VEHICLE_PROCEDURE"
+      >
+        <app-add-update-vehicle-procedure
+          [userType]="'buyer'"
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-add-update-vehicle-procedure>
+      </div>
+
+      <!-- <div
+        class="step-10 py-4"
+        *ngIf="currentStep == orderCurrentStepNumber.VEHICLE_DELIVERY_STATUS"
+      >
+        <app-vehicle-delivery
+          [currentStep]="currentStep"
+          [currentOrder]="orderDetail"
+          (onSubmitDetails)="setNextStep($event)"
+        ></app-vehicle-delivery>
+      </div> -->
+    </div>
+    <app-loader *ngIf="loading"></app-loader>
+  </div>
+</section>

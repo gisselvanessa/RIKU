@@ -1,0 +1,145 @@
+<section class="section bg-blue pb-5">
+  <div class="jakay-container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h3 class="font-38 text-primary fw-semibold">
+          {{ "FAQ's" | translate }}
+        </h3>
+      </div>
+      <div>
+        <div class="add-vehicle ms-2">
+          <a
+            routerLink="/admin/faq/add"
+            class="btn primary-btn btn-sm br-12 py-3"
+          >
+            + {{ "Add FAQ" | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- code for blog card component -->
+    <div class="bg-white br-12 p-4 box-shadow mt-5">
+      <ng-container *ngIf="!loading; else faqLoading">
+        <ng-container *ngIf="faqList?.length; else noFaq">
+          <ng-container *ngFor="let section of faqList; let index = index">
+            <div class="faq__sub-accordion border-grey br-5 my-4">
+              <div class="accordion-item bg-transparent">
+                <h2
+                  class="accordion-header"
+                  (click)="selectedAccordians(section.uuid)"
+                  [attr.id]="'report-' + (index + 4)"
+                >
+                  <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                      <div class="bg-transparent p-3 font-20 fw-medium">
+                        #{{ page * limit - limit + index + 1 }}
+                      </div>
+                      <div>
+                        <button
+                          class="accordion-button bg-transparent p-3 font-20 fw-medium"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          [attr.data-bs-target]="section.uuid"
+                          aria-expanded="false"
+                          aria-controls="collapseOne"
+                          [ngClass]="
+                            section.uuid === selectAccordian ? '' : 'collapsed'
+                          "
+                        >
+                          {{ section.question }}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="d-flex">
+                      <div class="bg-transparent p-3 font-20 fw-medium">
+                        <a href="javascript:void(0)">
+                          <ng-container
+                            *ngIf="
+                              section.uuid === selectAccordian;
+                              else closeEye
+                            "
+                          >
+                            <img
+                              src="assets/images/eye-open.svg"
+                              class="ms-3"
+                            />
+                          </ng-container>
+                          <ng-template #closeEye>
+                            <img
+                              src="assets/images/eye-close.svg"
+                              class="ms-3"
+                            />
+                          </ng-template>
+                        </a>
+                      </div>
+                      <div class="bg-transparent p-3 font-20 fw-medium">
+                        <a
+                          href="javascript:void(0);"
+                          (click)="editFaq(section.uuid)"
+                        >
+                          <img
+                            src="assets/images/vehicle-list/pen-purple-icon.svg"
+                            class="ms-3"
+                          />
+                        </a>
+                      </div>
+                      <div class="bg-transparent p-3 font-20 fw-medium">
+                        <a
+                          href="javascript:void(0);"
+                          (click)="deletefaq(index)"
+                        >
+                          <img
+                            src="assets/images/vehicle-list/del-icon.svg"
+                            class="ms-3"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </h2>
+                <div
+                  [attr.id]="section.uuid"
+                  [ngClass]="section.uuid === selectAccordian ? 'show' : ''"
+                  class="accordion-collapse collapse"
+                  [attr.aria-labelledby]="section.uuid"
+                  data-bs-parent="#report-accordian"
+                >
+                  <div class="accordion-body p-3">
+                    <p class="font-16 text-primary">
+                      {{ section.answer }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #noFaq>
+          <div class="faq__sub-accordion m-5">
+            <div class="accordion-item bg-transparent">
+              <h3 class="text-center">
+                {{ "FAQ aren't added yet" | translate }}.
+              </h3>
+            </div>
+          </div>
+        </ng-template>
+        <pagination
+          *ngIf="faqList?.length"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+          [removePaddingButtom]="removePaddingButtom"
+        >
+        </pagination>
+      </ng-container>
+      <ng-template #faqLoading>
+        <div class="faq__sub-accordion m-5">
+          <div class="accordion-item bg-transparent">
+            <p class="text-center">
+              <app-loader></app-loader>
+            </p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>

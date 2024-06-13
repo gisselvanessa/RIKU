@@ -1,0 +1,28 @@
+
+  <div class="modal-body border-0 p-2 m-4">
+    <div>
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2 p-1">
+        {{ "Are Your Sure You Want To Cancel This Order?" | translate }}
+      </h3>
+      <p class="font-14 text-primary-light mb-3 p-1">
+        {{ "seller_dealer_cancel_order_modal_text_paragraph1" | translate }}
+      </p>
+      <p class="font-14 text-primary-light mb-3 p-1">
+        {{ "seller_dealer_cancel_order_modal_text_paragraph2" | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button type="button" class="btn primary-btn-outline " (click)="activeModal.close(false)">
+      {{ 'Cancel' | translate }}
+    </button>
+    <button type="submit" class="btn primary-btn" (click)="onSubmit()">
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        *ngIf="loading"
+        aria-hidden="true"
+      ></span> {{ 'Yes' | translate }}
+    </button>
+  </div>
+

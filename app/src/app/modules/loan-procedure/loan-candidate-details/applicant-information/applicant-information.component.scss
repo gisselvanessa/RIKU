@@ -1,0 +1,426 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.report {
+  &__accordion {
+    padding-bottom: 30px;
+    @include for-tablet-portrait-up {
+      padding-bottom: 50px;
+    }
+    & .accordion-item {
+      border: none;
+      // border-bottom: 0.5px solid $purple-grey;
+      border-radius: 0;
+    }
+
+    & .accordion-button {
+      // border-bottom: 0.5px solid $purple-grey;
+      box-shadow: none;
+
+      &::after {
+        background-image: url("../../../../../assets/images/loan-application/dp-icon.svg");
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+      }
+
+      &:not(.collapsed)::after {
+        background-image: url("../../../../../assets/images/loan-application/dp-icon-up.svg");
+      }
+    }
+  }
+
+  &__sub-accordion {
+    & .accordion-button {
+      box-shadow: none;
+
+      &::after {
+        background-image: url("../../../../../assets/images/contact/round-plus.svg");
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+      }
+
+      &:not(.collapsed)::after {
+        background-image: url("../../../../../assets/images/contact/round-minus.svg");
+      }
+    }
+  }
+
+  &__accordion {
+    .title {
+      margin-top: 75px;
+    }
+  }
+}
+
+.title {
+  &.bottom-border-style {
+    position: relative;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: #2f779c;
+      width: 298px;
+      max-width: 100%;
+      height: 2px;
+    }
+
+    &.border-170 {
+      &:after {
+        width: 170px;
+      }
+    }
+  }
+}
+
+.doropdown_radio {
+  &.doropdown_selection {
+    position: absolute;
+    top: 30px;
+    right: 5px;
+
+    @media (min-width: 991px) {
+      top: 40px;
+    }
+
+    .btn {
+      width: 140px;
+
+      &.dropdown-toggle {
+        &:after {
+          right: 10px;
+        }
+      }
+    }
+  }
+
+  &.dropdown-images {
+    li {
+      a {
+        .form-check-inline label {
+          padding-left: 10px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+
+  .btn {
+    padding: 15px 20px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+
+    &.dropdown-toggle {
+      &:after {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid $secondary-color;
+        transform: rotate(225deg);
+        border-left: 2px solid $secondary-color;
+        border-right: unset;
+        border-bottom: unset;
+        top: 42%;
+        right: 25px;
+        position: absolute;
+      }
+    }
+  }
+
+  ul {
+    box-shadow: 0px 3px 16px #00000029;
+    border: 0px;
+  }
+
+  li {
+    margin-top: 15px;
+
+    a {
+      border: 0px;
+      padding: 0px;
+
+      &.btn {
+        padding: 15px;
+
+        &:hover {
+          color: $secondary-color !important;
+          border: 1px solid rgba($color: $secondary-color, $alpha: 0.5);
+        }
+      }
+
+      &:hover {
+        border: 0px;
+      }
+
+      .form-check-inline label {
+        text-align: left;
+        padding: 12px 20px;
+        padding-left: 45px;
+        white-space: normal;
+      }
+    }
+  }
+}
+
+.control-checkmark {
+  width: 18px;
+  height: 18px;
+  background-color: transparent;
+  border: 1px solid rgba(137, 112, 143, 0.5);
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  /* z-index: -1; */
+}
+
+.form-inline-check {
+  position: relative;
+  height: 18px;
+}
+
+.form-inline-check input[type="radio"],
+.form-inline-check input[type="checkbox"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+  cursor: pointer;
+}
+
+.form-inline-check input[type="checkbox"]:checked ~ .control-checkmark,
+.form-inline-check input[type="radio"]:checked ~ .control-checkmark {
+  border-color: #2f779c;
+}
+
+.form-inline-check input[type="checkbox"]:checked ~ .control-checkmark:after,
+.form-inline-check input[type="radio"]:checked ~ .control-checkmark:after {
+  background-color: #2f779c;
+  width: 10px;
+  height: 10px;
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 500px) {
+  .form-inline-check {
+    position: relative;
+    height: 16px;
+  }
+
+  .control-checkmark {
+    left: 14px;
+    height: 16px;
+    width: 16px;
+  }
+
+  .form-inline-check input[type="checkbox"]:checked ~ .control-checkmark:after,
+  .form-inline-check input[type="radio"]:checked ~ .control-checkmark:after {
+    height: 8px;
+    width: 8px;
+  }
+}
+
+.bg-light-blue {
+  background-color: $secondary-color-10 !important;
+}
+
+.bg-blue-secondary {
+  background: $secondary-color;
+}
+
+.height-240 {
+  height: 240px;
+}
+
+div.text {
+  position: relative;
+}
+
+div.text input {
+  padding-left: 15px;
+  margin-left: 4px;
+}
+
+div.text:after {
+  position: absolute;
+  left: 6px;
+  top: 15.5px;
+  content: "$";
+  color: #2f779c;
+}
+
+.search-grp input.form-control {
+  padding-left: 45px !important;
+  min-width: 230px;
+  border: 1px solid rgba(137, 112, 143, 0.5);
+}
+.search-grp .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  transform: translateY(-50%);
+}
+
+.search-grp .search-btn {
+  position: absolute;
+  top: 50%;
+  right: 1%;
+  transform: translateY(-50%);
+}
+
+.acc-header {
+  background-color: $white;
+  border-radius: 10px;
+  padding-left: 65px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.left-icon {
+  top: 50%;
+  left: 2.1rem;
+  transform: translate(-50%, -50%);
+}
+
+.collapse-content {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.custom-dropdown-toggle::after, .ea-btn-dropdown::after {
+  content: "";
+  display: none !important;
+}
+
+// right icon of dropdown
+.custom-dropdown-toggle, .ea-btn-dropdown {
+  position: relative;
+}
+
+.custom-dropdown-toggle, .reference-place-input {
+  border: 1px solid rgba(137, 112, 143, 0.5) !important;
+  border-radius: 10px;
+}
+
+.custom-dropdown-toggle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-color: #4E1F4F;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.ea-btn-dropdown::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-dropdown-toggle::before {
+  content: url('../../../../../assets/images/arrow-down.svg');
+}
+
+.ea-btn-dropdown::before {
+  content: url('../../../../../assets/images/loan-application/ea-arrw-down.svg');
+}
+
+.input-icon-container {
+  width: 34.29px;
+  height: 34px;
+  top: 3rem !important;
+  background-color: $primary-color;
+  border-radius: 50%;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.ea-dropdown {
+  border-bottom: 2px solid $secondary-color;
+}
+
+.ea-btn-dropdown {
+  border: none;
+  padding-inline: 0 !important;
+}
+
+div.text input:hover {
+  border: none !important;
+  border-bottom: 2px solid $secondary-color !important;
+}
+
+div.text input:focus {
+  border: none !important;
+  border-bottom: 2px solid $secondary-color !important;
+}
+
+.minus-btn {
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
+  border: 0.6px solid $secondary-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.minus-btn-container, .add-btn-container {
+  width: 45px;
+}
+
+.add-btn {
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
+  border: 0.6px solid $secondary-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+a.dropdown-item:active {
+  background-color: transparent;
+}
+
+.dp-icon {
+  position: absolute;
+  top: 60%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+#monthly-income-input:focus {
+  border: 1px solid !important;
+}
+
+.datepicker-theme {
+  background-color: blue;
+  border: 3px solid red;
+}

@@ -1,0 +1,145 @@
+@import "../../../../../../variables";
+@import "../../../../../../function";
+
+/* loan */
+.label-border-left {
+  min-width: 200px;
+  border-left: 1px solid #dee2e6 !important;
+  text-align: right;
+}
+
+.condition-padding {
+  padding-left: 35px;
+}
+
+.report{
+  &__accordion{
+    padding-bottom: 50px;
+    &  .accordion-item{
+      border: none;
+      // border-bottom: 0.5px solid $purple-grey;
+      border-radius: 0;
+
+    }
+    &  .accordion-button{
+
+      // border-bottom: 0.5px solid $purple-grey;
+      box-shadow: none;
+
+      &::after{
+        background-image: url(/assets/images/contact/bottom-arrow-white.svg);
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+        background-color: #3C759A;
+          border-radius: 50%;
+          box-shadow: 0px 4px 4px 0px #00000040;
+      }
+      &:not(.collapsed)::after{
+        background-image: url(/assets/images/contact/up-arrow-white.svg);
+      }
+    }
+  }
+  &__sub-accordion{
+    & .accordion-button{
+      box-shadow: none;
+      &::after{
+        background-image: url(/assets/images/contact/round-plus.svg);
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+      }
+      &:not(.collapsed)::after{
+        background-image: url(/assets/uimages/contact/round-minus.svg);
+
+      }
+    }
+  }
+
+  &__accordion {
+      .title {
+          margin-top: 75px;
+      }
+  }
+}
+
+.vehicle-image-wrp {
+  height: 90px;
+  width: 90px;
+  border-radius: 15px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+
+.status-label .label{
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  &.in-progress {
+    color: rgb(153, 76, 152);
+    background-color: rgba(153, 76, 152, 0.1);
+  }
+  &.completed{
+    color: #46BC39;
+    background-color: rgba(70, 188, 57, .1);
+  }
+  &.cancelled{
+    color: $red;
+    background-color: rgba(241, 64, 64, .1);
+  }
+}
+
+.accordion-button-h2
+{
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px #00000040
+}
+
+.font {
+  &-24 {
+    font-size: 24px;
+    @media (max-width: 1400px){
+        font-size: 22px !important;
+    }
+  }
+  &-15 {
+    font-size: 15px;
+    @media (max-width: 1400px){
+        font-size: 13px !important;
+    }
+  }
+  &-16 {
+    font-size: 16px;
+    @media (max-width: 1400px){
+        font-size: 14px !important;
+    }
+  }
+  &-17 {
+    font-size: 17px;
+    @media (max-width: 1400px){
+        font-size: 15px !important;
+    }
+  }
+  &-18 {
+    font-size: 18px;
+    @media (max-width: 1400px){
+        font-size: 16px !important;
+    }
+  }
+  &-20 {
+    font-size: 20px;
+    @media (max-width: 1400px){
+        font-size: 18px !important;
+    }
+  }
+  &-22 {
+    font-size: 22px;
+    @media (max-width: 1400px){
+        font-size: 20px !important;
+    }
+  }
+}

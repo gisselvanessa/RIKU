@@ -1,0 +1,656 @@
+ <div class="summary-wrp"> <!--UPLOAD OF APPLICANT DOCUMENTS -->
+  <div class="applicant-doc-wrp" *ngIf="ctx">
+    <ng-template #showDocuments let-documents="documentList">
+      <div class="doc-box">
+        <div class="bg-white px-5 py-4 br-12 border-blue">
+          <h4 class="font-22 fw-regular text-secondary mb-4">
+            {{ "Personal Documents" | translate }} 
+          </h4>
+          <div class="row">
+            <ng-container
+              *ngFor="
+                let document of documents['personal']['primary'];
+                let i = index
+              "
+            >
+              <div
+                [ngClass]="
+                  i == 1 ? 'col-lg-4' : i == 2 ? 'col-lg-3' : 'col-lg-4'
+                "
+              >
+                <div class="d-flex mb-3">
+                  <ng-container *ngIf="loanDocuments[document.key]">
+                    <a
+                      href="javascript:void(0)"
+                      class="approve-icon ms-sm-3"
+                      *ngIf="loanDocuments[document.key].is_verified"
+                    >
+                      <img
+                        src="assets/images/approved-icon.svg"
+                        alt="approve document"
+                      />
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      class="reject-icon ms-3"
+                      *ngIf="loanDocuments[document.key].is_verified === false"
+                    >
+                      <img
+                        src="assets/images/reject-icon.svg"
+                        alt="reject document"
+                      />
+                    </a>
+                  </ng-container>
+                  <label class="form-check-label document-label">{{
+                    document.name | translate
+                  }}</label>
+                </div>
+                <div class="d-flex">
+                  <div
+                    class="document-uploded-wrp mb-3 justify-content-center"
+                    *ngIf="loanDocuments[document.key]"
+                  >
+                    <div class="position-relative doc-wrp">
+                      <div class="uploded-document">
+                        <a
+                          [href]="loanDocuments[document.key].url"
+                          target="_blank"
+                        >
+                          <img
+                            src="assets/images/expert-evolution/report-2.png"
+                          />
+                        </a>
+                      </div>
+                      <span
+                        class="delete-doc"
+                        *ngIf="loanDocuments[document.key].is_verified !== true"
+                        (click)="deleteDocument(loanDocuments[document.key])"
+                        >&times;</span
+                      >
+                    </div>
+                  </div>
+                  <ng-container
+                    *ngIf="
+                      !loanDocuments[document.key] ||
+                      loanDocuments[document.key].is_verified === false
+                    "
+                  >
+                    <input
+                      type="file"
+                      class="d-none"
+                      #uploadPersonalDoc
+                      (change)="onFileChange($event, document.key, 'personal')"
+                    />
+                    <span
+                      *ngIf="
+                        isDocumentUploading && uploadingDocument == document.key
+                      "
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    &nbsp;&nbsp;&nbsp;
+                    <div
+                      class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                      (click)="uploadPersonalDoc.click()"
+                      *ngIf="showUploadButton"
+                    >
+                      <div
+                        class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                      >
+                        <img
+                          src="assets/images/upload-icon.svg"
+                          width="20px"
+                          height="20px"
+                        />
+                        <p class="font-10 fw-light text-secondary mt-2">
+                          {{ "Upload" | translate }}
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="documents['personal']['additional']">
+            <span class="border-bottom d-block my-3"></span>
+            <h4 class="font-22 fw-regular text-secondary mb-4">
+              {{ "Additional documents (Optional)" | translate }}
+            </h4>
+            <div class="row">
+              <ng-container
+                *ngFor="let document of documents['personal']['additional']"
+              >
+                <div class="col-lg-4">
+                  <div class="d-flex mb-3">
+                    <ng-container *ngIf="loanDocuments[document.key]">
+                      <a
+                        href="javascript:void(0)"
+                        class="approve-icon ms-sm-3"
+                        *ngIf="loanDocuments[document.key].is_verified"
+                      >
+                        <img
+                          src="assets/images/approved-icon.svg"
+                          alt="approve document"
+                        />
+                      </a>
+                      <a
+                        href="javascript:void(0)"
+                        class="reject-icon ms-3"
+                        *ngIf="
+                          loanDocuments[document.key].is_verified === false
+                        "
+                      >
+                        <img
+                          src="assets/images/reject-icon.svg"
+                          alt="reject document"
+                        />
+                      </a>
+                    </ng-container>
+                    <label class="form-check-label document-label">{{
+                      document.name | translate
+                    }}</label>
+                  </div>
+                  <div class="d-flex">
+                    <div
+                      class="document-uploded-wrp mb-3 justify-content-center"
+                      *ngIf="loanDocuments[document.key]"
+                    >
+                      <div class="position-relative doc-wrp">
+                        <div class="uploded-document">
+                          <a
+                            [href]="loanDocuments[document.key].url"
+                            target="_blank"
+                          >
+                            <img
+                              src="assets/images/expert-evolution/report-2.png"
+                            />
+                          </a>
+                        </div>
+                        <span
+                          class="delete-doc"
+                          *ngIf="
+                            loanDocuments[document.key].is_verified !== true
+                          "
+                          (click)="deleteDocument(loanDocuments[document.key])"
+                          >&times;</span
+                        >
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngIf="
+                        !loanDocuments[document.key] ||
+                        loanDocuments[document.key].is_verified === false
+                      "
+                    >
+                      <input
+                        type="file"
+                        class="d-none"
+                        #uploadPersonalDoc
+                        (change)="
+                          onFileChange($event, document.key, 'personal')
+                        "
+                      />
+                      <span
+                        *ngIf="
+                          isDocumentUploading &&
+                          uploadingDocument == document.key
+                        "
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      &nbsp;&nbsp;&nbsp;
+                      <div
+                        class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                        (click)="uploadPersonalDoc.click()"
+                        *ngIf="showUploadButton"
+                      >
+                        <div
+                          class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                        >
+                          <img
+                            src="assets/images/upload-icon.svg"
+                            width="20px"
+                            height="20px"
+                          />
+                          <p class="font-10 fw-light text-secondary mt-2">
+                            {{ "Upload" | translate }}
+                          </p>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="doc-box" *ngIf="documents['income']">
+        <div class="bg-white px-5 py-4 br-12 border-blue">
+          <h4 class="font-22 fw-regular text-secondary mb-4">
+            {{ "Justification Of Income" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-lg-4"
+              *ngFor="let document of documents['income']['primary']"
+            >
+              <div class="d-flex mb-3">
+                <ng-container *ngIf="loanDocuments[document.key]">
+                  <a
+                    href="javascript:void(0)"
+                    class="approve-icon ms-sm-3"
+                    *ngIf="loanDocuments[document.key].is_verified"
+                  >
+                    <img
+                      src="assets/images/approved-icon.svg"
+                      alt="approve document"
+                    />
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="reject-icon ms-3"
+                    *ngIf="loanDocuments[document.key].is_verified === false"
+                  >
+                    <img
+                      src="assets/images/reject-icon.svg"
+                      alt="reject document"
+                    />
+                  </a>
+                </ng-container>
+                <label class="form-check-label document-label">{{
+                  document.name | translate
+                }}</label>
+              </div>
+              <div class="d-flex">
+                <div
+                  class="document-uploded-wrp mb-3 justify-content-center"
+                  *ngIf="loanDocuments[document.key]"
+                >
+                  <div class="position-relative doc-wrp">
+                    <div class="uploded-document">
+                      <a
+                        [href]="loanDocuments[document.key].url"
+                        target="_blank"
+                      >
+                        <img
+                          src="assets/images/expert-evolution/report-2.png"
+                        />
+                      </a>
+                    </div>
+                    <span
+                      class="delete-doc"
+                      *ngIf="loanDocuments[document.key].is_verified !== true"
+                      (click)="deleteDocument(loanDocuments[document.key])"
+                      >&times;</span
+                    >
+                  </div>
+                </div>
+                <ng-container
+                  *ngIf="
+                    !loanDocuments[document.key] ||
+                    loanDocuments[document.key].is_verified === false
+                  "
+                >
+                  <input
+                    type="file"
+                    class="d-none"
+                    #uploadPersonalDoc
+                    (change)="onFileChange($event, document.key, 'income')"
+                  />
+                  <span
+                    *ngIf="
+                      isDocumentUploading && uploadingDocument == document.key
+                    "
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  &nbsp;&nbsp;&nbsp;
+                  <div
+                    class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                    (click)="uploadPersonalDoc.click()"
+                    *ngIf="showUploadButton"
+                  >
+                    <div
+                      class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                    >
+                      <img
+                        src="assets/images/upload-icon.svg"
+                        width="20px"
+                        height="20px"
+                      />
+                      <p class="font-10 fw-light text-secondary mt-2">
+                        {{ "Upload" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="documents['income']['additional']">
+            <span class="border-bottom d-block my-3"></span>
+            <h4 class="font-22 fw-regular text-secondary mb-4">
+              {{ "Additional documents (Optional)" | translate }}
+            </h4>
+            <div class="row">
+              <div
+                
+                *ngFor="let document of documents['income']['additional']; let i = index"
+                [ngClass]="documents['income']['additional'].length === 4 ? 'col-lg-3' : documents['income']['additional'].length === 3 ?  'col-lg-4': documents['income']['additional'].length < 3 ?  'col-lg-6': 'col-lg-12'"
+              >
+                <div class="d-flex mb-3">
+                  <ng-container *ngIf="loanDocuments[document.key]">
+                    <a
+                      href="javascript:void(0)"
+                      class="approve-icon ms-sm-3"
+                      *ngIf="loanDocuments[document.key].is_verified"
+                    >
+                      <img
+                        src="assets/images/approved-icon.svg"
+                        alt="approve document"
+                      />
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      class="reject-icon ms-3"
+                      *ngIf="loanDocuments[document.key].is_verified === false"
+                    >
+                      <img
+                        src="assets/images/reject-icon.svg"
+                        alt="reject document"
+                      />
+                    </a>
+                  </ng-container>
+                  <label class="form-check-label document-label">{{
+                    document.name | translate
+                  }}</label>
+                </div>
+                <div class="d-flex">
+                  <div
+                    class="document-uploded-wrp mb-3 justify-content-center"
+                    *ngIf="loanDocuments[document.key]"
+                  >
+                    <div class="position-relative doc-wrp">
+                      <div class="uploded-document">
+                        <a
+                          [href]="loanDocuments[document.key].url"
+                          target="_blank"
+                        >
+                          <img
+                            src="assets/images/expert-evolution/report-2.png"
+                          />
+                        </a>
+                      </div>
+                      <span
+                        class="delete-doc"
+                        *ngIf="loanDocuments[document.key].is_verified !== true"
+                        (click)="deleteDocument(loanDocuments[document.key])"
+                        >&times;</span
+                      >
+                    </div>
+                  </div>
+                  <ng-container
+                    *ngIf="
+                      !loanDocuments[document.key] ||
+                      loanDocuments[document.key].is_verified === false
+                    "
+                  >
+                    <input
+                      type="file"
+                      class="d-none"
+                      #uploadPersonalDoc
+                      (change)="onFileChange($event, document.key, 'income')"
+                    />
+                    <span
+                      *ngIf="
+                        isDocumentUploading && uploadingDocument == document.key
+                      "
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    &nbsp;&nbsp;&nbsp;
+                    <div
+                      class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                      (click)="uploadPersonalDoc.click()"
+                      *ngIf="showUploadButton"
+                    >
+                      <div
+                        class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                      >
+                        <img
+                          src="assets/images/upload-icon.svg"
+                          width="20px"
+                          height="20px"
+                        />
+                        <p class="font-10 fw-light text-secondary mt-2">
+                          {{ "Upload" | translate }}
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="doc-box" *ngIf="documents['heritage']">
+        <div class="bg-white px-5 py-4 br-12 border-blue">
+          <h4 class="font-22 fw-regular text-secondary mb-4">
+            {{ "Heritage" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-lg-4"
+              *ngFor="let document of documents['heritage']['primary']"
+            >
+              <div class="d-flex mb-3">
+                <ng-container *ngIf="loanDocuments[document.key]">
+                  <a
+                    href="javascript:void(0)"
+                    class="approve-icon ms-sm-3"
+                    *ngIf="loanDocuments[document.key].is_verified"
+                  >
+                    <img
+                      src="assets/images/approved-icon.svg"
+                      alt="approve document"
+                    />
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="reject-icon ms-3"
+                    *ngIf="loanDocuments[document.key].is_verified === false"
+                  >
+                    <img
+                      src="assets/images/reject-icon.svg"
+                      alt="reject document"
+                    />
+                  </a>
+                </ng-container>
+                <label class="form-check-label document-label">{{
+                  document.name | translate
+                }}</label>
+              </div>
+              <div class="d-flex">
+                <div
+                  class="document-uploded-wrp mb-3 justify-content-center"
+                  *ngIf="loanDocuments[document.key]"
+                >
+                  <div class="position-relative doc-wrp">
+                    <div class="uploded-document">
+                      <a
+                        [href]="loanDocuments[document.key].url"
+                        target="_blank"
+                      >
+                        <img
+                          src="assets/images/expert-evolution/report-2.png"
+                        />
+                      </a>
+                    </div>
+                    <span
+                      class="delete-doc"
+                      *ngIf="loanDocuments[document.key].is_verified !== true"
+                      (click)="deleteDocument(loanDocuments[document.key])"
+                      >&times;</span
+                    >
+                  </div>
+                </div>
+                <ng-container
+                  *ngIf="
+                    !loanDocuments[document.key] ||
+                    loanDocuments[document.key].is_verified === false
+                  "
+                >
+                  <input
+                    type="file"
+                    class="d-none"
+                    #uploadPersonalDoc
+                    (change)="onFileChange($event, document.key, 'heritage')"
+                  />
+                  <span
+                    *ngIf="
+                      isDocumentUploading && uploadingDocument == document.key
+                    "
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  &nbsp;&nbsp;&nbsp;
+                  <div
+                    class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                    (click)="uploadPersonalDoc.click()"
+                    *ngIf="showUploadButton"
+                  >
+                    <div
+                      class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                    >
+                      <img
+                        src="assets/images/upload-icon.svg"
+                        width="20px"
+                        height="20px"
+                      />
+                      <p class="font-10 fw-light text-secondary mt-2">
+                        {{ "Upload" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <span class="border-bottom d-block my-3"></span>
+          <h4 class="font-22 fw-regular text-secondary mb-4">
+            {{ "Additional documents (Optional)" | translate }}
+          </h4>
+          <div class="row">
+            <div
+              class="col-lg-4"
+              *ngFor="let document of documents['heritage']['additional']"
+            >
+              <div class="d-flex mb-3">
+                <ng-container *ngIf="loanDocuments[document.key]">
+                  <a
+                    href="javascript:void(0)"
+                    class="approve-icon ms-sm-3"
+                    *ngIf="loanDocuments[document.key].is_verified"
+                  >
+                    <img
+                      src="assets/images/approved-icon.svg"
+                      alt="approve document"
+                    />
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="reject-icon ms-3"
+                    *ngIf="loanDocuments[document.key].is_verified === false"
+                  >
+                    <img
+                      src="assets/images/reject-icon.svg"
+                      alt="reject document"
+                    />
+                  </a>
+                </ng-container>
+                <label class="form-check-label document-label">{{
+                  document.name | translate
+                }}</label>
+              </div>
+              <div class="d-flex">
+                <div
+                  class="document-uploded-wrp mb-3 justify-content-center"
+                  *ngIf="loanDocuments[document.key]"
+                >
+                  <div class="position-relative doc-wrp">
+                    <div class="uploded-document">
+                      <a
+                        [href]="loanDocuments[document.key].url"
+                        target="_blank"
+                      >
+                        <img
+                          src="assets/images/expert-evolution/report-2.png"
+                        />
+                      </a>
+                    </div>
+                    <span
+                      class="delete-doc"
+                      *ngIf="loanDocuments[document.key].is_verified !== true"
+                      (click)="deleteDocument(loanDocuments[document.key])"
+                      >&times;</span
+                    >
+                  </div>
+                </div>
+                <ng-container
+                  *ngIf="
+                    !loanDocuments[document.key] ||
+                    loanDocuments[document.key].is_verified === false
+                  "
+                >
+                  <input
+                    type="file"
+                    class="d-none"
+                    #uploadPersonalDoc
+                    (change)="onFileChange($event, document.key, 'heritage')"
+                  />
+                  <span
+                    *ngIf="
+                      isDocumentUploading && uploadingDocument == document.key
+                    "
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  &nbsp;&nbsp;&nbsp;
+                  <div
+                    class="document-uploded-wrp mb-3 justify-content-center ms-2"
+                    (click)="uploadPersonalDoc.click()"
+                    *ngIf="showUploadButton"
+                  >
+                    <div
+                      class="position-relative doc-wrp upload-wrp d-flex justify-content-center align-items-center flex-column"
+                    >
+                      <img
+                        src="assets/images/upload-icon.svg"
+                        width="20px"
+                        height="20px"
+                      />
+                      <p class="font-10 fw-light text-secondary mt-2">
+                        {{ "Upload" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="showDocuments; context: ctx">
+    </ng-container>
+  </div>
+</div>

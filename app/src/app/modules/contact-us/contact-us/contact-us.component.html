@@ -1,0 +1,128 @@
+<section class="section bg-blue section-p-100">
+  <div class="jakay-container">
+    <div class="row">
+      <div class="col-xl-4 col-md-6">
+        <div class="contact__info">
+          <h5 class="font-32 text-white fw-medium mb-4">{{'Contact Information' | translate}}</h5>
+          <p class="mb-3 "><a class="contactlink font-20 text-white" href="tel:026 001 569"><span class="icon">
+                <img src="assets/images/contact/call.svg" class="me-1" alt=""> </span>026 001 569</a></p>
+          <p class="mb-4"><a class="contactlink font-20 text-white" href="mailto:support@rikusa.com"><span
+                class="icon">
+                <img src="assets/images/contact/mail.svg" class="me-1" alt=""> </span>support@rikusa.com</a></p>
+          <ul class="d-flex contact__info-social">
+            <li><a href="javascript:void(0)" class="social_link"><img src="assets/images/contact/facebook.svg" alt=""></a></li>
+            <li><a href="javascript:void(0)" class="social_link"><img src="assets/images/contact/instagram.svg" alt=""></a></li>
+            <li><a href="javascript:void(0)" class="social_link"><img src="assets/images/contact/twitter-6.svg" alt=""></a></li>
+            <li><a href="javascript:void(0)" class="social_link"><img src="assets/images/contact/linkedin.svg" alt=""></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-xl-8 col-md-6 mt-3 mt-md-0">
+        <div class="contact__form ms-3">
+          <div class="section-header">
+            <h3 class=" mb-3 font-38 text-primary fw-semibold ">{{'Contact Us' | translate}}</h3>
+            <p class="text-primary-light   font-14">
+              {{'ContactInfoMessage' | translate}}
+            </p>
+          </div>
+          <form [formGroup]="contactUsForm">
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Name' | translate}}</label>
+                  <input type="text" class="form-control" formControlName="first_name" placeholder="{{'NamePlaceholder' | translate}}">
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.first_name.errors?.required"
+                    class="invalid-feedback">
+                    {{'FirstNameRequired' | translate}}
+                  </div>
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.first_name.errors?.minlength"
+                    class="invalid-feedback">
+                    {{'FirstNameLengthError' | translate}}
+                  </div>
+                  <div *ngIf="contactUsFormControls.first_name.errors?.cannotContainSpace" class="invalid-feedback">
+                    {{'SpaceNotAllow' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Surname' | translate}}</label>
+                  <input type="text" class="form-control" formControlName="last_name" placeholder="{{'SurnamePlaceholder' | translate}}">
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.last_name.errors?.required"
+                    class="invalid-feedback">
+                    {{'LastNameRequied' | translate}}
+                  </div>
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.last_name.errors?.minlength"
+                    class="invalid-feedback">
+                    {{'LastNameLengthError' | translate}}
+                  </div>
+                  <div *ngIf="contactUsFormControls.last_name.errors?.cannotContainSpace" class="invalid-feedback">
+                    {{'SpaceNotAllow' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6 ">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Email' | translate}}</label>
+                  <input type="text" formControlName="email" class="form-control" placeholder="{{'ContactUsEmailPlaceHolder' | translate}}">
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.email.errors?.required" class="invalid-feedback">
+                    {{'EmailRequired' | translate}}
+                  </div>
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.email.errors?.pattern" class="invalid-feedback">
+                    {{'InvalidEmail' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6 ">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Mobile Number (Optional)' | translate}}</label>
+                  <ngx-intl-tel-input [cssClass]="'form-control w-100'" [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[
+                                        SearchCountryField.Iso2,
+                                        SearchCountryField.Name
+                                        ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.Ecuador"
+                    [maxLength]="15" [phoneValidation]="true" [separateDialCode]="separateDialCode" name="mobile_no"
+                    (countryChange)="clearCountrySearchBox()" (input)="formatNumber($event)"
+                    formControlName="mobile_no">
+                  </ngx-intl-tel-input>
+
+                  <div
+                    *ngIf="isFormSubmitted && contactUsForm.value.mobile_no && contactUsFormControls['mobile_no'].errors"
+                    class="text-danger">
+                    {{'InvalidMobileError' | translate}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-12">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Subject' | translate}}</label>
+                  <input type="text" formControlName="subject" class="form-control" placeholder="{{'Enter Subject' | translate}}">
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.subject.errors?.required"
+                    class="invalid-feedback">
+                    {{'Subject is required' | translate}}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{'Message' | translate}}</label>
+                  <textarea formControlName="message" rows="4"></textarea>
+                  <div *ngIf="isFormSubmitted && contactUsFormControls.message.errors?.required"
+                    class="invalid-feedback">
+                    {{'Message is required' | translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="next-button mt-2 me-3 btn-wrp">
+              <button  (click)="submit()" class="btn primary-btn  btn-lg">{{ 'Send' | translate}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

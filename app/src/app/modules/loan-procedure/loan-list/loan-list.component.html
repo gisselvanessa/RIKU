@@ -1,0 +1,234 @@
+<section class="section vehicle__listing buyer--listing bg-blue">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Loan Application" | translate }}
+        </h3>
+        <p class="text-purple-2 font-16">
+          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+          nonumy eirmod tempor invidunt ut labore.
+        </p>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="Condition-inprogress-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#Condition-inprogress"
+                type="button"
+                [ngClass]="{ active: selectedTab == 'draft' }"
+                (click)="selectTab('draft')"
+                role="tab"
+                aria-controls="Condition-inprogress"
+                aria-selected="true"
+              >
+                {{ "Draft Application" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-past-tab"
+                data-bs-toggle="pill"
+                [ngClass]="{ active: selectedTab == 'submitted' }"
+                (click)="selectTab('submitted')"
+                data-bs-target="#Condition-past"
+                type="button"
+                role="tab"
+                aria-controls="Condition-past"
+                aria-selected="false"
+              >
+                {{ "Submitted" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content" id="Condition-tabContent">
+          <div *ngIf="loanList.length === 0 && isDataLoaded && !loading">
+            <h3 class="text-primary fw-semibold pb-4 pb-xl-3 pb-lg-2">
+              {{ "No Records Available" | translate }}
+            </h3>
+          </div>
+          <div
+            class="tab-pane fade show active"
+            id="Condition-inprogress"
+            role="tabpanel"
+            aria-labelledby="Condition-inprogress-tab"
+            *ngIf="loanList.length > 0 && !loading"
+          >
+            <div
+              class="bg-white br-32 vehicle-item-box-wrp mb-3 pb-lg-4"
+              *ngFor="let item of loanList; let i = index"
+            >
+              <div
+                class="d-flex w-100 p-3 p-sm-4 align-items-md-center align-items-start flex-md-row flex-column"
+              >
+                <div
+                  class="vehicle-item-img br-32 card_img position-relative mb-md-0 mb-3"
+                >
+                  <img src="{{ item.vehicle.cover_img_url }}" />
+                </div>
+                <div class="ps-md-3 ps-lg-4 vehicle-item-desc flex-grow-1">
+                  <div
+                    class="d-flex justify-content-between w-100 align-items-start mb-3 flex-lg-row flex-column"
+                  >
+                    <div>
+                      <h3 class="text-primary fw-semibold mb-2 mb-lg-3">
+                        {{ item.vehicle.year }}
+                        {{ item.vehicle.model }}
+                        {{ item.vehicle.make }}
+                      </h3>
+                      <div class="d-sm-flex mb-4 align-items-start">
+                        <div class="me-0 me-sm-4 mb-3 mb-lg-0">
+                          <p
+                            class="font-16 fw-regular text-secondary mb-1 mb-lg-2"
+                          >
+                            {{ "Vechicle amount" | translate }}:
+                          </p>
+                          <h4 class="font-28 fw-semibold text-secondary mb-0">
+                            ${{ item.vehicle.price | spanishNumber }}
+                          </h4>
+                        </div>
+                        <div class="ms-0 ms-sm-4">
+                          <p
+                            class="font-16 fw-regular text-purple mb-1 mb-lg-2"
+                          >
+                            {{ "Loan amount" | translate }}:
+                          </p>
+                          <h4 class="font-28 fw-semibold text-purple mb-0">
+                            ${{ item.amount | spanishNumber }}
+                          </h4>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <p class="text-purple-2">
+                          <img
+                            src="assets/images/calender.svg"
+                            class="me-2 mb-1"
+                            width="22px"
+                            height="18px"
+                          />{{ "Application Date" | translate }}:
+                          {{ item.created_at | date : "dd-MMMM-yyyy" }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="status-label text-lg-end mt-2 mt-sm-0">
+                      <label
+                        class="text-purple-2 mb-1 me-1 mb-sm-2 me-sm-2 me-lg-0"
+                        >{{ "Loan Application Status" | translate }}:</label
+                      >
+                      <p
+                        class="label in-progress d-inline-block d-lg-block text-center nowrap"
+                        *ngIf="
+                          item.status == 'pending' || item.status == 'qualified'
+                        "
+                      >
+                        {{ "Draft" | translate }}
+                      </p>
+                      <p
+                        class="label completed d-inline-block d-lg-block text-center nowrap"
+                        *ngIf="
+                          item.status == 'approved' ||
+                          item.status == 'completed' ||
+                          item.status == 'confirmed'
+                        "
+                      >
+                        {{
+                          item.status == "approved"
+                            ? ("Pre-Approved" | translate)
+                            : ("Completed" | translate)
+                        }}
+                      </p>
+                      <p
+                        class="label canceled d-inline-block d-lg-block text-center nowrap"
+                        *ngIf="item.status == 'rejected'"
+                      >
+                        {{ "Rejected" | translate }}
+                      </p>
+                      <p
+                        class="label canceled d-inline-block d-lg-block text-center nowrap"
+                        *ngIf="item.status == 'cancelled'"
+                      >
+                        {{ "Cancelled" | translate }}
+                      </p>
+
+                      <!-- if process is completed add class completed if process is canceled add class canceled -->
+                    </div>
+                  </div>
+
+                  <div
+                    *ngIf="
+                      item.status == 'pending' || item.status == 'qualified'
+                    "
+                    class="btn-grp"
+                  >
+                    <button
+                      (click)="continue(item.id, item.current_stage)"
+                      class="btn primary-btn btn-am br-12 continue me-2 me-lg-3 my-2 my-lg-3"
+                    >
+                      {{ "Continue" | translate }}
+                    </button>
+                    <button
+                      (click)="cancel(item.id)"
+                      class="btn primary-btn-outline continue btn-sm br-12"
+                    >
+                      {{ "Cancel Loan Application" | translate }}
+                    </button>
+                  </div>
+                  <div
+                    *ngIf="
+                      item.status == 'approved' ||
+                      item.status == 'rejected' ||
+                      item.status == 'cancelled'
+                    "
+                    class="btn-grp"
+                  >
+                    <button
+                      (click)="continue(item.id)"
+                      class="btn primary-btn btn-am br-12 continue me-3"
+                    >
+                      {{ "View Details" | translate }}
+                    </button>
+                  </div>
+
+                  <div class="w-lg-75" *ngIf="item.status == 'approved'">
+                    <p class="text-primary-light font-12 px-2 py-1 suggestions">
+                      {{
+                        "Your application is under review; a member of Jakay or the lending bank will contact you when the status has been updated. Typical responses come within 2 business days"
+                          | translate
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="Condition-past"
+            role="tabpanel"
+            aria-labelledby="Condition-past-tab"
+          ></div>
+          <app-loader *ngIf="loading"></app-loader>
+        </div>
+
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

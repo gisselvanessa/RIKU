@@ -1,0 +1,52 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('Cross click')"
+    aria-label="Close"
+  ></button>
+</div>
+<div *ngIf="error_message">
+  <p class="text-danger">{{ error_message }}</p>
+</div>
+<div class="modal-body border-0">
+  <div class="round-icon-wrp" *ngIf="!approveRejectflg">
+    <img src="../../../../assets/images/view_vehicle/reject_icon.svg" alt="" />
+  </div>
+  <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+    {{ approveRejectflg ? ("Approve" | translate) : ("Reject" | translate) }}
+    {{ "Vehicle" | translate }}
+  </h3>
+  <p class="text-center font-14 text-primary-light mb-3">
+    {{ approveRejectflg ? ("Are you sure you want to approve this vehicle?" | translate) : ("Are you sure you want to reject this vehicle?" | translate) }}
+  </p>
+</div>
+<div class="modal-footer d-flex justify-content-center border-0 mb-5">
+  <button
+    class="btn btn-outline-purple cancel-button-border"
+    (click)="activeModal.dismiss('Cross click')"
+    type="button"
+  >
+    No
+  </button>
+  <button
+    type="button"
+    class="btn"
+    [ngClass]="approveRejectflg ? 'primary-btn' : 'btn-danger'"
+    data-bs-dismiss="modal"
+    (click)="openApproveRejectConfirmation(approveRejectflg)"
+  >
+    <span
+      *ngIf="loading"
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+    <span [ngClass]="approveRejectflg ? '' : 'text'"
+      >{{ "Yes" | translate }},{{
+        approveRejectflg ? ("Approve" | translate) : ("Reject" | translate)
+      }}</span
+    >
+  </button>
+</div>

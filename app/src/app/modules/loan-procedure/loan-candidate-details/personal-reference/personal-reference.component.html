@@ -1,0 +1,185 @@
+<section class="pb-5 bg-blue">
+  <div>
+    <!-- <h3 class="text-primary font-24 mb-5 fw-semibold">
+      {{ "Personal Reference" | translate }}
+    </h3> -->
+    <form
+      [formGroup]="personalReferenceForm"
+      (ngSubmit)="sendPersonalReference()"
+    >
+      <div class="form-group bg-white p-3 mb-5 personal-references-container">
+        <div class="row">
+          <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-medium font-12 text-primary">
+                  {{ "Full Name" | translate }}
+                <sup class="text-danger font-14">*</sup>
+              </label>
+              <input
+                type="text"
+                maxlength="40"
+                AlphaNumeric
+                class="form-control"
+                placeholder="{{ 'Enter Full Name' | translate }}"
+                autocomplete="off"
+                name="full_name"
+                formControlName="full_name"
+              />
+              <div
+                *ngIf="isSubmitted && personalReferenceForm.controls['full_name'].errors?.['required']"
+                class="text-danger"
+              >
+                {{ "Full name is required" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-8 col-lg-6 col-xl-8">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-medium font-12 text-primary"
+                >{{ "Home Address" | translate
+                }}<sup class="text-danger font-14">*</sup></label
+              >
+              <input
+                type="text"
+                class="form-control border-0 input-border"
+                placeholder="{{ 'Enter Address' | translate }}"
+                name="address"
+                autocomplete="off"
+                formControlName="address"
+              />
+              <!-- <img src="assets/images/location.svg" class="input-icon" /> -->
+              <div
+                *ngIf="isSubmitted && personalReferenceForm.controls['address'].errors?.['required']"
+                class="text-danger"
+              >
+                {{ "Address is required" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+            <div class="form-group">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-medium font-12 text-primary">{{
+                "Mobile Number" | translate
+              }}</label>
+              <ngx-intl-tel-input
+                [cssClass]="'form-control w-100'"
+                [preferredCountries]="preferredCountries"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[
+                  SearchCountryField.Iso2,
+                  SearchCountryField.Name
+                ]"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="CountryISO.Ecuador"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [separateDialCode]="separateDialCode"
+                [numberFormat]="PhoneNumberFormat.National"
+                (countryChange)="clearCountrySearchBox()"
+                name="mobile_no"
+                formControlName="mobile_no"
+                autocomplete="off"
+              >
+              </ngx-intl-tel-input>
+              <div
+                *ngIf="
+                  isSubmitted &&
+                  personalReferenceForm.controls['mobile_no'].errors
+                "
+                class="text-danger"
+              >
+                {{ "Please enter a valid number" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+            <div class="form-group position-relative">
+              <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-medium font-12 text-primary"
+                >{{ "Reference Type" | translate
+                }}<sup class="text-danger font-14">*</sup></label
+              >
+              <div class="doropdown_radio" ngbDropdown>
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular custom-dropdown-toggle"
+                  [ngClass]="{ 'text-primary': selectedReference }"
+                  type="button"
+                  id="vehicle-type23"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {{
+                    selectedReference
+                      ? (selectedReference | translate)
+                      : ("Reference" | translate)
+                  }}
+                </button>
+                <ul
+                  ngbDropdownMenu
+                  aria-labelledby="vehicle-type23"
+                  class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                >
+                  <li *ngFor="let referenceType of referenceTypes">
+                    <a
+                      class="dropdown-item"
+                      ngbDropdownItem
+                      href="javascript:void(0);"
+                    >
+                      <div class="radio-check checkbox-check br-12 me-3">
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="reference_type"
+                            (change)="selectValue($event, referenceType.value)"
+                            id="{{ referenceType.id }}"
+                            [checked]="referenceType.value == selectedReference"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="{{ referenceType.id }}"
+                            >{{ referenceType.value | translate }}</label
+                          >
+                          <span class="dot-checkmark"></span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div
+                *ngIf="isSubmitted && personalReferenceForm.controls['reference_type'].errors?.['required']"
+                class="text-danger"
+              >
+                {{ "Reference Type is required" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-sm-flex mt-4">
+        <button
+          type="button"
+          (click)="setPreviousStep()"
+          class="btn btn-sm primary-btn-outline btn--small me-sm-3 fw-semibold font-16"
+        >
+          {{ "Previous" | translate }}
+        </button>
+        <button
+          class="btn btn-sm primary-btn btn--small border-1 mt-3 mt-sm-0 fw-semibold font-16"
+          data-bs-toggle="modal"
+          data-bs-target="#becomesellerConfirmModal"
+          type="submit"
+          [disabled]="personalReferenceForm.invalid"
+        >
+          {{ "Next" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

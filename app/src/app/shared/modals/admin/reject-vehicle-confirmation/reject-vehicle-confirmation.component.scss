@@ -1,0 +1,60 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.delete-vehicle-modal {
+  &.changed-modal {
+    .modal-dialog {
+      max-width: 550px;
+
+      @include for-phone-only {
+        max-width: 380px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  & .round-icon-wrp {
+    background-color: $red-2-10;
+
+    & img {
+      width: 50px;
+    }
+  }
+
+  & .btn-outline-purple {
+    top: 645px;
+    left: 791px;
+    width: 159px;
+    height: 64px;
+    border: 0px solid #89708F;
+    border-radius: 8px;
+    opacity: 1;
+
+  }
+
+  & .btn-danger {
+    top: 645px;
+    left: 970px;
+    width: 159px;
+    height: 64px;
+    border-radius: 8px;
+    opacity: 1;
+  }
+
+  & .cancel-button-border{
+    border: 1px solid #89708F !important;
+  }
+
+  & .text {
+    top: 667px;
+    left: 1007px;
+    width: 85px;
+    height: 20px;
+    text-align: left;
+    justify-content: center;
+    font: normal normal normal 14px/20px Lexend;
+    letter-spacing: 0.16px;
+    color: #FFFFFF;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,828 @@
+<section class="section admin_add__user bg-blue section-p-100">
+  <div class="jakay-container admin-container">
+    <div class="back-to-page section-header d-flex">
+      <span class="c-pointer" (click)="location.back()"
+        ><img class="arrowbg" src="assets/images/backarrow.svg"
+      /></span>
+      <div class="d-flex justify-content-between w-100 flex-wrap">
+        <h3 class="ms-3 font-38 text-primary fw-semibold">
+          {{ "Order Details" | translate }}
+        </h3>
+        <div
+          class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto"
+          *ngIf="!loading && orderDetails"
+        >
+          <p
+            class="label in-progress d-inline-block d-lg-block nowrap"
+            *ngIf="
+              orderDetails &&
+              orderDetails.order_status != 'confirmed' &&
+              orderDetails.order_status != 'cancelled' &&
+              orderDetails.order_status != 'rejected'
+            "
+          >
+            {{ "In Progress" | translate }}
+          </p>
+          <p
+            class="label complete d-inline-block d-lg-block nowrap"
+            *ngIf="orderDetails && orderDetails.order_status == 'confirmed'"
+          >
+            {{ "Complete" | translate }}
+          </p>
+          <p
+            class="label cancelled d-inline-block d-lg-block nowrap"
+            *ngIf="
+              (orderDetails && orderDetails.order_status == 'cancelled') ||
+              orderDetails.order_status == 'rejected'
+            "
+          >
+            {{ "Canceled" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="orderDetails && !loading">
+      <div class="col-lg-6">
+        <div class="row">
+          <div
+            class="col-12"
+            *ngIf="currentStep >= orderCurrentStepNumber.PLACED"
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row align-items-center mb-4">
+                    <div
+                      class="col-6 order-info procedure-steps-wrp delivery-steps-wrp"
+                    >
+                      <div class="step font-24 fw-semibold text-primary">
+                        <span> </span>{{ "Vehicle Information" | translate }}
+                      </div>
+                    </div>
+                    <div class="col-6 text-end" *ngIf="canViewVehicle">
+                      <button
+                        routerLink="/admin/vehicles/vehicle-details/{{
+                          orderDetails.vehicle_id
+                        }}"
+                        class="btn primary-btn btn-sm br-12"
+                      >
+                        {{ "View" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Make" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ orderDetails.vehicle.make }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Model" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ orderDetails.vehicle.model }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Year" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ orderDetails.vehicle.year }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Body Type" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ orderDetails.vehicle.body_type }}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-lg-4 col-sm-6 col-12"
+                  *ngIf="orderDetails.vehicle.number_plate"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Number Plate" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ orderDetails.vehicle.number_plate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ "Price" | translate }} $</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      ${{ orderDetails.original_price | spanishNumber }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Images" | translate
+                    }}</label>
+                    <div class="d-flex">
+                      <div
+                        class="vehicle-image-wrp me-4"
+                        *ngFor="let image of sliderImages"
+                      >
+                        <a [href]="image">
+                          <img [src]="image" width="100%" height="100%" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-12">
+                  <div class="form-group">
+                    <h4 class="text-primary font-18 mb-4">
+                      {{
+                        sellerType.includes("dealer")
+                          ? ("Dealer Information" | translate)
+                          : ("Seller Information" | translate)
+                      }}
+                    </h4>
+                    <div class="d-flex align-items-center mb-4">
+                      <div class="rating d-flex align-items-center me-3">
+                        <p class="font-18 text-secondary">
+                          {{ orderDetails.seller.ratingInStar }}
+                        </p>
+                        <img
+                          class="ms-2"
+                          src="assets/images/seller-img/star.svg"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="mb-4">
+                          <label
+                            class="mb-3 text-primary-light font-14 fw-regular"
+                            >{{ "Username" | translate }}</label
+                          >
+                          <p class="mb-2 text-primary font-16 fw-regular">
+                            {{ orderDetails.seller.username }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <div class="mb-4">
+                          <label
+                            class="mb-3 text-primary-light font-14 fw-regular"
+                            >{{ "Dealership Location" | translate }}</label
+                          >
+                          <p class="mb-2 text-primary font-16 fw-regular">
+                            {{
+                              orderDetails.seller.location.parish
+                                ? (orderDetails.seller.location.parish + ", "
+                                  | titlecase)
+                                : ""
+                            }}
+                            {{
+                              orderDetails.seller.location.city
+                                ? (orderDetails.seller.location.city + ", "
+                                  | titlecase)
+                                : ""
+                            }}
+                            {{
+                              orderDetails.seller.location.province
+                                ? (orderDetails.seller.location.province
+                                  | titlecase)
+                                : ("" | titlecase)
+                            }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="mb-4">
+                          <label
+                            class="mb-3 text-primary-light font-14 fw-regular"
+                            >{{ "Total Ratings" | translate }}</label
+                          >
+                          <p class="mb-2 text-primary font-16 fw-regular">
+                            {{
+                              orderDetails.seller.totalRatings | spanishNumber
+                            }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep >= orderCurrentStepNumber.EXPERT_EVALUATION &&
+              orderDetails.expert_evaluation?.is_expert_evaluation
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-4">
+              <!-- <h5 class="font-24 fw-semibold text-primary mb-4">
+                Expert Evaluation
+              </h5> -->
+              <div class="order-info procedure-steps-wrp delivery-steps-wrp">
+                <div class="step font-24 fw-semibold text-primary">
+                  <span> </span> {{ "Expert Evaluation" | translate }}
+                </div>
+              </div>
+
+              <div class="col-lg-12 col-md-12 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{
+                    "Expert Appraisal Report" | translate
+                  }}</label>
+                  <div class="d-flex">
+                    <div class="vehicle-image-wrp me-4">
+                      <img
+                        src="{{ orderDetails.vehicle.primary_image }}"
+                        width="100%"
+                        height="100%"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-10 col-md-12 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{
+                    "Expert Comment" | translate
+                  }}</label>
+                  <p class="mb-2 text-primary font-16 fw-regular">
+                    Lorem Ipsum Is Not Simply Random Text. It Has Roots In A
+                    Piece Of Classical Latin Literature From 45 BC, Making It
+                    Over 2000 Years Old. Richard Mcclintock, A Latin Professor
+                    At Hampden-Sydney College In Virginia.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep > orderCurrentStepNumber.SCHEDULE_MEETING &&
+              orderDetails.meetings.length > 0
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="col-12">
+                <div class="form-group mb-4">
+                  <!-- <h5 class="font-24 fw-semibold text-primary mb-4">
+                    Meeting Details
+                  </h5> -->
+                  <div
+                    class="order-info procedure-steps-wrp delivery-steps-wrp"
+                  >
+                    <div class="step font-24 fw-semibold text-primary">
+                      <span> </span> {{ "Meeting Details" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row"
+                *ngFor="let meetingDetails of orderDetails.meetings"
+              >
+                <div class="col-lg-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Date" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ meetingDetails.date | date : "dd-MMMM-YYYY" }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Time" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ meetingDetails.time }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Location" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold text-address">
+                      {{
+                        meetingDetails.location.address
+                          ? meetingDetails.location.address
+                          : ""
+                      }}
+                      {{
+                        meetingDetails.location.parish && !meetingDetails.location.address?.includes(meetingDetails.location.parish)
+                          ? ", " + meetingDetails.location.parish + ", "
+                          : ""
+                      }}
+                      {{
+                        meetingDetails.location.city && !meetingDetails.location.address?.includes(meetingDetails.location.city)
+                          ? meetingDetails.location.city + ", "
+                          : ""
+                      }}
+                      {{
+                        meetingDetails.location.province && !meetingDetails.location.address?.includes(meetingDetails.location.province)
+                          ? meetingDetails.location.province
+                          : ""
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Place Reference" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold break-all">
+                      {{ meetingDetails.additional_address }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="currentStep > orderCurrentStepNumber.VEHICLE_REVIEW"
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group mb-4">
+                    <!-- <h5 class="font-24 fw-semibold text-primary mb-4">
+                      Vehicle Review
+                    </h5> -->
+                    <div
+                      class="order-info procedure-steps-wrp delivery-steps-wrp"
+                    >
+                      <div class="step font-24 fw-semibold text-primary">
+                        <span> </span> {{ "Vehicle Review" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label
+                      class="approved text-secondary font-16 bg-none border-0 py-0"
+                      *ngIf="
+                        orderDetails.vehicle_review.vehicle_review_status ==
+                        vehicleReviewStatus.AS_EXPECTED
+                      "
+                      >{{ "Everything as Expected" | translate }}
+                    </label>
+                    <label
+                      class="rejected text-secondary font-16 bg-none border-0 py-0"
+                      *ngIf="
+                        orderDetails.vehicle_review.vehicle_review_status ==
+                        vehicleReviewStatus.NOT_AS_EXPECTED
+                      "
+                      >{{ "Not as Expected" | translate }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row">
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep > orderCurrentStepNumber.PRICE_NEGOTIATION &&
+              orderDetails.negotiation_details?.is_price_negotiating
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row align-items-center mb-4">
+                    <div
+                      class="col-6 order-info procedure-steps-wrp delivery-steps-wrp"
+                    >
+                      <!-- <h3 class="text-primary font-24 mb-2 fw-semibold">
+                        Negotiation Amount
+                      </h3> -->
+                      <div class="step font-24 fw-semibold text-primary">
+                        <span> </span> {{ "Negotiation Amount" | translate }}
+                      </div>
+                    </div>
+                    <div class="col-6 text-end">
+                      <h4
+                        *ngIf="
+                          orderDetails.negotiation_details.is_offer_accepted
+                        "
+                        class="offer-status py-1 px-2 br-5 accepted fw-regular d-inline-block"
+                      >
+                        {{ "Offer Accepted" | translate }}
+                      </h4>
+                      <h4
+                        *ngIf="
+                          orderDetails.negotiation_details.is_offer_accepted ===
+                          false
+                        "
+                        class="offer-status py-1 px-2 br-5 rejected fw-regular d-inline-block"
+                      >
+                        {{ "Offer Rejected" | translate }}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Actual Vehicle Price" | translate
+                    }}</label>
+                    <p class="text-secondary font-18 mb-0 fw-semibold">
+                      ${{
+                        orderDetails.negotiation_details.actual_price
+                          | spanishNumber
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Offer Price" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      ${{
+                        orderDetails.negotiation_details.negotiated_price
+                          | spanishNumber
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep >= orderCurrentStepNumber.BUY_NOW &&
+              orderDetails.payment?.type
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row align-items-center mb-4">
+                    <div
+                      class="col-7 order-info procedure-steps-wrp delivery-steps-wrp"
+                    >
+                      <div class="step font-24 fw-semibold text-primary">
+                        <span> </span>{{ "Payment Method" | translate }}
+                      </div>
+                    </div>
+                    <div class="col-5 text-center">
+                      <p *ngIf="orderDetails.payment.status == 'failed'" class="label cancelled inline-block d-lg-block">
+                        {{ "Payment Rejected" | translate }}
+                      </p>
+                      <p *ngIf="orderDetails.payment.status == 'success' || isPaymentReceived"
+                        class="label complete d-inline-block d-lg-block">
+                        {{ "Payment Received" | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-12">
+                  <label
+                    class="text-secondary"
+                    *ngIf="orderDetails.payment.type == 'cash'"
+                    ><img
+                      class="me-1"
+                      data-cash
+                      src="assets/images/cash-blue.svg"
+                      alt="cash"
+                    />
+                    {{ "Cash" | translate }}</label
+                  >
+                  <label
+                    class="text-secondary"
+                    *ngIf="orderDetails.payment.type == 'bank'"
+                    ><img
+                      class="me-1"
+                      data-cash
+                      src="assets/images/bank-blue.svg"
+                      alt="bank"
+                    />
+                    {{ "Bank Transfer" | translate }}</label
+                  >
+                  <label
+                    class="text-secondary"
+                    *ngIf="orderDetails.payment.type == 'card'"
+                    ><img
+                      class="me-1"
+                      data-cash
+                      src="assets/images/card-blue.svg"
+                      alt="card"
+                    />
+                    {{ "Card" | translate }}</label
+                  >
+                </div>
+                <div class="col-sm-4 col-12">
+                  <span class="text-primary-light font-16 mx-2 mb-2"
+                    >{{ "Amount" | translate }}:</span
+                  >
+                  <label class="text-secondary">
+                    <span [ngClass]="{'text-disabled': orderDetails.payment.status != 'success'}">${{ orderDetails.loan ? (depositAmount | spanishNumber) : (orderPrice | spanishNumber)}}</span>
+                  </label>
+                </div>
+                <div
+                  class="col-sm-4 col-12 d-flex"
+                  *ngIf="
+                    orderDetails.bank_receipt &&
+                    orderDetails.payment.type == 'cash'
+                  "
+                >
+                  <span class="text-primary-light font-16 mx-2 mb-2"
+                    >{{ "Payment Receipt" | translate }}:</span
+                  >
+                  <!-- <label class="text-secondary"
+                    >${{ orderDetails.payment.amount | spanishNumber }}</label
+                  > -->
+                  <div class="d-flex">
+                    <a
+                      [href]="orderDetails.bank_receipt.bank_receipt_url"
+                      target="_blank"
+                      class="vehicle-image-wrp me-4"
+                    >
+                      <img
+                        src="assets/images/expert-evolution/report-2.png"
+                        width="100%"
+                        height="100%"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row mt-4"
+                *ngIf="
+                  orderDetails.payment.type == 'cash' &&
+                  orderDetails.payment.status != 'success' &&
+                  isPaymentReceived == false
+                "
+              >
+                <div class="col-12">
+                  <ng-container *ngIf="orderDetails.payment.status == 'failed'; else acknowledgePayment">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                      <h5 class="text-danger font-16 mb-0">
+                        {{
+                        "You have rejected this payment" | translate
+                        }}
+                      </h5>
+                    </div>
+                  </ng-container>
+                  <ng-template #acknowledgePayment>
+                    <div
+                    class="d-flex align-items-center justify-content-between mb-4"
+                  >
+                    <h5 class="text-primary font-16 mb-0">
+                      {{
+                        "Please acknowledge the receipt of the payment which is transferred to Riku from buyer"
+                          | translate
+                      }}
+                    </h5>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-12">
+                      <button
+                        class="btn primary-btn btn-sm br-12 me-3"
+                        (click)="confirmPayment(true)"
+                      >
+                        {{ "Yes, Received" | translate }}
+                      </button>
+                      <button
+                        class="btn primary-btn-outline btn-sm"
+                        (click)="confirmPayment(false)"
+                      >
+                        {{ "Not Received" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep > orderCurrentStepNumber.VEHICLE_PROCEDURE ||
+              orderDetails.vehicle_procedure?.is_vehicle_procedure
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row align-items-center mb-4">
+                    <div
+                      class="col-6 order-info procedure-steps-wrp delivery-steps-wrp"
+                    >
+                      <div class="step font-24 fw-semibold text-primary">
+                        <span> </span>{{ "Vehicle Procedure" | translate }}
+                      </div>
+                    </div>
+                    <div
+                      class="col-6 text-end"
+                      *ngIf="
+                        canViewVehicleProcedure &&
+                        orderDetails.vehicle_procedure?.is_vehicle_procedure
+                      "
+                    >
+                      <button
+                        class="btn primary-btn btn-sm br-12"
+                        [routerLink]="[
+                          '/admin/vehicle-procedure/details/' +
+                            orderDetails.vehicle_procedure.id
+                        ]"
+                      >
+                        {{ "Manage" | translate }}
+                      </button>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                      <div class="procedure-steps-wrp">
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.REQUEST_FOR_DOCUMENTS
+                          }"
+                          class="step mb-3"
+                        >
+                          <span></span>{{ "Documents" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.CONTRACT_DEVELOPMENT
+                          }"
+                          class="step mt-3 mb-3"
+                        >
+                          <span></span>{{ "Contract Development" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.NOTARY
+                          }"
+                          class="step mb-3 mt-3"
+                        >
+                          <span></span>{{ "Notary" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.MONEY_TRANSFER_TO_SELLER
+                          }"
+                          class="step mb-3 mt-3"
+                        >
+                          <span></span
+                          >{{ "Transfer of money to the seller" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.TAX_PAYMENT_ORDERS
+                          }"
+                          class="step mb-3 mt-3"
+                        >
+                          <span></span
+                          >{{ "Vehicle tax payment orders" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.NATIONAL_TRANSIT
+                          }"
+                          class="step mb-3 mt-3"
+                        >
+                          <span></span
+                          >{{ "National transit agency" | translate }}
+                        </div>
+                        <div
+                          [ngClass]="{
+                            disableStep:
+                              procedureCurrentStepNo <
+                              procedureStepNumber.REGISTRATION_DELIVERY
+                          }"
+                          class="step mb-3 mt-3"
+                        >
+                          <span></span
+                          >{{
+                            "Delivery of the registration to the client"
+                              | translate
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              currentStep == orderCurrentStepNumber.VEHICLE_DELIVERY_STATUS &&
+              orderDetails.order_status != 'cancelled' &&
+              orderDetails.order_status != 'rejected'
+            "
+          >
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row align-items-center">
+                <div
+                  class="col-6"
+                  [ngClass]="{
+                    'order-info procedure-steps-wrp delivery-steps-wrp':
+                      orderDetails.delivery_status == 'confirmed'
+                  }"
+                >
+                  <div class="step font-24 fw-semibold text-primary mb-4">
+                    <span> </span> {{ "Delivery Status" | translate }}
+                  </div>
+                </div>
+                <div class="col-6 text-end">
+                  <h4
+                    class="order-status py-1 px-2 br-5 complete fw-regular d-inline-block"
+                    *ngIf="orderDetails.delivery_status == 'confirmed'"
+                  >
+                    {{ "Delivered" | translate }}
+                  </h4>
+                </div>
+                <div class="d-flex align-items-center mt-3">
+                  <div class="procedure-steps-wrp delivery-steps-wrp">
+                    <div
+                      class="step mb-3"
+                      *ngIf="
+                        orderDetails.delivery_status == 'pending' ||
+                        orderDetails.delivery_status == 'delivery_due' ||
+                        orderDetails.delivery_status == 'out_for_delivery' ||
+                        orderDetails.delivery_status == 'delivered' ||
+                        orderDetails.delivery_status == 'confirmed'
+                      "
+                    >
+                      <span></span>{{ "Delivery Due" | translate }}
+                    </div>
+                    <div
+                      class="step mt-3 mb-3"
+                      *ngIf="
+                        orderDetails.delivery_status == 'out_for_delivery' ||
+                        orderDetails.delivery_status == 'delivered' ||
+                        orderDetails.delivery_status == 'confirmed'
+                      "
+                    >
+                      <span></span>{{ "Out for Delivery" | translate }}
+                    </div>
+                    <div
+                      class="step mt-3"
+                      *ngIf="orderDetails.delivery_status == 'confirmed'"
+                    >
+                      <span></span>{{ "Delivered" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-loader *ngIf="loading"></app-loader>
+  </div>
+</section>

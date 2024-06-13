@@ -1,0 +1,997 @@
+<div class="report__accordion mb-3">
+  <div class="accordion-item bg-transparent border-0">
+    <h2
+      class="accordion-header mt-5"
+      (click)="selectedAccordians()"
+      id="report-15"
+      *ngIf="page === 'add'"
+    >
+      <button
+        class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+        type="
+                button"
+        data-bs-toggle="collapse"
+        data-bs-target="#report15"
+        aria-expanded="true"
+        aria-controls="collapseOne"
+        [ngClass]="{
+          collapsed: accordianName.ComparisonTable != selectAccordian
+        }"
+      >
+        <div
+          class="text-secondary font-24 fw-semibold title bottom-border-style mb-0 mt-0"
+        >
+          {{ "Comparison Table - Vehicle Approval" | translate }}
+        </div>
+      </button>
+    </h2>
+    <h5 *ngIf="page === 'view'">
+      <div
+        class="text-secondary font-24 fw-semibold title bottom-border-style mb-3"
+      >
+        {{ "Comparison Table - Vehicle Approval" | translate }}
+      </div>
+    </h5>
+    <div *ngIf="page === 'add'">
+      <div
+        id="report15"
+        [ngClass]="
+          accordianName.ComparisonTable === selectAccordian ? 'show' : ''
+        "
+        class="accordion-collapse collapse"
+        aria-labelledby="report-15"
+        data-bs-parent="#report-accordian"
+      >
+        <div class="accordion-body px-0">
+          <form *ngIf="page === 'add'" [formGroup]="comparisonForm">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Brand" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Brand' | translate }}"
+                      name="brand"
+                      formControlName="brand"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.brand.invalid &&
+                        comparisonFormDataControls.brand.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.brand.errors?.required
+                        "
+                      >
+                        {{ "Brand is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Color" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Color' | translate }}"
+                      name="color"
+                      formControlName="color"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.color.invalid &&
+                        comparisonFormDataControls.color.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.color.errors?.required
+                        "
+                      >
+                        {{ "Color is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Year" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Year' | translate }}"
+                      name="year"
+                      OnlyNumber
+                      formControlName="year"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.year.invalid &&
+                        comparisonFormDataControls.year.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="comparisonFormDataControls.year.errors?.required"
+                      >
+                        {{ "Year is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Market Value" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Market Value' | translate }}"
+                      name="worth"
+                      OnlyNumber
+                      formControlName="worth"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.worth.invalid &&
+                        comparisonFormDataControls.worth.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.worth.errors?.required
+                        "
+                      >
+                        {{ "Market Value is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "F. Year" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter F. Year' | translate }}"
+                      name="f_year"
+                      OnlyNumber
+                      formControlName="f_year"
+                      autocomplete="off"
+                      min="1"
+                      max="1.20"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.f_year.invalid &&
+                        comparisonFormDataControls.f_year.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_year.errors?.required
+                        "
+                      >
+                        {{ "F. Year is required" | translate }}
+                      </small>
+                    </div>
+                    <div *ngIf="comparisonFormDataControls.f_year.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_year.errors?.min ||
+                          comparisonFormDataControls.f_year.errors?.max
+                        "
+                      >
+                        {{ "F. Year must be between 1 and 1.20" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "F. Brand" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter F. Brand' | translate }}"
+                      formControlName="f_brand"
+                      name="f_brand"
+                      OnlyNumber
+                      min="1"
+                      max="1.20"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.f_brand.invalid &&
+                        comparisonFormDataControls.f_brand.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_brand.errors?.required
+                        "
+                      >
+                        {{ "F. Brand is required" | translate }}
+                      </small>
+                    </div>
+                    <div *ngIf="comparisonFormDataControls.f_brand.touched">
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_brand.errors?.min ||
+                          comparisonFormDataControls.f_brand.errors?.max
+                        "
+                      >
+                        {{ "F. Brand must be between 0.90 and 1" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Zone Of Use" | translate
+                    }}</label>
+                    <div
+                      class="doropdown_radio"
+                      [ngClass]="{
+                        'is-invalid  border-1':
+                          isFormSubmitted &&
+                          comparisonFormDataControls.zone_of_use.invalid
+                      }"
+                      ngbDropdown
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{ 'text-primary': selectedZone }"
+                        type="button"
+                        id="zone"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        [disabled]="statusOfReview == 'completed'"
+                      >
+                        {{
+                          selectedZone
+                            ? (selectedZone | translate)
+                            : ("Zone Of Use" | translate)
+                        }}
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        aria-labelledby="zone"
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li *ngFor="let zone of zoneOptions">
+                          <a
+                            class="dropdown-item"
+                            ngbDropdownItem
+                            href="javascript:void(0);"
+                          >
+                            <div class="radio-check checkbox-check br-12 me-3">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="zone_of_use"
+                                  formControlName="zone_of_use"
+                                  id="{{ zone.id }}"
+                                  value="{{ zone.value }}"
+                                  (change)="selectZone($event, zone.value)"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="{{ zone.id }}"
+                                  >{{ zone.value | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.zone_of_use.invalid &&
+                        comparisonFormDataControls.zone_of_use.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.zone_of_use.errors
+                            ?.required
+                        "
+                      >
+                        {{ "Zone Of Use is required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                      >Zone Of Use</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="Enter Zone Of Use"
+                      name="zone_of_use"
+                      formControlName="zone_of_use"
+                      autocomplete="off"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.zone_of_use.invalid &&
+                        comparisonFormDataControls.zone_of_use.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.zone_of_use.errors
+                            ?.required
+                        "
+                      >
+                        Zone Of Use is required.
+                      </small>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">
+                      {{ "F. Area Of ​​Use" | translate }}</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter F. Area Of ​​Use' | translate }}"
+                      name="f_area_of_use"
+                      OnlyNumber
+                      formControlName="f_area_of_use"
+                      autocomplete="off"
+                      min="1"
+                      max="1.20"
+                      [readOnly]="statusOfReview == 'completed'"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        comparisonFormDataControls.f_area_of_use.invalid &&
+                        comparisonFormDataControls.f_area_of_use.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_area_of_use.errors
+                            ?.required
+                        "
+                      >
+                        {{ "F. Area Of Use is required" | translate }}.
+                      </small>
+                    </div>
+                    <div
+                      *ngIf="comparisonFormDataControls.f_area_of_use.touched"
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          comparisonFormDataControls.f_area_of_use.errors
+                            ?.min ||
+                          comparisonFormDataControls.f_area_of_use.errors?.max
+                        "
+                      >
+                        {{
+                          "F. Area of use must be between 0.90 and 1"
+                            | translate
+                        }}.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                    >Corrected Average Value</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control border-0"
+                    placeholder="Enter Corrected Average Value"
+                    name="corrected_average_value"
+                    formControlName="corrected_average_value"
+                  />
+                </div>
+              </div> -->
+
+                <div class="col-12">
+                  <button
+                    (click)="addData()"
+                    *ngIf="comparisonFormData.length < 6"
+                    class="btn primary-btn btn-md me-3 border-1"
+                    [disabled]="statusOfReview == 'completed'"
+                  >
+                    {{
+                      indexBooleanOfComparisonTable
+                        ? ("Edit" | translate)
+                        : ("Add" | translate)
+                    }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div
+            class="table-responsive bg-white br-12 p-3 report-table"
+            *ngIf="comparisonFormData.length > 0"
+          >
+            <table
+              class="table mb-0 table--comparison table-bordered border-radius-none"
+            >
+              <thead>
+                <tr>
+                  <th>{{ "Samples (Y)" | translate }}</th>
+                  <th>{{ "Brand" | translate }}</th>
+                  <th>{{ "Color" | translate }}</th>
+                  <th>{{ "Year" | translate }}</th>
+                  <th>{{ "Worth" | translate }}</th>
+                  <th>{{ "F. Year" | translate }}</th>
+                  <th>{{ "F. Brand" | translate }}</th>
+                  <th>{{ "Zone Of Use" | translate }}</th>
+                  <th>{{ "F. Area Of ​​Use" | translate }}</th>
+                  <th>
+                    {{ "Value" | translate }}
+                    {{ "Average" | translate }}<br />
+                    {{ "Corrected" | translate }} <br />
+                  </th>
+                  <th>{{ "Actions" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let compareData of comparisonFormData; let i = index"
+                >
+                  <td class="bg-light-blue">Y{{ i + 1 }}</td>
+                  <td>{{ compareData.brand }}</td>
+                  <td>{{ compareData.color }}</td>
+                  <td>{{ compareData.year }}</td>
+                  <td>${{ compareData.worth | spanishNumber }}</td>
+                  <td>{{ compareData.f_year }}</td>
+                  <td>{{ compareData.f_brand }}</td>
+                  <td>{{ compareData.zone_of_use | translate }}</td>
+                  <td>{{ compareData.f_area_of_use }}</td>
+                  <td>$ {{ correctedAverageValue[i] | spanishNumber }}</td>
+                  <!-- <td>$ {{ compareData.average_value | spanishNumber }}</td> -->
+                  <td>
+                    <a
+                      *ngIf="page === 'add'"
+                      href="javascript:void(0);"
+                      (click)="editComparisonTable(i, compareData)"
+                    >
+                      <img
+                        src="assets/images/vehicle-list/pen-purple-icon.svg"
+                        class="ms-3"
+                      />
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      *ngIf="indexOfComparisonTable != i"
+                      (click)="deleteComparisonTable(i)"
+                    >
+                      <img
+                        src="assets/images/vehicle-list/del-icon.svg"
+                        class="ms-3"
+                      />
+                    </a>
+                  </td>
+                </tr>
+                <tr class="bg-blue-secondary text-white">
+                  <td colspan="4" class="text-end">
+                    {{ "Commercial Value" | translate }}: ({{
+                      "Market Average" | translate
+                    }})
+                  </td>
+                  <td class="bg-orange">
+                    ${{ commercialValue | spanishNumber }}
+                  </td>
+                  <td colspan="4" class="text-end">
+                    {{ "APPROVED AVERAGE" | translate }}
+                  </td>
+                  <td class="bg-purple">
+                    ${{ approvedAverage | spanishNumber }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="page === 'view'">
+      <div
+        class="table-responsive bg-white br-12 p-3 report-table"
+        *ngIf="comparisonFormData.length > 0"
+      >
+        <table
+          class="table mb-0 table--state table-bordered border-radius-none"
+        >
+          <thead>
+            <tr>
+              <th>{{ "Samples (Y)" | translate }}</th>
+              <th>{{ "Brand" | translate }}</th>
+              <th>{{ "Color" | translate }}</th>
+              <th>{{ "Year" | translate }}</th>
+              <th>{{ "Worth" | translate }}</th>
+              <th>{{ "F. Year" | translate }}</th>
+              <th>{{ "F. Brand" | translate }}</th>
+              <th>{{ "Zone Of Use" | translate }}</th>
+              <th>{{ "F. Area Of ​​Use" | translate }}</th>
+              <th>
+                {{ "Corrected" | translate }} <br />
+                {{ "Average" | translate }}<br />
+                {{ "Value" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let compareData of comparisonFormData; let i = index">
+              <td class="bg-light-blue">Y{{ i + 1 }}</td>
+              <td>{{ compareData.brand }}</td>
+              <td>{{ compareData.color }}</td>
+              <td>{{ compareData.year }}</td>
+              <td>${{ compareData.worth | spanishNumber }}</td>
+              <td>{{ compareData.f_year }}</td>
+              <td>{{ compareData.f_brand }}</td>
+              <td>{{ compareData.zone_of_use }}</td>
+              <td>{{ compareData.f_area_of_use }}</td>
+              <td>$ {{ correctedAverageValue[i] | spanishNumber }}</td>
+            </tr>
+            <tr class="bg-blue-secondary text-white">
+              <td colspan="4" class="text-end">
+                {{ "Commercial Value" | translate }}: ({{
+                  "Market Average" | translate
+                }})
+              </td>
+              <td class="bg-orange">${{ commercialValue | spanishNumber }}</td>
+              <td colspan="4" class="text-end">
+                {{ "APPROVED AVERAGE" | translate }}
+              </td>
+              <td class="bg-purple">${{ approvedAverage | spanishNumber }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="report__accordion mb-3">
+  <h4
+    class="text-secondary font-24 fw-semibold title bottom-border-style mt-4 mt-xl-5"
+  >
+    {{ "Factors Applied For The Approval Of Securities" | translate }}
+  </h4>
+  <div class="row gy-3 gy-xl-4">
+    <div class="col-md-6 col-xl-7">
+      <div class="table-responsive bg-white br-12 p-3 report-table">
+        <table
+          class="table mb-0 table--state table-bordered border-radius-none td-bg-grey"
+        >
+          <thead>
+            <tr>
+              <th colspan="2">{{ "Vehicle Year" | translate }}</th>
+              <th colspan="2">{{ "Brand" | translate }}</th>
+              <th colspan="2">{{ "Zone of Use" | translate }}</th>
+            </tr>
+            <tr>
+              <th>{{ "Variable" | translate }}</th>
+              <th>{{ "Factor" | translate }}</th>
+              <th>{{ "Variable" | translate }}</th>
+              <th>{{ "Factor" | translate }}</th>
+              <th>{{ "Variable" | translate }}</th>
+              <th>{{ "Factor" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ "VEHICLE YEAR" | translate }}</td>
+              <td>{{ "Min. 1 Max. 1.20" | translate }}</td>
+              <td>{{ "BRAND" | translate }}</td>
+              <td>{{ "Min. 0.90 Max. 1" | translate }}</td>
+              <td>{{ "ZONE OF USE" | translate }}</td>
+              <td>{{ "Min. 0.90 Max. 1" | translate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-5">
+      <div class="table-responsive bg-white br-12 p-3 report-table">
+        <table class="table mb-0 table-bordered border-radius-none">
+          <tbody>
+            <tr>
+              <td>{{ "Commercial Value" | translate }}</td>
+              <td class="bg-grey">${{ commercialValue | spanishNumber }}</td>
+            </tr>
+            <tr>
+              <td>{{ "Approved Average Value" | translate }}</td>
+              <td class="bg-grey">${{ approvedAverage | spanishNumber }}</td>
+            </tr>
+            <tr>
+              <td>{{ "Opportunity Value" | translate }}</td>
+              <td>
+                <div class="text">
+                  <input
+                    class="bg-purple opportunity-value app-comparison-table"
+                    type="text"
+                    OnlyNumber
+                    (blur)="formatNumber($event)"
+                    (focus)="formatToNumber($event)"
+                    [(ngModel)]="opportunityValue"
+                    [readOnly]="
+                      page === 'view' || statusOfReview === 'completed'
+                    "
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-xl-7">
+      <h4
+        class="text-secondary font-24 fw-semibold title bottom-border-style mt-4 mt-xl-5"
+      >
+        {{ "Additional Criteria of the Expert Appraiser" | translate }}
+      </h4>
+      <textarea
+        rows="4"
+        placeholder="{{ 'Enter Additional Information' | translate }}"
+        [(ngModel)]="additionalCriteria"
+        class="border-0 height-240"
+        [readOnly]="page === 'view' || statusOfReview === 'completed'"
+      >
+      </textarea>
+    </div>
+    <div class="col-md-7 col-xl-6">
+      <div *ngIf="page === 'add'">
+        <h4
+          class="text-secondary font-24 fw-semibold title bottom-border-style mt-4 mt-xl-5 border-170"
+        >
+          {{ "Additional Annexes" | translate }}
+        </h4>
+        <div class="mb-4 font-22">
+          {{ "Upload Document/Photo" | translate }}
+        </div>
+      </div>
+      <div *ngIf="page === 'view'">
+        <h4
+          *ngIf="appraisallDetails.additional_annex.length > 0"
+          class="text-secondary font-24 fw-semibold title bottom-border-style mt-4 mt-xl-5 border-170"
+        >
+          {{ "Additional Annexes" | translate }}
+        </h4>
+        <div
+          *ngIf="appraisallDetails.additional_annex.length > 0"
+          class="mb-4 font-22"
+        >
+          {{ "Uploaded Document/Photo" | translate }}
+        </div>
+      </div>
+
+      <div class="d-flex align-items-start" *ngIf="page === 'add'">
+        <div class="document-fields">
+          <div
+            class="document-uploded-wrp mb-3"
+            *ngFor="let imageurl of additionalAnnexUrlArray; let i = index"
+          >
+            <div class="position-relative docdimension">
+              <div class="uploded-document me-0">
+                <a class="d-block" [href]="imageurl" target="_blank">
+                  <img
+                    *ngIf="getFileType(imageurl) == 'image'"
+                    [src]="imageurl"
+                  />
+                  <img
+                    *ngIf="getFileType(imageurl) == 'pdf'"
+                    src="./assets/images/pdf_icon.png"
+                  />
+                  <img
+                    *ngIf="getFileType(imageurl) == 'doc'"
+                    src="./assets/images/doc_icon.png"
+                  />
+                </a>
+                <span
+                  *ngIf="page === 'add'"
+                  class="delete-doc c-pointer"
+                  (click)="deleteDocument(i)"
+                >
+                  &times;</span
+                >
+              </div>
+              <p class="font-10 fw-light text-purple mt-2">
+                {{ (fileName(imageurl) | slice : 0 : 15) + "..."
+                }}{{ fileName(imageurl) | slice : -3 }}
+              </p>
+            </div>
+            <a class="download-icon c-pointer" (click)="downloadFile(imageurl)"
+              ><img src="./assets/images/expert-evolution/white-download.svg"
+            /></a>
+          </div>
+        </div>
+
+        <div class="upload-button me-4">
+          <input
+            type="file"
+            #uploadannex
+            multiple="multiple"
+            (change)="onFileChange($event, 'annex')"
+            class="d-none"
+            accept="image/*, application/pdf"
+          />
+          <span
+            *ngIf="isAdditionalAnnexUploading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          >
+          </span>
+          <button
+            [disabled]="statusOfReview == 'completed'"
+            (click)="uploadannex.click()"
+          >
+            <img src="./assets/images/pluse-icon.svg" />
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-start" *ngIf="page === 'view'">
+        <div class="document-fields">
+          <div
+            class="document-uploded-wrp mb-3"
+            *ngFor="
+              let imageurl of appraisallDetails.additional_annex;
+              let i = index
+            "
+          >
+            <div class="position-relative docdimension">
+              <div class="uploded-document me-0">
+                <a
+                  class="d-block"
+                  [href]="imageurl.download_url"
+                  target="_blank"
+                >
+                  <img
+                    *ngIf="getFileType(imageurl.download_url) == 'image'"
+                    [src]="additionalAnnexUrlArray[i]"
+                  />
+                  <img
+                    *ngIf="getFileType(imageurl.download_url) == 'pdf'"
+                    src="./assets/images/pdf_icon.png"
+                  />
+                  <img
+                    *ngIf="getFileType(imageurl.download_url) == 'doc'"
+                    src="./assets/images/doc_icon.png"
+                  />
+                </a>
+              </div>
+              <p class="font-10 fw-light text-purple mt-2">
+                {{ (fileName(imageurl.download_url) | slice : 0 : 15) + "..."
+                }}{{ fileName(imageurl.download_url) | slice : -3 }}
+              </p>
+            </div>
+            <a
+              class="download-icon c-pointer"
+              (click)="downloadFile(imageurl.download_url)"
+              ><img src="./assets/images/expert-evolution/white-download.svg"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="signature-wrapper d-flex justify-content-center justify-content-md-end  mt-3 mt-sm-0"
+  >
+    <div class="signature-block text-center" *ngIf="page === 'add'">
+      <span
+        *ngIf="isSignDocumentUploading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      >
+      </span>
+      <div class="document-fields justify-content-center">
+        <div class="document-uploded-wrp mb-3" *ngIf="authSign">
+          <div class="position-relative docdimension">
+            <div class="uploded-document signature-document me-0">
+              <a class="d-block" [href]="authSign" target="_blank">
+                <!-- <img
+                  *ngIf="getFileType(authSign) == 'image'"
+                  [src]="authSign"
+                />
+                <img
+                  *ngIf="getFileType(authSign) == 'pdf'"
+                  src="./assets/images/pdf_icon.png"
+                />
+                <img
+                  *ngIf="getFileType(authSign) == 'doc'"
+                  src="./assets/images/doc_icon.png"
+                /> -->
+                <img [src]="authSign" />
+              </a>
+            </div>
+            <!-- <p class="font-10 fw-light text-purple mt-2">
+              {{ (fileName(authSign) | slice : 0 : 10) + "..."
+              }}{{ fileName(authSign) | slice : -3 }}
+            </p> -->
+          </div>
+        </div>
+      </div>
+      <button
+        class="btn primary-btn btn-md border-1 file-upload"
+        [disabled]="statusOfReview == 'completed'"
+        (click)="uploadSign()"
+        for="identify"
+      >
+        {{ "Identity Verification" | translate }}
+      </button>
+      <div class="signature-info">
+        <p class="text-secondary font-22 fw-regular mb-3">
+          {{ "Authorized Signature Of The Expert" | translate }}
+        </p>
+        <p class="text-purple font-14 fw-regular mb-3">{{ expertName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="signature-wrapper d-flex justify-content-center justify-content-md-end  mt-3 mt-sm-0"
+  >
+    <div class="signature-block text-center" *ngIf="page === 'view'">
+      <span
+        *ngIf="isSignDocumentUploading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      >
+      </span>
+      <div class="document-fields justify-content-center">
+        <div
+          class="document-uploded-wrp mb-3"
+          *ngIf="appraisallDetails.auth_sign.download_url"
+        >
+          <div class="position-relative docdimension">
+            <div class="uploded-document signature-document me-0">
+              <a
+                class="d-block"
+                [href]="appraisallDetails.auth_sign.download_url"
+                target="_blank"
+              >
+                <img
+                  *ngIf="
+                    getFileType(appraisallDetails.auth_sign.download_url) ==
+                    'image'
+                  "
+                  [src]="appraisallDetails.auth_sign.download_url"
+                />
+              </a>
+            </div>
+            <p class="font-10 fw-light text-purple mt-2">
+              {{
+                (fileName(appraisallDetails.auth_sign.download_url)
+                  | slice : 0 : 10) + "..."
+              }}{{
+                fileName(appraisallDetails.auth_sign.download_url) | slice : -3
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="signature-info">
+        <p class="text-secondary font-22 fw-regular mb-3">
+          {{ "Authorized Signature Of The Expert" | translate }}
+        </p>
+        <p class="text-purple font-14 fw-regular mb-3">{{ expertName }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="btn-grp mt-3 d-sm-flex" *ngIf="page === 'add'">
+  <button
+    class="btn primary-btn me-3 border-1 btn-sm btn--small"
+    data-bs-toggle="modal"
+    data-bs-target="#becomesellerConfirmModal"
+    (click)="saveComparisonData()"
+    [disabled]="statusOfReview == 'completed'"
+  >
+    {{ "Submit" | translate }}
+  </button>
+  <button type="button" (click)="back()" class="btn primary-btn-outline mt-3 mt-sm-0 btn-sm btn--small">
+    {{ "Cancel" | translate }}
+  </button>
+</div>
+<ng-template #deleteConfirmation>
+  <div class="modal-header border-0">
+    <button
+      type="button"
+      class="btn-close p-md-4 p-2"
+      (click)="modalRef.close(false)"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="/assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Delete Sample" | translate }}?
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Are you sure you want to delete this sample" | translate }}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button type="button" class="btn btn-danger" (click)="modalRef.close(true)">
+      {{ "Yes, Delete" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-purple"
+      (click)="modalRef.close(false)"
+    >
+      {{ "No" | translate }}
+    </button>
+  </div>
+</ng-template>

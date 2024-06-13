@@ -1,0 +1,211 @@
+@import "../../../function";
+@import "../../../variables";
+
+*{
+  font-family: "Pragati Narrow", sans-serif;
+}
+.jakay {
+  &__header {
+    .search-grp {
+      & input.form-control {
+        padding-left: 45px !important;
+      }
+
+      & .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+
+        @include for-laptop-only {
+          left: 2%;
+        }
+
+        @include for-phone-only {
+          left: 5%;
+        }
+      }
+
+    }
+
+    & .navbar-brand {
+      max-width: 120px;
+      margin-right: 0.5rem;
+      padding: 0;
+
+      & .brand-logo {
+        max-width: 125%;
+      }
+    }
+
+    @include for-laptop-only {
+      & .navbar-collapse {
+        position: absolute;
+        top: 100px;
+        width: 100%;
+        background-color: $white;
+        z-index: 10;
+        padding: 1rem 2rem;
+        left: 0;
+        border-top: 1px solid $purple-grey;
+        border-bottom: 1px solid $purple-grey;
+        border-bottom-left-radius: 32px;
+        border-bottom-right-radius: 32px;
+      }
+    }
+
+    & .navbar-nav {
+      margin-right: 1rem;
+      margin-left: 1rem;
+
+      @include for-desktop {
+        margin-right: 1rem;
+
+      }
+      & * {
+        margin-right: 1rem;
+
+        @include for-desktop {
+          margin-right: 1rem;
+        }
+      }
+
+      & .nav-link {
+        color: $primary-color;
+        font-size: 1rem;
+        font-weight: 700;
+
+        &.active {
+          border-bottom: 1px solid $secondary-color;
+          color: $secondary-color;
+        }
+      }
+    }
+
+    & .navbar-right {
+      & *+* {
+        // margin-left: 3.5rem;
+        margin: 1rem;
+        @include for-desktop {
+          margin-left: 2rem;
+        }
+      }
+
+      &-link {
+        position: relative;
+
+        & .dropdown-toggle::after {
+          content: none;
+        }
+
+        & span {
+          position: absolute;
+          background-color: $red;
+          padding: 6px;
+          color: $white;
+          font-size: 11px;
+          width: 19px;
+          height: 19px;
+          top: -24%;
+          right: -18%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          // margin: 0;
+        }
+
+        & .profile-img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .log-out-dropdown {
+      position: absolute;
+      left: -160px;
+      margin-left: 0px;
+    }
+
+    .vehicle-dropdown {
+      position: absolute;
+      left: 36px;
+      margin-left: 0px;
+    }
+  }
+}
+
+.position-unset {
+  position: unset !important;
+}
+
+.dropdown-icon {
+  width: 25px;
+  display: inline-block;
+  margin-right: 10px;
+
+  img {
+
+    width: 100%;
+    object-fit: contain;
+  }
+}
+
+.notification-drawer{
+  width: 542px;
+  left: unset !important;
+  right: -35px;
+}
+.caret-none:after{
+  display: none;
+}
+
+:host::ng-deep #ngb-typeahead-0 {
+  max-height: 200px !important;
+  overflow: auto !important;
+}
+
+.dealer-add-vehicle-button, .seller-add-vehicle-button{
+  padding: 0.875rem 1rem !important;
+}
+
+@media (min-width:1190px) {
+  .dealer-vehicle-header, .seller-vehicle-header {
+    width: min(1440px, 98%) !important;
+    .dealer-header-link, .seller-header-link{
+      text-align: center;
+      white-space: nowrap;
+      margin-right: 0.5rem !important;
+    }
+  }
+}
+
+.btn-nav-bar {
+  border-radius: 16px;
+  padding-block: 10px;
+  margin: 0;
+  box-shadow: 0px 5px 10px rgba(#171717, 0.5);
+}
+
+.btn-sell-vehicle {
+  background-color: $primary-color;
+  color: $white;
+  margin-right: 1rem;
+}
+
+.btn-signin {
+  color: $secondary-color;
+  background-color: $white;
+  border: 1.5px solid $secondary-color !important;
+}
+
+.btn-signup {
+  background-color: $secondary-color;
+  color: $white;
+}
+
+.btn-test {
+  border: 3px solid blue !important;
+}

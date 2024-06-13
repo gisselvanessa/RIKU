@@ -1,0 +1,111 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.cusotmer-heading{
+  h4{
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      &:after{
+          content: "";
+          height: 2px;
+          width: 8%;
+          left: 0;
+          bottom: 0;
+          position: absolute;
+          background-color: $secondary-color;
+          border-radius: 1px;
+      }
+  }
+  .doropdown_radio{
+      .btn{
+          padding:5px 15px 5px 35px;
+          border: 1px solid #CACED5;
+          border-radius: 5px;
+          .input-icon{
+              left:15px;
+              right:unset;
+              top:15px;
+              width: 15px;
+              height: auto;
+          }
+          &.dropdown-toggle{
+              &:after{
+                  top:38%;
+                  right:15px;
+              }
+          }
+      }
+      .dropdown-menu{
+          left:unset;
+          right: 0;
+          min-width: 8rem;
+          padding: 6px;
+      }
+      li{
+          margin:5px 0px;
+          a{
+              border: 1px solid rgba($color: #CACED5, $alpha: 0.5);
+              padding:6px;
+              border-radius: 5px;
+              text-align: left;
+              font-size: 10px;
+          }
+      }
+  }
+}
+.data-count{
+  border-radius: 100%;
+  height: 90px;
+  width: 90px;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($color: $secondary-color, $alpha: 0.1);
+  display: inline-flex;
+  &.small-data-count{
+      height: 40px;
+      width: 40px;
+  }
+}
+.cutomer-data-wrp{
+  p{
+      color: #B1A0B4;
+  }
+  .border-right{
+      border-right: 1px solid rgba($color: #B1A0B4, $alpha: 0.5);
+  }
+}
+
+.selected-dropdown-item{
+  background-color: rgba(47, 119, 156, 0.1) !important;
+}
+
+
+.condition-tabs {
+  & .tabs-list {
+    border: 1px solid #CACED5;
+    border-radius: 5px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  & .nav-item {
+    @include for-phone-only {
+      width: 100%;
+    }
+  }
+
+  & .nav-link {
+    padding: 6px 20px;
+    font-size: 14px;
+    color: $thired-color;
+    @include for-phone-only {
+      width: 100%;
+    }
+
+    &.active {
+      background-color: $secondary-color;
+      color: $white;
+    }
+  }
+}

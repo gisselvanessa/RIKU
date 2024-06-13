@@ -1,0 +1,6 @@
+<svg id="gauge" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <path id="Path_2194" data-name="Path 2194" d="M0,0H36V36H0Z" fill="none"/>
+  <circle id="Ellipse_326" data-name="Ellipse 326" cx="13.499" cy="13.499" r="13.499" transform="translate(4.752 4.343)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+  <circle id="Ellipse_327" data-name="Ellipse 327" cx="1.5" cy="1.5" r="1.5" transform="translate(17.001 16)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+  <line id="Line_1145" data-name="Line 1145" y1="3.885" x2="3.885" transform="translate(20.115 12)" fill="none" stroke="#ec8f67" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+</svg>

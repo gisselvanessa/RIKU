@@ -1,0 +1,99 @@
+<section class="section bg-blue">
+  <ng-container>
+    <div class="back-to-page d-flex">
+      <div class="section-header">
+        <h3 class="font-38 text-primary fw-semibold">
+          {{ "Vehicle Delivery" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="payment_wrapper">
+      <p class="font-22 text-primary mb-4">
+        {{ "Delivery Status" | translate }}:
+        <span *ngIf="currentOrder.delivery_status == 'delivery_due'">{{
+          "Delivery Due" | translate
+        }}</span>
+        <span *ngIf="currentOrder.delivery_status == 'out_for_delivery'">{{
+          "Out for Delivery" | translate
+        }}</span>
+        <span *ngIf="currentOrder.delivery_status == 'delivered'">{{
+          "Delivered" | translate
+        }}</span>
+      </p>
+      <ng-container>
+        <p
+          class="font-22 text-primary mb-4"
+          *ngIf="currentOrder.delivery_status == 'delivered'"
+        >
+          {{ "Please confirm delivery status" | translate }}:
+        </p>
+        <div class="row">
+          <div class="col-lg-9">
+            <div
+              class="payment_wrapper--radio br-12"
+              *ngIf="currentOrder.delivery_status == 'delivered'"
+            >
+              <div class="form-check form-check-inline mb-3 mb-lg-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="payment"
+                  readonly="currentOrder.delivery_status != 'delivered'"
+                  [(ngModel)]="deliveryStatus"
+                  id="delivery_due"
+                  value="delivery_due"
+                />
+                <label class="form-check-label" for="delivery_due">
+                  {{ "Delivery Due" | translate }}</label
+                >
+                <span class="dot-checkmark"></span>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  readonly="currentOrder.delivery_status != 'delivered'"
+                  type="radio"
+                  name="payment"
+                  id="delivered"
+                  [(ngModel)]="deliveryStatus"
+                  value="delivered"
+                />
+                <label class="form-check-label" for="delivered">
+                  {{ "Delivered" | translate }}</label
+                >
+                <span class="dot-checkmark"></span>
+              </div>
+              <div
+                class="text-danger"
+                *ngIf="(!deliveryStatus || deliveryStatus == '') && isSubmitted"
+              >
+                {{ "Please select delivery status" | translate }}
+              </div>
+            </div>
+            <div class="mt-4 d-sm-flex">
+              <button
+                class="btn primary-btn-outline btn-sm btn--small me-sm-3"
+                (click)="setPreviousStep()"
+              >
+                {{ "Previous" | translate }}
+              </button>
+              <button
+                class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0"
+                *ngIf="currentOrder.delivery_status == 'delivered'"
+                (click)="submitDeliveryStatus()"
+              >
+                <span
+                  class="spinner-border text-primary"
+                  *ngIf="loading"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ "Submit1" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</section>

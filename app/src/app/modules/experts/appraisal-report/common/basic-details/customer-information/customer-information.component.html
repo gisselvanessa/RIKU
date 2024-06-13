@@ -1,0 +1,164 @@
+<div class="report__accordion">
+  <div class="accordion-item bg-transparent">
+    <h2 class="accordion-header" (click)="selectedAccordians()" id="report-2">
+      <button
+        class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#report2"
+        aria-expanded="false"
+        [ngClass]="{ collapsed: accordianName.CustomerInformation != selectAccordian }"
+
+        aria-controls="collapseOne"
+      >
+        <!-- <div *ngIf="stepsCompleted?.includes('CUSTOMER_INFO')">
+          <span class="step-completed"></span>
+        </div> -->
+        {{ 'Customer Information' | translate }}
+      </button>
+    </h2>
+    <div
+      id="report2"
+      class="accordion-collapse collapse"
+      [ngClass]="
+        accordianName.CustomerInformation === selectAccordian ? 'show' : ''
+      "
+      aria-labelledby="report-2"
+      data-bs-parent="#report-accordian"
+    >
+      <div class="accordion-body px-0">
+        <form *ngIf="customerInfoForm" [formGroup]="customerInfoForm">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Full Name' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter Full name' | translate }}"
+                  formControlName="full_name"
+                  [readOnly]="customerInformation.full_name"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Cedula ID' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Cedula ID' | translate }}"
+                  formControlName="cedula_id"
+                  [readOnly]="customerInformation.cadula_id"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Email' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter Email' | translate }}"
+                  formControlName="email"
+                  [readOnly]="customerInformation.email"
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group position-relative">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                  >{{ 'Mobile Number' | translate }}</label
+                >
+                <ngx-intl-tel-input
+                  [cssClass]="'form-control w-100'"
+                  [preferredCountries]="preferredCountries"
+                  [enableAutoCountrySelect]="true"
+                  [enablePlaceholder]="true"
+                  [searchCountryFlag]="true"
+                  [searchCountryField]="[
+                    SearchCountryField.Iso2,
+                    SearchCountryField.Name
+                  ]"
+                  [selectFirstCountry]="false"
+                  [selectedCountryISO]="CountryISO.Ecuador"
+                  [maxLength]="15"
+                  [phoneValidation]="true"
+                  [separateDialCode]="separateDialCode"
+                  [numberFormat]="PhoneNumberFormat.National"
+                  (countryChange)="clearCountrySearchBox()"
+                  name="mobile_no"
+                  formControlName="mobile_no"
+                >
+                </ngx-intl-tel-input>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Address' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter Address' | translate }}"
+                  formControlName="address"
+                  [readOnly]="customerInformation.location.address"
+                />
+                <img src="./assets/images/location.svg" class="input-icon" />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Province' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter Province' | translate }}"
+                  formControlName="province"
+                  [readOnly]="customerInformation.location.province"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'City' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter City' | translate }}"
+                  formControlName="city"
+                  [readOnly]="customerInformation.location.city"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Parish' | translate }}</label>
+                <input
+                  type="text"
+                  class="form-control border-0"
+                  placeholder="{{ 'Enter Parish' | translate }}"
+                  formControlName="parish"
+                  [readOnly]="customerInformation.location.city"
+                />
+              </div>
+            </div>
+
+            <div class="col-12">
+              <button
+                (click)="sendData()"
+                class="btn primary-btn btn-md me-3 border-1 mb-3"
+                [disabled]="statusOfReview == 'completed'"
+              >
+                {{ 'Save' | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

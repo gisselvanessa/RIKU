@@ -1,0 +1,26 @@
+@import '../../../../../function';
+@import '../../../../../variables';
+
+.admin_add__user {
+  padding-bottom: 80px;
+
+  & .add__user-img img {
+      height: 100%;
+      /* border-radius: 50%; */
+      width: 100%;
+      object-fit: cover;
+  }
+
+  & .admin__add-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    @media (min-width: 1200px) and (max-width: 1400px){
+      width: 125px;
+      height: 120px;
+    }
+  }
+
+}

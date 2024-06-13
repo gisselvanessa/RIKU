@@ -1,0 +1,93 @@
+<div class="modal-body border-0">
+  <div class="row justify-content-center">
+    <div class="col-lg-12 py-2 px-3 py-md-3 px-md-4">
+      <ng-container *ngIf="step == 1">
+        <h4 class="fw-bold text-primary mb-sm-3 mb-0 pt-0 pt-md-2 pt-lg-4">
+          {{ "VehicleProcedureQuestion" | translate }}
+        </h4>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0 pt-4">
+          {{
+            "The RIKU platform makes the vehicle processing service available to you when the purchase was made by paying in cash, credit/debit card or bank deposit. In case of acquiring the vehicle through financing, the vehicle processing service is included as RIKU personnel management."
+              | translate
+          }}
+        </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0 pt-4">
+          {{
+            "The vehicle processing service includes the review of the documentation provided by the seller, including the license plate, fines or any other condition that may affect the sale of the vehicle. The RIKU staff will be in charge of carrying out the procedure for the transfer of the vehicle, for which they will request the parties the necessary information and support of the vehicle that proves the information provided on the platform and will coordinate the dates for the signing of the contract. Vehicle processing service cost $240. The vehicle processing service does not include payment at the National Transit Agency, notaries, records or any other that is required to formalize the sale."
+              | translate
+          }}
+        </p>
+        <p
+          class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0 pt-4 text-bold"
+        >
+          {{ "vehicle_procedure_praragraph_3" | translate }}
+          <b>{{ "Your purchase order will be cancelled." | translate }}</b>
+        </p>
+        <div class="d-flex mt-3 pt-4">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="isAgreed"
+            [(ngModel)]="isAgreed"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <p>
+            <label class="text-primary font-16 mx-2" for="isAgreed">{{
+              "Yes, I Agree" | translate
+            }}</label>
+          </p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="step == 2">
+        <h4 class="fw-sm-bold text-primary mb-sm-3 mb-0 pt-4 font-38">
+          {{ "VehicleProcedureWarning" | translate }}
+        </h4>
+        <div class="d-flex mt-3 pt-4">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="isAccept"
+            [(ngModel)]="isAccept"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <p>
+            <label class="text-primary font-16 mx-2" for="isAccept">{{
+              "Yes, I Accept" | translate
+            }}</label>
+          </p>
+        </div>
+      </ng-container>
+    </div>
+    <div class="modal-footer d-ms-flex justify-content-left border-0">
+      <ng-container *ngIf="step == 1">
+        <button
+          type="submit"
+          class="btn primary-btn btn--small"
+          (click)="onSubmit()"
+        >
+          {{ "Yes" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn primary-btn-outline btn--small"
+          (click)="onReject()"
+        >
+          {{ "No, Cancel Order" | translate }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="step == 2">
+        <button type="submit" class="btn primary-btn" (click)="onAccept()">
+          {{ "Yes" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn primary-btn-outline"
+          (click)="step = 1"
+        >
+          {{ "No" | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</div>

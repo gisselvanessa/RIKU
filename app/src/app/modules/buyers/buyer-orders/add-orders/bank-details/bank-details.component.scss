@@ -1,0 +1,45 @@
+@import '../../../../../../function';
+@import '../../../../../../variables';
+
+
+.bg-white {
+    background-color: #ffffff !important;
+}
+
+.c-none {
+    display: none;
+}
+
+.form-group {
+
+
+    & .input-icon {
+        top: 54px;
+        position: absolute;
+        right: 23px;
+        cursor: pointer;
+
+        @include for-laptop {
+            top: 65px;
+        }
+
+        @include for-phone-only {
+            top: 50px;
+        }
+
+        &.uplode-icon {
+            top: 28px;
+        }
+    }
+}
+
+input.form-control {
+    border: 1px solid rgba(137, 112, 143, 0.5);
+    height: 60px;
+    background: #fff;
+    font-size: 1rem;
+    padding: 20px;
+    color: #3B1144;
+    border-radius: 12px;
+    width: 100%;
+}

@@ -1,0 +1,1272 @@
+<div class="appraisal-report__wrapper">
+  <div class="report__accordion" id="report-accordian">
+    <form [formGroup]="aboutUsForm">
+      <div class="accordion-item bg-transparent">
+        <h2
+          class="accordion-header"
+          id="report-1"
+          (click)="showHideSection('header')"
+        >
+          <button
+            class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold"
+            [ngClass]="{ collapsed: !isOpened || openedSection != 'header' }"
+            type="button"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            {{ "Header Section" | translate }}
+          </button>
+        </h2>
+        <div
+          id="report1"
+          class="accordion-collapse collapse"
+          [ngClass]="{ show: openedSection == 'header' && isOpened }"
+          aria-labelledby="report-1"
+        >
+          <div class="accordion-body px-0" formGroupName="header">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ headerTitle.value.length }} /
+                        {{ maxCharactersTitle }}
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      #headerTitle
+                      [maxlength]="maxCharactersTitle"
+                      class="form-control border-0"
+                      formControlName="title"
+                      placeholder="{{ 'Enter Title' | translate }}"
+                    />
+                    <div
+                      *ngIf="
+                        aboutUsForm.get('header.title')?.invalid &&
+                        isFormSubmitted
+                      "
+                      class="invalid-feedback text-danger"
+                    >
+                      {{ "Title is required" | translate }}.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Sub Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ headerSubTitle.value.length }} /
+                        {{ maxCharactersSubTitle }}
+                      </span>
+                    </div>
+
+                    <input
+                      type="text"
+                      #headerSubTitle
+                      [maxlength]="maxCharactersSubTitle"
+                      class="form-control border-0"
+                      formControlName="sub_title"
+                      placeholder="{{ 'Enter Sub Title' | translate }}"
+                    />
+                    <div
+                      *ngIf="
+                        aboutUsForm.get('header.sub_title')?.invalid &&
+                        isFormSubmitted
+                      "
+                      class="invalid-feedback text-danger"
+                    >
+                      {{ "Sub Title is required" | translate }}.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item bg-transparent">
+        <h2
+          class="accordion-header"
+          id="report-2"
+          (click)="showHideSection('text')"
+        >
+          <button
+            class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold"
+            [ngClass]="{ collapsed: !isOpened || openedSection != 'text' }"
+            type="button"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            {{ "Text Section" | translate }}
+          </button>
+        </h2>
+        <div
+          id="report2"
+          class="accordion-collapse collapse"
+          [ngClass]="{ show: openedSection == 'text' && isOpened }"
+          aria-labelledby="report-2"
+        >
+          <div class="accordion-body px-0">
+            <form action="" [formGroup]="textMissionForm">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ textMissionTitle.value.length }} /
+                        {{ maxCharactersTitle }}
+                      </span>
+                    </div>
+
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      #textMissionTitle
+                      [maxlength]="maxCharactersTitle"
+                      placeholder="{{ 'Enter Title' | translate }}"
+                      formControlName="title"
+                    />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Sub Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ textMissionSubTitle.value.length }} /
+                        {{ maxCharactersSubTitle }}
+                      </span>
+                    </div>
+
+                    <input
+                      type="text"
+                      #textMissionSubTitle
+                      [maxlength]="maxCharactersSubTitle"
+                      formControlName="sub_title"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Sub Title' | translate }}"
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+            <form [formGroup]="textVisionForm">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ textVisionTitle.value.length }} /
+                        {{ maxCharactersTitle }}
+                      </span>
+                    </div>
+
+                    <input
+                      type="text"
+                      #textVisionTitle
+                      [maxlength]="maxCharactersTitle"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Title' | translate }}"
+                      formControlName="title"
+                    />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Sub Title" | translate
+                      }}</label>
+                      <span class="font-14">
+                        {{ textVisionSubTitle.value.length }} /
+                        {{ maxCharactersSubTitle }}
+                      </span>
+                    </div>
+
+                    <input
+                      type="text"
+                      #textVisionSubTitle
+                      [maxlength]="maxCharactersSubTitle"
+                      formControlName="sub_title"
+                      class="form-control border-0"
+                      placeholder="{{ 'Enter Sub Title' | translate }}"
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item bg-transparent">
+        <h2
+          class="accordion-header"
+          id="report-5"
+          (click)="showHideSection('process')"
+        >
+          <button
+            class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+            type="button"
+            [ngClass]="{ collapsed: !isOpened || openedSection != 'process' }"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            {{ "Process Section" | translate }}
+          </button>
+        </h2>
+        <div
+          id="report5"
+          class="accordion-collapse collapse"
+          [ngClass]="{ show: openedSection == 'process' && isOpened }"
+        >
+          <div class="accordion-body px-0" formGroupName="process">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ processTitle.value.length }} /
+                      {{ maxCharactersTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #processTitle
+                    [maxlength]="maxCharactersTitle"
+                    class="form-control border-0"
+                    formControlName="title"
+                    placeholder="{{ 'Enter Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('process.title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Sub Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ processSubTitle.value.length }} /
+                      {{ maxCharactersSubTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #processSubTitle
+                    [maxlength]="maxCharactersSubTitle"
+                    class="form-control border-0"
+                    formControlName="sub_title"
+                    placeholder="{{ 'Enter Sub Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('process.sub_title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Sub Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="services-grp">
+                  <div class="buy-or-sell-heading">
+                    <span
+                      class="font-28 fw-semibold text-secondary position-relative d-inline-block heading-border-bottom pb-2"
+                      >{{ "To Buy" | translate }}</span
+                    >
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-5"
+                  >
+                    <label class="font-14 text-primary fw-semibold block">{{
+                      "Process Steps" | translate
+                    }}</label>
+
+                    <a
+                      href="javascript:void(0);"
+                      (click)="openModal('process_buy')"
+                      class="font-16 text-secondary fw-regular text-underline"
+                      >+{{ "Add New Process Step" | translate }}</a
+                    >
+                  </div>
+                  <input
+                    type="file"
+                    #processImage
+                    class="d-none"
+                    (change)="
+                      onFileInputChange($event, serviceIndex, 'process_buy')
+                    "
+                    accept="image/*"
+                  />
+                  <div class="row" *ngIf="processStepBuyList.length > 0">
+                    <div
+                      class="col-md-4 mb-4"
+                      *ngFor="let processStep of processStepBuyList; index as i"
+                    >
+                      <div class="card bg-white br-12 border-0">
+                        <div class="delete-bin-icon">
+                          <span
+                            ><img
+                              src="assets/images/view_vehicle/delete_red.svg"
+                              (click)="deleteProcess(i, 'buy')"
+                              alt="delete"
+                              class="c-pointer"
+                          /></span>
+                        </div>
+                        <div class="form-group">
+                          <span
+                            class="font-22 text-orange pb-1 mb-4 heading-border-bottom d-block w-100"
+                            >0{{ i + 1 }}</span
+                          >
+                          <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Image" | translate }}</label
+                          >
+                          <div class="d-flex align-items-center">
+                            <div class="icon-wrp">
+                              <img
+                                [src]="processStep.download_url"
+                                width="72px"
+                              />
+                            </div>
+                            <span
+                              *ngIf="loading && serviceIndex == i"
+                              class="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            >
+                            </span>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="serviceIndex = i; processImage.click()"
+                              class="font-14 fw-regular text-secondary text-underline"
+                              >{{ "Change Image" | translate }}</a
+                            >
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ processBuyTitle.value.length }} /
+                              {{ maxCharactersTitle }}
+                            </span>
+                          </div>
+
+                          <input
+                            class="form-control"
+                            #processBuyTitle
+                            [attr.maxlength]="maxCharactersTitle"
+                            [value]="processStep.title"
+                            (blur)="
+                              setProcessData($event, 'title', i, 'process_buy')
+                            "
+                            type="text"
+                            placeholder="{{ 'Enter Title' | translate }}"
+                          />
+                        </div>
+                        <div class="form-group mb-0">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Sub Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ processBuySubTitle.value.length }} /
+                              {{ maxCharactersSubTitle }}
+                            </span>
+                          </div>
+
+                          <textarea
+                            class="form-control"
+                            #processBuySubTitle
+                            [attr.maxlength]="maxCharactersSubTitle"
+                            placeholder="{{ 'Enter Sub Title' | translate }}"
+                            (blur)="
+                              setProcessData(
+                                $event,
+                                'sub_title',
+                                i,
+                                'process_buy'
+                              )
+                            "
+                            >{{ processStep.sub_title }}</textarea
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="processStepBuyList.length == 0 && isFormSubmitted"
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Process Steps are required" | translate }}.
+                  </div>
+                </div>
+                <div class="services-grp">
+                  <div class="buy-or-sell-heading">
+                    <span
+                      class="font-28 fw-semibold text-secondary position-relative d-inline-block heading-border-bottom pb-2"
+                      >{{ "To Sell" | translate }}</span
+                    >
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-5"
+                  >
+                    <label class="font-14 text-primary fw-semibold block">{{
+                      "Process Steps" | translate
+                    }}</label>
+
+                    <a
+                      href="javascript:void(0);"
+                      (click)="openModal('process_sell')"
+                      class="font-16 text-secondary fw-regular text-underline"
+                      >+{{ "Add New Process Step" | translate }}</a
+                    >
+                  </div>
+                  <input
+                    type="file"
+                    #processSellImage
+                    class="d-none"
+                    (change)="
+                      onFileInputChange($event, serviceIndex, 'process_sell')
+                    "
+                    accept="image/*"
+                  />
+                  <div class="row" *ngIf="processStepSellList.length > 0">
+                    <div
+                      class="col-md-4 mb-4"
+                      *ngFor="
+                        let processStep of processStepSellList;
+                        index as i
+                      "
+                    >
+                      <div class="card bg-white br-12 border-0">
+                        <div class="delete-bin-icon">
+                          <span
+                            ><img
+                              src="assets/images/view_vehicle/delete_red.svg"
+                              (click)="deleteProcess(i, 'sell')"
+                              alt="delete"
+                              class="c-pointer"
+                          /></span>
+                        </div>
+                        <div class="form-group">
+                          <span
+                            class="font-22 text-orange pb-1 mb-4 heading-border-bottom d-block w-100"
+                            >0{{ i + 1 }}</span
+                          >
+                          <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Image" | translate }}</label
+                          >
+                          <div class="d-flex align-items-center">
+                            <div class="icon-wrp">
+                              <img
+                                [src]="processStep.download_url"
+                                width="72px"
+                              />
+                            </div>
+                            <span
+                              *ngIf="loading && serviceIndex == i"
+                              class="spinner-border spinner-border-sm"
+                              role="status"
+                              aria-hidden="true"
+                            >
+                            </span>
+                            <a
+                              href="javascript:void(0)"
+                              (click)="
+                                serviceIndex = i; processSellImage.click()
+                              "
+                              class="font-14 fw-regular text-secondary text-underline"
+                              >{{ "Change Image" | translate }}</a
+                            >
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ processSellTitle.value.length }} /
+                              {{ maxCharactersTitle }}
+                            </span>
+                          </div>
+
+                          <input
+                            class="form-control"
+                            #processSellTitle
+                            [attr.maxlength]="maxCharactersTitle"
+                            [value]="processStep.title"
+                            (blur)="
+                              setProcessData($event, 'title', i, 'process_sell')
+                            "
+                            type="text"
+                            placeholder="{{ 'Enter Title' | translate }}"
+                          />
+                        </div>
+                        <div class="form-group mb-0">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Sub Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ processSellSubTitle.value.length }} /
+                              {{ maxCharactersSubTitle }}
+                            </span>
+                          </div>
+
+                          <textarea
+                          #processSellSubTitle
+                          [attr.maxlength]="maxCharactersSubTitle"
+                            placeholder="{{ 'Enter Sub Title' | translate }}"
+                            class="form-control"
+                            (blur)="
+                              setProcessData(
+                                $event,
+                                'sub_title',
+                                i,
+                                'process_sell'
+                              )
+                            "
+                            >{{ processStep.sub_title }}</textarea
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="processStepSellList.length == 0 && isFormSubmitted"
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Process Steps are required" | translate }}.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item bg-transparent">
+        <h2
+          class="accordion-header"
+          id="report-3"
+          (click)="showHideSection('eligibility')"
+        >
+          <button
+            class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+            type="button"
+            [ngClass]="{
+              collapsed: !isOpened || openedSection != 'eligibility'
+            }"
+            aria-controls="collapseOne"
+          >
+            {{ "Eligibility Section" | translate }}
+          </button>
+        </h2>
+        <div
+          id="report3"
+          class="accordion-collapse collapse"
+          [ngClass]="{ show: openedSection == 'eligibility' && isOpened }"
+          aria-labelledby="report-3"
+        >
+          <div class="accordion-body px-0" formGroupName="eligibility">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ eligibiltyTitle.value.length }} /
+                      {{ maxCharactersTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #eligibiltyTitle
+                    [maxlength]="maxCharactersTitle"
+                    class="form-control border-0"
+                    formControlName="title"
+                    placeholder="{{ 'Enter Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('eligibility.title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Sub Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ eligibiltySubTitle.value.length }} /
+                      {{ maxCharactersSubTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #eligibiltySubTitle
+                    [maxlength]="maxCharactersSubTitle"
+                    class="form-control border-0"
+                    formControlName="sub_title"
+                    placeholder="{{ 'Enter Sub Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('eligibility.sub_title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Sub Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Button Text" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ eligibiltybutton.value.length }} /
+                      {{ buttonCharacters }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #eligibiltybutton
+                    [maxlength]="buttonCharacters"
+                    class="form-control border-0"
+                    formControlName="button_text"
+                    placeholder="{{ 'Enter Button Text' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('eligibility.button_text')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Button Text is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item bg-transparent">
+        <h2
+          class="accordion-header"
+          id="report-4"
+          (click)="showHideSection('services')"
+        >
+          <button
+            class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+            type="button"
+            [ngClass]="{ collapsed: !isOpened || openedSection != 'services' }"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            {{ "Services Section" | translate }}
+          </button>
+        </h2>
+        <div
+          id="report4"
+          class="accordion-collapse collapse"
+          [ngClass]="{ show: openedSection == 'services' && isOpened }"
+          aria-labelledby="report-4"
+          data-bs-parent="#report-accordian"
+        >
+          <div class="accordion-body px-0" formGroupName="services">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ servicesTitle.value.length }} /
+                      {{ maxCharactersTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #servicesTitle
+                    [maxlength]="maxCharactersTitle"
+                    class="form-control border-0"
+                    formControlName="title"
+                    placeholder="{{ 'Enter Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('services.title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="d-flex justify-content-between">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Sub Title" | translate
+                    }}</label>
+                    <span class="font-14">
+                      {{ servicesSubTitle.value.length }} /
+                      {{ maxCharactersSubTitle }}
+                    </span>
+                  </div>
+
+                  <input
+                    type="text"
+                    #servicesSubTitle
+                    [maxlength]="maxCharactersSubTitle"
+                    class="form-control border-0"
+                    formControlName="sub_title"
+                    placeholder="{{ 'Enter Sub Title' | translate }}"
+                  />
+                  <div
+                    *ngIf="
+                      aboutUsForm.get('services.sub_title')?.invalid &&
+                      isFormSubmitted
+                    "
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Sub Title is required" | translate }}.
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="services-grp">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-5"
+                  >
+                    <label class="font-14 text-primary fw-semibold d-block">{{
+                      "Services" | translate
+                    }}</label>
+                    <a
+                      href="javascript:void(0);"
+                      (click)="openModal('service')"
+                      class="font-16 text-secondary fw-regular text-underline"
+                      >+{{ "Add New Service" | translate }}</a
+                    >
+                  </div>
+                  <input
+                    type="file"
+                    #serviceIcon
+                    class="d-none"
+                    (change)="onFileInputChange($event, serviceIndex)"
+                    accept="image/*"
+                  />
+                  <div class="row" *ngIf="serviceList.length > 0">
+                    <div
+                      class="col-md-4 mb-4"
+                      *ngFor="let service of serviceList; index as i"
+                    >
+                      <div class="card bg-white br-12 border-0">
+                        <div class="delete-bin-icon">
+                          <span
+                            ><img
+                              src="assets/images/view_vehicle/delete_red.svg"
+                              (click)="deleteService(i)"
+                              alt="delete"
+                              class="c-pointer"
+                          /></span>
+                        </div>
+                        <div class="form-group">
+                          <span
+                            class="font-22 text-orange pb-1 mb-4 heading-border-bottom d-block w-100"
+                            >0{{ i + 1 }}</span
+                          >
+                        </div>
+                        <div class="form-group">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ servicesTitle1.value.length }} /
+                              {{ maxCharactersTitle }}
+                            </span>
+                          </div>
+
+                          <input
+                            class="form-control"
+                            #servicesTitle1
+                            [attr.maxlength]="maxCharactersTitle"
+                            [value]="service.title"
+                            (blur)="setServiceData($event, 'title', i)"
+                            type="text"
+                            placeholder="{{ 'Enter Title' | translate }}"
+                          />
+                        </div>
+                        <div class="form-group mb-0">
+                          <div class="d-flex justify-content-between">
+                            <label
+                            class="font-14 text-primary-light fw-regular mb-2 d-block"
+                            >{{ "Sub Title" | translate }}</label
+                          >
+                            <span class="font-14">
+                              {{ servicesSubTitle1.value.length }} /
+                              {{ maxCharactersSubTitle }}
+                            </span>
+                          </div>
+
+                          <textarea
+                          #servicesSubTitle1
+                          [attr.maxlength]="maxCharactersSubTitle"
+                            class="form-control"
+                            placeholder="{{ 'Enter Sub Title' | translate }}"
+                            (blur)="setServiceData($event, 'sub_title', i)"
+                            >{{ service.sub_title }}</textarea
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="serviceList.length == 0 && isFormSubmitted"
+                    class="invalid-feedback text-danger"
+                  >
+                    {{ "Services are required" | translate }}.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-grp mt-5 d-flex">
+        <button
+          class="btn primary-btn me-3 border-1"
+          (click)="savePageContent()"
+          [disabled]="
+            loading ||
+            (!modulePermissions?.can_create && !modulePermissions?.can_edit)
+          "
+        >
+          {{ "Submit" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #addServiceModal let-d="close">
+  <div class="modal-header position-relative border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Add Service" | translate }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="d('Cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <form [formGroup]="serviceForm">
+          <div class="card bg-white br-12 border-0">
+            <div class="form-group">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ servicesPopUpTitle.value.length }} /
+                  {{ maxCharactersTitle }}
+                </span>
+              </div>
+
+              <input
+                class="form-control"
+                #servicesPopUpTitle
+                [maxlength]="maxCharactersTitle"
+                placeholder="{{ 'Enter Title' | translate }}"
+                formControlName="title"
+                type="text"
+              />
+              <div
+                *ngIf="serviceForm.get('title')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="form-group mb-0">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Sub Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ servicesPopUpSubTitle.value.length }} /
+                  {{ maxCharactersSubTitle }}
+                </span>
+              </div>
+
+              <textarea
+              #servicesPopUpSubTitle
+              [maxlength]="maxCharactersSubTitle"
+                class="form-control"
+                formControlName="sub_title"
+                placeholder="{{ 'Enter Sub Title' | translate }}"
+              ></textarea>
+              <div
+                *ngIf="serviceForm.get('sub_title')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Sub Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex">
+              <button
+                class="btn primary-btn me-3 border-1"
+                (click)="addService()"
+              >
+                {{ "Save" | translate }}
+              </button>
+              <button
+                class="btn primary-btn-outline me-3"
+                (click)="closeModal()"
+              >
+                {{ "Cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addProcessBuyModal let-d="close">
+  <div class="modal-header position-relative border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Add Process Steps" | translate }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="closeModal()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <form [formGroup]="processToBuyForm">
+          <div class="card bg-white br-12 border-0">
+            <div class="form-group">
+              <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Image" | translate }}</label
+              >
+              <div class="d-flex align-items-center">
+                <div class="icon-wrp" *ngIf="iconUrl">
+                  <img [src]="iconUrl" width="72px" />
+                </div>
+                <input
+                  type="file"
+                  #uploadImage
+                  class="d-none"
+                  (change)="onFileInputChange($event, -1, 'process_buy')"
+                  accept="image/*"
+                />
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                >
+                </span
+                ><a
+                  href="javascript:void(0)"
+                  *ngIf="!loading"
+                  (click)="uploadImage.click()"
+                  class="font-14 fw-regular text-secondary text-underline"
+                  >{{
+                    iconUrl ? ("Change" | translate) : ("Upload" | translate)
+                  }}
+                  {{ "Image" | translate }}</a
+                >
+              </div>
+              <div
+                *ngIf="processToBuyForm.get('icon')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Image is required" | translate }}.
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ processBuyerPopUpTitle.value.length }} /
+                  {{ maxCharactersTitle }}
+                </span>
+              </div>
+
+              <input
+              #processBuyerPopUpTitle
+              [maxlength]="maxCharactersTitle"
+                class="form-control"
+                placeholder="{{ 'Enter Title' | translate }}"
+                formControlName="title"
+                type="text"
+              />
+              <div
+                *ngIf="processToBuyForm.get('title')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="form-group mb-0">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Sub Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ processBuyerPopUpSubTitle.value.length }} /
+                  {{ maxCharactersSubTitle }}
+                </span>
+              </div>
+
+              <textarea
+              #processBuyerPopUpSubTitle
+              [maxlength]="maxCharactersSubTitle"
+                class="form-control"
+                formControlName="sub_title"
+                placeholder="{{ 'Enter Sub Title' | translate }}"
+              ></textarea>
+              <div
+                *ngIf="
+                  processToBuyForm.get('sub_title')?.invalid && isSubmitted
+                "
+                class="invalid-feedback text-danger"
+              >
+                {{ "Sub Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex">
+              <button
+                class="btn primary-btn me-3 border-1"
+                (click)="addProcess('buy')"
+              >
+                {{ "Save" | translate }}
+              </button>
+              <button
+                class="btn primary-btn-outline me-3"
+                (click)="closeModal()"
+              >
+                {{ "Cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #addProcessSellModal let-d="close">
+  <div class="modal-header position-relative border-0">
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Add Process Steps" | translate }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="closeModal()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <form [formGroup]="processToSellForm">
+          <div class="card bg-white br-12 border-0">
+            <div class="form-group">
+              <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Image" | translate }}</label
+              >
+              <div class="d-flex align-items-center">
+                <div class="icon-wrp" *ngIf="iconUrl">
+                  <img [src]="iconUrl" width="72px" />
+                </div>
+                <input
+                  type="file"
+                  #uploadImage
+                  class="d-none"
+                  (change)="onFileInputChange($event, -1, 'process_sell')"
+                  accept="image/*"
+                />
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                >
+                </span
+                ><a
+                  href="javascript:void(0)"
+                  *ngIf="!loading"
+                  (click)="uploadImage.click()"
+                  class="font-14 fw-regular text-secondary text-underline"
+                  >{{
+                    iconUrl ? ("Change" | translate) : ("Upload" | translate)
+                  }}
+                  {{ "Image" | translate }}</a
+                >
+              </div>
+              <div
+                *ngIf="processToSellForm.get('icon')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Image is required" | translate }}.
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ processSellerPopUpTitle.value.length }} /
+                  {{ maxCharactersTitle }}
+                </span>
+              </div>
+
+              <input
+              #processSellerPopUpTitle
+              [maxlength]="maxCharactersTitle"
+                class="form-control"
+                placeholder="{{ 'Enter Title' | translate }}"
+                formControlName="title"
+                type="text"
+              />
+              <div
+                *ngIf="processToSellForm.get('title')?.invalid && isSubmitted"
+                class="invalid-feedback text-danger"
+              >
+                {{ "Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="form-group mb-0">
+              <div class="d-flex justify-content-between">
+                <label
+                class="font-14 text-primary-light fw-regular mb-2 d-block"
+                >{{ "Sub Title" | translate }}</label
+              >
+                <span class="font-14">
+                  {{ processSellerPopUpSubTitle.value.length }} /
+                  {{ maxCharactersSubTitle }}
+                </span>
+              </div>
+
+              <textarea
+              #processSellerPopUpSubTitle
+              [maxlength]="maxCharactersSubTitle"
+                class="form-control"
+                formControlName="sub_title"
+                placeholder="{{ 'Enter Sub Title' | translate }}"
+              ></textarea>
+              <div
+                *ngIf="
+                  processToSellForm.get('sub_title')?.invalid && isSubmitted
+                "
+                class="invalid-feedback text-danger"
+              >
+                {{ "Sub Title is required" | translate }}.
+              </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex">
+              <button
+                class="btn primary-btn me-3 border-1"
+                (click)="addProcess('sell')"
+              >
+                {{ "Save" | translate }}
+              </button>
+              <button
+                class="btn primary-btn-outline me-3"
+                (click)="closeModal()"
+              >
+                {{ "Cancel" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

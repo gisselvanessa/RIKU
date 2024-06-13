@@ -1,0 +1,218 @@
+@import "../../../../../../variables";
+@import "../../../../../../function";
+
+// css for buy now page 17-01-2023 //
+a {
+  text-decoration: underline;
+  display: inline-block;
+  color: $primary-color;
+}
+
+.payment_wrapper {
+  & .price-grp {
+    // width: max-content;
+    padding: 30px;
+
+    & .form-check-inline {
+      margin-bottom: 30px;
+      width: unset;
+
+      & input[type="radio"]:checked {
+        & ~ .dot-checkmark::after {
+          width: 10px;
+          height: 10px;
+        }
+
+        & + label {
+          background-color: transparent;
+          // color: $primary-color;
+        }
+      }
+
+      & .dot-checkmark {
+        width: 19px;
+        height: 19px;
+      }
+    }
+  }
+
+  &--radio {
+    & .form-check-inline {
+      width: 305px;
+
+      display: block;
+
+      & label {
+        padding-block: 14px;
+      }
+
+      & input:checked {
+        & ~ label {
+          & img[src][data-card] {
+            content: url("../../../../../../assets/images/card-blue.svg");
+          }
+
+          & img[src][data-cash] {
+            content: url("../../../../../../assets/images/cash-blue.svg");
+          }
+
+          & img[src][data-bank] {
+            content: url("../../../../../../assets/images/bank-blue.svg");
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal-btn-close {
+  position: absolute;
+  right: 2%;
+  top: 17%;
+}
+
+.justify-content-left {
+  justify-content: flex-start;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.c-none {
+  display: none;
+}
+
+.form-group {
+  & .input-icon {
+    top: 54px;
+    position: absolute;
+    right: 23px;
+    cursor: pointer;
+
+    @include for-laptop {
+      top: 65px;
+    }
+
+    @include for-phone-only {
+      top: 50px;
+    }
+
+    &.uplode-icon {
+      top: 28px;
+    }
+  }
+}
+
+input.form-control {
+  border: 1px solid rgba(137, 112, 143, 0.5);
+  height: 60px;
+  background: #fff;
+  font-size: 1rem;
+  padding: 20px;
+  color: #3b1144;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.vehicle__uploaded-photo {
+  & .photo-wrp {
+    width: 65px;
+    height: 65px;
+    position: relative;
+    & img {
+      border-radius: 12px;
+      height: 68px;
+      width: 68px;
+      object-fit: cover;
+      object-position: center;
+    }
+    & span {
+      background-color: #b1a0b4;
+      height: 22px;
+      width: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 22px;
+    }
+  }
+}
+
+.custom-checkbox {
+  position: relative !important;
+  // top: 18px !important;
+  top: 5px !important;
+  left: 36px !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+  width: 24px !important;
+}
+.upload {
+  &--report {
+    max-width: 450px;
+  }
+}
+
+.text-disabled {
+  color: #b1a0b4;
+}
+
+.loan_payment_row {
+  width: 50%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-left: 0px;
+  box-shadow: 21.23px 22.59px 80px 0px #00000012;
+}
+.font {
+  &-24 {
+    font-size: 24px;
+    @media (max-width: 1400px){
+        font-size: 22px !important;
+    }
+  }
+  &-15 {
+    font-size: 15px;
+    @media (max-width: 1400px){
+        font-size: 13px !important;
+    }
+  }
+  &-16 {
+    font-size: 16px;
+    @media (max-width: 1400px){
+        font-size: 14px !important;
+    }
+  }
+  &-17 {
+    font-size: 17px;
+    @media (max-width: 1400px){
+        font-size: 15px !important;
+    }
+  }
+  &-20 {
+    font-size: 20px;
+    @media (max-width: 1400px){
+        font-size: 18px !important;
+    }
+  }
+}
+.form-check-inline label {
+  @media (max-width: 1400px){
+    padding: 0;
+    height: 45px;
+    padding-left: 50px;
+
+  }
+}
+.form-check-inlineP label {
+  padding-left: 0;
+}
+

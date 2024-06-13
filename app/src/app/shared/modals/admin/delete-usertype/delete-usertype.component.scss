@@ -1,0 +1,28 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.delete-vehicle-modal {
+    &.changed-modal {
+        .modal-dialog {
+            max-width: 550px;
+
+            @include for-phone-only {
+                max-width: 380px;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    & .round-icon-wrp {
+        background-color: $red-2-10;
+
+        & img {
+            width: 50px;
+        }
+    }
+
+    & .btn-outline-purple {
+        border: 1px solid $thired-color;
+        border-radius: 8px;
+    }
+}

@@ -1,0 +1,2346 @@
+<section class="section view-vehicle buyyer__view-vehicle">
+  <div class="jakay-container">
+
+    <!-- <div class="d-flex justify-content-end my-3">
+      <share-buttons
+        theme="circles-dark"
+        *ngIf="showSharing"
+        [include]="['copy', 'facebook', 'whatsapp']"
+        [showIcon]="true"
+        [showText]="false"
+        [url]="currentURL"
+        class=""
+      >
+      </share-buttons>
+    </div> -->
+
+    <div class="back-to-page section-header d-flex">
+      <span (click)="back()"
+        ><img class="arrowbg" src="assets/images/backarrow.svg"
+      /></span>
+      <div class="d-md-flex justify-content-between w-100 flex-wrap">
+        <h3 class="ms-3 font-38 text-primary fw-semibold">
+          {{ "Vehicle Details" | translate }}
+        </h3>
+
+        <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto">
+          <div
+            class="round-head-img me-1"
+            style="cursor: pointer"
+            (click)="favVehicle()"
+            *ngIf="isLoggedIn"
+          >
+            <a>
+              <img
+                *ngIf="showHeart"
+                src="../assets/images/view_vehicle/red-heart.svg"
+                alt="heart"
+              />
+            </a>
+            <a>
+              <img
+                *ngIf="!showHeart"
+                src="../assets/images/vehicle-list/purple-heart.svg"
+                alt="heart"
+              />
+            </a>
+          </div>
+
+          <share-buttons
+            theme="circles-dark"
+            [include]="['facebook', 'whatsapp']"
+            [showIcon]="true"
+            [showText]="false"
+            [url]="currentURL"
+          >
+          </share-buttons>
+          <div
+            class="ms-1 instagram-btn"
+            (click)="copyToClipboard()"
+          >
+            <span class="fa fa-instagram" style="background-color: transparent;height: 100%;color:white;border-radius: 100px;width: 100%;"></span>
+          </div>
+
+          <!-- <a href="javascript:void(0)" (click)="showSharing = !showSharing">
+            <img
+              src="assets/images/view_vehicle/share.svg"
+              alt=""
+              class="img-fluid"
+            />
+          </a> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-8 mb-5 mb-xl-0 col-12">
+        <div class="view-vehicle__details pe-lg-3">
+          <div class="row">
+            <div class="col-md-6 col-lg-7">
+              <!-- Slider main wrapper -->
+              <div class="view-vehicle__details">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="swiper-container-wrapper">
+                      <div
+                        class="swiper-container gallery-top buyer-detail--swiper"
+                      >
+                        <img
+                          *ngIf="sliderImages.length === 0"
+                          width="400"
+                          src="assets/images/no_image.png"
+                        />
+                        <ng-container *ngIf="sliderImages.length > 0">
+                          <swiper
+                            [navigation]="{
+                              enabled: true,
+                              nextEl: '.swiper-button-next',
+                              prevEl: '.swiper-button-prev'
+                            }"
+                            [thumbs]="{ swiper: thumbsSwiper }"
+                            class="swiper-wrapper"
+                          >
+                            <ng-template
+                              *ngFor="let image of sliderImages; index as i"
+                              swiperSlide
+                            >
+                              <img
+                                class="pointer c-pointer"
+                                [src]="image"
+                                (click)="openGallery(sliderImages, i)"
+                                (error)="handleMissingImage($event)"
+                              />
+                            </ng-template>
+                          </swiper>
+                          <div class="swiper-button-next"></div>
+                          <div class="swiper-button-prev"></div>
+                        </ng-container>
+                      </div>
+                      <div *ngIf="sliderImages.length > 0 && vehicleDetail.other_img_urls.length > 0" class="swiper-container gallery-thumbs">
+                        <div class="swiper-wrapper-cont">
+                          <div class="swiper-wrapper">
+                            <ng-container>
+                              <swiper
+                                (swiper)="thumbsSwiper = $event"
+                                [spaceBetween]="10"
+                                [slidesPerView]="2"
+                                [freeMode]="true"
+                                [watchSlidesProgress]="true"
+                                class="swiper-wrapper"
+                              >
+                                <ng-template
+                                  *ngFor="let image of sliderImages; index as i"
+                                  swiperSlide
+                                >
+                                  <img [src]="image" class="pointer c-pointer" />
+                                </ng-template>
+                              </swiper>
+                            </ng-container>
+                          </div>
+                          <div class="swiper-navigation">
+                              <div class="custom-button swiper-button-prev"></div>
+                              <div class="custom-button swiper-button-next"></div>
+                          </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 like-details">
+                <img
+                  class="me-3"
+                  src="assets/images/view_vehicle/blue-heart.svg"
+                  alt=""
+                />
+                <span class="align-middle text-primary font-22"
+                  >{{ favVehileCount }}
+                  {{ "People added to their favorites" | translate }}</span
+                >
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <div class="car_details">
+                <h2 class="text-primary fw-semibold car_model plus-jakarta">
+                  {{ vehicleDetail.model_year }} {{ vehicleDetail.make }}
+                  {{ vehicleDetail.make_model }}
+                </h2>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h3 class="text-secondary car_price plus-jakarta">
+                    ${{ vehicleDetail.price | spanishNumber }}
+                  </h3>
+                  <div>
+                    <div *ngIf="isMyVehicle == true" class="mb-2">
+                      <h3 class="px-2 py-2 fw-medium font-12 bg-purple">{{"My Vehicle" | translate}}</h3>
+                    </div>
+                    <div >
+                      <h3 class="border px-2 py-2 fw-medium font-12" [ngClass]="vehicleDetail.trade_process==='Available' ? 'process-label-available' : vehicleDetail.trade_process==='Unavailable' ? 'process-label-unavailable': 'process-label-purchasep'">{{vehicleDetail.trade_process | translate}}</h3>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-purple">
+                  {{
+                    !vehicleDetail.is_negotiable
+                      ? ("Not Negotiable" | translate)
+                      : ("Negotiable" | translate)
+                  }}
+                </p>
+              </div>
+              <div class="d-flex align-items-center my-4">
+                <p class="text-purple-2 font-20">
+                  <img src="assets/images/view_vehicle/location.svg" alt="" />
+                  {{ vehicleDetail.location.city | titlecase }}
+                  {{ vehicleDetail.location.province | titlecase }}
+                </p>
+                <!-- <span class="mx-2 mx-md-3 mx-lg-4"></span>
+                <p class="text-purple-2 font-20">
+                  <img src="assets/images/view_vehicle/menu.svg" alt="" />
+                  {{ vehicleDetail.created_at | date : "d-MMMM-yyyy" }}
+                </p> -->
+              </div>
+              <div class="details_labels">
+                <label
+                  for="exampleFormControlInput1"
+                  *ngIf="vehicleDetail.condition"
+                  class="form-label details__label me-3"
+                  >{{ vehicleDetail.condition | titlecase | translate }}</label
+                >
+                <label
+                  for="exampleFormControlInput1"
+                  *ngIf="vehicleDetail.fuel_type"
+                  class="form-label details__label me-3"
+                  >{{ vehicleDetail.fuel_type | titlecase | translate }}</label
+                >
+                <label
+                  *ngIf="vehicleDetail.distance_travelled_unit === 'Kilometers'"
+                  for="exampleFormControlInput1"
+                  class="form-label details__label"
+                  >{{
+                    vehicleDetail.distance_travelled | spanishNumber
+                  }}
+                  km</label
+                >
+                <label
+                  *ngIf="vehicleDetail.distance_travelled_unit === 'Miles'"
+                  for="exampleFormControlInput1"
+                  class="form-label details__label"
+                  >{{
+                    vehicleDetail.distance_travelled | spanishNumber
+                  }}
+                  mi</label
+                >
+                <label
+                  *ngIf="vehicleDetail.distance_travelled_unit === 'Hours'"
+                  for="exampleFormControlInput1"
+                  class="form-label details__label"
+                  >{{
+                    vehicleDetail.distance_travelled | spanishNumber
+                  }}
+                  Hr</label
+                >
+              </div>
+              <div class="details-btn-grp mt-3" *ngIf="vehicleDetail.is_active">
+                <button
+                  class="btn primary-btn-outline"
+                  disabled
+                  *ngIf="
+                    vehicleDetail.is_in_session || vehicleDetail.quantity === 0;
+                    else buynow
+                  "
+                >
+                  {{ "Out Of Stock" | translate }}
+                </button>
+                <ng-template #buynow>
+                  <button *ngIf="vehicleDetail.trade_process == 'Available' && isMyVehicle == false"
+                    class="btn primary-btn d-flex align-items-center justify-content-center mt-md-4"
+                    (click)="buyNow()"
+                  >
+                    <img
+                      src="assets/images/view_vehicle/shopping-cart.png"
+                      class="me-3"
+                      alt=""
+                    />
+                    {{ "Buy Now" | translate }}
+                  </button>
+                </ng-template>
+              </div>
+              <div
+                class="details-btn-grp mt-1"
+                *ngIf="
+                  vehicleDetail.is_active &&
+                  !vehicleDetail.is_in_session &&
+                  vehicleDetail.quantity != 0
+                "
+              >
+                <button
+                  (click)="purchaseWithLoan()"
+                  class="btn btn-lone d-flex align-items-center justify-content-center mt-4"
+                  *ngIf="
+                    !vehicleDetail.is_in_session && vehicleDetail.quantity != 0  && vehicleDetail.trade_process == 'Available' && isMyVehicle == false
+                  "
+                >
+                  <img
+                    src="assets/images/view_vehicle/hand-lone.png"
+                    class="me-3"
+                    alt=""
+                  />
+                  <span class="text-white">{{
+                    "Purchase with Loan" | translate
+                  }}</span>
+                </button>
+              </div>
+
+              <div class="stock-container px-3 pb-3 pt-2 mt-5">
+                <h3 class="text-primary fw-semibold" style="font-size: 15px;">Stock</h3>
+                <div style="overflow-x: auto;" class="d-flex">
+                  <div
+                    style="min-height: 90px; min-width: 70px;"
+                    *ngFor="let i of [1, 2, 3]"
+                    class="d-flex flex-column justify-content-center align-items-center"
+                  >
+                    <h2 class="text-primary mb-2 fw-medium" style="font-size: 11px;">2</h2>
+                    <div class="color"></div>
+                    <h2 class="text-primary mt-3 fw-medium" style="font-size: 11px;">Negro</h2>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <button
+                (click)="comingSoon()"
+                class="btn btn-lone d-flex align-items-center justify-content-center mt-4"
+              >
+                <img
+                  src="assets/images/view_vehicle/hand-lone.png"
+                  class="me-3"
+                  alt=""
+                />
+                <span class="text-white">{{
+                  "Purchase with Loan" | translate
+                }}</span>
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xl-4 mb-5 mb-xl-0">
+        <div class="debt__details">
+          <div class="d-sm-flex justify-content-between">
+            <h5 class="text-primary font-22 fw-semibold">
+              {{ "Debt Calculation" | translate }}
+            </h5>
+            <button
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              title="Note: By default, the minimum down payment will be 30% of the total vehicle amount. The down payment cannot be less than that."
+              (click)="openTerms()"
+            >
+              <h5
+                class="text-primary font-22 fw-semibold text-align-left text-underline"
+              >
+                {{ "T & C" | translate }}
+              </h5>
+            </button>
+          </div>
+          <ng-template #terms let-d="dismiss">
+            <div class="modal-header position-relative order-0">
+              <h4
+                class="modal-title text-center w-100 text-primary fw-semibold mb-2"
+              >
+                {{ "Terms & Conditions for Debt Calculation" | translate }}
+              </h4>
+              <button
+                type="button"
+                class="btn-close modal-btn-close p-4"
+                (click)="d('Cross click')"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body border-0">
+              <div class="row justify-content-center">
+                <div class="col-lg-12 px-4">
+                  <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+                    {{
+                      "THE RIKU PLATFORM makes available to users through its site, informative credit simulators in order to help users have approximate general conditions such as monthly payments, term, type of amortization table and value of the entry, however, these tools or simulators at no time should be understood as binding or create obligations between the parties."
+                        | translate
+                    }}
+                  </p>
+                  <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+                    {{
+                      "This table cannot be used in other financial institutions and it will not be considered as confirmation of a credit, since you must make the request online according to the functionalities of the RIKU platform and you must meet the necessary requirements for the credit application be accepted. The RIKU platform gives you the facility to simulate a credit and reserves the right to modify the established parameters so that the values may vary considerably."
+                        | translate
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <div class="debt__details--box">
+            <div class="details-head">
+              <label
+                for=""
+                class="mb-2 text-white align-items-center font-28 font-md-34"
+              >
+                <!-- {{ "Calculated Debt" | translate }} -->
+              </label>
+            </div>
+            <div class="details-body bg-white">
+              <div class="form-group loan-type-tabs">
+                <!-- <label class="mb-xl-3 mb-lg-2 mb-1 d-block font-20">{{ "Select Loan Type" | translate }}</label> -->
+
+                <div class="d-sm-flex justify-content-between mb-2 mb-sm-0">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 font-20">{{
+                    "Select Loan Type" | translate
+                  }}</label>
+                  <button class="mb-1" data-bs-placement="right">
+                    <span
+                      class="font-14 text-align-left text-underline reference-link"
+                    >
+                      {{ "View Reference" | translate }}
+                    </span>
+                  </button>
+                </div>
+
+                <div class="tabs-list br-12 w-100">
+                  <ul class="nav nav-pills" id="loan-type-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link"
+                        [ngClass]="{ active: selectedLoanType == 'variable' }"
+                        (click)="selectLoanType('variable')"
+                        id="condition-variable-tab"
+                        type="button"
+                        role="tab"
+                        aria-controls="condition-variable"
+                        aria-selected="true"
+                      >
+                        {{ "Variable" | translate }}
+                      </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button
+                        class="nav-link"
+                        [ngClass]="{ active: selectedLoanType == 'fixed' }"
+                        (click)="selectLoanType('fixed')"
+                        type="button"
+                        role="tab"
+                        aria-controls="Condition-new"
+                        aria-selected="false"
+                      >
+                        {{ "Fixed" | translate }}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block font-20">{{
+                  "Down Payment" | translate
+                }}</label>
+                <div class="price-range-slider1">
+                  <div class="mt-4 custom-slider1">
+                    <ngx-slider
+                      [options]="depositeOptions"
+                      (valueChange)="calculateEMI($event, 'deposit')"
+                    ></ngx-slider>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block font-20">{{
+                  "Terms (Months)" | translate
+                }}</label>
+                <div class="price-range-slider1">
+                  <div class="mt-2 custom-slider1">
+                    <ngx-slider
+                      [(value)]="minEMIMonth"
+                      [options]="emiMonthOptions"
+                      (valueChange)="calculateEMI($event, 'emi_months')"
+                    ></ngx-slider>
+                  </div>
+                </div>
+              </div>
+              <div class="d-sm-flex justify-content-between">
+                <div class="form-group">
+                  <label class="mb-1 d-block font-14">{{
+                    "Loan Amount" | translate
+                  }}</label>
+                  <h5 class="font-18 fw-semibold text-primary">
+                    ${{ loanAmount | spanishNumber }}
+                  </h5>
+                </div>
+
+                <div class="form-group mb-0">
+                  <label class="mb-1 d-block font-14">{{
+                    "Monthly payment" | translate
+                  }}</label>
+                  <h5 class="font-18 fw-semibold text-primary">
+                    ${{ monthlyEMIValue | spanishNumber }}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="font-12 text-purple mt-3">
+            {{ "VehicleDetailNote" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <div style="background-color: #EEF4F7;">
+    <section style="background-color: #EEF4F7; width: min(1440px, 100%); margin: auto;">
+      <div
+        style="border-radius: 20px; background-color: #FFF;"
+        class="row p-3 mx-3 gy-4"
+      >
+        <div class="col-lg-3 col-sm-6">
+          <h1 class="text-primary fw-semibold font-24">
+            {{ sellerDetails?.first_name }} {{ sellerDetails?.last_name }}
+          </h1>
+          <div style="display: inline-block;" class="mt-2">
+            <div class="d-flex px-3" style="background-color: rgba(60, 117, 154, 0.1); border-radius: 10px;">
+              <p class="font-22 text-secondary">
+                {{ sellerDetails?.avg_rating }}
+              </p>
+              <img
+                class="ms-4"
+                src="assets/images/seller-img/star.svg"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <h2 class="fw-regular" style="font-size: 20px; color: #555555;">
+            {{ "Dealership Location" | translate }}
+          </h2>
+          <p class="fw-semibold text-primary" style="font-size: 20px;">
+            {{ sellerDetails?.address?.parish | titlecase }},
+            {{ sellerDetails?.address?.city | titlecase }},
+            {{ sellerDetails?.address?.province | titlecase }}
+          </p>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <h2 class="fw-regular" style="font-size: 20px; color: #555555;">
+            {{ "Total Ratings" | translate }}
+          </h2>
+          <p class="fw-semibold text-primary" style="font-size: 20px;">
+            {{ sellerDetails?.total_reviews }}
+          </p>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+          <div class="d-flex flex-row-reverse">
+            <div
+              class="d-flex mb-4"
+            >
+              <button
+                (click)="
+                  openContact(
+                    'Call',
+                    sellerDetails?.id,
+                    sellerDetails?.type,
+                    sellerDetails.email
+                  )
+                "
+              >
+                <div
+                  style="width: 60px; height: 60px; border-radius: 100px; background-color: rgba(60, 117, 154, 0.14);"
+                  class="d-flex justify-content-center align-items-center me-4"
+                >
+                  <img
+                    src="assets/images/seller-img/phone.svg"
+                    alt=""
+                  />
+                </div>
+              </button>
+              <button
+                (click)="
+                  openContact(
+                    'Chat',
+                    sellerDetails.id,
+                    sellerDetails?.type,
+                    sellerDetails.email
+                  )
+                "
+              >
+                <div
+                  style="width: 60px; height: 60px; border-radius: 100px; background-color: rgba(60, 117, 154, 0.14);"
+                  class="d-flex justify-content-center align-items-center ms-2"
+                >
+                  <img
+                    src="assets/images/seller-img/msg.svg.svg"
+                    alt=""
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+          <div class="d-flex flex-row-reverse">
+            <button
+              style="border-radius: 10px; background-color: #3C759A; color: #FFF"
+              class="fw-semibold font-16 px-5 py-2"
+              (click)="openUserDetails(sellerDetails?.id)"
+            >
+              Ver Detalle
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section class="buyyer__tabs pe-lg-3 ps-3 mt-3 pb-3">
+        <div class="buyyer__tabs--btngrp px-3">
+          <ul
+            class="nav nav-pills mb-0 justify-content-between"
+            id="pills-tab"
+            role="tablist"
+          >
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link text-primary font-22 fw-semibold active"
+                id="overview-tab"
+                [ngClass]="{ active: selectedTab == 'Overview' }"
+                (click)="selectTab('Overview')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="overview"
+                aria-selected="true"
+              >
+                {{ "Overview" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link text-primary font-22 fw-semibold"
+                id="description-tab"
+                [ngClass]="{ active: selectedTab == 'Description' }"
+                (click)="selectTab('Description')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="description"
+                aria-selected="false"
+              >
+                {{ "Detail Section" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link text-primary font-22 fw-semibold"
+                id="delivery-tab"
+                data-bs-toggle="pill"
+                [ngClass]="{ active: selectedTab == 'delivery' }"
+                (click)="selectTab('delivery')"
+                type="button"
+                role="tab"
+                aria-controls="delivery"
+                aria-selected="false"
+              >
+                {{ "Delivery & Payment" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link text-primary font-22 fw-semibold"
+                id="policies-tab"
+                [ngClass]="{ active: selectedTab == 'policies' }"
+                (click)="selectTab('policies')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="policies"
+                aria-selected="false"
+              >
+                {{ "Policies" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <div
+        class="tab-content mx-3"
+        id="pills-tabContent"
+        style="background-color: #FFF; border-radius: 15px;"
+      >
+        <div
+          class="tab-pane fade show active"
+          id="overview"
+          role="tabpanel"
+          aria-labelledby="overview-tab"
+          [ngClass]="{ 'show active': selectedTab == 'Overview' }"
+        >
+          <section
+            class="section basic px-3 pt-2"
+            style="padding-top: 0;"
+          >
+            <h3
+              class="font-28 font-md-34 text-primary fw-semibold mb-3"
+            >
+              {{ "Basic" | translate }}
+            </h3>
+
+            <div class="row gy-4">
+              <div class="col-sm-6 col-md-4 col-lg-3 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/vehicle.png" alt="vehicle" />
+                <div class="ms-3">
+                  <h1 class="text-primary fw-medium font-14">
+                    {{ "Vehicle Type" | translate }}
+                  </h1>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">
+                    {{ vehicleDetail.vehicle_type | translate }}
+                  </h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/calendar.png" alt="calendar" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">
+                    {{ "Registration Year" | translate }}
+                  </h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">
+                    {{ vehicleDetail.registration_year }}
+                  </h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/plate.png" alt="plate" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">
+                    {{ "Number Plate" | translate }}
+                  </h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">
+                    {{ vehicleDetail.number_plate }}
+                  </h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 col-lg-3 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/vin-number.png" alt="vin-number" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">
+                    {{ "VIN Number" | translate }}
+                  </h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">
+                    {{vehicleDetail.licence_number}}
+                  </h2>
+                </div>
+              </div>
+            </div>
+
+            <h3
+              style="font-size: 1.375rem;"
+              class="mt-4 font-16 text-primary fw-semibold"
+            >
+              {{ "Specifications" | translate }}
+            </h3>
+
+            <div class="row mt-3 gy-3">
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/gear.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">
+                    {{"Transmission" | translate}}
+                  </h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">
+                    {{ vehicleDetail.transmission | translate }}
+                  </h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/car.svg" alt="car" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{ "Body Type" | translate }}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.body_type }}</h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/fuel.svg" alt="fuel" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{ "Fuel Type" | translate }}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.fuel_type | translate }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 gy-3">
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/engine.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{ "Engine" | translate }}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.engine_size | spanishNumber }} CC</h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/paint_gun.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{"Outside Color" | translate}}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.color | translate }}</h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/doors.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{"Passenger Doors" | translate}}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.passanger_doors }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 pb-3 gy-3">
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/icon-sitting.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{"Passenger Capacity" | translate}}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.passanger_capacity }}</h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/break.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{ "Brakes" | translate }}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.break_type | translate }}</h2>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 d-flex align-items-center">
+                <img src="assets/images/view_vehicle/car-glasses.svg" alt="gear" />
+                <div class="ms-3">
+                  <h2 class="text-primary fw-medium font-14">{{ "Glasses" | translate }}</h2>
+                  <h2 class="fw-bold font-16" style="color: #9E438F;">{{ vehicleDetail.glass_type | translate }}</h2>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- <div
+              class="basic-box basic-box--rechange"
+              style="border: 3px solid;"
+            >
+              <div class="row gy-3 gy-xl-4">
+                <div class="col-sm-6 col-xl-4 col-xxl-3">
+                  <div class="specifications__wrapper--text">
+                    <p class="text-primary-light mb-2">
+                      {{ "Vehicle Type" | translate }}
+                    </p>
+                    <h5 class="text-primary">
+                      {{ vehicleDetail.vehicle_type | translate }}
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 col-xxl-3">
+                  <div
+                    class="specifications__wrapper--text"
+                    *ngIf="vehicleDetail.condition != 'new'"
+                  >
+                    <p class="text-primary-light mb-2">
+                      {{ "Registration Year" | translate }}
+                    </p>
+                    <h5 class="text-primary">
+                      {{ vehicleDetail.registration_year }}
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 col-xxl-3">
+                  <div
+                    class="specifications__wrapper--text"
+                    *ngIf="vehicleDetail.condition != 'new'"
+                  >
+                    <p class="text-primary-light mb-2">
+                      {{ "Number Plate" | translate }}
+                    </p>
+                    <h5 class="text-primary">
+                      {{ vehicleDetail.number_plate }}
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 col-xxl-3">
+                  <div class="specifications__wrapper--text">
+                    <p class="text-primary-light mb-2">
+                      {{ "VIN Number" | translate }}
+                    </p>
+                    <h5 class="text-primary">
+                      {{ vehicleDetail.licence_number | licensePlate }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+
+          </section>
+        </div>
+
+        <div
+          class="tab-pane fade"
+          id="description"
+          role="tabpanel"
+          aria-labelledby="description-tab"
+          [ngClass]="{ 'show active': selectedTab == 'Description' }"
+        >
+          <!-- <section class="section description mb-0">
+            <div class="jakay-container bg-primary">
+              <h3
+                class="font-28 font-md-34 section-header text-primary fw-semibold"
+              >
+                {{ "Description" | translate }}
+              </h3>
+              <p class="font-22" [innerHTML]="getDescription(vehicleDetail.description)">  </p>
+            </div>
+          </section> -->
+          <!-- <section class="section--spacing pt-0">
+            <div>
+              <h3 class="font-28 font-md-34 section-header text-primary fw-semibold">
+                {{ "Highlights" | translate }}
+              </h3>
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="highlights__box">
+                    <h5 class="highlights__box--title text-purple font-28 mb-3">
+                      {{ "Technology" | translate }}
+                    </h5>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <ul
+                        class="highlights__box--list"
+                        *ngFor="let items of vehicleDetail.technologies"
+                      >
+                        <li
+                          class="highlights__box--items"
+                          *ngFor="let technology of items"
+                        >
+                          {{ technology }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="highlights__box">
+                    <h5 class="highlights__box--title text-purple font-28 mb-3">
+                      {{ "Utility" | translate }}
+                    </h5>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <ul
+                        class="highlights__box--list"
+                        *ngFor="let items of vehicleDetail.utilities"
+                      >
+                        <li
+                          class="highlights__box--items"
+                          *ngFor="let utility of items"
+                        >
+                          {{ utility }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="highlights__box">
+                    <h5 class="highlights__box--title text-purple font-28 mb-3">
+                      {{ "Comfort" | translate }}
+                    </h5>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <ul class="highlights__box--list">
+                        <li
+                          class="highlights__box--items"
+                          *ngFor="let confort of vehicleDetail.comforts"
+                        >
+                          {{ confort | titlecase }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="highlights__box">
+                    <h5 class="highlights__box--title text-purple font-28 mb-3">
+                      {{ "Security" | translate }}
+                    </h5>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <ul class="highlights__box--list">
+                        <li
+                          class="highlights__box--items"
+                          *ngFor="let security of vehicleDetail.securities"
+                        >
+                          {{ security | titlecase }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="highlights__box">
+                    <h5 class="highlights__box--title text-purple font-28 mb-3">
+                      {{ "Entertainment" | translate }}
+                    </h5>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <ul class="highlights__box--list">
+                        <li
+                          class="highlights__box--items"
+                          *ngFor="
+                            let entertainment of vehicleDetail.entertainments
+                          "
+                        >
+                          {{ entertainment | titlecase }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section> -->
+        </div>
+
+        <div
+          class="tab-pane fade"
+          id="delivery"
+          role="tabpanel"
+          aria-labelledby="delivery-tab"
+          [ngClass]="{ 'show active': selectedTab == 'delivery' }"
+        >
+          <section class="section" style="padding-top: 0;">
+            <!-- <div class="mb-4 mb-xxl-5">
+              <h3
+                class="font-28 font-md-34 section-header text-primary fw-semibold"
+              >
+                {{ "Average Delivery Time" | translate }}
+              </h3>
+              <div>
+                <h4 class="font-20 text-primary pb-2 mb-2">
+                  {{ "Purchase of vehicles without financing" | translate }}
+                </h4>
+                <ul
+                  class="mx-4 font-12 text-primary mb-3"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "If you are applying for a purchase of a vehicle without financing, for the legalization of contracts and payment of taxes, within our services offered on the platform the average delivery time will be between 3 to 5 business days."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "The shift selection times at the National Transit Agency for the legalization of the registration are not considered."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Payments at the National Transit Agency , taxes, notaries, records or any other required for the formalization of documents must be assumed by the buyer or seller."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "It does not apply if your purchase is made outside of our services within the Riku platform."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+                // previously commented start
+                <a href="" class="my-4 font-24 text-secondary"
+                  >{{ "Average Delivery Time" | translate }}: 4
+                  {{ "to" | translate }} 5 {{ "Business Days" | translate }}</a
+                >
+                // previously commented end
+              </div>
+
+              <div *ngIf="vehicleDetail.condition == 'used'">
+                <h4 class="font-20 text-primary">
+                  {{ "Purchase of used vehicles with financing" | translate }}
+                </h4>
+                <ul
+                  class="mx-3 font-12 text-primary mb-1"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "If your purchase is with financing, the pre-qualification will be instantaneous after you have filled out the required credit application."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "For the final approval of the credit you should consider the following steps if your application is Pre-approved."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+
+                <ul
+                  class="mx-5 font-12 text-primary mb-1"
+                  style="list-style-type: decimal"
+                >
+                  <li>
+                    {{
+                      "The credit application must be filled with clear and true information."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Deliver the requirements required for the approval of the loan, you can upload the documents within the same application of the platform."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Continue all purchase processes that are required."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "One of our specialists will validate your uploaded documents within the assigned processes, if there is confusing information one of our experts will contact you immediately, to give the necessary guidance and advice for approval."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+                <ul
+                  class="mx-3 font-12 text-primary mb-1"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "Final credit approval will take between 24 to 48 hours."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "For the financing of used vehicles a professional appraisal is required. The appraisal can be requested within the purchase process without leaving the application."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "The delivery time and legalization of contracts will take between 6 to 8 business days."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "The shift selection times at the National Transit Agency for the legalization of the registration are not considered."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Payments at the National Transit Agency , taxes, notaries, records or any other required for the formalization of documents must be assumed by the buyer or seller."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+
+                // previously commented start
+                <a href="" class="my-4 font-24 text-secondary"
+                  >{{ "Average Delivery Time" | translate }}: 9
+                  {{ "to" | translate }} 11 {{ "Business Days" | translate }}</a
+                >
+                // previously commented end
+              </div>
+
+              <div *ngIf="vehicleDetail.condition == 'new'">
+                <h4 class="font-20 text-primary pb-2 mb-1">
+                  {{ "Purchase of new vehicles with financing." | translate }}
+                </h4>
+                <ul
+                  class="mx-3 font-12 text-primary mb-1"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "If your purchase is with financing, the pre-qualification will be instantaneous after you have filled out the required credit application."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "For the final approval of the credit you should consider the following steps if your application is Pre-approved."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+
+                <ul
+                  class="mx-5 font-12 text-primary mb-1"
+                  style="list-style-type: decimal"
+                >
+                  <li>
+                    {{
+                      "The credit application must be filled with clear and true information."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Deliver the requirements required for the approval of the loan, you can upload the documents within the same application of the platform."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "Continue all purchase processes that are required."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "One of our specialists will validate your uploaded documents within the assigned processes, if there is confusing information one of our experts will contact you immediately, to give the necessary guidance and advice for approval."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+                <ul
+                  class="mx-3 font-12 text-primary mb-1"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "Final credit approval will take between 24 to 48 hours."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{ "Professional appraisal does not apply." | translate }}
+                  </li>
+                  <li>
+                    {{
+                      "The delivery time and legalization of contracts will take between 6 to 8 business days."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "The shift selection times at the National Transit Agency for the legalization of the registration are not considered."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+
+                // previously commented start
+                <a href="" class="my-4 font-24 text-secondary"
+                  >{{ "Average Delivery Time" | translate }}: 15
+                  {{ "Business Days" | translate }}</a
+                >
+                <a href="" class="my-4 font-24 text-secondary"
+                >{{ "Average Delivery Time" | translate }}: 15
+                {{ "Business Days" | translate }}</a
+              >
+                // previously commented end
+              </div>
+            </div> -->
+            <div class="p-3">
+
+              <h1>Métodos de Pago</h1>
+              <ul class="ms-3">
+                <li>
+                  <h2 class="" style="vertical-align: center;">
+                    <img src="assets/images/money.svg" alt="Money" class="position-relative" style="bottom: 3px;">
+                    Dinero en Efectivo
+                  </h2>
+                </li>
+                <li>
+                  <h2 class="" style="vertical-align: center;">
+                    <img src="assets/images/card.svg" alt="Money" class="position-relative" style="bottom: 3px;">
+                    Tarjeta
+                  </h2>
+                </li>
+              </ul>
+              <h1>Pasos para el Pago Total del Vehículo</h1>
+              <h1 class="title text-center mb-4">Depósitos en Efectivo</h1>
+              <app-card-payment-information
+                number="1"
+                title="ACERCATE A LA INSTITUCIÓN FINANCIERA MÁS CERCANA"
+                subTitle="La foto debe ser clara, legible y contener todos los datos que permitan identificar la fecha, el valor, el beneficiario y el depositante."
+                src="assets/images/palace.svg"
+                alt="Palace"
+              >
+              </app-card-payment-information>
+              <div style="height: 30px;"></div>
+              <app-card-payment-information
+                number="2"
+                title="REALIZA EL DEPOSITO DEL IMPORTE TOTAL DEL VEHICULO"
+                subTitle="Dirígete a ventanilla y realiza el depósito de acuerdo a lo señalado en el“Importe total a pagar”. Asegúrate de realizar el pago en la siguientecuenta:"
+                src="assets/images/statistical-file.svg"
+                alt="Palace"
+                [type]="2"
+              >
+              </app-card-payment-information>
+              <div style="height: 30px;"></div>
+              <app-card-payment-information
+                number="3"
+                title="GUARDA EL COMPROBANTE Y TOMA UNA FOTOGRAFÍA"
+                subTitle="Lleva contigo tus documentos personales"
+                src="assets/images/camera-file.svg"
+                alt="Palace"
+              >
+              </app-card-payment-information>
+              <div style="height: 30px;"></div>
+              <app-card-payment-information
+                number="4"
+                title="SUBE EL COMPROBANTE A LA PLATAFORMA"
+                subTitle="La plataforma te permite subir la fotografía del comprobante."
+                src="assets/images/upload-file.svg"
+                alt="Palace"
+              >
+              </app-card-payment-information>
+              <div style="height: 30px;"></div>
+              <app-card-payment-information
+                number="5"
+                title="UN AGENTE SE CONTACTARÁ CONTIGO"
+                subTitle="Nuestro personal se encuentra trabajando para brindarte el mejor servicio. Por lo que una vez comprobado el pago, un agente de Riku se contactará contigo para continuar con el proceso."
+                src="assets/images/agent-contact.svg"
+                alt="Palace"
+              >
+              </app-card-payment-information>
+              <div class="note-container my-5 ms-sm-5">
+                <p>
+                  El vendedor recibirá el pago cuando el proceso de trámite vehicular esté gestionado correctamente y el vehículo se encuentre a nombre del comprador.
+                </p>
+              </div>
+
+              <!-- <div *ngIf="vehicleDetail.condition == 'used'">
+                <h4 class="font-20 text-primary pb-2 mb-2">
+                  {{ "Purchase of used vehicles with financing" | translate }}
+                </h4>
+                <ul
+                  class="mx-4 font-12 text-primary mb-3"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "In vehicles with financing, there will be a commercial adviser who will take your case from the beginning of the purchase financing opening until the delivery of your vehicle documents."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "You will be able to follow your purchase processes in our mobile application for each process you have carried out."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "You will receive all the necessary information about your financing and which payment channels you can use."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "It does not apply if your purchase is made outside of our services within the Riku platform."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+              </div> -->
+
+              <div *ngIf="vehicleDetail.condition == 'new'">
+                <h4 class="font-20 text-primary pb-2 mb-2">
+                  {{ "Purchase of new vehicles with financing" | translate }}
+                </h4>
+                <ul
+                  class="mx-4 font-12 text-primary mb-3"
+                  style="list-style-type: circle"
+                >
+                  <li>
+                    {{
+                      "In new vehicles with financing , you will receive a commercial advisor who will support you between the communication between the commercial house and the financing process with the financial institution."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "You will be able to follow your purchase processes in our mobile application for each process you have carried out."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "On delivery of your vehicle you will receive all your complete documentation for your vehicle's circulation."
+                        | translate
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      "It does not apply if your purchase is made outside of our services within the Riku platform."
+                        | translate
+                    }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- <div class="">
+              <h3
+                class="font-28 font-md-34 section-header text-primary fw-semibold"
+              >
+                {{ "Accepted Payment Method" | translate }}
+              </h3>
+              <p class="font-20 text-purple-3 mb-3 mb-lg-4">
+                <img
+                  class="me-3"
+                  width="42px"
+                  src="assets/images/view_vehicle/purple-cash.svg"
+                  alt=""
+                />
+                {{ "Cash" | translate }}
+              </p>
+              <p class="font-20 text-purple-3 mb-3 mb-lg-4">
+                <img
+                  class="me-3"
+                  width="42px"
+                  src="assets/images/view_vehicle/purple-credit-card.svg"
+                  alt=""
+                />
+                {{ "Card" | translate }}
+              </p>
+              // previously commented start
+              <p class="font-20 text-purple-3">
+                <img
+                  class="me-3"
+                  width="42px"
+                  src="assets/images/bank-purple.svg"
+                  alt=""
+                />
+                {{ "Bank Transfer" | translate }}
+              </p>
+              // previously commented end
+            </div> -->
+          </section>
+        </div>
+        <div
+          class="tab-pane fade px-3 pb-5"
+          id="delivery"
+          role="tabpanel"
+          aria-labelledby="delivery-tab"
+          [ngClass]="{ 'show active': selectedTab == 'policies' }"
+        >
+          <section class="section pt-4">
+            <div class="form-group">
+              <h3
+                class="font-28 font-md-34 mb- text-primary fw-semibold mb-2 mb-md-3"
+              >
+                {{ "Payment and Cancellation Policy" | translate }}
+              </h3>
+              <p class="font-20 font-md-24 text-primary-light">
+                {{ "Please click here for the" | translate }}
+                <button
+                  (click)="policy('payment_cancellation_policy')"
+                  class="font-20 font-md-24 text-secondary text-underline button text-start"
+                >
+                  {{ "Payment and Cancellation Policy" | translate }}
+                </button>
+              </p>
+            </div>
+            <div class="form-group">
+              <h3
+                class="font-28 font-md-34 mb- text-primary fw-semibold mb-2 mb-md-3"
+              >
+                {{ "Financing Policy" | translate }}
+              </h3>
+              <p class="font-20 font-md-24 text-primary-light">
+                {{ "Please click here for the" | translate }}
+                <button
+                  (click)="policy('financing_policy')"
+                  class="font-20 font-md-24 text-secondary text-underline button text-start"
+                >
+                  {{ "Financing Policy" | translate }}
+                </button>
+              </p>
+            </div>
+            <div class="form-group mb-0">
+              <h3
+                class="font-28 font-md-34 mb- text-primary fw-semibold mb-2 mb-md-3"
+              >
+                {{ "Terms & Conditions" | translate }}
+              </h3>
+              <p class="font-20 font-md-24 text-primary-light">
+                {{ "Please click here for the" | translate }}
+                <button
+                  (click)="policy('terms_and_condition')"
+                  class="font-20 font-md-24 text-secondary text-underline button text-start"
+                >
+                  {{ "Terms & Conditions" | translate }}
+                </button>
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+<div
+  class="tab-pane fade show active"
+  id="overview"
+  role="tabpanel"
+  aria-labelledby="overview-tab"
+  *ngIf="selectedTab === 'Overview'"
+>
+  <!-- <section class="section--spacing specifications mb-0 pt-0">
+    <div class="jakay-container">
+      <h3 class="section-header font-28 font-md-34 text-primary fw-semibold">
+        {{ "Specifications" | translate }}
+      </h3>
+      <div class="specifications__wrapper p-3 p-md-4">
+        <div class="row">
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images//view_vehicle/speedometer.svg"
+                  alt="milage"
+                />
+              </div>
+              <div
+                *ngIf="vehicleDetail.mileage"
+                class="specifications__wrapper--text ms-3 ms-xl-4"
+              >
+                <label for="" class="mb-2">{{ "Mileage" | translate }}</label>
+                <h5>
+                  {{ vehicleDetail.mileage | spanishNumber }}
+                  {{ vehicleDetail.mileage_unit | translate }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/gear.svg" alt="gear" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{
+                  "Transmission" | translate
+                }}</label>
+                <h5>{{ vehicleDetail.transmission | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/car.svg" alt="car" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Body Type" | translate }}</label>
+                <h5>{{ vehicleDetail.body_type }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/fuel.svg" alt="fuel" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Fuel Type" | translate }}</label>
+                <h5>{{ vehicleDetail.fuel_type | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/engine.svg" alt="engine" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Engine" | translate }}</label>
+                <h5>{{ vehicleDetail.engine_size | spanishNumber }} CC</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/paint_gun.svg"
+                  alt="paint_gun"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{
+                  "Outside Color" | translate
+                }}</label>
+                <h5>{{ vehicleDetail.color | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/doors.svg" alt="milage" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{
+                  "Passenger Doors" | translate
+                }}</label>
+                <h5>{{ vehicleDetail.passanger_doors }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/icon-sitting.svg"
+                  alt="gear"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{
+                  "Passenger Capacity" | translate
+                }}</label>
+                <h5>{{ vehicleDetail.passanger_capacity }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/break.svg" alt="car" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Brakes" | translate }}</label>
+                <h5>{{ vehicleDetail.break_type | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/bodywork.svg" alt="fuel" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Bodywork" | translate }}</label>
+                <h5>{{ vehicleDetail.body_work | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-4 mb-lg-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/car-glasses.svg"
+                  alt="engine"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{ "Glasses" | translate }}</label>
+                <h5>{{ vehicleDetail.glass_type | translate }}</h5>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              vehicleDetail.vehicle_type == 'Heavy' ||
+              vehicleDetail.vehicle_type == 'Work Machinery'
+            "
+            class="col-lg-4 col-sm-6 mb-4 mb-lg-5"
+          >
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img src="assets/images/view_vehicle/ton.svg" alt="paint_gun" />
+              </div>
+              <div class="specifications__wrapper--text ms-3 ms-xl-4">
+                <label for="" class="mb-2">{{
+                  "Tonnage Capacity" | translate
+                }}</label>
+                <h5>{{ vehicleDetail.tonage_capacity }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+
+</div>
+<div
+  style="
+    background-color: #EEF4F7;
+    padding-bottom: 20px;
+  "
+>
+  <div
+    style="
+    "
+    class="px-3 jakay-container"
+  >
+    <div
+      class="tab-pane fade show active"
+      id="description"
+      role="tabpanel"
+      aria-labelledby="description-tab"
+      *ngIf="selectedTab == 'Description'"
+      style="background-color: #FFF; border-radius: 12px;"
+    >
+      <section class="section">
+        <div class="jakay-container">
+          <h3
+            class="font-28 font-md-34 section-header text-primary fw-semibold"
+          >
+            {{ "Description" | translate }}
+          </h3>
+          <p class="font-22" [innerHTML]="getDescription(vehicleDetail.description)">  </p>
+          <!-- <p class="font-22 section-footer">
+            El automóvil, también denominado auto, coche o carro según los países, es un vehículo motorizado con ruedas utilizado para el transporte. Está compuesto por diversas partes, como motor, chasis, carrocería y sistemas de dirección, frenos y suspensión.
+          </p> -->
+        </div>
+      </section>
+      <section
+        class="section--spacing pt-0"
+        *ngIf="
+          vehicleDetail?.technologies?.length ||
+          vehicleDetail?.comforts?.length ||
+          vehicleDetail?.securities?.length ||
+          vehicleDetail?.entertainments?.length
+        "
+      >
+        <div class="jakay-container">
+          <h3 class="font-28 font-md-34 section-header text-primary fw-semibold">
+            {{ "Highlights" | translate }}
+          </h3>
+          <div class="row gy-3 gy-lg-4">
+            <ng-container *ngIf="vehicleDetail?.technologies?.length">
+              <div
+                class=""
+                [ngClass]="
+                  vehicleDetail.technologies.length <= 7
+                    ? 'col-lg-4'
+                    : vehicleDetail.technologies.length <= 11
+                    ? 'col-lg-12'
+                    : 'col-lg-12'
+                "
+              >
+                <div class="highlights__box h-100">
+                  <h5 class="highlights__box--title text-purple font-28 mb-4">
+                    {{ "Technology" | translate }}
+                  </h5>
+                  <div>
+                    <ul class="highlights__box--list d-flex">
+                      <li style="margin: 10px 0;"
+                        class=""
+                        [ngClass]="
+                          vehicleDetail.technologies.length <= 7
+                            ? 'col-12'
+                            : vehicleDetail.technologies.length <= 11
+                            ? 'col-6'
+                            : 'col-4'
+                        "
+                        *ngFor="let items of vehicleDetail.technologies"
+                      >
+                      <div class="d-flex">
+                        <div style="margin-top: 5px;">
+                          <span class="highlights__box--items"></span>
+                        </div>
+                        <span>
+                          {{ items | translate }}
+                        </span>
+                      </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="vehicleDetail?.comforts?.length">
+              <div
+                class=""
+                [ngClass]="
+                  vehicleDetail.comforts.length <= 7
+                    ? 'col-lg-4'
+                    : vehicleDetail.comforts.length <= 11
+                    ? 'col-lg-12'
+                    : 'col-lg-12'
+                "
+              >
+                <div class="highlights__box h-100">
+                  <h5 class="highlights__box--title text-purple font-28 mb-4">
+                    {{ "Comfort" | translate }}
+                  </h5>
+                  <div>
+                    <ul class="highlights__box--list d-flex">
+                      <li style="margin: 10px 0;"
+                        class=""
+                        [ngClass]="
+                          vehicleDetail.comforts.length <= 7
+                            ? 'col-12'
+                            : vehicleDetail.comforts.length <= 11
+                            ? 'col-6'
+                            : 'col-4'
+                        "
+                        *ngFor="let confort of vehicleDetail.comforts"
+                      >
+                      <div class="d-flex">
+                        <div style="margin-top: 5px;">
+                          <span class="highlights__box--items"></span>
+                        </div>
+                        <span>
+                          {{ confort | translate }}
+                        </span>
+                      </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="vehicleDetail?.securities?.length">
+              <div
+                class=""
+                [ngClass]="
+                  vehicleDetail.securities.length <= 7
+                    ? 'col-lg-4'
+                    : vehicleDetail.securities.length <= 11
+                    ? 'col-lg-12'
+                    : 'col-lg-12'
+                "
+              >
+                <div class="highlights__box h-100">
+                  <h5 class="highlights__box--title text-purple font-28 mb-4">
+                    {{ "Security" | translate }}
+                  </h5>
+                  <div>
+                    <ul class="highlights__box--list d-flex">
+                      <li style="margin: 10px 0;"
+                        class=""
+                        [ngClass]="
+                          vehicleDetail.securities.length <= 7
+                            ? 'col-12'
+                            : vehicleDetail.securities.length <= 11
+                            ? 'col-6'
+                            : 'col-4'
+                        "
+                        *ngFor="let security of vehicleDetail.securities"
+                      >
+                      <div class="d-flex">
+                        <div style="margin-top: 5px;">
+                          <span class="highlights__box--items"></span>
+                        </div>
+                        <span>
+                          {{ security | titlecase | translate }}
+                        </span>
+                      </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="vehicleDetail?.entertainments?.length">
+              <div
+                class=""
+                [ngClass]="
+                  vehicleDetail.entertainments.length <= 7
+                    ? 'col-lg-4'
+                    : vehicleDetail.entertainments.length <= 11
+                    ? 'col-lg-12'
+                    : 'col-lg-12'
+                "
+              >
+                <div class="highlights__box h-100">
+                  <h5 class="highlights__box--title text-purple font-28 mb-4">
+                    {{ "Entertainment" | translate }}
+                  </h5>
+                  <div>
+                    <ul class="highlights__box--list d-flex">
+                      <li style="margin: 10px 0;"
+                        class=""
+                        [ngClass]="
+                          vehicleDetail.entertainments.length <= 7
+                            ? 'col-12'
+                            : vehicleDetail.entertainments.length <= 11
+                            ? 'col-6'
+                            : 'col-4'
+                        "
+                        *ngFor="let entertainment of vehicleDetail.entertainments"
+                      >
+                      <div class="d-flex">
+                        <div style="margin-top: 5px;">
+                          <span class="highlights__box--items"></span>
+                        </div>
+                        <span>
+                          {{ entertainment | translate }}
+                        </span>
+                      </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<section
+    *ngIf="recommendedVehicleList.length > 2"
+    class="section--spacing bg-blue recommended"
+  >
+    <div class="jakay-container">
+      <h3 class="section-header font-38 text-primary fw-semibold">
+        {{ "Recommended Vehicles" | translate }}
+      </h3>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="vehicle__listing-slider pt-4">
+          <div class="swiper review-swiper review--swiper">
+            <div>
+              <swiper [config]="productSlider" class="swiper-wrapper">
+                <ng-template
+                  *ngFor="let vehicle of recommendedVehicleList; let i = index"
+                  swiperSlide
+                >
+                  <div class="swiper-slide">
+                    <div class="listing_cards mb-4">
+                      <div class="card_img position-relative">
+                        <img
+                          [src]="vehicle.cover_img_url"
+                          (click)="changeVehicle(vehicle.id)"
+                          (error)="handleMissingImage($event)"
+                          alt="car-1"
+                          class="img-fluid"
+                        />
+                        <a
+                          class="card_img-fav"
+                          style="cursor: pointer"
+                          *ngIf="
+                            !recommendfavVehicleId.includes(vehicle.id) &&
+                            isLoggedIn
+                          "
+                          (click)="recommendfavVehicle(i)"
+                        >
+                          <img
+                            class="fav-icon"
+                            src="assets/images/vehicle-list/purple-heart.svg"
+                            alt=""
+                          />
+                        </a>
+                        <a
+                          class="card_img-fav"
+                          style="cursor: pointer"
+                          *ngIf="
+                            recommendfavVehicleId.includes(vehicle.id) &&
+                            isLoggedIn
+                          "
+                          (click)="recommendfavVehicle(i)"
+                        >
+                          <img
+                            class="fav-icon"
+                            src="assets/images/view_vehicle/red-heart.svg"
+                            alt=""
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box pt-3" style="padding-bottom: 60px;">
+                        <div class="justify-content-between mt-3 px-3">
+                          <h5
+                            class="text-primary car_model text-primary font-22 fw-semibold"
+                          >
+                            {{ vehicle?.model_year }} {{ vehicle?.make }}
+                            {{ vehicle?.make_model }}
+                          </h5>
+                          <h4 class="text-orange font-28 car_price mt-4 fw-semibold">
+                            ${{ vehicle?.price | spanishNumber }}
+                          </h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date px-3"
+                        >
+                          <p class="text-primary font-16 fw-medium">
+                            <img
+                              src="../assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            {{ vehicle?.location?.city | titlecase }}
+                          </p>
+                        </div>
+                        <div class="details_labels px-3">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3 fw-regular"
+                            >{{
+                              vehicle?.condition | titlecase | translate
+                            }}</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3 fw-regular"
+                            >{{
+                              vehicle?.fuel_type | titlecase | translate
+                            }}</label
+                          >
+                          <a
+                            *ngIf="vehicle?.condition === 'used'"
+                            title="{{
+                              vehicle?.distance_travelled +
+                                ' ' +
+                                vehicle?.distance_travelled_unit
+                            }}"
+                          >
+                            <label
+                              *ngIf="
+                                vehicle?.distance_travelled_unit ===
+                                'Kilometers'
+                              "
+                              for="exampleFormControlInput2"
+                              class="form-label details__label fw-regular"
+                              >{{
+                                vehicle?.distance_travelled | spanishNumber
+                              }}
+                              km</label
+                            >
+                            <label
+                              *ngIf="
+                                vehicle?.distance_travelled_unit === 'Miles'
+                              "
+                              for="exampleFormControlInput2"
+                              class="form-label details__label"
+                              >{{
+                                vehicle?.distance_travelled | spanishNumber
+                              }}
+                              mi</label
+                            >
+                            <label
+                              *ngIf="
+                                vehicle?.distance_travelled_unit === 'Hours'
+                              "
+                              for="exampleFormControlInput2"
+                              class="form-label details__label"
+                              >{{
+                                vehicle?.distance_travelled | spanishNumber
+                              }}
+                              Hr</label
+                            >
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <!-- <ng-template swiperSlide>
+                  <div class="swiper-slide">
+                    <div class="listing_cards mb-4">
+                      <div class="card_img position-relative">
+                        <img
+                          src="assets/images/vehicle-list/car-1.png"
+                          alt="car-1"
+                          class="img-fluid"
+                        />
+                        <a href="#" class="card_img-fav">
+                          <img
+                            src="../assets/images/vehicle-list/purple-heart.svg"
+                            alt=""
+                            class="fav-icon"
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box py-3">
+                        <div class="d-flex justify-content-between mt-3 px-3">
+                          <h5
+                            class="text-secondary car_model text-primary font-22 fw-semibold"
+                          >
+                            2020 BMW 2 Series
+                          </h5>
+                          <h4 class="text-green font-28 car_price">$683</h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date px-3"
+                        >
+                          <p class="text-purple-2 font-16">
+                            <img
+                              src="../assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            Leicestershire
+                          </p>
+                        </div>
+                        <div class="details_labels px-3">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Used</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Petrol</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label"
+                            >17,325 km</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template swiperSlide>
+                  <div class="swiper-slide">
+                    <div class="listing_cards mb-4">
+                      <div class="card_img position-relative">
+                        <img
+                          src="assets/images/vehicle-list/car-1.png"
+                          alt="car-1"
+                          class="img-fluid"
+                        />
+                        <a href="#" class="card_img-fav">
+                          <img
+                            src="../assets/images/vehicle-list/purple-heart.svg"
+                            alt=""
+                            class="fav-icon"
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box py-3">
+                        <div class="d-flex justify-content-between mt-3 px-3">
+                          <h5
+                            class="text-secondary car_model text-primary font-22 fw-semibold"
+                          >
+                            2020 BMW 2 Series
+                          </h5>
+                          <h4 class="text-green font-28 car_price">$683</h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date px-3"
+                        >
+                          <p class="text-purple-2 font-16">
+                            <img
+                              src="../assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            Leicestershire
+                          </p>
+                        </div>
+                        <div class="details_labels px-3">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Used</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Petrol</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label"
+                            >17,325 km</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template swiperSlide>
+                  <div class="swiper-slide">
+                    <div class="listing_cards mb-4">
+                      <div class="card_img position-relative">
+                        <img
+                          src="assets/images/vehicle-list/car-1.png"
+                          alt="car-1"
+                          class="img-fluid"
+                        />
+                        <a href="#" class="card_img-fav">
+                          <img
+                            src="../assets/images/vehicle-list/purple-heart.svg"
+                            alt=""
+                            class="fav-icon"
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box py-3">
+                        <div class="d-flex justify-content-between mt-3 px-3">
+                          <h5
+                            class="text-secondary car_model text-primary font-22 fw-semibold"
+                          >
+                            2020 BMW 2 Series
+                          </h5>
+                          <h4 class="text-green font-28 car_price">$683</h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date px-3"
+                        >
+                          <p class="text-purple-2 font-16">
+                            <img
+                              src="../assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            Leicestershire
+                          </p>
+                        </div>
+                        <div class="details_labels px-3">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Used</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Petrol</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label"
+                            >17,325 km</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template swiperSlide>
+                  <div class="swiper-slide">
+                    <div class="listing_cards mb-4">
+                      <div class="card_img position-relative">
+                        <img
+                          src="assets/images/vehicle-list/car-1.png"
+                          alt="car-1"
+                          class="img-fluid"
+                        />
+                        <a href="#" class="card_img-fav">
+                          <img
+                            src="assets/images/vehicle-list/purple-heart.svg"
+                            alt=""
+                            class="fav-icon"
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box py-3">
+                        <div class="d-flex justify-content-between mt-3 px-3">
+                          <h5
+                            class="text-secondary car_model text-primary font-22 fw-semibold"
+                          >
+                            2020 BMW 2 Series
+                          </h5>
+                          <h4 class="text-green font-28 car_price">$683</h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date px-3"
+                        >
+                          <p class="text-purple-2 font-16">
+                            <img
+                              src="assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            Leicestershire
+                          </p>
+                        </div>
+                        <div class="details_labels px-3">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Used</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-3"
+                            >Petrol</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label"
+                            >17,325 km</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template> -->
+              </swiper>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+              <button
+                (click)="back()"
+                class="btn primary-btn-outline view_vehicle-btn btn--small fw-semibold"
+                style="font-size: 16px;"
+              >
+                {{ "View All Vehicles" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<div id="simpleModal" class="modal">
+  <div class="modal-content">
+    <span class="closeBtn">&times;</span>
+    <!-- Swiper modal -->
+    <div id="swiper-container-modal" class="swiper-container-modal">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="https://live.staticflickr.com/6079/6136071267_797265d54d.jpg"
+            />
+          </div>
+        </div>
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="http://c1.staticflickr.com/4/3652/3286547152_59fd376d3c.jpg"
+            />
+          </div>
+        </div>
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="https://c1.staticflickr.com/1/189/442112564_aad204d2de.jpg"
+            />
+          </div>
+        </div>
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="https://live.staticflickr.com/8685/17081448532_77263fa0dd.jpg"
+            />
+          </div>
+        </div>
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="https://c1.staticflickr.com/5/4451/24162846828_8500a2fec4.jpg"
+            />
+          </div>
+        </div>
+        <div class="swiper-slide swiper-slide-modal">
+          <div class="swiper-zoom-container">
+            <img
+              class="swiper-lazy swiper-lazy-modal"
+              data-src="https://farm4.staticflickr.com/3199/2386530366_47bfae6da0_z.jpg"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div id="swiper-pagination-modal" class="swiper-pagination"></div>
+      <!-- Add Pagination -->
+      <div id="swiper-button-next-modal" class="swiper-button-next"></div>
+      <div id="swiper-button-prev-modal" class="swiper-button-prev"></div>
+    </div>
+  </div>
+</div>

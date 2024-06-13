@@ -1,0 +1,382 @@
+@import "../../../function";
+@import "../../../variables";
+
+.landing {
+  &__banner {
+    position: relative;
+
+    &.bg-blue {
+      background-color: #EEF4F7;
+    }
+
+    &:after {
+      content: "";
+      background-color: #EC8F67;
+      width: 300px;
+      height: 100%;
+      position: absolute;
+      right: 11.5%;
+      top: 0;
+      display: block;
+      z-index: 0;
+
+      @include for-tablet-landscape-only {
+        width: 200px;
+      }
+    }
+
+    .jakay-container {
+      z-index: 1;
+      position: relative;
+
+      .car-banner-image {
+        position: absolute;
+        right: -11%;
+        top: 15%;
+        width: 70%;
+
+        @media (max-width:1750px) {
+          width: 60%;
+          right: -2%;
+          top: 20%;
+        }
+
+        @include for-tablet-landscape-only {
+          right: -2%;
+          top: 22%;
+        }
+
+        @include for-tablet-only {
+          width: 66%;
+          top: 19%;
+          right: 0;
+        }
+
+        @include for-phone-only {
+          width: 68%;
+          top: 23%;
+        }
+      }
+    }
+
+    &-desc {
+      padding: 115px 0px 115px 0px;
+
+      @include for-tablet-landscape-only {
+        padding: 80px 0;
+      }
+
+      h5 {
+        width: 45%;
+        min-height: 200px;
+        margin-bottom: 125px;
+
+        @include for-tablet-landscape-only {
+          width: 100%;
+          font-size: 30px;
+          margin-bottom: 160px;
+        }
+
+      }
+
+      h1 {
+        max-width: 60%;
+      }
+
+      ul.nav-tabs {
+        border: 0px;
+
+        .nav-item {
+          background-color: transparent;
+        }
+
+        .nav-link {
+          span {
+            color: $thired-color;
+            font-size: 20px;
+            font-weight: 400;
+          }
+
+          padding: 15px 50px;
+          border: 0px;
+          background-color: rgba($color: #2F779C, $alpha: 0.05);
+
+          &.active {
+            background-color: $white;
+
+            span {
+              position: relative;
+              color: $primary-color;
+              font-weight: 600;
+
+              &::after {
+                content: "";
+                background-color: $secondary-color;
+                height: 1px;
+                width: 100%;
+                display: block;
+                position: absolute;
+                bottom: -20px;
+                left: 0;
+              }
+            }
+          }
+        }
+      }
+
+      .tab-content {
+        width: 95%;
+
+        @include for-phone-only {
+          width: 100%;
+        }
+      }
+
+      span.border-right {
+        border-right: 1px solid #D8CFDA;
+        width: 1px;
+        height: 80px;
+        margin: 0px 10px;
+        background-color: #D8CFDA;
+      }
+    }
+  }
+
+  &__about {
+    position: relative;
+    background: url(../../../assets/images/lending/about_bg-img.png) 0% 0% no-repeat padding-box;
+    background-size: cover;
+    background-position: center;
+    height: min(max(400px, 41.66vw), 800px);
+
+    // &::after {
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   content: "";
+    //   background-image: linear-gradient(-80deg, #4E1F4F00 0%, #4E1F4FD1 50%, #4E1F4F 100%);
+    //   top: 0;
+    //   left: 0;
+    // }
+  }
+
+  &__about-desc {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+
+    p {
+      color: rgba($color: $white, $alpha: .7);
+
+      @include for-tablet-only {
+        font-size: 1.2rem !important;
+      }
+
+      @include for-phone-only {
+        font-size: 1rem !important;
+      }
+    }
+  }
+
+  &__process-heading {
+    margin-bottom: 100px;
+  }
+
+  &__process-detail-wrp {
+    .heading-border-bottom {
+      position: relative;
+
+      &::after {
+        content: "";
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        height: 3px;
+        width: 15%;
+        background-color: $dark-orange;
+      }
+    }
+  }
+
+  &__loan {
+    position: relative;
+    background: url(../../../assets/images/lending/loan_bg-img.png) 0% 0% no-repeat padding-box;
+    background-size: cover;
+    background-position: center;
+    height: min(max(400px, 30.2vw), 580px);
+
+    // &::after {
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   content: "";
+    //   background-color: rgba($color: #4E1F4F, $alpha: 0.8);
+    //   top: 0;
+    //   left: 0;
+    // }
+  }
+
+  &__loan-desc {
+    p {
+      line-height: 45px;
+
+      @include for-tablet-landscape-only {
+        line-height: normal;
+      }
+
+      @include for-tablet-only {
+        font-size: 1.2rem !important;
+
+        padding: 0 2rem;
+      }
+
+      @include for-phone-only {
+        font-size: 1rem !important;
+        padding: 0 1rem;
+      }
+    }
+  }
+
+  &__card-body {
+    padding: 40px;
+    border-radius: 32px;
+
+    &:hover {
+      background-color: $primary-color;
+      -webkit-box-shadow: 0px 34px 50px -4px rgba(78, 31, 79, .5);
+      box-shadow: 0px 34px 50px -4px rgba(78, 31, 79, .5);
+      border-radius: 32px;
+      -webkit-transition: all ease-in-out 0.5s;
+      cursor: pointer;
+      transition: all ease-in-out 0.5s;
+
+      h4 {
+        color: #fff !important;
+        -webkit-transition: all ease-in-out 0.5s;
+      }
+
+      p {
+        color: rgba($color: #fff, $alpha: 0.5);
+        -webkit-transition: all ease-in-out 0.5s;
+      }
+
+      img[src] {
+        content: url("/./assets/images/lending/car-icon-orange.svg");
+      }
+    }
+  }
+
+
+}
+
+
+.brand-swipper {
+  .swiper-wrapper {
+    align-items: center;
+  }
+
+  .swiper-slide {
+    text-align: center;
+  }
+}
+
+.with-border-image {
+  position: relative;
+
+  img {
+    z-index: 1;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    border: 1px solid #EC8F67;
+    background-color: #fff;
+    z-index: -1;
+    position: absolute;
+    top: 48px;
+  }
+
+  &.left-side,
+  &.right-side {
+    margin-bottom: 60px;
+  }
+
+  &.left-side {
+    &:after {
+
+      left: -48px;
+
+      @include for-tablet-only {
+        left: -25px;
+        top: 25px;
+      }
+    }
+  }
+  &.right-side {
+    &:after {
+
+      right: -48px;
+
+      @include for-tablet-only {
+        right: -25px;
+        top: 25px;
+      }
+    }
+  }
+}
+
+.admin-container {
+  margin: auto 50px !important;
+}
+
+.mission-vission-wrp .heading-border-bottom::after {
+  content: "";
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  height: 1px;
+  width: 70%;
+  background-color: #2F779C;
+}
+
+.buy-or-sell-heading .heading-border-bottom:after {
+  content: "";
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  position: absolute;
+  height: 1px;
+  width: 70%;
+  background-color: #2F779C;
+}
+
+.feature-count {
+  width: 50px;
+  height: 50px;
+  background-color: #2F779C;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing__about-fetures .landing__card-body {
+  border: 1px solid rgba(137, 112, 143, 0.5);
+  height: 100%;
+}
+
+.landing__about-fetures .landing__card-body p {
+  line-height: 32px;
+}
+
+.landing__about-fetures .landing__card {
+  height: 95%;
+}
+.align-justify{
+  text-align: justify;
+}

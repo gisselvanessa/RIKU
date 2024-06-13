@@ -1,0 +1,57 @@
+<div [ngClass]="{ 'jk-container': type === 2, 'card-one': number == '1' || number == '3', 'card-four': number == '4' }">
+    <div class="drop-img-container position-absolute">
+        <img src="assets/images/drop.svg" class="drop-img" alt="Drop">
+        <h1 class="number">{{number}}</h1>
+    </div>
+    <div class="card me-3 flex-sm-row pe-sm-3 pb-2 pb-sm-3">
+        <div class="text-content ps-3 ps-sm-5 pe-2 pe-xl-5">
+            <h1 class="text h1 pt-3">{{title}}</h1>
+            <h2 class="text h2 pb-2 mt-2">{{subTitle}}</h2>
+            <div *ngIf="type === 2">
+                <div class="row">
+                    <div class="col-6 d-flefx align-items-center">
+                        <h2 class="h2 text">Tipo de cuenta: </h2>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Corriente</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Número de Cuenta: </h2>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">9500605400</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Nombre Banco: </h2>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Banco Internacional</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Número de Ruta: </h2>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">BINTECEQ</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">Código SWIFT: </h2>
+                    </div>
+                    <div class="col-6 d-flex align-items-center">
+                        <h2 class="h2 text">021000089</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mb-2 me-md-3 img-container pt-md-3 pt-lg-5 pb-lg-4">
+            <img [src]="src" [alt]="alt"  [ngClass]="{ 'md-img': type === 2 }" />
+        </div>
+    </div>
+</div>

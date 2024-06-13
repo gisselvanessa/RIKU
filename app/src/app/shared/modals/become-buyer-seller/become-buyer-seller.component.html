@@ -1,0 +1,70 @@
+<div class="modal-header border-0">
+    <button type="button" class="btn-close p-4" (click)="activeModal.dismiss('close')" aria-label="Close"></button>
+</div>
+<div class="modal-body border-0">
+    <h3 *ngIf="becomeType == 'seller'"
+      class="modal-title text-center w-100 text-primary fw-semibold mb-2"
+    >
+      {{ "Become a Seller" | translate }}
+    </h3>
+    <h3 *ngIf="becomeType == 'buyer'"
+      class="modal-title text-center w-100 text-primary fw-semibold mb-2"
+    >
+      {{ "Become a Buyer" | translate }}
+    </h3>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <p *ngIf="becomeType == 'seller'"
+          class="text-center font-14 font-sm-10 text-primary-light mb-sm-3 mb-0"
+        >
+          {{
+            "You will be registered as a seller with the same account information as buyer. do you want to proceed further?"
+              | translate
+          }}
+        </p>
+        <p *ngIf="becomeType == 'buyer'"
+          class="text-center font-14 font-sm-10 text-primary-light mb-sm-3 mb-0"
+        >
+          {{
+            "You will be registered as a buyer with the same account information as seller. do you want to proceed further?"
+              | translate
+          }}
+        </p>
+      </div>
+      <div
+        class="modal-footer d-flex justify-content-center border-0"
+      >
+        <button
+          type="submit"
+          style="border: 1px solid #89708f; border-radius: 12px"
+          class="btn btn-md forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="activeModal.dismiss('Cross click')"
+        >
+          {{ "Cancel" | translate }}
+        </button>
+        <button *ngIf="becomeType == 'seller'"
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="becomeAsSeller()"
+        >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{ "Yes" | translate }}
+        </button>
+        <button *ngIf="becomeType == 'buyer'"
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="becomeBuyer()"
+        >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{ "Yes" | translate }}
+        </button>
+      </div>
+    </div>
+</div>
+  

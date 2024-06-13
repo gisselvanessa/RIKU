@@ -1,0 +1,473 @@
+@import "../../../../variables";
+@import "../../../../function";
+
+.font-17{
+  font-size: 17px !important; 
+  @media (max-width: 1400px) {
+    font-size: 15px !important; 
+  }
+  @media (max-width: 1200px) {
+    font-size: 12px !important; 
+  }
+}
+.expert {
+  &__wrapper {
+    // css for pricebox on expert review
+    &--pricebox {
+      padding: 30px;
+      background-color: $white;
+      border: 1px solid $secondary-color;
+      border-radius: 15px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+
+      &:hover {
+        box-shadow: 0px 34px 50px -4px rgba(47, 119, 156, 0.51);
+      }
+
+      & .recommended {
+        position: absolute;
+        color: $orange;
+        padding: 5px 16px;
+        border-radius: 7px;
+        font-size: 20px;
+        top: -5%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      // highlights section //
+      .highlights {
+        margin-bottom: 80px;
+
+        &__box {
+          padding: 48px 58px;
+          box-shadow: 0px 3px 16px #00000029;
+          border-radius: 30px;
+
+          &--items {
+            background-image: url("../../../../assets/images/single_blue_check.svg");
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: 10px;
+            padding-left: 18px;
+            margin: 15px 0;
+          }
+        }
+      }
+
+      &.recommended {
+        border: 1px solid $orange;
+
+        &:hover {
+          box-shadow: 0px 34px 50px -4px rgba(233, 141, 105, 0.5);
+        }
+
+        .highlights {
+          &__box {
+            &--items {
+              background-image: url("../../../../assets/images/single_orange_check.svg");
+            }
+          }
+        }
+      }
+
+      & .form-check-inline {
+        & input[type="radio"]:checked {
+          & ~ .dot-checkmark::after {
+            width: 13px;
+            height: 13px;
+          }
+
+          & + label {
+            background-color: transparent;
+            color: $primary-color;
+          }
+        }
+
+        & label {
+          font-size: 24px;
+          color: $primary-color;
+          font-weight: 600;
+          padding-left: 35px;
+        }
+
+        & .dot-checkmark {
+          width: 24px;
+          height: 24px;
+          left: 3px;
+        }
+      }
+    }
+
+    // css for radio design in expert review
+    &--radio {
+      & .form-check-inline {
+        width: 230px;
+
+        display: block;
+
+        & label {
+          padding-block: 14px;
+        }
+
+        & input:checked {
+          & ~ label {
+            & img[src][data-card] {
+              // content: url("../../../../assets/images/card-blue.svg");
+            }
+
+            & img[src][data-cash] {
+              //  content: url("../../../../assets/images/cash-blue.svg");
+            }
+
+            & img[src][data-bank] {
+              //  content: url("../../../assets/images/bank-blue.svg");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// css for buy now page 17-01-2023 //
+.payment_wrapper {
+  & .price-grp {
+    // width: max-content;
+    padding: 30px;
+
+    & .form-check-inline {
+      margin-bottom: 30px;
+      width: unset;
+
+      & input[type="radio"]:checked {
+        & ~ .dot-checkmark::after {
+          width: 10px;
+          height: 10px;
+        }
+
+        & + label {
+          background-color: transparent;
+          // color: $primary-color;
+        }
+      }
+
+      & .dot-checkmark {
+        width: 19px;
+        height: 19px;
+      }
+    }
+  }
+
+  &--radio {
+    & .form-check-inline {
+      width: 230px;
+
+      display: block;
+
+      & label {
+        padding-block: 14px;
+      }
+
+      & input:checked {
+        & ~ label {
+          & img[src][data-card] {
+            //content: url("../../../../assets/images/card-blue.svg");
+          }
+
+          & img[src][data-cash] {
+            // content: url("../../../../assets/images/cash-blue.svg");
+          }
+
+          & img[src][data-bank] {
+            // content: url("../../../assets/images/bank-blue.svg");
+          }
+        }
+      }
+    }
+  }
+}
+
+// process steps //
+.expert-steps {
+  .steps-wrp {
+    padding-left: 0px;
+    padding-top: 0px;
+    padding-bottom: 55px;
+    margin-bottom: 10px;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+  
+    @include for-tablet-portrait-up {
+      // padding-left: 75px;
+      overflow-x: unset;
+      overflow-y: unset;
+      flex-direction: unset !important;
+      margin-bottom: 50px;
+    }
+    /* justify-content: space-between; */
+    @include for-laptop {
+      .step:nth-child(1) {
+        .line {
+          width: 90px;
+        }
+      }
+      .step:nth-last-child(2) {
+        .line {
+          width: 35px;
+        }
+      }
+      .step:last-child {
+        .line {
+          display: none;
+        }
+      }
+    }
+
+     .step {
+      flex-grow: 1;
+      align-items: center !important;
+      display: inline-flex;
+      color: #89708f;
+      min-width: 100px;
+      @include for-tablet-only {
+        flex-direction: unset;
+      }
+      @include for-tablet-portrait-up {
+        min-width: unset;
+        width: 28%;
+        &:last-child {
+          width: 50px;
+        }
+      }
+      div {
+        .step-round {
+          // margin-left: 10px;
+          margin-right: 0;
+          color: #ec8f67;
+          background-color: $white;
+          border: 1px solid #ec8f67;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          padding: 8px;
+          position: relative;
+
+          @include for-laptop-only {
+            width: 40px;
+            height: 40px;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            display: inline-block;
+            visibility: hidden;
+            opacity: 0;
+            width: 7px;
+            height: 13px;
+            border-bottom: 3px solid #fff;
+            border-right: 3px solid #fff;
+          }
+        }
+
+        h6 {
+          position: absolute;
+          left: 0 !important;
+          top: 58px !important;
+          color:#ec8f67;
+          font-size: min(max(0.5rem, 1.83vw), 1rem);
+          font-weight: 500;
+          text-align: center !important;
+          font-size: 1rem;
+          transform: translate(-20%, 0px);
+          -webkit-transform: translate(-20%, 0px);
+          -moz-transform: translate(-20%, 0px);
+          -ms-transform: translate(-20%, 0px);
+          -o-transform: translate(-20%, 0px);
+          @include for-tablet-portrait-up {
+            font-size: 1.125rem;
+          }
+        }
+      }
+
+      .line {
+        background-color: #ec8f67;
+        border-radius: 0px;
+        height: 0.5px;
+        width: 120px;
+        flex-grow: 1;
+        margin-right: 0;
+        @include for-tablet-portrait-up {
+          margin-bottom: 0;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+        @include for-tablet-only {
+          margin-top: unset;
+          display: none;
+        }
+      }
+
+      &.active,
+      &.completed {
+        div {
+          .step-round {
+            background-color: $white;
+            border-color: $secondary-color;
+            color: $secondary-color;
+          }
+
+          h6 {
+            color: $secondary-color;
+          }
+        }
+      }
+
+      &.completed {
+        div {
+          .step-round {
+            // background-color: $secondary-color;
+            color: $secondary-color;
+            position: relative;
+
+            &::after {
+              // visibility: visible;
+              // opacity: 1;
+            }
+          }
+        }
+
+        .line {
+          background-color: $secondary-color;
+
+        }
+      }
+    }
+  }
+}
+
+.steps-wrp {
+  .step {
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    color: $thired-color;
+
+    span {
+      color: $white;
+      background-color: $thired-color;
+      border-radius: 50%;
+      height: 34px;
+      width: 34px;
+      margin-right: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.active {
+      color: $primary-color;
+
+      span {
+        background-color: $secondary-color;
+      }
+    }
+  }
+
+  .line {
+    width: 15px;
+    height: 0.5px;
+    background-color: #b1a0b4;
+    margin-left: 10px;
+    // transform: rotate(90deg);
+    margin-right: 10px;
+    display: block;
+
+    @include for-tablet-portrait-up {
+      display: inline-flex;
+      margin-left: 25px;
+      transform: rotate(0deg);
+      width: 70px;
+    }
+  }
+}
+
+table {
+  thead {
+    border-radius: 6px;
+    background: rgba($color: $secondary-color, $alpha: 0.1);
+
+    th {
+      color: #191919;
+      font-size: 14px;
+      padding: 15px;
+      font-weight: 600;
+    }
+
+    th:first-child {
+      border-radius: 10px 0 0 10px;
+      padding-left: 30px;
+    }
+
+    th:last-child {
+      border-radius: 0 10px 10px 0;
+      padding-right: 30px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #d5dce6;
+
+      &:last-child {
+        border-bottom: 0px transparent;
+      }
+    }
+
+    td {
+      vertical-align: middle;
+      padding: 15px 15px;
+
+      &:first-child {
+        padding-left: 30px;
+      }
+
+      &:last-child {
+        padding-right: 30px;
+      }
+
+      .small-img-list {
+        border-radius: 12px;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      label {
+        font-size: 14px;
+        font-weight: 400;
+        border-radius: 25px;
+        padding: 8px 15px;
+        background-color: rgba($color: #4db143, $alpha: 0.1);
+        color: #46bc39;
+      }
+    }
+  }
+}

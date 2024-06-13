@@ -1,0 +1,59 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="section-header">
+        <div class="back-to-page d-flex">
+          <h3 class="font-38 text-primary fw-semibold">
+            {{ titleName | translate }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <ng-container [ngSwitch]="titleName">
+      <ng-container *ngSwitchCase="'Home'">
+        <app-home [modulePermissions]="modulePermissions"> </app-home>
+      </ng-container>
+      <ng-container *ngSwitchCase="'About Us'">
+        <app-about-us [modulePermissions]="modulePermissions"></app-about-us>
+      </ng-container>
+      <ng-container *ngSwitchCase="'I Want To Sell'">
+        <app-i-want-to-sell [modulePermissions]="modulePermissions"></app-i-want-to-sell>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <ng-container *ngIf="!loading; else loadingTemplate">
+          <form [formGroup]="contentForm" #form="ngForm">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-12 col-md-10 col-lg-10">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Content" | translate}}</label>
+                    <ckeditor [ngClass]="'ck-editor'" [data]="editorData" [editor]="Editor" [config]="env.ckeConfig"
+                      formControlName="html" name="myckeditor"></ckeditor>
+                    <div *ngIf="contentForm.controls['html'].invalid && contentForm.controls['html'].touched">
+                      <div *ngIf="contentForm.controls['html'].errors?.['required']" class="text-danger">
+                        {{"Content is required" | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-grp mt-5 d-flex">
+              <button class="btn primary-btn me-3 border-1" [disabled]="!modulePermissions.can_create && !modulePermissions.can_edit" type="submit" (click)="addUpdateDetails()">
+                {{"Submit" | translate}}
+              </button>
+            </div>
+          </form>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <div class="text-center">
+            <app-loader></app-loader>
+          </div>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+    <ng-container>
+    </ng-container>
+  </div>
+</section>

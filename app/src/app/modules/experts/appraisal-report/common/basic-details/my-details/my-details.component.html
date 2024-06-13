@@ -1,0 +1,330 @@
+<div class="report__accordion">
+  <div class="accordion-item bg-transparent">
+    <h2 class="accordion-header" (click)="selectedAccordians()" id="report-1">
+      <button
+        class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#report1"
+        aria-expanded="false"
+        [ngClass]="{ collapsed: accordianName.MyDetails != selectAccordian }"
+        aria-controls="collapseOne"
+      >
+        {{ "My Details" | translate }}
+      </button>
+    </h2>
+    <div
+      id="report1"
+      class="accordion-collapse collapse"
+      [ngClass]="accordianName.MyDetails === selectAccordian ? 'show' : ''"
+      aria-labelledby="report-1"
+      data-bs-parent="#report-accordian"
+    >
+      <div class="accordion-body px-0">
+        <form
+          *ngIf="myDetailsForm"
+          [formGroup]="myDetailsForm"
+          (ngSubmit)="save()"
+        >
+          <div class="form-group">
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "Expert Name" | translate
+                  }}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Enter Expert Name' | translate }}"
+                    name="expert_name"
+                    autocomplete="off"
+                    [readOnly]="statusOfReview == 'completed'"
+                    [ngClass]="{
+                      'is-invalid  border-1':
+                        isFormSubmitted &&
+                        myDetailsForm.invalid &&
+                        myDetailsFormControls.expert_name.invalid
+                    }"
+                    formControlName="expert_name"
+                  />
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      myDetailsFormControls.expert_name.invalid &&
+                      myDetailsFormControls.expert_name.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="myDetailsFormControls.expert_name.errors?.required"
+                    >
+                      {{ "Expert Name is required" | translate }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "Appraisal Date" | translate
+                  }}</label>
+                  <input
+                    #meetingDate
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Enter Appraisal Date' | translate }}"
+                    formControlName="appraisal_date"
+                    name="appraisal_date"
+                    (keydown)="(false)"
+                    autocomplete="off"
+                    bsDatepicker
+                    [minDate]="minDate"
+                    [readOnly]="statusOfReview == 'completed'"
+                    [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                    [ngClass]="{
+                      'is-invalid  border-1':
+                        isFormSubmitted &&
+                        myDetailsForm.invalid &&
+                        myDetailsFormControls.appraisal_date.invalid
+                    }"
+                  />
+                  <img
+                    (click)="meetingDate.click()"
+                    src="./assets/images/calender.svg"
+                    class="input-icon"
+                  />
+
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      myDetailsFormControls.appraisal_date.invalid &&
+                      myDetailsFormControls.appraisal_date.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        myDetailsFormControls.appraisal_date.errors?.required
+                      "
+                    >
+                      {{ "Appraisal Date is required" | translate }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "Code Number" | translate
+                  }}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    autocomplete="off"
+                    placeholder="{{ 'Enter Code Number' | translate }}"
+                    name="code_number"
+                    [ngClass]="{
+                      'is-invalid':
+                        isFormSubmitted &&
+                        myDetailsForm.invalid &&
+                        myDetailsFormControls.code_number.invalid
+                    }"
+                    formControlName="code_number"
+                    readonly
+                  />
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      myDetailsFormControls.code_number.invalid &&
+                      myDetailsFormControls.code_number.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="myDetailsFormControls.code_number.errors?.required"
+                      >{{ "Expert code is required" | translate }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-12 col-md-6 ">
+                                <div class="form-group position-relative">
+                                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">To</label>
+
+                                    <input type="text" class="form-control" placeholder="Enter"
+                                        value="Lorem Ipsum">
+
+                                </div>
+                            </div> -->
+              <div class="col-12 col-md-6">
+                <div class="form-group position-relative">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "To" | translate
+                  }}</label>
+                  <div
+                    class="doropdown_radio"
+                    [ngClass]="{
+                      'is-invalid  border-1':
+                        isFormSubmitted &&
+                        myDetailsForm.invalid &&
+                        myDetailsFormControls.to.invalid
+                    }"
+                    ngbDropdown
+                  >
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                      [ngClass]="{ 'text-primary': selectedTo }"
+                      type="button"
+                      id="vehicle-type23"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      [disabled]="statusOfReview == 'completed'"
+                    >
+                      {{ selectedTo ? (selectedTo | translate) : ("To" | translate) }}
+                    </button>
+                    <ul
+                      ngbDropdownMenu
+                      aria-labelledby="vehicle-type23"
+                      class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                    >
+                      <li *ngFor="let to of toOptions">
+                        <a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">
+                          <div class="radio-check checkbox-check br-12 me-3">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="to"
+                                formControlName="to"
+                                (change)="selectValue($event, to.value, 'to')"
+                                id="{{ to.id }}"
+                                value="{{ to.value }}"
+                                [checked]="to.value == selectedTo"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="{{ to.id }}"
+                                >{{ to.value | translate }}</label
+                              >
+                              <span class="dot-checkmark"></span>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      myDetailsFormControls.to.invalid &&
+                      myDetailsFormControls.to.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="myDetailsFormControls.to.errors?.required"
+                    >
+                      {{ "To is required" | translate }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group position-relative">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "Zone" | translate
+                  }}</label>
+                  <div
+                    class="doropdown_radio"
+                    [ngClass]="{
+                      'is-invalid  border-1':
+                        isFormSubmitted &&
+                        myDetailsForm.invalid &&
+                        myDetailsFormControls.zone.invalid
+                    }"
+                    ngbDropdown
+                  >
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                      [ngClass]="{ 'text-primary': selectedZone }"
+                      type="button"
+                      id="zone"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      [disabled]="statusOfReview == 'completed'"
+                    >
+                      {{ selectedZone ? (selectedZone | translate) : ("Zone" | translate) }}
+                    </button>
+                    <ul
+                      ngbDropdownMenu
+                      aria-labelledby="zone"
+                      class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                    >
+                      <li *ngFor="let zone of zoneOptions">
+                        <a class="dropdown-item" ngbDropdownItem href="javascript:void(0);">
+                          <div class="radio-check checkbox-check br-12 me-3">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="zone"
+                                formControlName="zone"
+                                (change)="
+                                  selectValue($event, zone.value, 'zone')
+                                "
+                                id="{{ zone.id }}"
+                                value="{{ zone.value }}"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="{{ zone.id }}"
+                                >{{ zone.value | translate }}</label
+                              >
+                              <span class="dot-checkmark"></span>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      myDetailsFormControls.zone.invalid &&
+                      myDetailsFormControls.zone.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="myDetailsFormControls.zone.errors?.required"
+                      >{{ "Zone is required" | translate }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <button
+                  class="btn primary-btn btn-md me-3 border-1 mb-3"
+                  type="submit"
+                  [disabled]="statusOfReview == 'completed'"
+                >
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    *ngIf="isSave"
+                  >
+                  </span>
+                  {{ "Save" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

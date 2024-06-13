@@ -1,0 +1,53 @@
+@import "../../../../../../function";
+@import "../../../../../../variables";
+
+.vehicle {
+    &__form {
+      input.form-control,
+      textarea {
+        border: 0px;
+      }
+    }
+  
+    &__uploaded-photo {
+      .photo-wrp {
+        position: relative;
+        width: 30%;
+        /* height: 300px; */
+  
+        img {
+          border-radius: 12px;
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+  
+        span {
+          background-color: $purple-grey;
+          height: 22px;
+          width: 22px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: -15px;
+          right: -6px;
+          color: #fff;
+          font-size: 20px;
+          line-height: 22px;
+        }
+  
+        p {
+          color: $light-purple;
+        }
+      }
+    }
+  }.additional-image-height {
+    max-height: 130px;
+    overflow-y: auto;
+  }
+  .br-blue{
+    border: 1px solid #2F779C;
+  }

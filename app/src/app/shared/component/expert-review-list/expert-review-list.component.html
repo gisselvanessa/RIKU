@@ -1,0 +1,478 @@
+<section class="section order__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Expert Review" | translate }}
+        </h3>
+        <p class="font-14 text-primary">
+          {{
+            "Please enter an appraisal order so that one of our experts can do it. Remember, you can request an appraisal at any time to buy or sell."
+              | translate
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <span class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+        "Search" | translate
+      }}</span>
+      <div class="row align-items-start">
+        <div class="col-xl-8 col-lg-7 mb-3">
+          <div class="search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="searchKeyword"
+                placeholder="{{ 'Search by Keyword' | translate }}"
+                (keyup.enter)="setSearchText(searchKeyword)"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="setSearchText(searchKeyword)">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-5 col-md-7 col-sm-6">
+          <div class="search-grp add-vehicle mb-4">
+            <a
+              class="btn primary-btn btn-md px-2 px-md-3 br-12 d-block"
+              (click)="addExpertReview()"
+            >
+              + {{ "Add Expert Review" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">Search Results</h3>
+          <a href="javascript:void(0)" *ngIf="searchApplied" (click)="searchText = ''; clearAll()"
+            class="ms-4 text-secondary text-underline">Clear All Filters</a>
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <span class="pill">{{ searchText }}
+        </span>
+      </div>
+    </div> -->
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-all-tab"
+                [ngClass]="{ active: selectedTab == 'other' }"
+                (click)="selectTab('other')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-all"
+                aria-selected="true"
+              >
+                {{ "Review Request" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-approval-tab"
+                [ngClass]="{ active: selectedTab == 'draft' }"
+                (click)="selectTab('draft')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-approval"
+                aria-selected="false"
+              >
+                {{ "Save as Draft" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="order__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+            [ngClass]="{ 'show active': selectedTab == 'other' }"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>{{ "Image" | translate }}</span>
+                  </th>
+                  <th (click)="setSorting('vehicle')">
+                    <span
+                      >{{ "Vehicle" | translate }}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('expert_name')">
+                    <span
+                      >{{ "Expert Name" | translate }}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('location')">
+                    <span>
+                      {{ "Location" | translate }}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('vehicle_source')">
+                    <span>
+                      {{ "Vehicle Source" | translate }}
+                      <img
+                        src="../../../../../assets/images/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th>
+                    <span>{{ "Service" | translate }} </span>
+                  </th>
+                  <th>
+                    <span>{{ "Price" | translate }} </span>
+                  </th>
+                  <th>
+                    <span>{{ "Payment Status" | translate }} </span>
+                  </th>
+                  <th>
+                    <span>{{ "Appraisal Report Status" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Appraisal Report" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="
+                        expertReviewList.length > 0;
+                        else noRecordsTemplate
+                      "
+                    >
+                      <tr
+                        *ngFor="let expert of expertReviewList; let i = index"
+                      >
+                        <td>
+                          <div class="small-img-list">
+                            <img
+                              [src]="
+                                expert.vehicle?.cover_img_url
+                                  ? expert.vehicle?.cover_img_url
+                                  : 'assets/images/no_preview.jpeg'
+                              "
+                            />
+                          </div>
+                        </td>
+                        <td class="nowrap">
+                          {{
+                            expert.vehicle.name
+                              ? expert.vehicle.name
+                              : ("-" | uppercase)
+                          }}
+                        </td>
+                        <td class="nowrap">
+                          {{
+                            expert.expert_name
+                              ? expert.expert_name
+                              : ("-" | titlecase)
+                          }}
+                        </td>
+                        <td class="nowrap">
+                          {{
+                            expert.location?.city
+                              ? expert.location?.city
+                              : ("-" | titlecase)
+                          }}
+                        </td>
+
+                        <td *ngIf="expert.is_insider === false">
+                          {{ "Vehicle off the platform" | translate }}
+                        </td>
+                        <td *ngIf="expert.is_insider === true">
+                          {{ "Vehicle within the platform" | translate }}
+                        </td>
+                        <td class="nowrap">
+                          {{
+                            expert.package_name
+                              ? (expert.package_name | translate)
+                              : ("-" | titlecase)
+                          }}
+                        </td>
+                        <td class="nowrap">
+                          ${{
+                            expert.price
+                              ? (expert.price | spanishNumber)
+                              : "00.00"
+                          }}
+                        </td>
+                        <td class="nowrap">
+                          {{
+                            expert.payment_status
+                              ? (expert.payment_status | translate)
+                              : "-"
+                          }}
+                        </td>
+                        <td
+                          *ngIf="
+                            expert.appraisal_report_status === 'in_pending'
+                          "
+                        >
+                          <label class="pending-approval">
+                            {{ "Pending" | translate }}</label
+                          >
+                        </td>
+                        <td
+                          *ngIf="expert.appraisal_report_status === 'completed'"
+                        >
+                          <label class="submitted">
+                            {{ "Submitted" | translate }}</label
+                          >
+                        </td>
+                        <td
+                          *ngIf="
+                            expert.appraisal_report_status === 'in_pending'
+                          "
+                        >
+                          <span> - </span>
+                        </td>
+                        <td
+                          *ngIf="expert.appraisal_report_status === 'completed'"
+                        >
+                          <div class="small-img-list">
+                            <img
+                              class="c-pointer"
+                              (click)="viewAppraisalReport(expert.id)"
+                              src="assets/images/appraisal.png"
+                            />
+                          </div>
+                        </td>
+                        <td class="action-class c-pointer">
+                          <a (click)="openExpertReviewDetails(expert.id, i)">
+                            <img src="assets/images/eye-open.svg"
+                          /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vehicle__listing--cards buyer-cards mb-3">
+        <div class="tab-content" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+            [ngClass]="{ 'show active': selectedTab == 'draft' }"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div class="p-3" *ngIf="expertReviewList.length === 0">
+              <h3 class="text-primary fw-semibold mb-xl-3 mb-lg-2">
+                {{ "No Records Available" | translate }}
+              </h3>
+            </div>
+            <div
+              class="tab-pane fade show active"
+              id="Condition-inprogress"
+              role="tabpanel"
+              aria-labelledby="Condition-inprogress-tab"
+              *ngIf="expertReviewList.length > 0 && !loading"
+            >
+              <div
+                class="bg-white br-32 vehicle-item-box-wrp mb-3"
+                *ngFor="let draftExpert of expertReviewList; let i = index"
+              >
+                <div
+                  class="d-flex w-100 px-3 px-lg-4 pt-3 pt-md-5 align-items-md-center align-items-start flex-md-row flex-column"
+                >
+                  <div class="ps-lg-2 vehicle-item-desc flex-grow-1">
+                    <div
+                      class="vehicle__steps expert-steps expert--vertical--horizontal d-flex align-items-center justify-content-center"
+                    >
+                      <div class="steps-wrp">
+                        <div
+                          class="step mb-md-0 mb-3 active"
+                          [ngClass]="{
+                            completed:
+                              currentExpertReviewStep[i] >
+                              expertReviewStepNumber.PRODUCT_SERVICES,
+                            active:
+                              currentExpertReviewStep[i] ==
+                              expertReviewStepNumber.PRODUCT_SERVICES
+                          }"
+                        >
+                          <div>
+                            <span class="step-round">
+                              <h6 class="text-start fw-semibold step--content">
+                                {{ "Product Services" | translate }}
+                              </h6>
+                            </span>
+                          </div>
+                          <span class="line"></span>
+                        </div>
+                        <div
+                          class="step mb-md-0 mb-3"
+                          [ngClass]="{
+                            completed:
+                              currentExpertReviewStep[i] >
+                              expertReviewStepNumber.FIND_EXPERT_APPRAISER,
+                            active:
+                              currentExpertReviewStep[i] ==
+                              expertReviewStepNumber.FIND_EXPERT_APPRAISER
+                          }"
+                        >
+                          <div>
+                            <span class="step-round">
+                              <h6 class="text-start fw-semibold step--content">
+                                {{ "Find Expert Appraiser" | translate }}
+                              </h6>
+                            </span>
+                          </div>
+                          <span class="line"></span>
+                        </div>
+                        <div
+                          class="step mb-md-0 mb-3"
+                          [ngClass]="{
+                            completed:
+                              currentExpertReviewStep[i] >
+                              expertReviewStepNumber.CONTACT_INFORMATION,
+                            active:
+                              currentExpertReviewStep[i] ==
+                              expertReviewStepNumber.CONTACT_INFORMATION
+                          }"
+                        >
+                          <div>
+                            <span class="step-round">
+                              <h6 class="text-start fw-semibold step--content">
+                                {{ "Contact Information" | translate }}
+                              </h6>
+                            </span>
+                          </div>
+                          <span class="line"></span>
+                        </div>
+                        <div
+                          class="step mb-md-0 mb-3"
+                          [ngClass]="{
+                            completed:
+                              currentExpertReviewStep[i] >
+                              expertReviewStepNumber.VEHICLE_INFORMATION,
+                            active:
+                              currentExpertReviewStep[i] ==
+                              expertReviewStepNumber.VEHICLE_INFORMATION
+                          }"
+                        >
+                          <div>
+                            <span class="step-round">
+                              <h6 class="text-start fw-semibold step--content">
+                                {{ "Vehicle Information" | translate }}
+                              </h6>
+                            </span>
+                          </div>
+                          <span class="line"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="total-price expert--total--price p-3 p-xl-4 d-md-flex justify-content-between align-items-md-center align-items-start flex-md-row flex-column"
+                >
+                  <div class="d-sm-flex">
+                    <button
+                      type="submit"
+                      class="btn px-3 px-lg-4 primary-btn btn-sm btn--small border-1 me-sm-3"
+                      (click)="continueProcess(draftExpert.id)"
+                    >
+                      {{ "Continue Expert Review" | translate }}
+                    </button>
+                    <button
+                      class="btn px-3 px-lg-4 primary-btn-outline btn-sm btn--small mt-3 mt-sm-0"
+                      (click)="cancelExpertReview(draftExpert.id)"
+                    >
+                      {{ "Cancel Expert Review" | translate }}
+                    </button>
+                  </div>
+                  <p
+                    class="text-purple-2 expert--total--price--column font-16 fw-regular d-flex align-items-center mt-3 mt-lg-0 ms-md-3"
+                  >
+                    <img src="assets/images/calender.svg" class="me-2 mb-1" />{{
+                      "Order Date" | translate
+                    }}:
+                    {{ draftExpert.created_at | date : "dd-MMMM-YYYY" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="Condition-past"
+              role="tabpanel"
+              aria-labelledby="Condition-past-tab"
+            ></div>
+            <app-loader *ngIf="loading"></app-loader>
+          </div>
+        </div>
+      </div>
+      <pagination
+        *ngIf="paginationData?.total_pages && !loading"
+        [paginationData]="paginationData"
+        (selectedPage)="jumpToThePage($event)"
+      >
+      </pagination>
+    </div>
+  </div>
+</section>

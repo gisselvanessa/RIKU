@@ -1,0 +1,249 @@
+@import "../../../../function";
+@import "../../../../variables";
+label{
+   color: $bg-purple;
+   font-weight: 600;
+}
+.page {
+  &-wrapper {
+    &--login {
+      padding-bottom: 120px !important;
+      @include for-tablet-portrait-up {
+        padding-bottom: 0 !important;
+      }
+      .radio {
+        &--check {
+          & .form {
+            &-check {
+              &-inline {
+                & label {
+                  padding-left: 35px;
+                  @include for-phone-only-up {
+                    padding-left: 45px;
+                  }
+                }
+              }
+            }
+          }
+          & .custom {
+            &-checkbox {
+              padding: 0;
+              width: 27px !important;
+              height: 27px !important;
+              margin-left: -1.7rem;
+              margin-top: -6px;
+              &-label {
+                top: unset !important;
+                line-height: 24px;
+              }
+            }
+          }
+        }
+      }
+      .lable {
+        &--icon {
+          & .input {
+            &-icon {
+              top: 60px;
+              @include for-desktop-14 {
+                top: 61px;
+              }
+              @include for-desktop {
+                top: 70px;
+              }
+            }
+          }
+        }
+      }
+      & .static {
+        &-bottom {
+          &-btn {
+            background-image: linear-gradient(
+              to bottom,
+              transparent 0%,
+              #fff 40%,
+              #fff 100%
+            );
+            padding: 60px 20px 20px 20px;
+            position: fixed;
+            bottom: 0;
+            z-index: 99;
+            left: 0;
+            width: 100%;
+            @include for-tablet-portrait-up {
+              background-image: unset;
+              padding: unset;
+              position: unset;
+              z-index: unset;
+              width: unset;
+            }
+          }
+        }
+      }
+      & .background {
+        &-image {
+          border-radius: 32px;
+          position: relative;
+          overflow: hidden;
+          height: 340px;
+          @include for-phone-only-up {
+            height: 420px;
+          }
+          @include for-tablet-portrait-up {
+            height: 520px;
+          }
+          @include for-tablet-landscape-up {
+            height: 1000px;
+          }
+          @include for-desktop {
+            height: 95vh;
+          }
+          .jakay-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+          }
+
+          .logo {
+            position: absolute;
+            transform: translateX(-50%);
+            top: 12px;
+            left: 50%;
+            width: 115px;
+            @include for-tablet-portrait-up {
+              top: 30px;
+              width: 115px;
+            }
+            @include for-tablet-landscape-up {
+              top: 90px;
+              width: 230px;
+            }
+          }
+
+          h1 {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            left: 15px;
+            color: $white;
+            z-index: 1;
+
+            @include for-tablet-portrait-up {
+              right: 25px;
+              bottom: 45px;
+              left: 25px;
+            }
+
+            @include for-tablet-landscape-up {
+              left: 25px;
+              bottom: 75px;
+              right: 25px;
+            }
+
+            @include for-big-desktop {
+              left: 35px;
+              bottom: 75px;
+              right: 35px;
+            }
+          }
+          &:after {
+            content: "";
+            background: linear-gradient(0deg, #4e1f4fbf 0%, #4e1f4f00 100%);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            height: 50%;
+            z-index: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.left-side-logo {
+  @include for-phone-only {
+    text-align: center;
+  }
+}
+
+.font-sm-10 {
+  @include for-phone-only {
+    font-size: 12px;
+  }
+}
+
+.horizontal-line {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+
+  span {
+    padding: 0 10px;
+  }
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: rgb(137 112 143 / 32%);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    transform: translateY(-50%);
+  }
+}
+
+.custom-checkbox {
+  position: relative !important;
+  // top: 16px !important;
+  top: 5px !important;
+  left: 25px !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+}
+
+.custom-checkbox-label {
+  position: relative !important;
+  top: -30px !important;
+}
+.align-justify {
+  word-break: break-word !important;
+}
+.bg-light-gray{
+  background-color: #f8f8f8 ;
+}
+.set-border{
+  border: 2px solid #e9f0ff;
+  border-radius: 20px;
+  background-color: #fff;
+}
+.image-responsive {
+  
+  height: 100vh; /* Por defecto, el height será automático */
+}
+.bg-purple-eye{
+  background-color: $bg-purple;
+  padding: 0.35rem;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+}
+
+input.form-control {
+  
+  padding-left: 50px;
+}
+.input-container {
+  display: flex;
+  align-items: center; /* Alinear verticalmente en el centro */
+}
+.form-group .input-icon-l {
+  position: absolute;
+  left: 15px;
+  top: 55%;
+}

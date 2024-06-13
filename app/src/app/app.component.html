@@ -1,0 +1,35 @@
+<span class="form-inline" *ngIf="!isProductionDomain">
+  <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
+    <option *ngFor="let language of translate.getLangs()" [value]="language"
+      [selected]="language === translate.currentLang">
+      {{ language }}
+    </option>
+  </select>
+</span>
+<ng-container *ngIf="
+    isLoggedIn == false ||
+    userType == 'buyer' ||
+    userType == 'seller' ||
+    userType == 'user' ||
+    userType == 'dealer'
+  ">
+  <app-header [isLoggedIn]="isLoggedIn" [userType]="userType"></app-header>
+  <router-outlet></router-outlet>
+  <app-footer [userType]="userType" [isLoggedIn]="isLoggedIn"></app-footer>
+</ng-container>
+
+<ng-container *ngIf="isLoggedIn && (userType === 'admin' || userType === 'super_admin')">
+  <div class="d-flex">
+    <app-sidebar></app-sidebar>
+    <main class="flex-grow-1 admin-main-wrapper">
+      <app-header [isLoggedIn]="isLoggedIn" [userType]="userType"></app-header>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isLoggedIn && userType === 'expert'">
+  <app-header [isLoggedIn]="isLoggedIn" [userType]="userType"></app-header>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</ng-container>

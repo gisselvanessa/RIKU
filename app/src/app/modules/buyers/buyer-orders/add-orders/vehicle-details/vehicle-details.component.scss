@@ -1,0 +1,332 @@
+@import "../../../../../../variables";
+@import "../../../../../../function";
+
+
+
+.rating {
+  background-color: rgba(47, 119, 156, 0.1);
+  padding: 5px 15px;
+  border-radius: 32px;
+}
+
+.vehicle-review-wrp {
+
+  .form-check-inline input[type="radio"]:checked+label,
+  .form-check-inline input[type="checkbox"]:checked+label {
+    background-color: transparent;
+  }
+
+  .dot-checkmark {
+    left: 0px;
+  }
+
+  .form-check-inline label {
+    padding-left: 40px;
+    font-size: 1rem;
+  }
+
+  .textarea-wrp {
+    .dot-checkmark {
+      top: 8%;
+    }
+
+    .text-label-wrp {
+      padding-left: 40px;
+    }
+
+    textarea {
+      max-width: 70%;
+    }
+  }
+}
+
+.offer-label {
+  color: $light-purple-2;
+  font-size: 22px;
+  background-color: rgba(98, 65, 105, .1);
+  border-radius: 5px;
+
+  &.accepted {
+    color: $secondary-color;
+    background-color: rgba(47, 119, 156, .1);
+  }
+}
+
+
+
+
+
+.order-steps {
+  .steps-wrp {
+    width: 100%;
+    display: inline-flex;
+    padding-left: 50px;
+    padding-bottom: 30px;
+    margin-bottom: 60px;
+
+    .step {
+      flex-grow: 1;
+
+      &:last-child {
+        flex-grow: 0;
+      }
+
+      div {
+        .step-round {
+          margin-left: 10px;
+          color: $purple-grey;
+          background-color: transparent;
+          border: 1px solid $purple-grey;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            display: inline-block;
+            visibility: hidden;
+            opacity: 0;
+            width: 7px;
+            height: 13px;
+            border-bottom: 3px solid #fff;
+            border-right: 3px solid #fff;
+          }
+        }
+
+        h6 {
+          position: absolute;
+          left: 50%;
+          top: 45px;
+          transform: translateX(-50%);
+          white-space: nowrap;
+          color: $purple-grey;
+          font-size: min(max(.5rem, 0.83vw), 1rem);
+          ;
+          font-weight: 500;
+
+        }
+      }
+
+      .line {
+        background-color: $purple-grey;
+        border-radius: 0px;
+        height: 0.5px;
+        flex-grow: 1;
+        width: 100%;
+      }
+
+      &.active,
+      &.completed {
+        div {
+          .step-round {
+            background-color: $white;
+            border-color: $secondary-color;
+            color: $secondary-color;
+          }
+
+          h6 {
+            color: $secondary-color;
+          }
+        }
+
+        .line {
+          background-color: $secondary-color;
+        }
+      }
+
+      &.completed {
+        div {
+          .step-round {
+            background-color: $secondary-color;
+            color: $secondary-color;
+            position: relative;
+
+            &::after {
+              visibility: visible;
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.btn-light {
+  background-color: $thired-color;
+}
+
+.expert {
+  &__wrapper {
+    &--radio {
+      & .form-check-inline {
+        width: 230px;
+
+        display: block;
+
+        & label {
+          padding-block: 14px;
+        }
+
+        & input:checked {
+          &~label {
+            & img[src][data-card] {
+              content: url("../../../../../../assets/images/card-blue.svg");
+            }
+
+            & img[src][data-cash] {
+              content: url("../../../../../../assets/images/cash-blue.svg");
+            }
+
+            & img[src][data-bank] {
+              content: url("../../../../../../assets/images/bank-blue.svg");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.steps-wrp {
+  .step {
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    color: $thired-color;
+
+    span {
+      color: $white;
+      background-color: $thired-color;
+      border-radius: 50%;
+      height: 34px;
+      width: 34px;
+      margin-right: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.active {
+      color: $primary-color;
+
+      span {
+        background-color: $secondary-color;
+      }
+    }
+  }
+
+  .line {
+    width: 15px;
+    height: .5px;
+    background-color: #B1A0B4;
+    margin-left: 10px;
+    transform: rotate(90deg);
+    margin-right: 10px;
+    display: block;
+
+    @include for-tablet-portrait-up {
+      display: inline-flex;
+      margin-left: 25px;
+      transform: rotate(0deg);
+      width: 70px;
+    }
+  }
+}
+
+.vehicle-image-wrp {
+  height: 130px;
+  max-width: 195px;
+  min-width: 130px;
+  border-radius: 15px;
+  border: 1px solid #2F779C;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.text-secondary {
+  color: #2F779C !important;
+}
+
+.option-icon-item {
+ width: 50px;
+ margin-right: -15px;
+ margin-left: -10px;
+ margin-bottom: 20px;
+}
+
+.usr-img{
+ border-radius: 100px;
+ box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.vehicle-det-images{
+  border-radius: 10px;
+  border: 1px solid #2F779C;
+}
+
+
+
+@media (max-width: 465px) {
+  .option-icon-item{
+    width: auto;
+ margin-right: -15px;
+ margin-left: -10px;
+ margin-bottom: 20px;
+  }
+  .btn-view{
+    position: relative;
+    top: 142px;
+    right: -195px;
+  }
+  .usr-img{
+    width: 120px;
+  }
+  .vehicle-det-images{
+    width: 50%;
+  }
+}
+
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+}
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 10px; 
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #E0E0E0; 
+  border-radius: 4px; 
+  cursor: pointer;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background-color: transparent; 
+}
+.text-success{
+  color: rgba(10, 191, 83, 1) !important;
+}
+.bg-success{
+  background-color: rgba(10, 191, 83, 0.2) !important;
+}
+.order-detail-img{
+  width:auto;
+  height: 130px;
+  border-radius: 15px;
+  border: 1px solid #2F779C;
+  // overflow: hidden;
+  @media (max-width: 800px){ 
+    height: 90px;
+  }
+}
+

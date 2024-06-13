@@ -1,0 +1,119 @@
+<section class="section admin_add__user mb-3 bg-blue">
+  <div class="jakay-container">
+    <div class="back-to-page d-flex">
+      <span class="c-pointer" (click)="back()"><img src="./assets/images/backarrow.svg" /></span>
+      <div class="ms-3 section-header flex-grow-1">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <h3 class="mb-3 font-38 text-primary fw-semibold">
+            {{ 'Add Appraisal Report' | translate }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div aria-colcount="" class="bg-white br-12 p-3 p-md-4 mb-4">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-sm-6 col-md-4 mb-2 mb-md-0">
+          <h6 class="text-secondary mb-0 font-24 fw-semibold">Riku</h6>
+        </div>
+        <div class="col-sm-6 col-md-4 my-2 my-md-0">
+          <h6 class="text-secondary mb-0 font-24 fw-semibold text-md-center">
+            {{ "Appraisal Report" | translate }}
+          </h6>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <h6 class="text-secondary mb-0 font-24 fw-semibold text-md-end">
+            <span class="text-light-purple-2 fw-regular me-3"
+              >{{ "Request Number" | translate }}:</span
+            >
+            {{ appraisallId.slice(0, 6) | uppercase }}
+          </h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="appraisal-report__wrapper">
+      <div id="report-accordian" *ngIf="loading">
+        <app-my-details
+          [selectAccordian]="selectAccordian"
+          (selectedAccordian)="selectedAccordian($event)"
+          (saveData)="saveData($event)"
+          [appraisallDetails]="mydetails"
+          [stepsCompleted]="stepsCompleted"
+          [statusOfReview]="status"
+        ></app-my-details>
+        <app-customer-information
+          [selectAccordian]="selectAccordian"
+          (selectedAccordian)="selectedAccordian($event)"
+          [expertReviewId]="appraisallId"
+          [stepsCompleted]="stepsCompleted"
+          (saveData)="saveData($event)"
+          [statusOfReview]="status"
+        ></app-customer-information>
+        <app-vehicle-information
+          [selectAccordian]="selectAccordian"
+          (selectedAccordian)="selectedAccordian($event)"
+          (saveData)="saveData($event)"
+          [appraisallDetails]="vehicleInfo"
+          [stepsCompleted]="stepsCompleted"
+          [statusOfReview]="status"
+        ></app-vehicle-information>
+        <app-state-of-conversation
+          [selectAccordian]="selectAccordian"
+          (selectedAccordian)="selectedAccordian($event)"
+          (saveData)="saveData($event)"
+          [appraisallDetails]="appraisallDetails"
+          [page]="page.Add"
+          [stepsCompleted]="stepsCompleted"
+          [statusOfReview]="status"
+        ></app-state-of-conversation>
+        <app-comparison-table
+          [selectAccordian]="selectAccordian"
+          (selectedAccordian)="selectedAccordian($event)"
+          [page]="page.Add"
+          (saveData)="saveData($event)"
+          [appraisallDetails]="appraisallDetails"
+          [stepsCompleted]="stepsCompleted"
+          [statusOfReview]="status"
+        ></app-comparison-table>
+        <app-additional-details [page]="page.Add"></app-additional-details>
+      </div>
+
+      <div class="text-purple fw-regular intructions">
+        <h6>{{"CLARIFICATION:" | translate}}</h6>
+        <p>
+          1: {{ 'ExpertReviewMessage1' | translate }}
+        </p>
+
+        <p>
+          2: {{ 'ExpertReviewMessage2' | translate }}
+        </p>
+
+        <p>
+          3. {{ 'ExpertReviewMessage3' | translate }}
+        </p>
+
+        <p>
+          4. {{ 'ExpertReviewMessage4' | translate }}
+        </p>
+
+        <p>
+          5. {{ 'ExpertReviewMessage5' | translate }}
+        </p>
+
+        <p>6. {{ 'ExpertReviewMessage6' | translate }}</p>
+
+        <p>
+          7. {{ 'ExpertReviewMessage7' | translate }}
+        </p>
+
+        <p>
+          8. {{ 'ExpertReviewMessage8' | translate }}
+        </p>
+
+        <p>
+          9. {{ 'ExpertReviewMessage9' | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

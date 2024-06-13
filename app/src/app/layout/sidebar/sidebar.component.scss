@@ -1,0 +1,122 @@
+@import "../../../function";
+@import "../../../variables";
+
+.wrapper {
+  transition: all 0.5s ease;
+  overflow: hidden;
+  padding-left: 320px;
+  background-color: #000;
+  &.toggled {
+    padding-left: 100px;
+  }
+  &.toggled .sidebar-wrapper {
+    & .burgur-icon{
+      text-align: left!important;
+    }
+    width: 100px;
+    & .sidebar-nav {
+      width: auto;
+      & li{
+        & a{
+          width: auto;
+          padding: 6px;
+          img{
+            margin-right: 0px!important;
+          }
+          span{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.sidebar-wrapper {
+  height: 100vh;
+  width: 320px;
+  position: fixed;
+  z-index: 1000;
+  padding: 20px;
+  left: 250px;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: $bg-purple;
+  transition: all 0.5s ease;
+  & .sidebar-nav {
+    width: 280px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    & li {
+      margin-bottom: 0.5rem;
+      & a {
+        color: $white;
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px 5px;
+        &.active,
+        &:hover {
+          background-color: $secondary-color;
+          border-radius: 12px;
+        }
+      }
+    }
+  }
+}
+
+/* Sidebar Styles */
+.admin-navbar{
+  .jakay__header{
+    .navbar-brand{
+      .brand-logo{
+        height: 60px;
+        max-width: unset;
+        width: auto;
+      }
+    }
+  }
+  .text-purple-light{
+    color: #B1A0B4;
+  }
+  .user-menu{
+    border-radius: 12px;
+    background-color: transparent;
+    padding: 8px 10px;
+    &:hover{
+      background-color: rgba(213, 220, 230, .3);
+      transition: all 0.5s ease;
+    }
+  }
+}
+
+@media (min-width: 1420px){
+  .admin-navbar .jakay__header .navbar-right * + * {
+    margin-left: 2rem;
+    &:last-child{
+      margin-left: 1.3rem;
+    }
+  }
+}
+
+.sub-menu{
+  padding-left:50px;
+  li{
+    .sub-menu-item{
+      padding: 5px 10px !important;
+      border-radius: 7px !important;
+      &:hover{
+        background-color: transparent !important;
+      }
+      &.active{
+        color: #E98D69 !important;
+        text-decoration: underline;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+

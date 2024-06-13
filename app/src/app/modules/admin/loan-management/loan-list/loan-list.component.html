@@ -1,0 +1,467 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div class="d-flex justify-content-between align-items-center section-header">
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{'Loan Management' | translate}}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+        "Search" | translate
+        }}</label>
+      <div class="row">
+        <div class="col-lg-9 col-md-8">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input type="text" class="form-control border-0" [(ngModel)]="searchText"
+                placeholder="{{'Search by Make, Model or Keyword' | translate}}" />
+              <img src="assets/images/vehicle-list/grey-search.svg" class="search-icon" />
+              <button class="search-btn" (click)="getFilterUserList()">
+                <img src="assets/images/vehicle-list/search-btn.svg" alt="search-btn" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">
+            {{ "Search Results" | translate }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-all-tab" [ngClass]="{ active: selectedTab == '' }"
+                (click)="selectTab('')" data-bs-toggle="pill" type="button" role="tab" aria-controls="Condition-all"
+                aria-selected="true">
+                {{ "All" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approval-tab" [ngClass]="{ active: selectedTab == 'approved' }"
+                (click)="selectTab('approved')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approval" aria-selected="false">
+                {{ "Approved" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approved-tab" [ngClass]="{ active: selectedTab == 'completed' }"
+                (click)="selectTab('completed')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approved" aria-selected="false">
+                {{ "Submitted" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-rejected-tab" [ngClass]="{ active: selectedTab == 'rejected' }"
+                (click)="selectTab('rejected')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-rejected" aria-selected="false">
+                {{ "Not Approved" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div class="tab-pane fade" id="Condition-all" [ngClass]="{ 'show active': selectedTab == '' }" role="tabpanel"
+            aria-labelledby="Condition-all-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>Loan ID</span>
+                  </th>
+                  <th>
+                    <span>Image</span>
+                  </th>
+                  <th (click)="setSorting('vehicle')">
+                    <span>Vehicle
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" />
+                    </span>
+                  </th>
+                  <th>
+                    <span>Application Date</span>
+                  </th>
+                  <th>
+                    <span>Vehicle Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Status</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="loanList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let loan of loanList; let i = index">
+                        <td>
+                          {{ loan.id.slice(0, 6) | uppercase }}
+                        </td>
+
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="loan.vehicle?.cover_img_url; else noImage">
+                              <img [src]="loan.vehicle.cover_img_url" />
+                            </ng-container>
+                            <ng-template #noImage>
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-template>
+                          </div>
+                        </td>
+
+                        <td>
+                          {{ loan.vehicle.make }}, {{ loan.vehicle.model }}, {{ loan.vehicle.year }}
+                        </td>
+
+                        <td>{{ loan.created_at | date :'dd-MMMM-yyyy' }}</td>
+                        <td>${{ loan.vehicle.price | spanishNumber }}</td>
+                        <td>${{ loan.amount | spanishNumber }}</td>
+                        <td>
+                          <ng-container *ngIf="loan.status == 'pending' || loan.status == 'qualified'">
+                            <label class="pending-approval">{{"Pending" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'approved'">
+                            <label class="approved">{{"Approved" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'rejected'">
+                            <label class="rejected">{{"Rejected" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'cancelled'">
+                            <label class="rejected">{{"Cancelled" | translate}}</label>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" routerLink="/admin/loans/details/{{loan.id}}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" [ngClass]="{ 'show active': selectedTab == 'approved' }" id="Condition-approval"
+            role="tabpanel" aria-labelledby="Condition-approval-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>Loan ID</span>
+                  </th>
+                  <th>
+                    <span>Image</span>
+                  </th>
+                  <th (click)="setSorting('vehicle')">
+                    <span>Vehicle
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" />
+                    </span>
+                  </th>
+                  <th>
+                    <span>Application Date</span>
+                  </th>
+                  <th>
+                    <span>Vehicle Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Status</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="loanList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let loan of loanList; let i = index">
+                        <td>
+                          {{ loan.id.slice(0, 6) | uppercase }}
+                        </td>
+
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="loan.vehicle?.cover_img_url; else noImage">
+                              <img [src]="loan.vehicle.cover_img_url" />
+                            </ng-container>
+                            <ng-template #noImage>
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-template>
+                          </div>
+                        </td>
+
+                        <td>
+                          {{ loan.vehicle.make }}, {{ loan.vehicle.model }}, {{ loan.vehicle.year }}
+                        </td>
+
+                        <td>{{ loan.created_at | date :'dd-MMMM-yyyy' }}</td>
+                        <td>${{ loan.vehicle.price }}</td>
+                        <td>${{ loan.amount | titlecase }}</td>
+                        <td>
+                          <ng-container *ngIf="loan.status == 'pending' || loan.status == 'qualified'">
+                            <label class="pending-approval">{{"Pending" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'approved'">
+                            <label class="approved">{{"Approved" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'rejected'">
+                            <label class="rejected">{{"Rejected" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'cancelled'">
+                            <label class="rejected">{{"Cancelled" | translate}}</label>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" routerLink="/admin/loans/details/{{loan.id}}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-approved" [ngClass]="{ 'show active': selectedTab == 'completed' }"
+            role="tabpanel" aria-labelledby="Condition-approved-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>Loan ID</span>
+                  </th>
+                  <th>
+                    <span>Image</span>
+                  </th>
+                  <th (click)="setSorting('vehicle')">
+                    <span>Vehicle
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" />
+                    </span>
+                  </th>
+                  <th>
+                    <span>Application Date</span>
+                  </th>
+                  <th>
+                    <span>Vehicle Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Status</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="loanList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let loan of loanList; let i = index">
+                        <td>
+                          {{ loan.id.slice(0, 6) | uppercase }}
+                        </td>
+
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="loan.vehicle?.cover_img_url; else noImage">
+                              <img [src]="loan.vehicle.cover_img_url" />
+                            </ng-container>
+                            <ng-template #noImage>
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-template>
+                          </div>
+                        </td>
+
+                        <td>
+                          {{ loan.vehicle.make }}, {{ loan.vehicle.model }}, {{ loan.vehicle.year }}
+                        </td>
+
+                        <td>{{ loan.created_at | date :'dd-MMMM-yyyy' }}</td>
+                        <td>${{ loan.vehicle.price }}</td>
+                        <td>${{ loan.amount | titlecase }}</td>
+                        <td>
+                          <ng-container *ngIf="loan.status == 'pending' || loan.status == 'qualified'">
+                            <label class="pending-approval">{{"Pending" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'approved'">
+                            <label class="approved">{{"Approved" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'rejected'">
+                            <label class="rejected">{{"Rejected" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'cancelled'">
+                            <label class="rejected">{{"Cancelled" | translate}}</label>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/loans/details/{{loan.id}}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-rejected" [ngClass]="{ 'show active': selectedTab == 'rejected' }"
+            role="tabpanel" aria-labelledby="Condition-rejected-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>Loan ID</span>
+                  </th>
+                  <th>
+                    <span>Image</span>
+                  </th>
+                  <th (click)="setSorting('vehicle')">
+                    <span>Vehicle
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" />
+                    </span>
+                  </th>
+                  <th>
+                    <span>Application Date</span>
+                  </th>
+                  <th>
+                    <span>Vehicle Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Amount</span>
+                  </th>
+                  <th>
+                    <span>Loan Status</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="loanList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let loan of loanList; let i = index">
+                        <td>
+                          {{ loan.id.slice(0, 6) | uppercase }}
+                        </td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="loan.vehicle?.cover_img_url; else noImage">
+                              <img [src]="loan.vehicle.cover_img_url" />
+                            </ng-container>
+                            <ng-template #noImage>
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-template>
+                          </div>
+                        </td>
+                        <td>
+                          {{ loan.vehicle.make }}, {{ loan.vehicle.model }}, {{ loan.vehicle.year }}
+                        </td>
+                        <td>{{ loan.created_at | date :'dd-MMMM-yyyy' }}</td>
+                        <td>${{ loan.vehicle.price }}</td>
+                        <td>${{ loan.amount | titlecase }}</td>
+                        <td>
+                          <ng-container *ngIf="loan.status == 'pending' || loan.status == 'qualified'">
+                            <label class="pending-approval">{{"Pending" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'approved'">
+                            <label class="approved">{{"Approved" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'rejected'">
+                            <label class="rejected">{{"Rejected" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="loan.status == 'cancelled'">
+                            <label class="rejected">{{"Cancelled" | translate}}</label>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/loans/details/{{loan.id}}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination *ngIf="paginationData?.total_pages && !loading" [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)">
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

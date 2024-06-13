@@ -1,0 +1,27 @@
+<svg id="Component_62_2" data-name="Component 62 – 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2885" data-name="Rectangle 2885" width="40" height="40" fill="#a82424"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_66" data-name="Mask Group 66" clip-path="url(#clip-path)">
+    <g id="Group_2082" data-name="Group 2082" transform="translate(8.402 8.402)">
+      <g id="Rectangle_2881" data-name="Rectangle 2881" transform="translate(0)" fill="none" stroke="#fff" stroke-width="1">
+        <rect width="9.116" height="9.116" rx="2" stroke="none"/>
+        <rect x="0.5" y="0.5" width="8.116" height="8.116" rx="1.5" fill="none"/>
+      </g>
+      <g id="Rectangle_2883" data-name="Rectangle 2883" transform="translate(14.08 14.08)" fill="none" stroke="#fff" stroke-width="1">
+        <rect width="9.116" height="9.116" rx="2" stroke="none"/>
+        <rect x="0.5" y="0.5" width="8.116" height="8.116" rx="1.5" fill="none"/>
+      </g>
+      <g id="Rectangle_2882" data-name="Rectangle 2882" transform="translate(14.081 0.001)" fill="none" stroke="#fff" stroke-width="1">
+        <rect width="9.115" height="9.115" rx="4.557" stroke="none"/>
+        <rect x="0.5" y="0.5" width="8.115" height="8.115" rx="4.057" fill="none"/>
+      </g>
+      <g id="Rectangle_2884" data-name="Rectangle 2884" transform="translate(0 14.08)" fill="none" stroke="#fff" stroke-width="1">
+        <rect width="9.117" height="9.117" rx="4.558" stroke="none"/>
+        <rect x="0.5" y="0.5" width="8.117" height="8.117" rx="4.058" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

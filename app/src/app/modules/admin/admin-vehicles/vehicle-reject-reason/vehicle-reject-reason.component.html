@@ -1,0 +1,24 @@
+<section class="section vehicle__listing bg-blue">
+    <div class="jakay-container admin-container">
+        <div class="section-header">
+            <h3 class=" font-38 mb-3 text-primary fw-semibold ">{{"Vehicle Rejection Reason" | translate}}</h3>
+        </div>
+       <div class="row">
+        <div class="col-lg-4">
+            <div class="vehicle__selection">
+                <div class="form-group mb-0">
+                    <label class="mb-xl-3 mb-lg-2 mb-2 d-block">{{"Please Enter The Rejection Reason" | translate}}</label>
+                    <textarea  class="form-control br-12" [(ngModel)]="rejectReason"
+                        rows="3"></textarea>
+                </div>
+                <div class="btn-grp mt-5 d-flex">
+                    <button class=" btn primary-btn me-3 border-1" data-bs-toggle="modal"
+                        (click)="rejectVehicle()">{{"Confirm" | translate}}</button>
+                    <button class=" btn primary-btn-outline" (click)= "location.back()">{{"Cancel" | translate}}</button>
+                </div>
+                <br>
+            </div>
+        </div>
+       </div>
+    </div>
+</section>

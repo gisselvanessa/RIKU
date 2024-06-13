@@ -1,0 +1,104 @@
+<section class="section bg-blue admin--listing h-vh-90">
+  <div class="container-fluid px-4">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="back-to-page d-flex">
+        <span>
+          <a href="javascript:void(0)" (click)="goback()">
+            <img src="assets/images/backarrow.svg" />
+          </a>
+        </span>
+        <h3 class="ms-3 mb-3 font-38 text-primary fw-semibold">{{"Blog Detail" | translate}}</h3>
+      </div>
+      <div class="d-flex mb-3 ms-auto">
+        <button
+          class="btn-outline-purple text-primary font-14"
+          (click)="editBlog()"
+        >
+          <img
+            class="me-2"
+            src="assets/images/view_vehicle/edit_purple.svg"
+            width="28px"
+            height="28px"
+            alt=""
+          />{{"Edit" | translate}}
+        </button>
+      </div>
+    </div>
+    <div class="bg-white br-12 p-4 border-bottom" *ngIf="isDataLoaded">
+      <div
+        class="d-flex justify-content-start align-items-center border-bottom pb-4"
+      >
+        <label class="text-purple-light font-14 me-2">{{"Created Date" | translate}}: </label>
+        <p class="fw-semibold text-primary font-18">
+          {{ blogDetails.created_at | date : "MM-dd-YYYY" }}
+        </p>
+      </div>
+      <div class="blog-detail__info pt-4">
+        <p class="fw-semibold text-primary font-18">
+          {{ blogDetails.title | titlecase }}
+        </p>
+        <div class="blog-detail__content pt-4">
+          <div class="blog-detail__filter-label">
+            <ul class="d-flex align-items-center">
+              <ng-container *ngFor="let tags of blogDetails.tags">
+                <li class="text-secondary font-16">{{ tags }}</li>
+              </ng-container>
+            </ul>
+          </div>
+          <div class="blog-detail__media pt-4">
+            <label class="text-purple-light font-14 mb-2">
+              <span *ngIf="blogDetails.asset_type === 'image'">{{"Image" | translate}}</span>
+              <span *ngIf="blogDetails.asset_type === 'video'">{{"Video" | translate}}</span>
+              <span
+                *ngIf="
+                  blogDetails.asset_type !== 'image' &&
+                  blogDetails.asset_type !== 'video'
+                "
+                >{{"Youtube Video" | translate}}</span
+              >
+            </label>
+            <div class="blog-detail__media__image-video">
+              <img
+                *ngIf="blogDetails.asset_type === 'image'"
+                [src]="blogDetails.cover_asset_url.download_url | safeUrl"
+              />
+              <video
+                *ngIf="blogDetails.asset_type === 'video'"
+                [muted]="true"
+                [autoplay]="false"
+                width="350px"
+                height="195px"
+                class="img"
+                controls
+              >
+                <source
+                  [src]="blogDetails.cover_asset_url.download_url | safeUrl"
+                  type="video/mp4"
+                />
+              </video>
+              <iframe
+                *ngIf="
+                  blogDetails.asset_type !== 'image' &&
+                  blogDetails.asset_type !== 'video'
+                "
+                width="420"
+                height="315"
+                [src]="embeddedUrl(blogDetails.cover_asset_url) | safeUrl"
+              >
+              </iframe>
+            </div>
+          </div>
+          <div class="blog-detail__desc py-4">
+            <label class="text-purple-light font-14 mb-2">{{"Description" | translate}}: </label>
+            <div
+              class="text-primary mb-0 fw-semibold font-18 ck-editor" 
+              [innerHtml]="blogDetails.html"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

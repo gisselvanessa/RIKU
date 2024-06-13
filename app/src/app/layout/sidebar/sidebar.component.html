@@ -1,0 +1,266 @@
+<div class="wrapper"
+*ngIf="!router.url.includes('/admin/login')"
+[ngClass]="isSideBarOpen ? '' : 'toggled'">
+  <!-- Sidebar -->
+  <div class="sidebar-wrapper">
+    <div
+      class="text-end mb-5 w-100 burgur-icon"
+      (click)="isSideBarOpen = !isSideBarOpen"
+    >
+      <a class="navbar-brand me-0" href="javascript:void(0)"
+        ><img src="assets/images/sidebar/menu-toggle-icon.svg" alt="toggle-btn"
+      /></a>
+    </div>
+    <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+      <li *ngIf="modulePermissions[moduleName.Dashboard]?.can_list || modulePermissions[moduleName.Dashboard]?.can_view_details">
+        <a routerLink="/admin/dashboard" routerLinkActive="active">
+          <img
+            src="assets/images/sidebar/dashbored-icon.svg"
+            class="me-3"
+            alt="dashboard"
+          /><span>{{"Dashboard" | translate}}</span></a
+        >
+      </li>
+      <li style="margin-left: 5px" *ngIf="modulePermissions[moduleName.VehicleManagement]?.can_list">
+        <a routerLink="/admin/vehicles" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/vehicle-manage-icon.svg"
+            class="me-3"
+            alt="Vehicle Management"
+          /><span>{{"Vehicle Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.OrderManagement]?.can_list">
+        <a routerLink="/admin/orders" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/orders.svg"
+            class="me-3"
+            alt="Order Management"
+          /><span>{{"Order Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.ProcedureManagement]?.can_list">
+        <a routerLink="/admin/vehicle-procedure" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/vehicle-pro-icon.svg"
+            class="me-3"
+            alt="Vehicluar Procedure"
+          /><span>{{"Vehicle Procedure" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.UserManagement]?.can_list">
+        <a routerLink="/admin/users" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/user-icon.svg"
+            class="me-3"
+            alt="User Management"
+          /><span>{{"User Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.TeamManagement]?.can_list">
+        <a routerLinkActive="active" routerLink="/admin/team-members">
+          <img
+            src="assets/images/sidebar/team-icon.svg"
+            class="me-3"
+            alt="Team Management"
+          /><span>{{"Team Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.RoleManagement]?.can_list">
+        <a routerLinkActive="active" routerLink="/admin/roles"
+          ><img
+            src="assets/images/sidebar/roles-icon.svg"
+            class="me-3"
+            alt="Role Management"
+          /><span>{{"Role Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.ExpertManagement]?.can_list">
+        <a routerLinkActive="active" routerLink="/admin/experts"
+          ><img
+            src="assets/images/sidebar/expert-icon.svg"
+            class="me-3"
+            alt="Expert Management"
+          /><span>{{"Expert Management" | translate}}</span></a
+        >
+      </li>
+      <li>
+        <a routerLinkActive="active" routerLink="/notifications"
+          ><img
+            src="assets/images/sidebar/sidebar-notification.svg"
+            class="me-3"
+            alt="Expert Management"
+          /><span>{{"Notifications" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.CMS]?.can_list">
+        <a routerLinkActive="active" class="c-pointer" (click)="openDropdown()" [ngClass]="(router.url.indexOf('/blog') > -1) || (router.url.indexOf('/faq') > -1) || (router.url.indexOf('/cms-pages') > -1) ? 'active' : ''">
+          <img
+            src="assets/images/sidebar/contant-mange-icon.svg"
+            class="me-3"
+            alt="Content Management"
+          />
+          <span>
+            {{"Content Management" | translate}}
+            <ng-container *ngIf="selectedAccordian; else upArrow">
+              <img
+                src="assets/images/sidebar/up-arrow.svg"
+                class="me-3"
+                alt="Content Management"
+              />
+            </ng-container>
+            <ng-template #upArrow>
+              <img
+                src="assets/images/sidebar/down-arrow.svg"
+                class="me-3"
+                alt="Content Management"
+              />
+            </ng-template>
+          </span>
+        </a>
+        <ul *ngIf="selectedAccordian && isSideBarOpen" class="sub-menu">
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/blog"
+            >
+              <span>{{"Blog" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'home' }"
+            >
+              <span>{{"Home" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'about-us' }"
+            >
+              <span>{{"About Us" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'sell' }"
+            >
+              <span>{{"I Want To Sell" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'terms' }"
+            >
+              <span>{{"Terms & Conditions" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'privacy-policy' }"
+            >
+              <span>{{"Privacy Policy" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'payment-cancellation-policy' }"
+            >
+              <span>{{"Payment and Cancellation Policy" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'payment-info' }"
+            >
+              <span>{{"Payment Info" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/cms-pages"
+              [queryParams]="{ page: 'financing-policy' }"
+            >
+              <span>{{"Financing Policy" | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="sub-menu-item"
+              routerLinkActive="active"
+              routerLink="/admin/faq"
+            >
+              <span>{{"Faq's" | translate}}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="modulePermissions[moduleName.LoanManagement]?.can_list">
+        <a [routerLink]="['/admin/loans']" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/loan-icon.svg"
+            class="me-3"
+            alt="Loan Management"
+          /><span>{{"Loan Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.CompanyManagement]?.can_list">
+        <a routerLink="/admin/companies" routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/company.svg"
+            class="me-3"
+            alt="Company Management"
+          /><span>{{"Company Management" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.ActivityLog]?.can_list">
+        <a
+          href="javascript:void(0)"
+          routerLink="/admin/activity-log/list"
+          routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/activity.svg"
+            class="me-3"
+            alt="Activity Log"
+          /><span>{{"Activity Log" | translate}}</span></a
+        >
+      </li>
+      <li *ngIf="modulePermissions[moduleName.ContactUs]?.can_list">
+        <a
+          href="javascript:void(0)"
+          routerLink="/admin/manage-contact-us"
+          routerLinkActive="active"
+          ><img
+            src="assets/images/sidebar/contact-us.svg"
+            class="me-3"
+            alt="Contact Us"
+          /><span>{{"Manage Contact Us" | translate}}</span></a
+        >
+      </li>
+    </ul>
+  </div>
+</div>

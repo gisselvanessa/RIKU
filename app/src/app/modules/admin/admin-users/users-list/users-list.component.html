@@ -1,0 +1,644 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div class="d-flex justify-content-between align-items-center section-header">
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Users" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+        "Search" | translate
+        }}</label>
+      <div class="row">
+        <div class="col-lg-9 col-md-8">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input type="text" class="form-control border-0" [(ngModel)]="searchText" placeholder="{{
+                  'Search by Seller, Buyer, Dealer or Keyword' | translate
+                }}" />
+              <img src="assets/images/vehicle-list/grey-search.svg" class="search-icon" />
+              <button class="search-btn" (click)="getFilterUserList()">
+                <img src="assets/images/vehicle-list/search-btn.svg" alt="search-btn" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4" *ngIf="modulePermissions.can_create">
+          <div class="form-group search-grp add-vehicle ms-2">
+            <a routerLink="/admin/users/add" class="btn primary-btn btn-sm br-12 py-3">
+              + {{ "Add User" | translate }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Filters" | translate
+          }}</label>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div ngbDropdown #myStatusDrop="ngbDropdown" class="doropdown_radio" [autoClose]="'outside'">
+              <button ngbDropdownToggle
+              class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+              [ngClass]="{ 'text-primary': selectedStatus }" type="button"
+                id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                <ng-container *ngIf="selectedStatus">
+                  {{
+                  selectedStatus == ("Active" | translate)
+                  ? ("Inactive" | translate)
+                  : (selectedStatus | titlecase | translate)
+                  }}
+                </ng-container>
+                <ng-container *ngIf="!selectedStatus">
+                  {{ "User Status" | translate }}
+                </ng-container>
+              </button>
+              <ul ngbDropdownMenu class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let statusData of statusList">
+                  <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="Status"
+                          (change)="selectValue(statusData.id, 'status')" id="{{ statusData.id }}"
+                          value="{{ statusData.id }}" [checked]="statusData.id == selectedStatus" />
+                        <label class="form-check-label" for="{{ statusData.id }}">{{ statusData.status | translate
+                          }}</label>
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myStatusDrop.close(); getFilterUserList()" href="javascript:void(0)">{{ "Apply" | translate
+                    }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">
+            {{ "Search Results" | translate }}
+          </h3>
+          <a href="javascript:void(0)" *ngIf="searchApplied" (click)="clearAll()"
+            class="ms-4 text-secondary text-underline">{{ "Clear All Filters" | translate }}</a>
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <span class="pill" *ngIf="selectedStatus">
+          {{
+          selectedStatus == ("Active" | translate)
+          ? ("Inactive" | translate)
+          : (selectedStatus | titlecase | translate)
+          }}<a class="ms-3" href="javascript:void(0)" (click)="selectedStatus = null; getFilterUserList()"><img
+              src="assets/images/vehicle-list/blue-cross.svg" alt="" /></a></span>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-all-tab" [ngClass]="{ active: selectedTab == 'all' }"
+                (click)="selectTab('all')" data-bs-toggle="pill" type="button" role="tab" aria-controls="Condition-all"
+                aria-selected="true">
+                {{ "All" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approval-tab" [ngClass]="{ active: selectedTab == 'buyer' }"
+                (click)="selectTab('buyer')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approval" aria-selected="false">
+                {{ "Buyer" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approved-tab" [ngClass]="{ active: selectedTab == 'seller' }"
+                (click)="selectTab('seller')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approved" aria-selected="false">
+                {{ "Seller" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-rejected-tab" [ngClass]="{ active: selectedTab == 'dealer' }"
+                (click)="selectTab('dealer')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-rejected" aria-selected="false">
+                {{ "Dealer" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div class="tab-pane fade" id="Condition-all" [ngClass]="{ 'show active': selectedTab == 'all' }"
+            role="tabpanel" aria-labelledby="Condition-all-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('REG_DATE')">
+                    <span>{{ "Reg Date" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_TYPE')">
+                    <span>{{ "User Type" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('FIRST_NAME')">
+                    <span>{{ "Name" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LAST_NAME')">
+                    <span>{{ "Surname" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_NAME')">
+                    <span>{{ "Username" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Status" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Active/Inactive" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="userList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let user of userList; let i = index">
+                        <td>
+                          {{ user.registration_date | date : "MM-dd-YYYY" }}
+                        </td>
+
+                        <td *ngIf="user.user_type.length > 1">
+                          <div>
+                            {{ user.user_type[0].type | titlecase | translate }}
+                          </div>
+                          <div>
+                            {{ user.user_type[1].type | titlecase | translate }}
+                          </div>
+                        </td>
+                        <td *ngIf="user.user_type.length === 1">
+                          {{ user.user_type[0].type | titlecase | translate }}
+                        </td>
+                        <td>{{ user.first_name | titlecase }}</td>
+                        <td>{{ user.last_name | titlecase }}</td>
+                        <td>{{ user.user_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                          {{ user.status | titlecase | translate }}
+                        </td>
+                        <td>
+                          <ng-container *ngIf="modulePermissions.can_edit">
+                            <div class="row" *ngFor="
+                                                          let userType of user.user_type;
+                                                          let j = index
+                                                        ">
+                              <div class="switch-wrp d-flex align-items-center mb-2">
+                                <p class="font-16 text-primary mx-2" *ngIf="user.user_type.length > 1">
+                                  {{ userType.type | titlecase | translate }}
+                                </p>
+                                <input type="checkbox" [checked]="userType.status == 'Active'" name="checkbox-list"
+                                  (click)="changeStatus($event, i, j)" value="{{ userType.status }}"
+                                  id="switch0{{ i }}{{ j }}" /><label class="switch"
+                                  for="switch0{{ i }}{{ j }}">Toggle</label>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a *ngIf="modulePermissions.can_view_details" href="javascript:void(0)" routerLink="/admin/users/user-details/{{
+                              user.user_id
+                            }}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                          <a *ngIf="modulePermissions.can_edit" href="javascript:void(0);"
+                            (click)="editUser(user.user_id)">
+                            <img src="assets/images/vehicle-list/pen-purple-icon.svg" class="ms-3" />
+                          </a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete" (click)="deleteUser(i)">
+                            <img src="assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">
+                      {{ "You Can't Access to these Data" | translate }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" [ngClass]="{ 'show active': selectedTab == 'buyer' }" id="Condition-approval"
+            role="tabpanel" aria-labelledby="Condition-approval-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('REG_DATE')">
+                    <span>{{ "Reg Date" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_TYPE')">
+                    <span>{{ "User Type" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('FIRST_NAME')">
+                    <span>{{ "Name" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LAST_NAME')">
+                    <span>{{ "Surname" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_NAME')">
+                    <span>{{ "Username" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Status" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Active/Inactive" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">
+                      {{ "You Can't Access to these Data" | translate }}
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="userList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let user of userList; let i = index">
+                        <td>
+                          {{ user.registration_date | date : "MM-dd-YYYY" }}
+                        </td>
+                        <td *ngIf="user.user_type.length > 1">
+                          <div>
+                            {{ user.user_type[0].type | titlecase | translate}}
+                          </div>
+                          <div>
+                            {{ user.user_type[1].type | titlecase | translate }}
+                          </div>
+                        </td>
+                        <td *ngIf="user.user_type.length === 1">
+                          {{ user.user_type[0].type | titlecase | translate }}
+                        </td>
+                        <td>{{ user.first_name | titlecase }}</td>
+                        <td>{{ user.last_name | titlecase }}</td>
+                        <td>{{ user.user_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                          {{ user.status | titlecase | translate}}
+                        </td>
+                        <td>
+                          <ng-container *ngIf="modulePermissions.can_edit">
+                            <div class="row" *ngFor="
+                                                          let userType of user.user_type;
+                                                          let j = index
+                                                        ">
+                              <div class="switch-wrp d-flex align-items-center mb-2">
+                                <input type="checkbox" [checked]="userType.status == 'Active'" name="checkbox-list"
+                                  (click)="changeStatus($event, i, j)" value="{{ userType.status }}"
+                                  id="switchbuyer0{{ i }}{{ j }}" /><label class="switch"
+                                  for="switchbuyer0{{ i }}{{ j }}">Toggle</label>
+
+                                <p class="font-16 text-primary mx-2" *ngIf="user.user_type.length > 1">
+                                  - {{ userType.type | titlecase | translate}}
+                                </p>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/users/user-details/{{
+                              user.user_id
+                            }}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                          <a *ngIf="modulePermissions.can_edit" href="javascript:void(0);"
+                            (click)="editUser(user.user_id)">
+                            <img src="assets/images/vehicle-list/pen-purple-icon.svg" class="ms-3" />
+                          </a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete" (click)="deleteUser(i)">
+                            <img src="assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-approved" [ngClass]="{ 'show active': selectedTab == 'seller' }"
+            role="tabpanel" aria-labelledby="Condition-approved-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('REG_DATE')">
+                    <span>{{ "Reg Date" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_TYPE')">
+                    <span>{{ "User Type" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('FIRST_NAME')">
+                    <span>{{ "Name" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LAST_NAME')">
+                    <span>{{ "Surname" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_NAME')">
+                    <span>{{ "Username" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Status" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Active/Inactive" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">
+                      {{ "You Can't Access to these Data" | translate }}
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="userList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let user of userList; let i = index">
+                        <td>
+                          {{ user.registration_date | date : "MM-dd-YYYY" }}
+                        </td>
+                        <td *ngIf="user.user_type.length > 1">
+                          <div>
+                            {{ user.user_type[0].type | titlecase | translate}}
+                          </div>
+                          <div>
+                            {{ user.user_type[1].type | titlecase | translate }}
+                          </div>
+                        </td>
+                        <td *ngIf="user.user_type.length === 1">
+                          {{ user.user_type[0].type | titlecase | translate }}
+                        </td>
+                        <td>{{ user.first_name | titlecase }}</td>
+                        <td>{{ user.last_name | titlecase }}</td>
+                        <td>{{ user.user_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                          {{ user.status | titlecase | translate }}
+                        </td>
+                        <td>
+                          <ng-container *ngIf="modulePermissions.can_edit">
+                            <div class="row" *ngFor="
+                              let userType of user.user_type;
+                              let j = index
+                            ">
+                              <div class="switch-wrp d-flex align-items-center mb-2">
+                                <input type="checkbox" [checked]="userType.status == 'Active'" name="checkbox-list"
+                                  (click)="changeStatus($event, i, j)" value="{{ userType.status }}"
+                                  id="switchseller0{{ i }}{{ j }}" /><label class="switch"
+                                  for="switchseller0{{ i }}{{ j }}">Toggle</label>
+
+                                <p class="font-16 text-primary mx-2" *ngIf="user.user_type.length > 1">
+                                  - {{ userType.type | titlecase | translate }}
+                                </p>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/users/user-details/{{
+                              user.user_id
+                            }}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_edit"
+                            (click)="editUser(user.user_id)">
+                            <img src="assets/images/vehicle-list/pen-purple-icon.svg" class="ms-3" />
+                          </a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete" (click)="deleteUser(i)">
+                            <img src="assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-rejected" [ngClass]="{ 'show active': selectedTab == 'dealer' }"
+            role="tabpanel" aria-labelledby="Condition-rejected-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('REG_DATE')">
+                    <span>{{ "Reg Date" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_TYPE')">
+                    <span>{{ "User Type" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('FIRST_NAME')">
+                    <span>{{ "Name" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LAST_NAME')">
+                    <span>{{ "Surname" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('USER_NAME')">
+                    <span>{{ "Username" | translate }}
+                      <img src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Status" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Active/Inactive" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">
+                      {{ "You Can't Access to these Data" | translate }}
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="userList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let user of userList; let i = index">
+                        <td>
+                          {{ user.registration_date | date : "MM-dd-YYYY" }}
+                        </td>
+                        <td *ngIf="user.user_type.length > 1">
+                          <div>
+                            {{ user.user_type[0].type | titlecase | translate }}
+                          </div>
+                          <div>
+                            {{ user.user_type[1].type | titlecase | translate }}
+                          </div>
+                        </td>
+                        <td *ngIf="user.user_type.length === 1">
+                          {{ user.user_type[0].type | titlecase | translate }}
+                        </td>
+                        <td>{{ user.first_name | titlecase }}</td>
+                        <td>{{ user.last_name | titlecase }}</td>
+                        <td>{{ user.user_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                          {{ user.status | titlecase | translate}}
+                        </td>
+                        <td>
+                          <ng-container *ngIf="modulePermissions.can_edit">
+                            <div class="row" *ngFor="
+                              let userType of user.user_type;
+                              let j = index
+                            ">
+                              <div class="switch-wrp d-flex align-items-center mb-2">
+                                <input type="checkbox" [checked]="userType.status == 'Active'" name="checkbox-list"
+                                  (click)="changeStatus($event, i, j)" value="{{ userType.status }}"
+                                  id="switchdealer0{{ i }}{{ j }}" /><label class="switch"
+                                  for="switchdealer0{{ i }}{{ j }}">Toggle</label>
+
+                                <p class="font-16 text-primary mx-2" *ngIf="user.user_type.length > 1">
+                                  - {{ userType.type | titlecase | translate }}
+                                </p>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/users/user-details/{{
+                              user.user_id
+                            }}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_edit"
+                            (click)="editUser(user.user_id)">
+                            <img src="assets/images/vehicle-list/pen-purple-icon.svg" class="ms-3" />
+                          </a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete" (click)="deleteUser(i)">
+                            <img src="assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination *ngIf="paginationData?.total_pages && !loading" [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)">
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

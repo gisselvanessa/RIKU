@@ -1,0 +1,66 @@
+<div class="row" *ngIf="paginationData?.total_pages">
+  <div class="col-12">
+    <div
+      class="pagination row justify-content-between align-items-center"
+      [ngClass]="removePaddingButtom ? '' : 'pb-5'"
+    >
+      <div class="col-md-4">
+        <p class="text-primary font-14">
+          {{ "Page" | translate }}
+          <span class="fw-semibold font-14">{{
+            paginationData.current_page
+          }}</span>
+          {{ "of total" | translate }}
+          <span class="fw-semibold font-14">{{
+            paginationData.total_pages
+          }}</span>
+          {{ "Pages" | translate }}
+        </p>
+      </div>
+      <div class="col-md-8">
+        <ngb-pagination
+          [collectionSize]="pageSize"
+          [maxSize]="printPage"
+          [page]="Page"
+          [rotate]="true"
+          (pageChange)="onPage($event)"
+        >
+          <ng-template ngbPaginationPrevious>
+            <div class="position-relative; display:flex; align-items:center;">
+              <img
+                style="position: absolute; top: 30%; left: 20px; width: 22px"
+                class="input-icon-l"
+                src="assets/images/arrow-left-white.svg"
+                alt="Mi Icono"
+              />
+              <button
+                style="padding-left: 35px !important"
+                class="btn primary-btn shw px-3 py-2 nowrap br-16"
+                type="button"
+              >
+                {{ "Previous" | translate }}
+              </button>
+            </div>
+          </ng-template>
+          <ng-template ngbPaginationNext>
+            <div class="position-relative; display:flex; align-items:center;">
+              <img
+                style="position: absolute; top: 30%; right: 20px; width: 22px"
+                class="input-icon-l"
+                src="assets/images/arrow-right-white.svg"
+                alt="Mi Icono"
+              />
+              <button
+                style="padding-right: 35px !important"
+                class="btn primary-btn shw px-3 py-2 nowrap br-16"
+                type="button"
+              >
+                {{ "Next" | translate }}
+              </button>
+            </div>
+          </ng-template>
+        </ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1297 @@
+<ng-container *ngIf="!userService.isFromMobile">
+  <header
+  *ngIf="
+    !router.url.includes('/admin/login') &&
+    !router.url.includes('/auth/login') &&
+    !router.url.includes('/auth/signup') &&
+    !router.url.includes('/coming-soon') &&
+    !router.url.includes('/auth/mobile-verification')
+  "
+  class="jakay__header"
+>
+  <ng-container *ngIf="!isLoggedIn">
+    <nav class="navbar navbar-expand-xl position-relative">
+      <div
+        class="jakay-container position-unset d-flex align-items-xl-center justify-content-between justify-content-xl-start"
+      >
+        <a
+          class="navbar-brand c-pointer"
+          routerLink="/home"
+          href="javascript:void(0)"
+          ><img
+            class="brand-logo"
+            src="assets/images/riku-logo.svg"
+            alt="brand_logo"
+        /></a>
+
+        <div
+          [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
+          id="navbarNavAltMarkuptop"
+        >
+          <div class="navbar-nav">
+            <div
+              class="navbar-right d-flex align-items-center d-md-none mb-3"
+              *ngIf="!isLoggedIn"
+            >
+              <!-- <button
+                class="btn primary-btn-outline border-0 btn-sm font-16"
+                routerLink="/auth/login"
+              > -->
+              <button
+                class="btn-sm btn-nav-bar font-12 btn-sell-vehicle col"
+                routerLink="/auth/login"
+              >
+                {{ "Sell a vehicle" | translate }}
+              </button>
+
+              <button
+                class="border-0 font-12 btn-sm btn-nav-bar btn-signin"
+                routerLink="/auth/login"
+              >
+                {{ "Sign In" | translate }}
+              </button>
+              <!-- <button
+                class="btn primary-btn btn-sm font-16"
+                routerLink="/auth/signup"
+              > -->
+              <button
+                class="font-12 btn-sm btn-nav-bar btn-signup btn-sm"
+                routerLink="/auth/signup"
+              >
+                {{ "Register" | translate }}
+              </button>
+            </div>
+            <a class="nav-link c-pointer" (click)="navigateToListing()">{{
+              "Search Vehicle" | translate
+            }}</a>
+            <a class="nav-link c-pointer" (click)="sendItToFinancing()">{{
+              "Sell Now" | translate
+            }}</a>
+            <a class="nav-link c-pointer" (click)="comingSoon()">{{
+              "Dealerships" | translate
+            }}</a>
+            <!-- <a class="nav-link c-pointer" (click)="comingSoon()">{{
+              "Individual Sellers" | translate
+            }}</a> -->
+          </div>
+        </div>
+        <div class="navbar-right align-items-center d-flex" *ngIf="!isLoggedIn">
+          <!-- <button
+            class="btn primary-btn-outline d-none d-sm-inline border-0 btn-sm font-16 btn-nav-bar btn-sell-vehicle"
+            routerLink="/auth/login"
+          > -->
+          <button
+            class="btn-sm d-none d-md-inline btn-nav-bar font-12 btn-sell-vehicle"
+            routerLink="/auth/login"
+          >
+            {{ "Sell a vehicle" | translate }}
+          </button>
+          <!-- <button
+            class="btn primary-btn-outline d-none d-sm-inline border-0 btn-sm font-16 btn-nav-bar btn-signin"
+            routerLink="/auth/login"
+          > -->
+          <button
+            class="btn-sm d-none d-md-inline btn-nav-bar font-12  btn-signin"
+            routerLink="/auth/login"
+          >
+            {{ "Sign In" | translate }}
+          </button>
+          <!-- <button
+            class="btn primary-btn btn-sm d-none d-sm-inline font-16 btn-nav-bar btn-signup"
+            routerLink="/auth/signup"
+          > -->
+          <button
+            class="btn-sm d-none d-md-inline btn-nav-bar font-12 btn-signup"
+            routerLink="/auth/signup"
+          >
+            {{ "Register" | translate }}
+          </button>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="javascript:void(0)navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            (click)="toggleCollapsed()"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+
+        <div class="navbar-right d-flex align-items-center" *ngIf="isLoggedIn">
+          <a
+            ngbDropdown
+            class="navbar-right-link d-flex align-items-center position-relative"
+            href="javascript:void(0)"
+          >
+            <img
+              class="profile-img"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+              alt="notification"
+            />
+            <i
+              ngbDropdownToggle
+              class="ms-2 text-primary fa fa-chevron-down"
+            ></i>
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 p-3 log-out-dropdown"
+              aria-labelledby="vehicle-type"
+            >
+              <button ngbDropdownItem (click)="logout()">Log out</button>
+            </ul>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </ng-container>
+  <ng-container *ngIf="isLoggedIn">
+    <nav
+      *ngIf="userType == 'seller' || userType == 'user'"
+      class="navbar navbar-expand-xl position-relative"
+    >
+      <div
+        class="jakay-container seller-vehicle-header position-unset d-flex align-items-xl-center justify-content-between justify-content-xl-start"
+      >
+        <a class="navbar-brand" routerLink="/home" href="javascript:void(0)"
+          ><img
+            class="brand-logo"
+            src="assets/images/riku-logo.svg"
+            alt="brand_logo"
+        /></a>
+
+        <div
+          [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
+          id="navbarNavAltMarkup"
+          style="margin-left:200px;"
+        >
+          <div class="navbar-nav align-items-xl-center">
+
+            <a
+              class="nav-link buyer-header-link"
+              [routerLink]="['/user/vehicles/buyer-vehicle-list']"
+              routerLinkActive="active"
+              >{{ "Vehicles" | translate }}</a
+            >
+            <a
+              class="nav-link seller-header-link"
+              [routerLink]="['/loan/financing']"
+              routerLinkActive="active"
+              >{{ "Financing" | translate }}</a
+            >
+            <a class="nav-link me-0" routerLink="/user/expert-reviews">{{
+              "Expert Review" | translate
+            }}</a>
+            <!-- <a
+              class="nav-link seller-header-link c-pointer"
+              (click)="comingSoon()"
+              routerLinkActive="active"
+              >{{ "Customers" | translate }}</a
+            >
+            <a
+              class="nav-link seller-header-link c-pointer"
+              (click)="comingSoon()"
+              routerLinkActive="active"
+              >{{ "Vehicle Delivery" | translate }}</a
+            > -->
+            <a
+              class="nav-link seller-header-link"
+              [routerLink]="['/user/my-vehicles']"
+              routerLinkActive="active"
+              >{{ "My Vehicles" | translate }}</a
+            >
+            <a
+              class="nav-link seller-header-link"
+              [routerLink]="['/user/seller-orders']"
+              routerLinkActive="active"
+              >{{ "My Sales" | translate }}</a
+            >
+            <a class="nav-link" routerLinkActive="active" routerLink="/blogs">{{
+              "Blog" | translate
+            }}</a>
+
+            <div class="navbar-right d-flex align-items-center">
+              <button
+                class="btn btn-purple d-md-none seller-add-vehicle-button"
+                routerLink="/user/my-vehicles/add-vehicle"
+              >
+                {{ "Add Vehicle" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="navbar-right d-flex align-items-center">
+          <button
+            class="btn btn-purple d-none d-md-inline"
+            routerLink="/user/my-vehicles/add-vehicle"
+          >
+            {{ "Add Vehicle" | translate }}
+          </button>
+          <a
+            class="navbar-right-link d-none d-md-inline"
+            href="javascript:void(0)"
+            routerLink="/user/chat-user"
+          >
+            <img src="././assets/images/msg.svg" alt="msg" />
+          </a>
+          <a
+            class="navbar-right-link"
+            ngbDropdown
+            #notification="ngbDropdown"
+            href="javascript:void(0)"
+          >
+            <img
+              src="assets/images/notification.svg"
+              alt="notification"
+              (click)="notification.toggle()"
+            />
+            <span class="" *ngIf="newNotificationCount"></span>
+            <div
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown notification-drawer"
+            >
+              <app-notification-header
+                (click)="notification.close()"
+                (count)="getCount($event)"
+              ></app-notification-header>
+            </div>
+          </a>
+          <a
+            ngbDropdown
+            #menuList="ngbDropdown"
+            class="navbar-right-link d-flex align-items-center"
+            placement="bottom-right"
+            href="javascript:void(0)"
+          >
+            <img
+              class="profile-img"
+              (click)="menuList.toggle()"
+              [src]="
+                userProfileImage
+                  ? userProfileImage
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+              "
+              alt="notification"
+            />
+            <i
+              ngbDropdownToggle
+              class="ms-2 text-primary fa fa-chevron-down"
+            ></i>
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown"
+              aria-labelledby="vehicle-type"
+            >
+              <li>
+                <button ngbDropdownItem routerLink="/user/my-profile">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/profile.svg"
+                      alt="profile"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Profile" | translate }}
+                </button>
+              </li>
+              <li
+                class="ms-0"
+                [routerLink]="['/user/buyer-orders']"
+                routerLinkActive="active"
+              >
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/orders.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Orders" | translate }}
+                </button>
+              </li>
+              
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="comingSoon()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/star.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Reviews" | translate }}
+                </button>
+              </li>
+              <li
+                class="ms-0"
+                [routerLink]="['/user/seller-orders']"
+                routerLinkActive="active"
+              >
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/my-sales.svg"
+                      alt="order"
+                      class="me-2"
+                      style="width: 20px;"
+                    />
+                  </div>
+                  {{ "My Sales" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="comingSoon()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/hand.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Bank Account Info" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/policies/payment_info']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/card.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Payment Info" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/notifications']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/bell.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Manage Notification" | translate }}
+                </button>
+              </li>
+
+
+              <li class="ms-0" *ngIf="loggedInUserType === 'seller' && userDetails?.role?.length == 1">
+                <button ngbDropdownItem (click)="openBseller('user');">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/seller-img/profile-icon.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Become a Buyer" | translate }}
+                </button>
+              </li>
+
+
+              <li class="ms-0" [routerLink]="['/faq']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/question.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Help/FAQs" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/contact-us']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/headphone.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Contact Us" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="logout()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/logout.svg"
+                      alt="logout"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Log out" | translate }}
+                </button>
+              </li>
+            </ul>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="javascript:void(0)navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            (click)="toggleCollapsed()"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <nav
+      *ngIf="userType == 'buyer'"
+      class="navbar navbar-expand-xl position-relative mx-0"
+    >
+      <div
+        class="jakay-container position-unset d-flex align-items-xl-center justify-content-between justify-content-xl-start"
+      >
+        <a class="navbar-brand" routerLink="/home" href="javascript:void(0)"
+          ><img
+            class="brand-logo"
+            src="assets/images/riku-logo.svg"
+            alt="brand_logo"
+        /></a>
+
+        <div
+          [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
+          id="navbarNavAltMarkup"
+        >
+          <div class="navbar-nav align-items-center">
+            <div class="navbar-right d-flex align-items-center mb-4 d-sm-none">
+              <a class="navbar-right-link" href="javascript:void(0)">
+                <img src="assets/images/msg.svg" alt="msg" />
+                <span class=""></span>
+              </a>
+              <a
+                class="navbar-right-link"
+                ngbDropdown
+                #notification="ngbDropdown"
+                href="javascript:void(0)"
+              >
+                <img
+                  src="assets/images/notification.svg"
+                  alt="notification"
+                  (click)="notification.toggle()"
+                />
+                <span class="" *ngIf="newNotificationCount"></span>
+              </a>
+            </div>
+            <div class="form-group search-grp mb-0 me-0">
+
+             <!--  Search input
+              <div class="position-relative">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="{{ 'Search Vehicle' | translate }}"
+                  [inputFormatter]="vehicleFormatter"
+                  [ngbTypeahead]="search"
+                  [resultTemplate]="vehicleResultList"
+                />
+                <img
+                  src="assets/images/vehicle-list/search-blue.svg"
+                  class="search-icon"
+                />
+              </div> -->
+              <span
+                *ngIf="searching"
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <ng-template
+                #vehicleResultList
+                let-vehicle="result"
+                class="vehicle-list-container"
+                let-t="term"
+              >
+                <ng-container
+                  disabled
+                  *ngIf="vehicle.canonicalName === 'no_result'"
+                >
+                  <div>{{ "No vehicles available" | translate }}</div>
+                </ng-container>
+                <ng-container *ngIf="vehicle.canonicalName !== 'no_result'">
+                  <img
+                    [src]="vehicle.cover_img_url"
+                    class="me-1"
+                    style="width: 24px"
+                    (click)="showVehicleDetails(vehicle)"
+                  />
+                  <ngb-highlight
+                    (click)="showVehicleDetails(vehicle)"
+                    result="{{ vehicle.make }} {{ vehicle.make_model }} {{
+                      vehicle.model_year
+                    }}"
+                    [term]="t"
+                  ></ngb-highlight>
+                </ng-container>
+              </ng-template>
+            </div>
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              aria-current="page"
+              routerLink="/buyer/vehicles/buyer-vehicle-list"
+              href="javascript:void(0)"
+              >{{ "Vehicles" | translate }}</a
+            >
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              routerLink="/loan/financing"
+              href="javascript:void(0)"
+              >{{ "Financing" | translate }}</a
+            >
+            <a
+              class="nav-link me-0"
+              routerLinkActive="active"
+              routerLink="/buyer/expert-reviews"
+              href="javascript:void(0)"
+              >{{ "Expert Review" | translate }}</a
+            >
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              routerLink="/blogs"
+              href="javascript:void(0)"
+              >{{ "Blog" | translate }}</a
+            >
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              (click)="comingSoon()"
+              href="javascript:void(0)"
+              >{{ "Sell a vehicle" | translate }}</a
+            >
+          </div>
+        </div>
+        <div class="navbar-right d-flex align-items-center">
+          <a
+            class="navbar-right-link d-none d-sm-inline"
+            href="javascript:void(0)"
+            routerLink="/buyer/chat-user"
+          >
+            <img src="assets/images/msg.svg" alt="msg" />
+            <span class=""></span>
+          </a>
+          <a
+            ngbDropdown
+            #notifications="ngbDropdown"
+            class="navbar-right-link d-none d-sm-inline"
+            href="javascript:void(0)"
+          >
+            <img
+              src="assets/images/notification.svg"
+              alt="notification"
+              (click)="notifications.toggle()"
+            />
+            <span class="" *ngIf="newNotificationCount"></span>
+            <div
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown notification-drawer"
+            >
+              <app-notification-header
+                (click)="notifications.close()"
+                (count)="getCount($event)"
+              ></app-notification-header>
+            </div>
+          </a>
+          <a
+            ngbDropdown
+            #menuList="ngbDropdown"
+            class="navbar-right-link d-flex align-items-center position-relative"
+            href="javascript:void(0)"
+          >
+            <img
+              class="profile-img"
+              (click)="menuList.toggle()"
+              [src]="
+                userProfileImage
+                  ? userProfileImage
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+              "
+              alt="notification"
+            />
+            <i
+              ngbDropdownToggle
+              class="ms-2 text-primary fa fa-chevron-down"
+            ></i>
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu br-12 py-3 px-2 log-out-dropdown"
+              aria-labelledby="vehicle-type"
+            >
+              <li class="ms-0">
+                <button ngbDropdownItem routerLink="/buyer/my-profile">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/profile.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Profile" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem routerLink="/user/buyer-orders/order-list">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/orders.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Orders" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/loan/loan-list']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/hand.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Loan Application" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="myFavourites()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/heart.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Favorites" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/policies/payment_info']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/card.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Payment Info" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/notifications']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/bell.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Manage Notification" | translate }}
+                </button>
+              </li>
+
+
+              <li class="ms-0" *ngIf="loggedInUserType === 'buyer' && userDetails?.role?.length == 1">
+                <button ngbDropdownItem (click)="openBseller('seller');">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/seller-img/profile-icon.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Become a Seller" | translate }}
+                </button>
+              </li>
+
+
+              <li class="ms-0" [routerLink]="['/faq']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/question.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Help/FAQs" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/contact-us']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/headphone.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Contact Us" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="logout()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/logout.svg"
+                      alt="logout"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Log out" | translate }}
+                </button>
+              </li>
+            </ul>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="javascript:void(0)navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            (click)="toggleCollapsed()"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <nav *ngIf="userType == 'dealer'" class="navbar navbar-expand-xl">
+      <div
+        class="jakay-container dealer-vehicle-header position-unset d-flex align-items-xl-center justify-content-between justify-content-xl-start"
+      >
+        <a class="navbar-brand" routerLink="/home" href="javascript:void(0)"
+          ><img
+            class="brand-logo"
+            src="assets/images/riku-logo.svg"
+            alt="brand_logo"
+        /></a>
+        <div
+          [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
+          id="navbarNavAltMarkup"
+          style="margin-left:200px;"
+        >
+          <div class="navbar-nav align-items-xl-center">
+            <div class="navbar-right d-flex mb-4 d-md-none align-items-center">
+              <button
+                class="btn btn-purple"
+                routerLink="/dealer/vehicles/add-vehicle"
+              >
+                {{ "Add Vehicle" | translate }}
+              </button>
+              <a
+                class="navbar-right-link"
+                href="javascript:void(0)"
+                routerLink="/dealer/chat-user"
+              >
+                <img src="././assets/images/msg.svg" alt="msg" />
+              </a>
+              <a class="navbar-right-link" href="javascript:void(0)">
+                <img
+                  src="././assets/images/notification.svg"
+                  alt="notification" />
+                <span class=""></span
+              ></a>
+            </div>
+            <a
+              class="nav-link dealer-header-link"
+              [routerLink]="['/dealer/dashboard']"
+              routerLinkActive="active"
+              >{{ "Dashboard" | translate }}</a
+            >
+            <a
+              class="nav-link dealer-header-link"
+              [routerLink]="['/dealer/vehicles']"
+              routerLinkActive="active"
+              >{{ "My Vehicles" | translate }}</a
+            >
+            <a
+              class="nav-link dealer-header-link"
+              [routerLink]="['/dealer/orders']"
+              routerLinkActive="active"
+              >{{ "My Orders" | translate }}</a
+            >
+            <!-- <a
+              class="nav-link dealer-header-link c-pointer"
+              (click)="comingSoon()"
+              routerLinkActive="active"
+              >{{ "Customers" | translate }}</a
+            >
+            <a
+              class="nav-link dealer-header-link c-pointer"
+              (click)="comingSoon()"
+              routerLinkActive="active"
+              >{{ "Vehicle Delivery" | translate }}</a
+            > -->
+            <a
+              class="nav-link me-0"
+              routerLinkActive="active dealer-header-link"
+              routerLink="/dealer/expert-reviews"
+              >{{ "Expert Review" | translate }}</a
+            >
+            <a
+              class="nav-link"
+              routerLinkActive="active  dealer-header-link"
+              routerLink="/blogs"
+              >{{ "Blog" | translate }}</a
+            >
+          </div>
+        </div>
+        <div class="navbar-right d-flex align-items-center">
+          <button
+            class="btn btn-purple d-md-inline d-none dealer-add-vehicle-button"
+            routerLink="/dealer/vehicles/add-vehicle"
+          >
+            {{ "Add Vehicle" | translate }}
+          </button>
+          <a
+            class="navbar-right-link d-md-inline d-none"
+            routerLink="/dealer/chat-user"
+            href="javascript:void(0)"
+          >
+            <img src="././assets/images/msg.svg" alt="msg" />
+            <!-- <span class="">2</span> -->
+          </a>
+          <a
+            ngbDropdown
+            #notification="ngbDropdown"
+            class="navbar-right-link d-md-inline d-none"
+            href="javascript:void(0)"
+          >
+            <img
+              src="assets/images/notification.svg"
+              alt="notification"
+              (click)="notification.toggle()"
+            />
+            <span class="" *ngIf="newNotificationCount"></span>
+            <div
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown notification-drawer"
+            >
+              <app-notification-header
+                (click)="notification.close()"
+                (count)="getCount($event)"
+              ></app-notification-header>
+            </div>
+          </a>
+          <a
+            ngbDropdown
+            #menuList="ngbDropdown"
+            class="navbar-right-link d-flex align-items-center"
+            placement="bottom-right"
+            href="javascript:void(0)"
+          >
+            <img
+              class="profile-img"
+              (click)="menuList.toggle()"
+              [src]="
+                userProfileImage
+                  ? userProfileImage
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+              "
+              alt="notification"
+            />
+            <i
+              ngbDropdownToggle
+              class="ms-2 text-primary fa fa-chevron-down"
+            ></i>
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown"
+              aria-labelledby="vehicle-type"
+            >
+              <li class="ms-0">
+                <button ngbDropdownItem routerLink="/dealer/my-profile">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/profile.svg"
+                      alt="profile"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Profile" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem routerLink="/dealer/orders">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/orders.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Orders" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="comingSoon()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/star.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Reviews" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="comingSoon()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/hand.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Bank Account Info" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/policies/payment_info']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/card.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Payment Info" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/notifications']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/bell.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Manage Notification" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/faq']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/question.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Help/FAQs" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/contact-us']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/headphone.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Contact Us" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="logout()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/logout.svg"
+                      alt="logout"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Log out" | translate }}
+                </button>
+              </li>
+            </ul>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="javascript:void(0)navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            (click)="toggleCollapsed()"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <nav
+      class="navbar"
+      *ngIf="userType == 'admin' || userType == 'super_admin'"
+    >
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header fixed-brand w-100 admin-navbar">
+        <header class="jakay__header admin-header">
+          <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid d-flex align-items-center px-4">
+              <a
+                class="navbar-brand"
+                routerLink="/home"
+                href="javascript:void(0);"
+                ><img
+                  class="brand-logo"
+                  src="assets/images/riku-logo.svg"
+                  alt="brand_logo"
+              /></a>
+
+              <div
+                class="navbar-right d-flex align-items-center justify-content-end"
+              >
+                <a
+                  class="navbar-right-link"
+                  ngbDropdown
+                  #notification="ngbDropdown"
+                  href="javascript:void(0)"
+                >
+                  <img
+                    src="assets/images/notification.svg"
+                    alt="notification"
+                    (click)="notification.toggle()"
+                  />
+                  <span class="" *ngIf="newNotificationCount"></span>
+                  <div
+                    ngbDropdownMenu
+                    class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown notification-drawer"
+                  >
+                    <app-notification-header
+                      (click)="notification.close()"
+                      (count)="getCount($event)"
+                    ></app-notification-header>
+                  </div>
+                </a>
+
+                <a
+                  ngbDropdown
+                  #menuList="ngbDropdown"
+                  class="navbar-right-link d-flex align-items-center"
+                  href="javascript:void(0)"
+                >
+                  <div
+                    class="d-flex align-items-center user-menu"
+                    (mouseover)="menuList.open()"
+                  >
+                    <img
+                      class="profile-img"
+                      [src]="
+                        userProfileImage
+                          ? userProfileImage
+                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                      "
+                      alt="notification"
+                    />
+                    <div class="ms-2">
+                      <p class="font-16 fw-regular text-primary mb-0">
+                        {{ fullName }}
+                      </p>
+                      <p class="fw-regular text-purple-light font-12 mb-0 ms-0">
+                        {{ userEmail }}
+                      </p>
+                    </div>
+                  </div>
+                  <ul
+                    ngbDropdownMenu
+                    class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2"
+                    aria-labelledby="vehicle-type"
+                  >
+                    <li class="ms-0">
+                      <button ngbDropdownItem routerLink="/admin/view-profile">
+                        <div class="dropdown-icon">
+                          <img
+                            src="assets/images/sidebar/profile.svg"
+                            alt="profile"
+                            class="me-2"
+                          />
+                        </div>
+                        {{ "My Profile" | translate }}
+                      </button>
+                    </li>
+                    <li class="ms-0">
+                      <button ngbDropdownItem (click)="comingSoon()">
+                        <div class="dropdown-icon">
+                          <img
+                            src="assets/images/sidebar/settings-icon.svg"
+                            alt="order"
+                            class="me-2"
+                          />
+                        </div>
+                        {{ "Settings" | translate }}
+                      </button>
+                    </li>
+                    <li class="ms-0">
+                      <button ngbDropdownItem (click)="logout()">
+                        <div class="dropdown-icon">
+                          <img
+                            src="assets/images/sidebar/logout.svg"
+                            alt="logout"
+                            class="me-2"
+                          />
+                        </div>
+                        {{ "Log out" | translate }}
+                      </button>
+                    </li>
+                  </ul>
+                </a>
+              </div>
+            </div>
+          </nav>
+        </header>
+      </div>
+      <!-- bs-example-navbar-collapse-1 -->
+    </nav>
+    <nav
+      class="navbar navbar-expand-xl position-relative mx-0"
+      *ngIf="userType == 'expert'"
+    >
+      <div
+        class="jakay-container position-unset d-flex align-items-xl-center justify-content-between"
+      >
+        <a class="navbar-brand" routerLink="/home" href="javascript:void(0);"
+          ><img
+            class="brand-logo"
+            src="assets/images/riku-logo.svg"
+            alt="brand_logo"
+        /></a>
+        <div
+          [ngClass]="{ collapse: collapsed, 'navbar-collapse': true }"
+          id="navbarNavAltMarkup"
+        >
+          <div class="navbar-nav">
+            <div class="navbar-right d-flex mb-4 d-md-none align-items-center">
+            </div>
+            <a
+              class="nav-link"
+              [routerLink]="['/expert/appointments']"
+              routerLinkActive="active"
+              >{{ "Appointments" | translate }}</a
+            >
+          </div>
+        </div>
+
+        <div class="navbar-right d-flex align-items-center justify-content-end">
+          <a
+            class="navbar-right-link"
+            ngbDropdown
+            #notification="ngbDropdown"
+            href="javascript:void(0)"
+          >
+            <img
+              src="assets/images/notification.svg"
+              alt="notification"
+              (click)="notification.toggle()"
+            />
+            <span class="" *ngIf="newNotificationCount"></span>
+            <div
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2 log-out-dropdown notification-drawer"
+            >
+              <app-notification-header
+                (click)="notification.close()"
+                (count)="getCount($event)"
+              ></app-notification-header>
+            </div>
+          </a>
+
+          <a
+            ngbDropdown
+            #menuList="ngbDropdown"
+            class="navbar-right-link d-flex align-items-center"
+            href="javascript:void(0)"
+          >
+            <div
+              class="d-flex align-items-center user-menu"
+              (mouseover)="menuList.open()"
+            >
+              <img
+                class="profile-img"
+                [src]="
+                  userProfileImage
+                    ? userProfileImage
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                "
+                alt="notification"
+              />
+              <div class="ms-2">
+                <p class="font-16 fw-regular text-primary mb-0">
+                  {{ fullName }}
+                </p>
+                <p class="fw-regular text-purple-light font-12 mb-0 ms-0">
+                  {{ userEmail }}
+                </p>
+              </div>
+            </div>
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu ms-0 vehicle-type-menu vehicle-dropdown-menu br-12 py-3 px-2"
+              aria-labelledby="vehicle-type"
+            >
+              <li class="ms-0">
+                <button ngbDropdownItem routerLink="/admin/view-profile">
+                  <div class="dropdown-icon">
+                    <img
+                      src="assets/images/sidebar/profile.svg"
+                      alt="profile"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "My Profile" | translate }}
+                </button>
+              </li>
+              <li class="ms-0" [routerLink]="['/notifications']">
+                <button ngbDropdownItem>
+                  <div class="dropdown-icon">
+                    <img
+                      src="././assets/images/lending/headerProfile/bell.svg"
+                      alt="order"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Manage Notification" | translate }}
+                </button>
+              </li>
+              <li class="ms-0">
+                <button ngbDropdownItem (click)="logout()">
+                  <div class="dropdown-icon">
+                    <img
+                      src="assets/images/sidebar/logout.svg"
+                      alt="logout"
+                      class="me-2"
+                    />
+                  </div>
+                  {{ "Log out" | translate }}
+                </button>
+              </li>
+            </ul>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </ng-container>
+</header>
+</ng-container>
+

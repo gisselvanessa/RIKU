@@ -1,0 +1,233 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container">
+    <div class="back-to-page d-flex">
+      <span (click)="back()"><img src="assets/images/backarrow.svg" /></span>
+      <div class="ms-3 section-header">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Riku Loan Application" | translate }}
+        </h3>
+        <p class="text-primary font-15 mb-3 fw-regular">
+          {{
+            "Fill out the credit application carefully with true information, it will allow you the fastest and safest credit score."
+              | translate
+          }}
+        </p>
+      </div>
+    </div>
+    <div
+      class="vehicle__steps order-steps d-flex align-items-center justify-content-center"
+      #loanStepsWrapper
+    >
+      <div class="steps-wrp">
+        <div
+          class="step"
+          [ngClass]="{
+            completed: currentStep > loanCurrentStepNumber.APPLICANT_INFO,
+            active: currentStep == loanCurrentStepNumber.APPLICANT_INFO
+          }"
+        >
+          <!-- <div class="step completed"> --> 
+          <div>
+            <span class="step-round text-center">
+              <!-- <img src="assets/images/loan-application/folder-file.svg" alt="Folder file" *ngIf="!(currentStep > loanCurrentStepNumber.APPLICANT_INFO)"> -->
+              <!-- <img src="assets/images/loan-application/skb-folder-file.svg" alt="Folder file" *ngIf="currentStep > loanCurrentStepNumber.APPLICANT_INFO"> -->
+              <svg width="42" height="45" viewBox="0 0 42 45" fill="#EC8F67" xmlns="http://www.w3.org/2000/svg" class="folder">
+                <g clip-path="url(#clip0_2273_713)">
+                  <path d="M34.9994 15.0302H19.156L16.461 11.5541C16.2438 11.2756 15.9593 11.0491 15.6308 10.8934C15.3024 10.7376 14.9392 10.6568 14.571 10.6577H6.99935C6.38051 10.6577 5.78702 10.8881 5.34943 11.2981C4.91185 11.7081 4.66602 12.2641 4.66602 12.844V36.8925C4.66602 37.4724 4.91185 38.0284 5.34943 38.4384C5.78702 38.8484 6.38051 39.0788 6.99935 39.0788H34.9994C35.6182 39.0788 36.2117 38.8484 36.6493 38.4384C37.0869 38.0284 37.3327 37.4724 37.3327 36.8925V17.2164C37.3327 16.6366 37.0869 16.0805 36.6493 15.6705C36.2117 15.2605 35.6182 15.0302 34.9994 15.0302ZM34.9994 36.8925H6.99935V19.4027H15.5277C16.1465 19.4027 16.74 19.1723 17.1776 18.7623C17.6152 18.3523 17.861 17.7962 17.861 17.2164H6.99935V12.844H14.571L17.616 16.7682C17.7246 16.9075 17.8669 17.0207 18.0311 17.0986C18.1953 17.1765 18.3769 17.2169 18.561 17.2164H34.9994V36.8925Z" />
+                  <path d="M25.6673 1.38135V4.71468C25.6673 5.21468 25.2007 5.54801 24.5007 5.54801H19.834M19.834 5.54801V15.548C19.834 15.769 19.9569 15.981 20.1757 16.1373C20.3945 16.2936 20.6912 16.3813 21.0007 16.3813H35.0007C35.7007 16.3813 36.1673 16.048 36.1673 15.548V2.21468C36.1673 1.71468 35.7007 1.38135 35.0007 1.38135H25.5507L24.8507 1.54801L20.184 4.88135C19.9507 5.04801 19.834 5.21468 19.834 5.54801ZM24.5007 12.2147H31.5007M24.5007 8.88135H31.5007" fill="#EC8F67" stroke="#EC8F67" stroke-linecap="round" stroke-linejoin="round" class="doc" />
+                  <path d="M17.3125 24.0625C17.3125 25.6131 18.7426 26.875 20.5 26.875C22.2574 26.875 23.6875 25.6131 23.6875 24.0625C23.6875 22.5119 22.2574 21.25 20.5 21.25C18.7426 21.25 17.3125 22.5119 17.3125 24.0625ZM26.1667 33.125H26.875V32.5C26.875 30.0881 24.6501 28.125 21.9167 28.125H19.0833C16.3492 28.125 14.125 30.0881 14.125 32.5V33.125H26.1667Z" fill="#EC8F67"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_2273_713">
+                   <rect width="42" height="45" fill="#EC8F67"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <h6 class="text-start fw-semibold mt-4 pt-1">
+                {{ "Applicant Information" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          *ngIf="
+            loanDetail?.applicant_info?.marital_status === 'married' &&
+            loanDetail?.applicant_info?.is_co_applicant == true
+          "
+          class="step"
+          [ngClass]="{
+            completed:
+              currentStep > loanCurrentStepNumber.CO_APPLICANT_INFO &&
+              loanDetail?.applicant_info?.is_co_applicant,
+            active: currentStep == loanCurrentStepNumber.CO_APPLICANT_INFO
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <!-- <img src="assets/images/loan-application/users.svg" alt="Users" *ngIf="!(currentStep > loanCurrentStepNumber.CO_APPLICANT_INFO &&
+              loanDetail?.applicant_info?.is_co_applicant)">
+              <img src="assets/images/loan-application/skb-users.svg" alt="Users" *ngIf="currentStep > loanCurrentStepNumber.CO_APPLICANT_INFO &&
+              loanDetail?.applicant_info?.is_co_applicant"> -->
+              <svg width="44" height="46" viewBox="0 0 44 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_2273_782)">
+                  <path d="M21.8776 22.1054C25.1776 22.1054 27.7442 19.2943 27.7442 15.8443C27.7442 12.3943 25.0553 9.71094 21.7553 9.71094C18.4553 9.71094 15.8887 12.522 15.8887 15.8443C15.8887 19.2943 18.5776 22.1054 21.8776 22.1054ZM21.7553 12.2665C21.8776 12.2665 21.8776 12.2665 21.7553 12.2665C23.7109 12.2665 25.2998 13.9276 25.2998 15.972C25.2998 18.0165 23.7109 19.5498 21.7553 19.5498C19.7998 19.5498 18.3331 17.8887 18.3331 15.972C18.3331 13.9276 19.922 12.2665 21.7553 12.2665Z" fill="#EC8F67"/>
+                  <path d="M39.9673 21.3388C37.6451 19.1666 34.5895 18.0166 31.4118 18.1444C31.0451 18.1444 30.8007 18.1444 30.434 18.1444C30.1895 19.1666 29.8229 20.061 29.334 20.8277C30.0673 20.6999 30.6784 20.6999 31.4118 20.6999C33.734 20.5722 36.0562 21.3388 37.8895 22.7444V31.9444H40.334V21.7222L39.9673 21.3388Z" fill="#EC8F67"/>
+                  <path d="M28.5998 9.96685C29.2109 8.43352 30.922 7.66685 32.5109 8.30574C33.9776 8.94463 34.7109 10.7335 34.0998 12.3946C33.6109 13.5446 32.5109 14.3113 31.4109 14.3113C31.1665 14.3113 30.7998 14.3113 30.5553 14.1835C30.6776 14.8224 30.6776 15.4613 30.6776 15.9724C30.6776 16.228 30.6776 16.4835 30.6776 16.7391C30.922 16.7391 31.1665 16.8668 31.4109 16.8668C34.4665 16.8668 36.9109 14.3113 36.9109 11.2446C36.9109 8.05018 34.4664 5.49463 31.5331 5.49463C29.5776 5.49463 27.8664 6.51685 26.8887 8.30574C27.4998 8.68907 28.1109 9.20018 28.5998 9.96685Z" fill="#EC8F67"/>
+                  <path d="M14.666 20.9557C14.1771 20.189 13.8105 19.2945 13.566 18.2723C13.1993 18.2723 12.9549 18.2723 12.5882 18.2723C9.41046 18.1445 6.3549 19.2945 4.03268 21.339L3.66602 21.7223V31.9445H6.11046V22.7445C8.06602 21.339 10.266 20.5723 12.5882 20.7001C13.3216 20.7001 14.0549 20.8279 14.666 20.9557Z" fill="#EC8F67"/>
+                  <path d="M12.5888 16.7389C12.8333 16.7389 13.0777 16.7389 13.3222 16.6111C13.3222 16.3555 13.3222 16.1 13.3222 15.8444C13.3222 15.2055 13.3222 14.5667 13.4444 14.0555C13.1999 14.1833 12.8333 14.1833 12.5888 14.1833C10.9999 14.1833 9.65549 12.7778 9.65549 11.1167C9.65549 9.45554 10.9999 8.04999 12.5888 8.04999C13.811 8.04999 14.911 8.81665 15.3999 9.96665C15.8888 9.32776 16.6222 8.68888 17.2333 8.17776C15.6444 5.49443 12.3444 4.59999 9.77771 6.2611C7.21105 7.92221 6.35549 11.3722 7.94438 14.0555C8.92216 15.7167 10.6333 16.7389 12.5888 16.7389Z" fill="#EC8F67"/>
+                  <path d="M31.9004 29.0056L31.656 28.6223C29.2115 25.8112 25.7893 24.1501 22.1227 24.2779C18.456 24.1501 14.9115 25.8112 12.4671 28.6223L12.2227 29.0056V38.7168C12.2227 39.8668 13.0782 40.889 14.3004 40.889H29.9449C31.0449 40.889 32.0227 39.8668 32.0227 38.7168V29.0056H31.9004ZM29.456 38.3334H14.6671V29.9001C16.6227 27.8556 19.3115 26.8334 22.1227 26.8334C24.8115 26.7056 27.5004 27.8556 29.456 29.9001V38.3334Z" fill="#EC8F67"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_2273_782">
+                  <rect width="44" height="46" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <h6 class="text-start fw-semibold mt-4 pt-1">
+                {{ "Cosigner" | translate }}({{ "Optional" | translate }})
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step"
+          [ngClass]="{
+            completed: currentStep > loanCurrentStepNumber.REFERENCE_INFO,
+            active: currentStep == loanCurrentStepNumber.REFERENCE_INFO
+          }"
+        >
+          <div>
+            <span class="step-round text-center">
+              <!-- <img src="assets/images/loan-application/users.svg" alt="Users" *ngIf="!(currentStep > loanCurrentStepNumber.REFERENCE_INFO)"> -->
+              <!-- <img src="assets/images/loan-application/skb-users.svg" alt="Users" *ngIf="currentStep > loanCurrentStepNumber.REFERENCE_INFO"> -->
+              <svg width="44" height="46" viewBox="0 0 44 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_2273_782)">
+                  <path d="M21.8776 22.1054C25.1776 22.1054 27.7442 19.2943 27.7442 15.8443C27.7442 12.3943 25.0553 9.71094 21.7553 9.71094C18.4553 9.71094 15.8887 12.522 15.8887 15.8443C15.8887 19.2943 18.5776 22.1054 21.8776 22.1054ZM21.7553 12.2665C21.8776 12.2665 21.8776 12.2665 21.7553 12.2665C23.7109 12.2665 25.2998 13.9276 25.2998 15.972C25.2998 18.0165 23.7109 19.5498 21.7553 19.5498C19.7998 19.5498 18.3331 17.8887 18.3331 15.972C18.3331 13.9276 19.922 12.2665 21.7553 12.2665Z" fill="#EC8F67"/>
+                  <path d="M39.9673 21.3388C37.6451 19.1666 34.5895 18.0166 31.4118 18.1444C31.0451 18.1444 30.8007 18.1444 30.434 18.1444C30.1895 19.1666 29.8229 20.061 29.334 20.8277C30.0673 20.6999 30.6784 20.6999 31.4118 20.6999C33.734 20.5722 36.0562 21.3388 37.8895 22.7444V31.9444H40.334V21.7222L39.9673 21.3388Z" fill="#EC8F67"/>
+                  <path d="M28.5998 9.96685C29.2109 8.43352 30.922 7.66685 32.5109 8.30574C33.9776 8.94463 34.7109 10.7335 34.0998 12.3946C33.6109 13.5446 32.5109 14.3113 31.4109 14.3113C31.1665 14.3113 30.7998 14.3113 30.5553 14.1835C30.6776 14.8224 30.6776 15.4613 30.6776 15.9724C30.6776 16.228 30.6776 16.4835 30.6776 16.7391C30.922 16.7391 31.1665 16.8668 31.4109 16.8668C34.4665 16.8668 36.9109 14.3113 36.9109 11.2446C36.9109 8.05018 34.4664 5.49463 31.5331 5.49463C29.5776 5.49463 27.8664 6.51685 26.8887 8.30574C27.4998 8.68907 28.1109 9.20018 28.5998 9.96685Z" fill="#EC8F67"/>
+                  <path d="M14.666 20.9557C14.1771 20.189 13.8105 19.2945 13.566 18.2723C13.1993 18.2723 12.9549 18.2723 12.5882 18.2723C9.41046 18.1445 6.3549 19.2945 4.03268 21.339L3.66602 21.7223V31.9445H6.11046V22.7445C8.06602 21.339 10.266 20.5723 12.5882 20.7001C13.3216 20.7001 14.0549 20.8279 14.666 20.9557Z" fill="#EC8F67"/>
+                  <path d="M12.5888 16.7389C12.8333 16.7389 13.0777 16.7389 13.3222 16.6111C13.3222 16.3555 13.3222 16.1 13.3222 15.8444C13.3222 15.2055 13.3222 14.5667 13.4444 14.0555C13.1999 14.1833 12.8333 14.1833 12.5888 14.1833C10.9999 14.1833 9.65549 12.7778 9.65549 11.1167C9.65549 9.45554 10.9999 8.04999 12.5888 8.04999C13.811 8.04999 14.911 8.81665 15.3999 9.96665C15.8888 9.32776 16.6222 8.68888 17.2333 8.17776C15.6444 5.49443 12.3444 4.59999 9.77771 6.2611C7.21105 7.92221 6.35549 11.3722 7.94438 14.0555C8.92216 15.7167 10.6333 16.7389 12.5888 16.7389Z" fill="#EC8F67"/>
+                  <path d="M31.9004 29.0056L31.656 28.6223C29.2115 25.8112 25.7893 24.1501 22.1227 24.2779C18.456 24.1501 14.9115 25.8112 12.4671 28.6223L12.2227 29.0056V38.7168C12.2227 39.8668 13.0782 40.889 14.3004 40.889H29.9449C31.0449 40.889 32.0227 39.8668 32.0227 38.7168V29.0056H31.9004ZM29.456 38.3334H14.6671V29.9001C16.6227 27.8556 19.3115 26.8334 22.1227 26.8334C24.8115 26.7056 27.5004 27.8556 29.456 29.9001V38.3334Z" fill="#EC8F67"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_2273_782">
+                  <rect width="44" height="46" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <h6 class="text-start fw-semibold mt-4 pt-1">
+                {{ "Personal Reference" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step"
+          [ngClass]="{
+            completed: currentStep > loanCurrentStepNumber.APPLICATION_REVIEW,
+            active: currentStep == loanCurrentStepNumber.APPLICATION_REVIEW
+          }"
+        >
+          <div>
+            <span class="step-round text-center">
+              <!-- <img src="assets/images/loan-application/file.svg" alt="File" *ngIf="!(currentStep > loanCurrentStepNumber.APPLICATION_REVIEW)"> -->
+              <!-- <img src="assets/images/loan-application/skb-file.svg" alt="File" *ngIf="currentStep > loanCurrentStepNumber.APPLICATION_REVIEW"> -->
+              <svg width="34" height="37" viewBox="0 0 34 37" fill="#FFF" xmlns="http://www.w3.org/2000/svg" class="file">
+                <path d="M10.5233 18.4998H18.6185M10.5233 22.0236H21.8566M10.5233 25.5475H15.3804M26.7137 27.3094V14.976L18.6185 6.1665H10.5233C9.66446 6.1665 8.84083 6.53776 8.23357 7.1986C7.62631 7.85945 7.28516 8.75574 7.28516 9.69031V27.3094C7.28516 28.2439 7.62631 29.1402 8.23357 29.8011C8.84083 30.4619 9.66446 30.8332 10.5233 30.8332H23.4756C24.3344 30.8332 25.1581 30.4619 25.7653 29.8011C26.3726 29.1402 26.7137 28.2439 26.7137 27.3094Z" fill="none" stroke="#EC8F67" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18.6191 6.1665V11.4522C18.6191 12.3868 18.9603 13.2831 19.5676 13.9439C20.1748 14.6048 20.9984 14.976 21.8572 14.976H26.7144" fill="#EC8F67" stroke="#EC8F67" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <h6 class="text-start fw-semibold mt-4 pt-1">
+                {{ "Application Review" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step"
+          [ngClass]="{
+            completed: currentStep > loanCurrentStepNumber.SUMMARY,
+            active: currentStep == loanCurrentStepNumber.SUMMARY
+          }"
+        >
+          <div>
+            <span class="step-round text-center">
+              <!-- <img src="assets/images/loan-application/files-upload.svg" alt="File upload" *ngIf="!(currentStep > loanCurrentStepNumber.SUMMARY)">
+              <img src="assets/images/loan-application/skb-files-upload.svg" alt="File upload" *ngIf="currentStep > loanCurrentStepNumber.SUMMARY"> -->
+              <svg width="31" height="29" viewBox="0 0 31 29" fill="#EC8F67" xmlns="http://www.w3.org/2000/svg">
+                <path d="M27.125 18.125H29.0625V29H1.9375V9.0625H3.875V3.625H5.8125V0H27.125V18.125ZM7.75 1.8125V3.625H23.25V18.125H25.1875V1.8125H7.75ZM5.8125 5.4375V9.0625H11.0649L20.7524 18.125H21.3125V5.4375H5.8125ZM27.125 27.1875V19.9375H19.9351L10.2476 10.875H3.875V27.1875H27.125Z" fill="#EC8F67"/>
+                <path d="M9.79966 21.6104V16.2299L8.30181 17.6792L7.84667 17.232L10.1211 15.0312L12.3955 17.232L11.941 17.6798L10.4425 16.2299V21.6104H9.79966ZM6.65931 23.7396C6.36359 23.7396 6.11674 23.6438 5.91874 23.4522C5.72031 23.2602 5.62109 23.0211 5.62109 22.735V21.2279H6.26395V22.735C6.26395 22.8304 6.30509 22.9181 6.38738 22.9981C6.47009 23.0778 6.56074 23.1176 6.65931 23.1176H13.5829C13.6815 23.1176 13.7721 23.0778 13.8548 22.9981C13.9371 22.9181 13.9782 22.8304 13.9782 22.735V21.2279H14.6211V22.735C14.6211 23.0211 14.5221 23.26 14.3241 23.4516C14.1257 23.6436 13.8786 23.7396 13.5829 23.7396H6.65931Z" fill="#EC8F67"/>
+              </svg>
+              <h6 class="text-start fw-semibold mt-4 pt-1">
+                {{ "Upload Loan Documents" | translate }}
+              </h6>
+            </span>
+          </div>
+          <!-- <span class="line"></span> -->
+        </div>
+      </div>
+    </div>
+    <div class="expert__wrapper">
+      <div
+        class="step-1"
+        *ngIf="currentStep === loanCurrentStepNumber.APPLICANT_INFO"
+      >
+        <app-applicant-information
+          [currentStep]="currentStep"
+          [currentLoanDetail]="loanDetail"
+          (onSubmitApplicantDetails)="setNextStep($event)"
+          [currentLoanId]="loanDetailId"
+          [cedulaId]="cedulaId"
+        ></app-applicant-information>
+      </div>
+      <!-- <div class="step-1">
+            <app-applicant-information></app-applicant-information>
+          </div> -->
+      <!-- <div class="step-2">
+        <app-co-applicant></app-co-applicant>
+      </div> -->
+      <div
+        class="step-2"
+        *ngIf="currentStep === loanCurrentStepNumber.CO_APPLICANT_INFO"
+      >
+        <app-co-applicant
+          [currentStep]="currentStep"
+          [currentLoanDetail]="loanDetail"
+          (onSubmitApplicantDetails)="setNextStep($event)"
+          [currentLoanId]="loanDetailId"
+        ></app-co-applicant>
+      </div>
+      <div
+        class="step-3"
+        *ngIf="currentStep === loanCurrentStepNumber.REFERENCE_INFO"
+      >
+        <app-personal-reference
+          [currentStep]="currentStep"
+          [currentLoanDetail]="loanDetail"
+          (onSubmitApplicantDetails)="setNextStep($event)"
+          [currentLoanId]="loanDetailId"
+        ></app-personal-reference>
+      </div>
+      <div
+        class="step-4"
+        *ngIf="currentStep === loanCurrentStepNumber.APPLICATION_REVIEW"
+      >
+        <app-application-review
+          [currentStep]="currentStep"
+          [currentLoanDetail]="loanDetail"
+          (onSubmitApplicantDetails)="setNextStep($event)"
+          [currentLoanId]="loanDetailId"
+        ></app-application-review>
+      </div>
+      <div class="step-5" *ngIf="currentStep === loanCurrentStepNumber.SUMMARY">
+        <app-application-review
+          [isFromSummary]="true"
+          [currentLoanDetail]="loanDetail"
+        ></app-application-review>
+      </div>
+    </div>
+  </div>
+</section>

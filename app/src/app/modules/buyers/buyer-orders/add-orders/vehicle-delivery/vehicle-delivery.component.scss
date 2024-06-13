@@ -1,0 +1,62 @@
+@import "../../../../../../variables";
+@import "../../../../../../function";
+
+// css for buy now page 17-01-2023 //
+.payment_wrapper {
+  & .price-grp {
+      // width: max-content;
+      padding: 30px;
+
+      & .form-check-inline {
+          margin-bottom: 30px;
+          width: unset;
+
+          & input[type="radio"]:checked {
+              &~.dot-checkmark::after {
+                  width: 10px;
+                  height: 10px;
+              }
+
+              &+label {
+                  background-color: transparent;
+                  // color: $primary-color;
+              }
+          }
+
+          & .dot-checkmark {
+              width: 19px;
+              height: 19px;
+
+          }
+      }
+  }
+
+  &--radio {
+      & .form-check-inline {
+          width: 260px;
+
+          display: block;
+
+          & label {
+              padding-block: 14px;
+              background: white;
+          }
+
+          & input:checked {
+              &~label {
+                  & img[src][data-card] {
+                      content: url("../../../../../../assets/images/card-blue.svg");
+                  }
+
+                  & img[src][data-cash] {
+                      content: url("../../../../../../assets/images/cash-blue.svg");
+                  }
+
+                  & img[src][data-bank] {
+                      content: url("../../../../../../assets/images/bank-blue.svg");
+                  }
+              }
+          }
+      }
+  }
+}

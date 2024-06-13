@@ -1,0 +1,199 @@
+<div>
+  <section class="section admin_add__user bg-blue">
+    <div class="jakay-container">
+      <ng-container *ngIf="!loading else loader;">
+        <div
+        class="d-flex section-header flex-wrap justify-content-between w-100 align-items-center"
+      >
+        <div class="mb-3">
+          <h3 class="ms-3 mb-3 font-38 text-primary fw-semibold">{{ 'My Profile' | translate }}</h3>
+          <!-- <p class="text-primary-light px-3 sub-head font-14">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore.
+          </p> -->
+        </div>
+        <div class="d-flex mb-3 ms-auto">
+          <button
+            class="btn-outline-purple text-primary font-14"
+            routerLink="/admin/edit-profile" routerLinkActive="router-link-active"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ 'Edit' | translate }}
+          </button>
+          <button
+            class="btn-outline-purple ms-5 text-primary font-14"
+            (click)="downloadUserDetails()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/user-detail/download-icon.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ 'Download' | translate }}
+          </button>
+        </div>
+
+      </div>
+      <div class="admin_user-detail" #userPdf>
+        <div class="row justify-content-between">
+          <div class="col-xl-2 col-lg-4 text-center">
+            <div class="add__user-img d-flex justify-content-center flex-wrap mb-4 mb-lg-0">
+              <div class="admin__add-img">
+                <img
+                  [src]="
+                    imageSrcForProfile
+                      ? imageSrcForProfile
+                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                  "
+                  alt="admin-img"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-10 col-lg-8">
+            <div class="bg-white p-4 br-12">
+              <div class="row admin_detail-wrp">
+                <div class="col-12" *ngIf="loggedInUserType === 'admin'">
+                  <div class="form-group">
+                    <p class="text-primary-light font-20">
+                      {{ 'Created Date' | translate }}:
+                      <span class="text-secondary ms-2 font-22">
+                        {{
+                          userDetails.created_date
+                            ? (userDetails.created_date | date : "MM-dd-YYYY")
+                            : "-"
+                        }}</span
+                      >
+                    </p>
+                    <hr />
+                  </div>
+                </div>
+
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      > {{ 'Name' | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{
+                        userDetails.first_name
+                          ? (userDetails.first_name | titlecase)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Surname' | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{
+                        userDetails.last_name
+                          ? (userDetails.last_name | titlecase)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-xl-3 col-sm-6 col-12"
+                  *ngIf="loggedInUserType === 'admin'"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Company Type' | translate }}</label
+                    >
+                    <ng-container
+                      *ngFor="let companyType of userDetails.company_role"
+                    >
+                      <p class="text-primary font-18 mb-0 fw-semibold">
+                        {{ companyType.company.name | titlecase }}
+                      </p>
+                    </ng-container>
+                  </div>
+                </div>
+                <div
+                  class="col-xl-3 col-sm-6 col-12"
+                  *ngIf="loggedInUserType === 'admin'"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Role' | translate }}</label
+                    >
+                    <ng-container *ngFor="let role of userDetails.company_role">
+                      <p class="text-primary font-18 mb-0 fw-semibold">
+                        {{ role.company_role.name | titlecase }}
+                      </p>
+                    </ng-container>
+                  </div>
+                </div>
+
+
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Mobile Number' | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{
+                        userDetails.country_code
+                          ? userDetails.country_code
+                          : "-"
+                      }}
+                      {{ userDetails.mobile_no ? userDetails.mobile_no : "-" }}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="col-xl-3 col-sm-6 col-12"
+                  *ngIf="loggedInUserType === 'admin'"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Status' | translate }}</label
+                    >
+                    <p
+                      class="text-primary font-18 mb-0 fw-semibold"
+                      *ngIf="userDetails?.status == true"
+                    >
+                    {{ 'Active' | translate }}
+                    </p>
+                    <p
+                      class="text-primary font-18 mb-0 fw-semibold"
+                      *ngIf="userDetails?.status == false"
+                    >
+                    {{ 'Inactive' | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ 'Email' | translate }}</label
+                    >
+                    <p class="text-primary text-break font-18 mb-0 fw-semibold">
+                      {{ userDetails.email ? userDetails.email : "-" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </ng-container>
+      <ng-template #loader>
+        <app-loader></app-loader>
+      </ng-template>
+    </div>
+  </section>
+</div>

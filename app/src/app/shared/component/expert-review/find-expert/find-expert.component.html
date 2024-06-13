@@ -1,0 +1,397 @@
+<form [formGroup]="locationForm" autocomplete="off">
+  <div class="row justify-content-between">
+    <!-- <h3 class="text-primary font-24 mt-4 mt-xl-0 pb-4 fw-semibold">
+      {{ "Find expert appraiser" | translate }}
+    </h3> -->
+    <!--Search-->
+
+    <div class="col-12">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Search" | translate
+        }}</label>
+        
+      
+
+      <div class="group">
+        <img class="img" style="cursor: pointer;" src="assets/images/buscador.svg" (click)="triggerSearch()"/>
+        <img class="lets-icons-search" src="assets/images/search-alt-light.svg" />
+        <input type="text" class="form-control map" style="padding-left: 100px !important"
+        formControlName="additional_address"
+       (keyup.enter)="searchByKeyword($event)"
+        placeholder="{{ 'Search Expert' | translate }}" />
+      </div>
+    </div>
+  </div>
+    <!--Address-->
+
+    <!--Province-->
+    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Province" | translate
+        }}</label>
+        <div ngbDropdown #ddlProvince="ngbDropdown" class="doropdown_radio" [autoClose]="'outside'">
+          <button ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle multipledata-hide btn-dropdown text-secondary font-14 fw-regular" type="button"
+            id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+            <ng-container>
+              <span class="font-15" *ngIf="locationControls.province.value">{{
+                locationControls?.province.value | titlecase
+                }}</span>
+              <span class="multipledata-hide font-15" *ngIf="!locationControls?.province.value">{{ 'Select' | translate }}</span>
+            </ng-container>
+          </button>
+          <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input type="text" class="form-control" placeholder="{{'Search Province' | translate}}"
+                    [(ngModel)]="searchProvince" [ngModelOptions]="{ standalone: true }" />
+                  <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                </div>
+              </div>
+            </li>
+            <li *ngFor="
+                        let province of provinceList
+                          | filter : searchProvince;
+                        index as i
+                      ">
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [checked]="
+                                locationControls?.province?.value ==
+                                province
+                              " (click)="setProvince(province)" name="province" id="province_{{ i }}" value="{{ province }}" />
+                    <label class="form-check-label" for="province_{{ i }}">{{ province | titlecase
+                      }}</label>
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item btn primary-btn text-center text-white py-3" (click)="ddlProvince.close(); searchExperts(locationControls?.province.value, 'province')" href="javascript:void(0)">{{ "Apply" | translate }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--Province-->
+
+    <!--City-->
+    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "City" | translate
+        }}</label>
+        <!-- <input
+          type="text"
+          class="form-control"
+          formControlName="city"
+          OnlyAlphabets
+          type="text"
+          placeholder="{{ 'Enter City' | translate }}"
+          (input)="search($event, 'city')"
+        /> -->
+        <div ngbDropdown
+        #ddlCity="ngbDropdown" [autoClose]="'outside'"
+        class="doropdown_radio">
+          <button ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle multipledata-hide btn-dropdown text-secondary font-14 fw-regular"
+            type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+            <ng-container>
+              <span class="font-15" *ngIf="locationControls.city.value">{{
+                  locationControls.city.value | titlecase
+                }}</span>
+              <span class="multipledata-hide font-15" *ngIf="!locationControls?.city.value">{{ 'Select' | translate }}</span>
+            </ng-container>
+          </button>
+          <ul
+            ngbDropdownMenu
+            aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{ 'Search City' | translate }}"
+                    [(ngModel)]="searchCity"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <li
+              *ngFor="
+                let city of cityList | filter : searchCity;
+                index as i
+              "
+            >
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [checked]="
+                        locationControls?.city?.value == city
+                      "
+                      (click)="setCity(city)"
+                      name="city"
+                      id="city_{{ i }}"
+                      value="{{ city }}"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="city_{{ i }}"
+                      >{{ city | titlecase }}</label
+                    >
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li  *ngIf="cityList.length > 0">
+              <a class="dropdown-item btn primary-btn text-center text-white py-3" (click)="ddlCity.close(); searchExperts(locationControls?.city.value, 'city')" href="javascript:void(0)">{{ "Apply" | translate }}</a>
+            </li>
+            <li *ngIf="cityList.length == 0">
+              <a class="dropdown-item" href="javascript:void(0)">
+                {{ "No Cities Found" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--City-->
+
+    <!--Parish-->
+    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Parish" | translate
+        }}</label>
+        <!-- <input
+          type="text"
+          class="form-control"
+          placeholder="{{ 'Enter Parish' | translate }}"
+          type="text"
+          formControlName="parish"
+          (input)="search($event, 'parish')"
+        /> -->
+        <div ngbDropdown
+        #ddlParish="ngbDropdown" [autoClose]="'outside'"
+        class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            class="btn btn-white dropdownP-toggle multipledata-hide btn-dropdown text-secondary font-14 fw-regular"
+            type="button"
+            id="vehicle-type"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <ng-container>
+              <span class="font-15"
+                *ngIf="locationControls.parish.value"
+                >{{
+                  locationControls.parish.value | titlecase
+                }}</span
+              >
+              <span class="multipledata-hide font-15" *ngIf="!locationControls.parish.value">{{
+                "Select" | translate
+              }}</span>
+            </ng-container>
+          </button>
+          <ul
+            ngbDropdownMenu
+            aria-labelledby="vehicle-type"
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="{{
+                      'Search Parish' | translate
+                    }}"
+                    [(ngModel)]="searchParish"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <li
+              *ngFor="
+                let parish of parishList | filter : searchParish;
+                index as i
+              "
+            >
+              <a class="dropdown-item" href="javascript:void(0)">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input hide"
+                      type="radio"
+                      [checked]="
+                        locationControls?.parish?.value == parish
+                      "
+                      (click)="setParish(parish)"
+                      name="parish"
+                      id="parish_{{ i }}"
+                      value="{{ parish }}"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="parish_{{ i }}"
+                      >{{ parish | titlecase }}</label
+                    >
+                    <span class="dot-checkmark"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li  *ngIf="parishList.length > 0">
+              <a class="dropdown-item btn primary-btn text-center text-white py-3" (click)="ddlCity.close(); searchExperts(locationControls?.parish.value, 'parish')" href="javascript:void(0)">{{ "Apply" | translate }}</a>
+            </li>
+            <li *ngIf="parishList.length == 0">
+              <a class="dropdown-item" href="javascript:void(0)">
+                {{ 'No Parish Found' | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--Parish-->
+
+    <div class="d-sm-flex align-items-center mb-3 mb-lg-0">
+      <h3 class="text-primary plus-jakarta font-18 pb-2 pt-4 fw-semibold">
+        {{ "List of experts" | translate }}
+      </h3>
+      <a href="javascript:void(0)" class="ms-sm-4 pt-4 text-secondary text-underline" (click)="resetSearch()"
+        *ngIf="searchApplied">{{
+        "Clear All Filters" | translate }}</a>
+    </div>
+    <div class="condition-tabs mt-1 mt-md-2 mt-xl-3">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 find-expert--table">
+                <thead>
+                  <th>
+                    <span class="text-color font-14">{{ "Sr. No." | translate }}</span>
+                  </th>
+                  <th (click)="setSorting('first_name')">
+                    <span class="text-color font-14">
+                      {{ "Expert Appraiser" | translate }}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th>
+                    <span class="text-color font-14">{{ "City" | translate }}</span>
+                  </th>
+                  <th>
+                    <span class="text-color font-14">{{ "Parish" | translate }}</span>
+                  </th>
+                  <th>
+                    <span class="text-color font-14">{{ "Province" | translate }}</span>
+                  </th>
+                  <th>
+                    <span class="text-color font-14">{{ "Actions" | translate }}</span>
+                  </th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="expertList.length; else noRecordsTemplate"
+                    >
+                      <tr *ngFor="let expert of expertList; let i = index">
+                        <td class="font-14 fw-medium">{{ limit * (page - 1) + (i + 1) }}</td>
+                        <td class="font-14 fw-medium">{{ expert.name }}</td>
+                        <td class="font-14 fw-medium">{{ expert.location.city | titlecase }}</td>
+                        <td class="font-14 fw-medium">{{ expert.location.parish | titlecase }}</td>
+                        <td class="font-14 fw-medium">{{ expert.location.province | titlecase }}</td>
+                        <td>
+                          <button
+                            class="btn primary-btn px-3 py-2 nowrap br-12"
+                            (click)="setNextStep(expert.id)"
+                            type="button"
+                          >
+                            {{ (currentExpertReview?.expert_information?.id == expert.id ? "Requested" :"Request Evaluation") | translate }}
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="4">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="4">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+        <div class="d-sm-flex" *ngIf="!loading">
+          <button
+            class="btn primary-btn-outline btn-sm btn--small shw me-sm-3"
+            type="button"
+            (click)="previous()"
+          >
+            {{ "Previous" | translate }}
+          </button>
+          <button *ngIf="currentExpertReview.expert_information?.id !== null && currentExpertReview.expert_information?.id !== undefined"
+            class="btn primary-btn btn-sm btn--small shw"
+            type="button"
+            (click)="setNextStep(currentExpertReview.expert_information.id)"
+          >
+            {{ "Next" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

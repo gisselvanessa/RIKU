@@ -1,0 +1,98 @@
+<ng-container *ngIf="!userService.isFromMobile">
+  <footer *ngIf="!router.url.includes('/admin/login') &&
+  !router.url.includes('/coming-soon') &&
+  !router.url.includes('/auth/login') &&
+  !router.url.includes('/auth/signup') &&
+  !router.url.includes('/auth/mobile-verification')" class="jakay__footer">
+    <div class="footer__top">
+      <div class="jakay-container">
+        <div class="row">
+          <!-- <div class="col-xl-2 mb-4 mb-lg-0 border border-3">
+            <div> <a class="footer-brand" routerLink="/home" href="javascript:void(0)">
+                <img class="img-fluid" src="assets/images/logo-white.png" alt="brand_logo">
+              </a></div>
+          </div> -->
+          <div class="col-xl-8 mt-4 mt-xl-0">
+            <div class="footer-mid">
+              <h5 class="text-white fw-regular mb-3" (click)="comingSoon()" style="margin-bottom: 0 !important;">{{ 'Quick Links' | translate }}</h5>
+              <div class="footer__links-grp row flex-sm-row  flex-column flex-wrap justify-content-lg-between">
+                <div class="col-xl-3 col-lg-4  col-sm-6 ">
+                  <ul class="mb-3">
+                    <li *ngIf="userType == 'seller' || userType == 'dealer'"><a href="javascript:void(0)" (click)="viewVehicle()"
+                        class="footer_link">{{
+                        'My Vehicles' | translate }}</a></li>
+                    <li *ngIf="!isLoggedIn || userType == 'buyer'"><a href="javascript:void(0)" (click)="viewVehicle()" class="footer_link">{{
+                        'Automobiles' | translate }}</a></li>
+                    <li *ngIf="isLoggedIn"><a href="javascript:void(0)"
+                        (click)="navigateOnLink('/'+userType+'/orders/order-list')" class="footer_link">{{ 'My Orders' |
+                        translate }}</a></li>
+                    <!-- <li><a href="javascript:void(0)" (click)="comingSoon()" class="footer_link">{{ 'Vehicular
+                        Procedures' | translate }}</a></li> -->
+                  </ul>
+                </div>
+                <div class="col-xl-3 col-lg-4  col-sm-6 ">
+                  <ul class="mb-3">
+                    <!-- <li><a href="javascript:void(0)" (click)="comingSoon()" class="footer_link">{{ 'Manage Customers' |
+                        translate }}</a></li>
+                    <li><a href="javascript:void(0)" routerLink="/blogs" class="footer_link">{{ 'Blog' | translate
+                        }}</a></li> -->
+                    <li><a href="javascript:void(0)" routerLink="/about-us" class="footer_link">{{ 'About Us' |
+                        translate }}</a></li>
+                    <li><a href="javascript:void(0)" routerLink="/contact-us" class="footer_link">{{ 'Contact Us' |
+                      translate }}</a></li>
+                    <!-- <li><a href="javascript:void(0)" routerLink="/faq" class="footer_link">{{ 'FAQs' | translate }}</a>
+                    </li> -->
+                  </ul>
+                </div>
+                <div class="col-xl-3 col-lg-4  col-sm-6 ">
+                  <ul class="mb-3">
+                    <!-- <li><a href="javascript:void(0)" routerLink="/contact-us" class="footer_link">{{ 'Contact Us' |
+                        translate }}</a></li> -->
+                    <li><a href="javascript:void(0)" routerLink="/policies/terms_and_condition" class="footer_link">{{
+                        'Terms & Conditions' | translate }}</a></li>
+                    <li><a href="javascript:void(0)" routerLink="/policies/privacy_policy" class="footer_link">{{
+                        'Privacy Policies' | translate }}</a></li>
+                    <li><a href="javascript:void(0)" routerLink="/policies/payment_cancellation_policy"
+                        class="footer_link">{{ 'Payment and Cancellation Policies' | translate }}</a></li>
+                    <li><a href="javascript:void(0)" routerLink="/policies/financing_policy" class="footer_link">{{
+                        'Financing Policies' | translate }}</a></li>
+                  </ul>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-sm-6 ">
+                  <ul class="mb-3">
+                    <li><a href="javascript:void(0)" (click)="navigateOnLink('/notifications')" class="footer_link">{{
+                        'Notifications' | translate }}</a></li>
+                    <li><a href="javascript:void(0)" (click)="comingSoon()" class="footer_link">{{ 'Vehicle Delivery' |
+                        translate }}</a></li>
+                    <li *ngIf="userType"><a href="javascript:void(0)"
+                        (click)="navigateOnLink('/'+userType+'/my-profile')" class="footer_link">{{ 'My Account' |
+                        translate
+                        }}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4">
+            <div class="footer-right">
+              <h5 class=" text-white fw-regular mb-3 mt-2 mt-lg-0" style="margin-bottom: 0 !important;">{{ 'Follow Us' | translate }}</h5>
+              <div class="footer__icons d-flex justify-content-between">
+                <ul>
+                  <li><a href="javascript:void(0)" class="footer_link"><img src="../../../assets/images/contact/facebook.svg" alt="msg"  class="icon"/>
+                  </a></li>
+                  <li><a href="javascript:void(0)" class="footer_link"><img src="../../../assets/images/contact/instagram-contact.svg" alt="msg"  class="icon"/></a></li>
+                  <li><a href="javascript:void(0)" class="footer_link"><img src="../../../assets/images/contact/tik-tok.svg" alt="msg"  class="icon"/></a></li>
+                  <li><a href="javascript:void(0)" class="footer_link"><img src="../../../assets/images/contact/linkedin.svg" alt="msg"  class="icon"/></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <hr class="m-0"> -->
+    <div class="footer__bottom text-center">
+      <p class="text-white-50 p-5 ">© 2022 Riku. {{ 'All Rights Reserved' | translate }}.</p>
+    </div>
+  </footer>
+</ng-container>

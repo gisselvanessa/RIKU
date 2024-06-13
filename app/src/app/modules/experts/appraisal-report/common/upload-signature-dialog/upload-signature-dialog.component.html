@@ -1,0 +1,100 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-basic-title"> {{ "Create Signature" | translate }}</h3>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close(false)"></button>
+</div>
+<div class="modal-body border-0 bg-blue">
+  <div class="tabs-wrp">
+    <div class="Signature__tabs--btngrp">
+      <ul class="nav nav-pills mb-0" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-primary font-18 fw-semibold" id="choose-tab" data-bs-toggle="pill"
+            [ngClass]="{ 'active': selectedSignatureType == 'choose' }" (click)="selectSignatureType('choose')"
+            type="button" role="tab" aria-controls="choose" aria-selected="true"> {{ 'Choose' | translate }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-primary font-18 fw-semibold" id="draw-tab" data-bs-toggle="pill"
+            [ngClass]="{ 'active': selectedSignatureType == 'draw' }" (click)="selectSignatureType('draw')"
+            type="button" role="tab" aria-controls="draw" aria-selected="false">{{ 'Draw' | translate }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-primary font-18 fw-semibold" id="upload-tab" data-bs-toggle="pill"
+            [ngClass]="{ 'active': selectedSignatureType == 'upload' }" (click)="selectSignatureType('upload')"
+            type="button" role="tab" aria-controls="upload" aria-selected="false">{{ 'Upload' | translate }}</button>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade" id="choose" role="tabpanel" aria-labelledby="choose-tab"
+        [ngClass]="{ 'show active': selectedSignatureType == 'choose' }">
+        <section class="p-4 basic">
+          <div class="d-flex justify-content-between">
+            <h4 class="font-18">{{"Signature" | translate}}</h4>
+          </div>
+          <div class="signatures-list mt-4">
+            <div class="radio-check br-12" *ngFor="let item of fontFamily; index as i">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="signatue1" (change)="currentFontFamily = item"
+                  id="font_{{i}}" [value]="item">
+                <label class="form-check-label border-0 d-flex justify-content-between" for="font_{{i}}">
+                  <div class="font-30" [ngStyle]="{'font-family': item}"> {{ expertName }}</div>
+                </label>
+                <span class="dot-checkmark"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="tab-pane fade" id="draw" role="tabpane2" aria-labelledby="draw-tab"
+        [ngClass]="{ 'show active': selectedSignatureType == 'draw' }">
+        <section class="p-4 basic">
+          <div class="d-flex justify-content-between">
+            <h4 class="font-18">{{"Draw Signature" | translate}}</h4>
+          </div>
+          <div class="signatures-list mt-4">
+            <div class="white-box">
+              <div class="row">
+                <div class="col-12">
+                  <div class="draw-box">
+                    <canvas #blank style="display: none;"></canvas>
+                    <canvas #signPad (mousedown)="onMouseDown($event, 'sign')" (mousemove)="onMouseMove($event, 'sign')"
+                      (touchmove)="onTouchMove($event, 'sign')" (touchend)="TouchEnd()"
+                      (touchstart)="onTouchStart($event, 'sign')" class="draw-canvas">
+                    </canvas>
+                    <div class="button-row clearfix">
+                      <button type="button" class="btn primary-btn-outline" (click)="clearCanvas('sign')">
+                        <span class="icon-cross">&times;</span>
+                        <span class="text">{{"Clear" | translate}}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="tab-pane fade" id="upload" role="tabpane3" aria-labelledby="upload-tab"
+        [ngClass]="{ 'show active': selectedSignatureType == 'upload' }">
+        <section class="p-4 basic">
+          <button class="uplaod-signature mt-4">
+            <input type="file" accept=".png,.jpg,.jpeg" #uploadSign class="sr-only" data-to="#preview-sign"
+              (change)="uploadFile($event,'sign')">
+            <img [src]="previewSignature" *ngIf="previewSignature" [ngClass]="{'show': previewSignature}" alt=""
+              class="preview-image" id="preview-sign">
+            <p class="text-primary font-20 fw-medium">{{"Upload Your Signature" | translate}}</p>
+            <img src="assets/images/upload-icon.svg" (click)="uploadSign.click()" width="80px" height="auto"
+              class="m-3">
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="d-block text-end">
+    <button class="btn primary-btn me-2 border-1 btn-md" [disabled]="disableCreateBtn()" (click)="onCreate()">
+      {{ 'Create' | translate }}
+    </button>
+  </div>
+</div>

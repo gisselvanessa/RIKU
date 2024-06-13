@@ -1,0 +1,515 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="row justify-content-between">
+      <div class="col-xl-3 col-lg-6">
+        <div class="section-header">
+          <div class="back-to-page d-flex">
+            <span
+              (click)="back()"
+              ><img
+                src="assets/images/backarrow.svg"
+                style="cursor: pointer"
+            /></span>
+            <h3 class="font-38 text-primary ms-4 fw-semibold">
+              {{ blogId ? ("Edit" | translate) : ("Add" | translate) }} {{"Blog" | translate}}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="blogForm">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label
+                    class="mb-xl-3 mb-lg-2 mb-1 d-block font-14 text-primary-light"
+                    >{{"Title" | translate}}</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control text-primary border-0"
+                    AlphaNumeric
+                    placeholder="{{'Enter Title' | translate}}"
+                    formControlName="title"
+                    maxlength="50"
+                    [ngClass]="{
+                      'is-invalid':
+                        isFormSubmitted &&
+                        blogForm.invalid &&
+                        blogFormControls.title.invalid
+                    }"
+                  />
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      blogFormControls.title.invalid &&
+                      blogFormControls.title.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="blogFormControls.title.errors?.required"
+                    >
+                      {{"Title is required" | translate}}.
+                    </small>
+                    <small
+                      class="text-danger"
+                      *ngIf="blogFormControls.title.errors?.minlength"
+                    >
+                      {{"Title must be at least 3 characters long" | translate}}.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group position-relative">
+                  <label
+                    class="mb-xl-3 mb-lg-2 mb-1 d-block font-14 text-primary-light"
+                    >{{"Image/Video/Youtube Url" | translate}}</label
+                  >
+
+                  <!-- tabs and navigation for photo/video and youtube url -->
+
+                  <div class="condition-tabs">
+                    <div class="form-group">
+                      <div class="tabs-list br-12">
+                        <ul
+                          class="nav nav-pills"
+                          id="Condition-tab"
+                          role="tablist"
+                        >
+                          <li class="nav-item" role="presentation">
+                            <button
+                              class="nav-link"
+                              id="Condition-all-tab"
+                              [ngClass]="{
+                                active: selectedTab == 'image'
+                              }"
+                              (click)="selectedtab('image')"
+                              data-bs-toggle="pill"
+                              type="button"
+                              role="tab"
+                              aria-controls="Condition-all"
+                              aria-selected="true"
+                            >
+                              {{"Image" | translate}}
+                            </button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button
+                              class="nav-link"
+                              id="Condition-approval-tab"
+                              [ngClass]="{
+                                active: selectedTab == 'video'
+                              }"
+                              (click)="selectedtab('video')"
+                              data-bs-toggle="pill"
+                              type="button"
+                              role="tab"
+                              aria-controls="Condition-approval"
+                              aria-selected="false"
+                            >
+                              {{"Custom Video" | translate}}
+                            </button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button
+                              class="nav-link"
+                              id="Condition-approval-tab"
+                              [ngClass]="{
+                                active: selectedTab == 'youtube_url'
+                              }"
+                              (click)="selectedtab('youtube_url')"
+                              data-bs-toggle="pill"
+                              type="button"
+                              role="tab"
+                              aria-controls="Condition-approval"
+                              aria-selected="false"
+                            >
+                              {{"Youtube URL" | translate}}
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                      <span
+                        class="text-primary-light font-12 px-2 py-1 suggestions"
+                        ><b>*</b>{{"If you change the tab, then you will loose previous tab data" | translate}}.</span
+                      >
+                    </div>
+                    <div class="vehicle__listing--cards buyer-cards">
+                      <div class="tab-content pb-5" id="Condition-tabContent">
+                        <div
+                          class="tab-pane fade show"
+                          [ngClass]="{ active: selectedTab == 'image' }"
+                          id="Condition-all"
+                          role="tabpanel"
+                          aria-labelledby="Condition-all-tab"
+                        >
+                          <!-- photo-upload -->
+                          <div class="col-12 col-md-12 col-xl-8">
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="form-group">
+                                  <input
+                                    type="file"
+                                    class="c-none"
+                                    #image
+                                    (change)="onBlogImageChange($event)"
+                                    placeholder="Image"
+                                    formControlName="blog_image"
+                                  />
+                                  <input
+                                    type="text"
+                                    class="form-control text-primary c-pointer border-0"
+                                    (click)="image.click()"
+                                    placeholder="{{'Upload' | translate}}"
+                                  />
+                                  <img
+                                    src="assets/images/upload-icon.svg"
+                                    (click)="image.click()"
+                                    class="input-icon uplode-icon"
+                                  />
+                                  <span
+                                    *ngIf="isImageUploading"
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                  ></span>
+                                  <div
+                                    *ngIf="
+                                      isFormSubmitted &&
+                                      blogMediaArr.length == 0
+                                    "
+                                  >
+                                    <span class="text-danger"
+                                      >{{"Please upload Image" | translate}}</span
+                                    >
+                                  </div>
+                                  <div
+                                    class="vehicle__uploaded-photo mt-3"
+                                    *ngIf="blogMediaArr.length > 0"
+                                  >
+                                    <div class="d-flex flex-wrap">
+                                      <div
+                                        class="photo-wrp me-2 mb-2"
+                                        *ngFor="
+                                          let document of blogMediaArr;
+                                          index as i
+                                        "
+                                      >
+                                        <span
+                                          (click)="deleteBlogMedias(i, 'image')"
+                                          class="img-css"
+                                          >×</span
+                                        >
+                                        <ng-container
+                                          *ngIf="
+                                            getFileType(
+                                              document.download_url
+                                            ) == 'image'
+                                          "
+                                        >
+                                          <a
+                                            href="{{ document.download_url }}"
+                                            target="_blank"
+                                            ><img
+                                              class="br-12"
+                                              [src]="document.download_url"
+                                          /></a>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- photo-upload -->
+                        </div>
+
+                        <div
+                          class="tab-pane fade show"
+                          [ngClass]="{ active: selectedTab == 'video' }"
+                          id="Condition-approval"
+                          role="tabpanel"
+                          aria-labelledby="Condition-approval-tab"
+                        >
+                          <!-- video content -->
+
+                          <div class="col-12 col-md-12 col-xl-8">
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="form-group">
+                                  <input
+                                    type="file"
+                                    class="c-none"
+                                    placeholder="{{'Upload Custom Video' | translate}}"
+                                    #rucDocumet
+                                    (change)="onBlogCustomVideoChange($event)"
+                                    multiple
+                                    formControlName="blog_video"
+                                  />
+                                  <input
+                                    type="text"
+                                    class="form-control text-primary c-pointer border-0"
+                                    (click)="rucDocumet.click()"
+                                    placeholder="{{'Upload' | translate}}"
+                                  />
+                                  <img
+                                    src="assets/images/upload-icon.svg"
+                                    (click)="rucDocumet.click()"
+                                    class="input-icon uplode-icon"
+                                  />
+                                  <span
+                                    *ngIf="isVideoUploading"
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                  ></span>
+                                  <div
+                                    *ngIf="
+                                      isFormSubmitted &&
+                                      blogMediaArr.length == 0
+                                    "
+                                  >
+                                    <span class="text-danger">
+                                      {{"Please upload Video" | translate}}</span
+                                    >
+                                  </div>
+                                  <div
+                                    class="vehicle__uploaded-photo mt-3"
+                                    *ngIf="blogMediaArr.length > 0"
+                                  >
+                                    <div class="d-flex flex-wrap">
+                                      <div
+                                        class="photo-wrp me-2 mb-2"
+                                        *ngFor="
+                                          let video of blogMediaArr;
+                                          index as i
+                                        "
+                                      >
+                                        <span
+                                          (click)="deleteBlogMedias(i, 'video')"
+                                          class="img-css"
+                                          >×</span
+                                        >
+                                        <ng-container
+                                          *ngIf="
+                                            getFileType(video.download_url) ==
+                                            'doc'
+                                          "
+                                        >
+                                          <a
+                                            href="{{ video.download_url }}"
+                                            target="_blank"
+                                          >
+                                            <video
+                                              [muted]="true"
+                                              [autoplay]="false"
+                                              width="350px"
+                                              height="195px"
+                                              class="img"
+                                              controls
+                                            >
+                                              <source
+                                                src="{{ video.download_url }}"
+                                                type="video/mp4"
+                                              />
+                                            </video>
+                                          </a>
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- video content -->
+                        </div>
+
+                        <div
+                          class="tab-pane fade show"
+                          [ngClass]="{ active: selectedTab == 'youtube_url' }"
+                          id="Condition-approval"
+                          role="tabpanel"
+                          aria-labelledby="Condition-approval-tab"
+                        >
+                          <!-- youtube url content -->
+                          <input
+                            type="text"
+                            class="form-control text-primary border-0"
+                            placeholder="{{'Enter Youtube URL' | translate}}"
+                            formControlName="youtubeurl"
+                            [ngClass]="{
+                              'is-invalid':
+                                isFormSubmitted &&
+                                blogForm.invalid &&
+                                blogFormControls.youtubeurl.invalid
+                            }"
+                          />
+                          <div
+                            *ngIf="
+                              isFormSubmitted &&
+                              blogFormControls.youtubeurl.invalid &&
+                              blogFormControls.youtubeurl.errors
+                            "
+                          >
+                            <small
+                              class="text-danger"
+                              *ngIf="
+                                blogFormControls.youtubeurl.errors?.required
+                              "
+                            >
+                              {{"URL is required" | translate}}.
+                            </small>
+                            <small
+                              class="text-danger"
+                              *ngIf="
+                                blogFormControls.youtubeurl.errors?.minlength
+                              "
+                            >
+                             {{"URl must be at least 3 characters long" | translate}}.
+                            </small>
+                          </div>
+
+                          <!-- youtube url content -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label
+                    class="mb-xl-3 mb-lg-2 mb-1 d-block font-14 text-primary-light"
+                    >{{"Related Tag" | translate}}</label
+                  >
+                  <input
+                    type="text"
+                    #chipInput
+                    class="form-control text-primary border-0"
+                    placeholder="{{'Enter Related Tag' | translate}}"
+                    maxlength="20"
+                    (keyup)="addChip(chipInput.value, $event)"
+                    [ngClass]="{
+                      'is-invalid':
+                        !chipsArr.length &&
+                        isFormSubmitted &&
+                        blogForm.invalid &&
+                        blogFormControls.tags.invalid
+                    }"
+                  />
+                  <span
+                    class="text-primary-light font-12 px-2 py-1 suggestions"
+                  >
+                    <b>*</b>{{"You can add maximum 12 related tags" | translate}}.
+                  </span>
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      blogFormControls.tags.invalid &&
+                      blogFormControls.tags.errors
+                    "
+                  >
+                    <small
+                      class="text-danger"
+                      *ngIf="
+                        !chipsArr.length &&
+                        blogFormControls.tags.errors?.required
+                      "
+                    >
+                      {{"Related tag is required" | translate}}.
+                    </small>
+                    <small class="text-danger" *ngIf="chipsArr.length > 11">
+                      {{"You reached maximum related tags limit 12" | translate}}.
+                    </small>
+                  </div>
+                </div>
+
+                <div class="result-pills">
+                  <span
+                    *ngFor="let chips of chipsArr; let i = index"
+                    class="pill"
+                  >
+                    {{ chips }}
+                    <a
+                      class="ms-3"
+                      href="javascript:void(0)"
+                      (click)="removeChip(i)"
+                      ><img
+                        src="/assets/images/vehicle-list/blue-cross.svg"
+                        alt=""
+                    /></a>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label
+                    class="mb-xl-3 mb-lg-2 mb-1 d-block font-14 text-primary-light"
+                    >{{"Description" | translate}}</label
+                  >
+                  <ckeditor
+                    class="ck-editor"
+                    [data]="editorData"
+                    [editor]="Editor"
+                    [config]="env.ckeConfig"
+                    formControlName="html"
+                    name="myckeditor"
+                    [ngClass]="{
+                      'is-invalid':
+                        isFormSubmitted &&
+                        blogForm.invalid &&
+                        blogFormControls.html.invalid
+                    }"
+                  ></ckeditor>
+                  <div
+                    *ngIf="
+                      isFormSubmitted &&
+                      blogForm.controls['html'].invalid &&
+                      blogForm.controls['html'].errors
+                    "
+                  >
+                    <div
+                      *ngIf="
+                    blogForm.controls['html'].errors?.['required']
+                  "
+                      class="text-danger"
+                    >
+                      {{"Description is required" | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-grp mt-5 d-flex flex-wrap">
+        <button
+          class="btn primary-btn me-3 mb-2 border-1"
+          type="submit"
+          (click)="addUpdateBlog()"
+          [disabled]="isDisableSubmit"
+        >
+          {{"Submit" | translate}}
+        </button>
+        <a [routerLink]="['/admin/blog']" class="btn primary-btn-outline mb-2"
+          >{{"Cancel" | translate}}</a
+        >
+      </div>
+    </form>
+  </div>
+</section>

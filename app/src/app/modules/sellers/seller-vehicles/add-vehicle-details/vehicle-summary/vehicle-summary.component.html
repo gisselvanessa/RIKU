@@ -1,0 +1,341 @@
+<div class="fifth-step" *ngIf="vehicleData">
+  <div class="row">
+    <div class="col-lg-8 mt-4">
+      <div class="bg-white shw br-12 p-3">
+        <div class="row pt-3">
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/tag.svg"
+                  alt="gear"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 font-16 fw-semibold">{{
+                  "Brand" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.vehicle_make | translate }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/car.svg"
+                  alt="gear"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 font-16 fw-semibold">{{
+                  "Model" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.vehicle_model | translate }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/calendar.png"
+                  alt="car"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 font-16 fw-semibold">{{
+                  "Registration Year" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.registration_year }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/car.svg"
+                  alt="car"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 fw-semibold">{{
+                  "Body Type" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.vehicle_type }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/plate.svg"
+                  alt="fuel"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 fw-semibold">{{
+                  "Number Plate" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.number_plate | titlecase | translate }}
+                </h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/moneybag.svg"
+                  alt="fuel"
+                  width="50px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-4">
+                <label for="" class="mb-2 fw-semibold">{{
+                  "Price" | translate
+                }}</label>
+                <h5 class="font-16 text-purple fw-bold">
+                  {{ vehicleData.price | titlecase | translate }}
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- photos -->
+        <div class="row w-100">
+          <div class="col-lg-12 col-sm-12">
+            <div class="form-group">
+              <div
+                class="vehicle__uploaded-photo mt-3"
+                *ngIf="vehicleData.photos.length > 0"
+              >
+                <div class="d-flex additional-image-height">
+                  <ng-container
+                    *ngFor="let otherPhoto of vehicleData.photos; index as i"
+                  >
+                    <div class="photo-wrp me-3 mt-3">
+                      <img class="br-blue" [src]="otherPhoto" />
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 mt-4">
+      <div class="p-3">
+        <div class="bg-white br-12 p-3">
+          <h3 class="font-20 mb-2 text-purple-3">Resumen</h3>
+          <hr class="seprator text-primary-light mb-3" />
+          <div class="d-flex mb-3">
+            <h4 class="font-20 me-2 text-purple-3">Plan:</h4>
+            <h4 class="font-20 text-orange fw-semibold">Gratis</h4>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <h4 class="font-20 text-purple-3">Subtotal</h4>
+            <h4 class="font-20 text-purple-3">$00,00</h4>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <h4 class="font-20 text-purple-3">12% iva</h4>
+            <h4 class="font-20 text-purple-3">$00,00</h4>
+          </div>
+          <hr class="seprator text-primary-light mb-3" />
+          <div class="d-flex justify-content-between mb-5">
+            <h3 class="font-20 text-secondary">Total</h3>
+            <h3 class="font-20 text-secondary">$00,00</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1 class="mt-3 fw-bold text-primary font-32 pt-3">
+    Información de Contacto
+  </h1>
+  <div class="row mb-5">
+    <div class="col-lg-8 mt-4">
+      <div class="bg-white shw br-12 p-3">
+        <form [formGroup]="profileForm">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Name" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 30%; left: 19px"
+                      class="input-icon-l"
+                      src="assets/images/user.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'Enter Name' | translate }}"
+                      maxlength="20"
+                      formControlName="first_name"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Surname" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 30%; left: 19px"
+                      class="input-icon-l"
+                      src="assets/images/user.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'Enter Surname' | translate }}"
+                      maxlength="20"
+                      formControlName="last_name"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Cedula ID" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 35%; left: 16px"
+                      class="input-icon-l"
+                      src="assets/images/dni.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'ID Number' | translate }}"
+                      maxlength="20"
+                      [value]="dni"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Phone" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 30%; left: 16px"
+                      class="input-icon-l"
+                      src="assets/images/phone-light.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'Phone Number' | translate }}"
+                      maxlength="20"
+                      formControlName="mobile"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Email" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 25%; left: 16px"
+                      class="input-icon-l"
+                      src="assets/images/correo.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'EmailPlaceHolder' | translate }}"
+                      maxlength="20"
+                      formControlName="email"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group lable--icon">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block fw-semibold">{{
+                    "Address" | translate
+                  }}</label>
+                  <div class="position-relative">
+                    <img
+                      style="position: absolute; top: 25%; left: 16px"
+                      class="input-icon-l"
+                      src="assets/images/ep_location.svg"
+                      alt="Mi Icono"
+                    />
+                    <input
+                      style="padding-left: 60px !important"
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'AddressPlaceholder' | translate }}"
+                      maxlength="20"
+                      formControlName="address"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

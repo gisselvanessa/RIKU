@@ -1,0 +1,158 @@
+<section class="section--spacing vehicle__listing buyer--listing bg-blue">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <h3 class="font-38 text-primary fw-semibold">
+        {{ "My Favorites" | translate }}
+      </h3>
+      <!-- <p class="text-purple-2 font-14">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore.
+      </p> -->
+    </div>
+    <div class="condition-tabs">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content" id="fav-tabContent">
+          <ng-container *ngIf="!loading; else loadingTemplate">
+            <div
+              class="tab-pane fade"
+              id="Condition-vehicles"
+              [ngClass]="{ 'show active': selectedTab == 'vehicles' }"
+              role="tabpanel"
+              aria-labelledby="Condition-home-tab"
+            >
+              <div *ngIf="vehicleDataArray.length === 0">
+                <p class="text-primary font-22 fw-semibold">
+                  {{ "NoFavoriteVehicleMessage" | translate }}
+                </p>
+              </div>
+              <div *ngIf="vehicleDataArray.length">
+                <div
+                  class="row gy-3"
+                  *ngFor="let vehicleList of vehicleDataArray; let j = index"
+                >
+                  <div
+                    class="col-md-6 col-xl-4"
+                    *ngFor="let vehicleArray of vehicleList; let i = index"
+                  >
+                    <div class="listing_cards bg-white h-100">
+                      <div class="card_img position-relative">
+                        <img
+                          src="{{ vehicleArray?.cover_img_url }}"
+                          routerLink="/buyer/vehicles/vehicle-details/{{
+                            vehicleArray?.favourite_vehicle_id
+                          }}"
+                          (error)="handleMissingImage($event)"
+                          alt="car-1"
+                        />
+                        <a
+                          href="javascript:void(0)"
+                          class="card_img-fav"
+                          style="cursor: pointer"
+                          (click)="unfavouriteVehicle(j, i)"
+                        >
+                          <img
+                            class="fav-icon"
+                            src="assets/images/view_vehicle/red-heart.svg"
+                            alt=""
+                          />
+                        </a>
+                      </div>
+                      <div class="card_text-box p-3">
+                        <div class="d-flex justify-content-between">
+                          <h5
+                            class="text-secondary car_model text-primary font-22 fw-semibold"
+                          >
+                            {{ vehicleArray?.model_year }}
+                            {{ vehicleArray?.make }}
+                            {{ vehicleArray?.make_model }}
+                          </h5>
+                          <h4 class="text-green font-28 car_price">
+                            ${{ vehicleArray?.price | spanishNumber }}
+                          </h4>
+                        </div>
+                        <div
+                          class="d-flex align-items-center my-4 details_location-date"
+                        >
+                          <p class="text-purple-2 font-16">
+                            <img
+                              src="assets/images/view_vehicle/location.svg"
+                              alt=""
+                            />
+                            {{ vehicleArray?.location?.city | titlecase }}
+                          </p>
+                        </div>
+                        <div class="details_labels">
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-2 me-sm-3"
+                            >{{
+                              vehicleArray?.condition | titlecase | translate
+                            }}</label
+                          >
+                          <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label me-2 me-sm-3"
+                            >{{ vehicleArray?.fuel_type | translate }}</label
+                          >
+                          <!-- <label
+                            for="exampleFormControlInput1"
+                            class="form-label details__label"
+                            >{{ vehicleArray?.distance_travelled }}
+                            {{ vehicleArray?.distance_travelled_unit }}</label
+                          > -->
+                          <label
+                            *ngIf="
+                              vehicleArray?.distance_travelled_unit ===
+                              'Kilometers'
+                            "
+                            for="exampleFormControlInput2"
+                            class="form-label details__label"
+                            >{{
+                              vehicleArray?.distance_travelled | spanishNumber
+                            }}
+                            km</label
+                          >
+                          <label
+                            *ngIf="
+                              vehicleArray?.distance_travelled_unit === 'Miles'
+                            "
+                            for="exampleFormControlInput2"
+                            class="form-label details__label"
+                            >{{
+                              vehicleArray?.distance_travelled | spanishNumber
+                            }}
+                            mi</label
+                          >
+                          <label
+                            *ngIf="
+                              vehicleArray?.distance_travelled_unit === 'Hours'
+                            "
+                            for="exampleFormControlInput2"
+                            class="form-label details__label"
+                            >{{
+                              vehicleArray?.distance_travelled | spanishNumber
+                            }}
+                            Hr</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #loadingTemplate>
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <app-loader></app-loader>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

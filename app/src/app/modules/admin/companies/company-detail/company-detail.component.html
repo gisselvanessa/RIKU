@@ -1,0 +1,42 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+    <div class="jakay-container admin-container pb-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="mb-3 font-38 text-primary fw-semibold">
+                <div class="back-to-page d-flex">
+                    <span><img src="assets/images/backarrow.svg" style="cursor: pointer;" routerLink="/admin/companies"></span>
+                    <h3 class="ms-3 fw-semibold mb-0">{{"Company Detail" | translate}}</h3>
+                </div>
+            </h3>
+        </div>
+        <div class="bg-white p-4 br-12 mb-5 pb-3">
+            <div class="row admin_detail-wrp" *ngIf="!loading; else loadingTemplate">
+                <div class="col-12">
+                    <div class="form-group">
+                        <p class="text-primary-light">
+                            <label class="text-primary-light font-14 mb-2">{{"Created Date" | translate}}:</label>
+                            <span class="text-primary ms-2 font-18 fw-semibold">{{companyDetail.created_date | date: "MM-dd-YYYY hh:mm a"}}</span>
+                        </p>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="text-primary-light font-14 d-block mb-2">{{"Company Name" | translate}}</label>
+                        <p class="text-primary font-18 mb-0 fw-semibold"> {{companyDetail.company_name}} </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="text-primary-light font-14 d-block mb-2">{{"Created By" | translate}}</label>
+                        <p class="text-primary font-18 mb-0 fw-semibold"> {{companyDetail.created_by | titlecase}} </p>
+                    </div>
+                </div>
+            </div>
+            <ng-template #loadingTemplate>
+                <h3 class="font-26 text-primary fw-semibold text-center p-5 m-2">
+                    {{"Loading..." | translate}}
+                </h3>
+            </ng-template>
+        </div>
+    </div>
+</section>

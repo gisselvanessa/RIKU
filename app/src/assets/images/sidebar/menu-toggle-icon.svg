@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2899" data-name="Rectangle 2899" width="40" height="40" transform="translate(1432 266)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="Group_2166" data-name="Group 2166" transform="translate(-34 -14)">
+    <rect id="Rectangle_2914" data-name="Rectangle 2914" width="52" height="52" rx="12" transform="translate(34 14)" fill="#fff" opacity="0.1"/>
+    <g id="Component_69_8" data-name="Component 69 – 8" transform="translate(40 20)">
+      <g id="Mask_Group_67" data-name="Mask Group 67" transform="translate(-1432 -266)" clip-path="url(#clip-path)">
+        <g id="Group_2159" data-name="Group 2159" transform="translate(1390.978 -707.609)">
+          <path id="Subtraction_39" data-name="Subtraction 39" d="M24.458,1.172H.592A.591.591,0,0,1,0,.589.593.593,0,0,1,.592,0H24.458a.586.586,0,1,1,0,1.172Z" transform="translate(48.5 985.556)" fill="#fff" stroke="#fff" stroke-width="0.54"/>
+          <path id="Subtraction_40" data-name="Subtraction 40" d="M10.821,1.171H.592A.593.593,0,0,1,0,.581.589.589,0,0,1,.592,0H10.821a.585.585,0,0,1,0,1.171Z" transform="translate(48.5 993.026)" fill="#fff" stroke="#fff" stroke-width="0.54"/>
+          <path id="Subtraction_41" data-name="Subtraction 41" d="M24.458,1.172H.592A.591.591,0,0,1,0,.589.593.593,0,0,1,.592,0H24.458a.586.586,0,1,1,0,1.172Z" transform="translate(48.5 1000.491)" fill="#fff" stroke="#fff" stroke-width="0.54"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

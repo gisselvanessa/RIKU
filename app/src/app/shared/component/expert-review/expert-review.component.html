@@ -1,0 +1,282 @@
+<section
+  class="admin_add__user bg-blue"
+  [ngClass]="hideClass ? 'section--spacing' : ''"
+>
+  <div [ngClass]="hideClass ? 'jakay-container' : ''">
+    <div class="back-to-page d-flex">
+      <span (click)="back()"><img src="assets/images/backarrow.svg" /></span>
+      <div class="ms-3 section-header">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Experts Review Order" | translate }}
+        </h3>
+        <p class="text-primary-light font-14 mb-3">
+          {{
+            "Please select a service and fill in the information to place an order. It is important to consider that at the time of a purchase or sale of a used vehicle an appraisal is made."
+              | translate
+          }}
+        </p>
+      </div>
+    </div>
+    <div
+      class="vehicle__steps expert-steps d-flex align-items-center justify-content-center"
+      #expertStepsWrapper
+    >
+      <div class="steps-wrp">
+        <div
+          class="step mb-md-0 mb-3 active"
+          [ngClass]="{
+            completed:
+              currentExpertReviewStep > expertReviewStepNumber.PRODUCT_SERVICES,
+            active:
+              currentExpertReviewStep == expertReviewStepNumber.PRODUCT_SERVICES
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.PRODUCT_SERVICES ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.PRODUCT_SERVICES
+                    ? 'assets/images/vehicle-orders/icon-servicio azul.svg'
+                    : 'assets/images/vehicle-orders/icon-servicio naranja.svg'
+                "
+              />
+
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Product Services" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentExpertReviewStep >
+              expertReviewStepNumber.FIND_EXPERT_APPRAISER,
+            active:
+              currentExpertReviewStep ==
+              expertReviewStepNumber.FIND_EXPERT_APPRAISER
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.FIND_EXPERT_APPRAISER ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.FIND_EXPERT_APPRAISER
+                    ? 'assets/images/vehicle-orders/icon-busqueda-experto azul.svg'
+                    : 'assets/images/vehicle-orders/icon-busqueda-experto naranja.svg'
+                "
+              />
+
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Search Expert" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentExpertReviewStep >
+              expertReviewStepNumber.CONTACT_INFORMATION,
+            active:
+              currentExpertReviewStep ==
+              expertReviewStepNumber.CONTACT_INFORMATION
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.CONTACT_INFORMATION ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.CONTACT_INFORMATION
+                    ? 'assets/images/vehicle-orders/icon-informacion-contacto azul.svg'
+                    : 'assets/images/vehicle-orders/icon-informacion-contacto naranja.svg'
+                "
+              />
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Enter your contact Information" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed:
+              currentExpertReviewStep >
+              expertReviewStepNumber.VEHICLE_INFORMATION,
+            active:
+              currentExpertReviewStep ==
+              expertReviewStepNumber.VEHICLE_INFORMATION
+          }"
+          *ngIf="!currentOrder"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.VEHICLE_INFORMATION ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.VEHICLE_INFORMATION
+                    ? 'assets/images/vehicle-orders/icon-informacion-vehiculo azul.svg'
+                    : 'assets/images/vehicle-orders/icon-informacion-vehiculo naranja.svg'
+                "
+              />
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Vehicle Information" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentExpertReviewStep > expertReviewStepNumber.PAYMENT,
+            active: currentExpertReviewStep == expertReviewStepNumber.PAYMENT
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.PAYMENT ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.PAYMENT
+                    ? 'assets/images/vehicle-orders/icon-pago-experto azul.svg'
+                    : 'assets/images/vehicle-orders/icon-pago-experto naranja.svg'
+                "
+              />
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Expert Review Payment" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentExpertReviewStep > expertReviewStepNumber.SUMMARY,
+            active: currentExpertReviewStep == expertReviewStepNumber.SUMMARY
+          }"
+        >
+          <div>
+            <span class="step-round">
+              <img
+                width="90%"
+                [src]="
+                  currentExpertReviewStep ==
+                    expertReviewStepNumber.SUMMARY ||
+                  currentExpertReviewStep >
+                    expertReviewStepNumber.SUMMARY
+                    ? 'assets/images/vehicle-orders/icon-resumen-reunion-azul.svg'
+                    : 'assets/images/vehicle-orders/icon-resumen-reunion-naranja.svg'
+                "
+              />
+              <h6 class="text-start fw-semibold font-17">
+                {{ "Summary" | translate }}
+              </h6>
+            </span>
+          </div>
+          <span class="line"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="expert__wrapper" [ngClass]="hideClass ? 'jakay-container' : ''">
+    <div
+      class="step-1"
+      *ngIf="
+        currentExpertReviewStep === expertReviewStepNumber.PRODUCT_SERVICES
+      "
+    >
+      <app-product-services
+        [currentOrder]="currentOrder"
+        [currentExpertReview]="expertReviewDetail"
+        (onSubmitOrderDetails)="setNextOrderStep($event)"
+        (onSubmitExpertReviewDetails)="setNextStep($event)"
+      ></app-product-services>
+    </div>
+    <div
+      class="step-2"
+      *ngIf="
+        currentExpertReviewStep === expertReviewStepNumber.FIND_EXPERT_APPRAISER
+      "
+    >
+      <app-find-expert
+        [currentOrder]="currentOrder"
+        [currentExpertReview]="expertReviewDetail"
+        (onSubmitExpertReviewDetails)="setNextStep($event)"
+        [currentExpertReviewStep]="currentExpertReviewStep"
+      ></app-find-expert>
+    </div>
+    <div
+      class="step-3"
+      *ngIf="
+        currentExpertReviewStep === expertReviewStepNumber.CONTACT_INFORMATION
+      "
+    >
+      <app-contact-information
+        [currentOrder]="currentOrder"
+        [currentExpertReview]="expertReviewDetail"
+        [expertReviewId]="expertReviewId"
+        (onSubmitExpertReviewDetails)="setNextStep($event)"
+        [currentExpertReviewStep]="currentExpertReviewStep"
+      ></app-contact-information>
+    </div>
+    <div
+      class="step-4"
+      *ngIf="
+        currentExpertReviewStep === expertReviewStepNumber.VEHICLE_INFORMATION
+      "
+    >
+      <app-vehicle-information
+        (onSubmitExpertReviewDetails)="setNextStep($event)"
+        [currentExpertReview]="expertReviewDetail"
+      ></app-vehicle-information>
+    </div>
+    <div
+      class="step-5"
+      *ngIf="currentExpertReviewStep === expertReviewStepNumber.PAYMENT"
+    >
+      <app-payment
+        [currentOrder]="currentOrder"
+        (onSubmitExpertReviewDetails)="setNextStep($event)"
+        [currentExpertReview]="expertReviewDetail"
+      ></app-payment>
+    </div>
+    <div
+      class="step-6"
+      *ngIf="currentExpertReviewStep === expertReviewStepNumber.SUMMARY"
+    >
+      <app-summary
+        [currentOrder]="currentOrder"
+        [hideClass]="hideClass"
+        [currentExpertReview]="expertReviewDetail"
+        [expertReviewId]="expertReviewId"
+        (onSubmitOrderDetails)="setNextOrderStep($event)"
+        [currentExpertReviewStep]="currentExpertReviewStep"
+      ></app-summary>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,761 @@
+@import "../../../function";
+@import "../../../variables";
+
+.landing {
+  &__banner {
+    position: relative;
+
+    &.bg-blue {
+      background-color: #EEF4F7;
+    }
+
+    &:after {
+      content: "";
+      background-color: #EC8F67;
+      width: 300px;
+      height: 100%;
+      position: absolute;
+      right: 11.5%;
+      top: 0;
+      display: block;
+      z-index: 0;
+
+      @include for-tablet-landscape-only {
+        width: 200px;
+      }
+    }
+
+    .jakay-container {
+      z-index: 1;
+      position: relative;
+
+      .car-banner-image {
+        position: absolute;
+        right: -11%;
+        top: 15%;
+        width: 70%;
+
+        @media (max-width:1750px) {
+          width: 60%;
+          right: -2%;
+          top: 20%;
+        }
+
+        @include for-tablet-landscape-only {
+          right: -2%;
+          top: 22%;
+        }
+
+        @include for-tablet-only {
+          width: 100%;
+          top: 19%;
+          right: 0;
+        }
+      }
+    }
+
+    &-desc {
+      padding: 115px 0px 115px 0px;
+
+      @include for-tablet-landscape-only {
+        padding: 80px 0;
+      }
+
+      h5 {
+        width: 45%;
+        height: 200px;
+        overflow: hidden;
+        margin-bottom: 125px;
+
+        @include for-tablet-landscape-only {
+          width: 100%;
+          font-size: 30px;
+          margin-bottom: 80px;
+        }
+
+
+      }
+
+      h1 {
+        // max-width: 60%;
+        padding-left: 10%;
+      }
+
+      ul.nav-tabs {
+        border: 0px;
+
+        .nav-item {
+          background-color: transparent;
+        }
+
+        .nav-link {
+          span {
+            color: $thired-color;
+            font-size: 20px;
+            font-weight: 400;
+          }
+
+          padding: 15px 50px;
+          border: 0px;
+          background-color: rgba($color: #2F779C, $alpha: 0.05);
+
+          &.active {
+            background-color: $white;
+
+            span {
+              position: relative;
+              color: $primary-color;
+              font-weight: 600;
+
+              &::after {
+                content: "";
+                background-color: $secondary-color;
+                height: 1px;
+                width: 100%;
+                display: block;
+                position: absolute;
+                bottom: -20px;
+                left: 0;
+              }
+            }
+          }
+        }
+      }
+
+      .tab-content {
+        width: 95%;
+
+        @include for-phone-only {
+          width: 100%;
+        }
+      }
+
+      span.border-right {
+        border-right: 1px solid #D8CFDA;
+        width: 1px;
+        height: 80px;
+        margin: 0px 10px;
+        background-color: #D8CFDA;
+      }
+    }
+  }
+
+  &__about {
+    position: relative;
+    background: url(../../../assets/images/lending/about_bg-img.png) 0% 0% no-repeat padding-box;
+    background-size: cover;
+    background-position: center;
+    height: min(max(400px, 41.66vw), 800px);
+
+    // &::after {
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   content: "";
+    //   background-image: linear-gradient(-80deg, #4E1F4F00 0%, #4E1F4FD1 50%, #4E1F4F 100%);
+    //   top: 0;
+    //   left: 0;
+    // }
+  }
+
+  &__about-desc {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+
+    p {
+      color: rgba($color: $white, $alpha: .7);
+
+      @include for-tablet-only {
+        font-size: 1.2rem !important;
+      }
+
+      @include for-phone-only {
+        font-size: 1rem !important;
+      }
+    }
+  }
+
+  &__process-heading {
+    margin-bottom: 100px;
+  }
+
+  &__process-detail-wrp {
+    .heading-border-bottom {
+      position: relative;
+
+      &::after {
+        content: "";
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        height: 3px;
+        width: 15%;
+        background-color: $dark-orange;
+      }
+    }
+  }
+
+  &__loan {
+    position: relative;
+    background: url(../../../assets/images/lending/loan_bg-img.png) 0% 0% no-repeat padding-box;
+    background-size: cover;
+    background-position: center;
+    height: min(max(400px, 30.2vw), 580px);
+
+    // &::after {
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   content: "";
+    //   background-color: rgba($color: #4E1F4F, $alpha: 0.8);
+    //   top: 0;
+    //   left: 0;
+    // }
+  }
+
+  &__loan-desc {
+    p {
+      line-height: 45px;
+
+      @include for-tablet-landscape-only {
+        line-height: normal;
+      }
+
+      @include for-tablet-only {
+        font-size: 1.2rem !important;
+
+        padding: 0 2rem;
+      }
+
+      @include for-phone-only {
+        font-size: 1rem !important;
+        padding: 0 1rem;
+      }
+    }
+  }
+
+  &__card-body {
+
+    padding: 40px;
+    border-radius: 32px;
+
+    .icon-wrapper {
+      img {
+        &.onhover {
+          display: none;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: $primary-color;
+      -webkit-box-shadow: 0px 34px 50px -4px rgba(78, 31, 79, .5);
+      box-shadow: 0px 34px 50px -4px rgba(78, 31, 79, .5);
+      border-radius: 32px;
+      -webkit-transition: all ease-in-out 0.5s;
+      cursor: pointer;
+      transition: all ease-in-out 0.5s;
+
+      h4 {
+        color: #fff !important;
+        -webkit-transition: all ease-in-out 0.5s;
+      }
+
+      p {
+        color: rgba($color: #fff, $alpha: 0.5);
+        -webkit-transition: all ease-in-out 0.5s;
+      }
+
+      .icon-wrapper {
+        img {
+          &.onhover {
+            display: block;
+          }
+
+          &.offhover {
+            display: none;
+          }
+        }
+      }
+
+      // img[src] {
+      //   content: url("/./assets/images/lending/car-icon-orange.svg");
+      // }
+    }
+  }
+
+  &__review-bg {
+    background-image: url("/./assets/images/lending/review-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &__review-slider {
+    .swiper {
+      padding-bottom: 100px;
+    }
+
+    .review-card-wrp {
+      padding-top: 50px;
+    }
+
+    .review-card {
+      padding: 65px 40px 45px 40px;
+
+      img.user-img {
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      top: unset;
+      bottom: 0px;
+      transform: unset;
+      color: $white;
+      border: 1px solid $white;
+      border-radius: 8px;
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+
+      &:after {
+        font-size: 25px;
+      }
+
+      &:hover {
+        background-color: $primary-color;
+        border-color: $primary-color;
+        transition: .5s all ease-in-out;
+      }
+    }
+
+    .swiper-button-prev {
+      left: 45%;
+      right: unset;
+
+      @include for-laptop-only {
+        left: 44%;
+      }
+
+      @include for-tablet-landscape-only {
+        left: 42%;
+      }
+
+      @include for-phone-only {
+        left: 30%;
+      }
+    }
+
+    .swiper-button-next {
+      left: 51%;
+      right: unset;
+
+      @include for-laptop-only {
+        left: 52%;
+      }
+
+      @include for-tablet-landscape-only {
+        left: 54%;
+      }
+
+      @include for-phone-only {
+        left: 53%;
+      }
+    }
+  }
+}
+
+.swiper {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  z-index: 1;
+}
+
+.brand-swipper {
+  .swiper-wrapper {
+    align-items: center;
+  }
+
+  .swiper-slide {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+  }
+}
+
+.with-border-image {
+  position: relative;
+
+  img {
+    z-index: 1;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 32px;
+    border: 1px solid #EC8F67;
+    background-color: #fff;
+    z-index: -1;
+    position: absolute;
+    top: 48px;
+  }
+
+  &.left-side {
+    &:after {
+      // left: -48px;
+
+      left: 70px;
+      top: 30px;
+      border-radius: 20px;
+
+      @include for-tablet-only {
+        left: -25px;
+        top: 25px;
+      }
+    }
+  }
+  &.right-side {
+    &:after {
+      right: -48px;
+
+      @include for-tablet-only {
+        right: -25px;
+        top: 25px;
+      }
+    }
+  }
+}
+
+.admin-container {
+  margin: auto 50px !important;
+}
+
+.detail-wrp {
+  .dropdown-item {
+    padding: 8px 0px;
+
+  }
+  .btn-dropdown {
+    padding: 10px 20px 10px 0px !important;
+  }
+}
+
+.icon-wrapper {
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+  }
+}
+.brand-slider-wrapper{
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  img{
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    object-fit: contain;
+  }
+
+}
+.align-justify{
+  text-align: justify;
+}
+
+.form-check-label{
+  height: auto !important;
+}
+
+
+.doropdown_radio {
+  &.doropdown_selection {
+    position: absolute;
+    top: 41px;
+    right: 5px;
+
+    .btn {
+      width: 140px;
+
+      &.dropdown-toggle {
+        &:after {
+          right: 10px;
+        }
+      }
+    }
+  }
+
+  &.dropdown-images {
+    li {
+      a {
+        .form-check-inline label {
+          padding-left: 10px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+
+  .btn {
+    padding: 15px 20px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+
+    &.dropdown-toggle {
+      &:after {
+        visibility: hidden;
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid $secondary-color;
+        transform: rotate(225deg);
+        border-left: 2px solid $secondary-color;
+        border-right: unset;
+        border-bottom: unset;
+        top: 42%;
+        right: 25px;
+        position: absolute;
+      }
+    }
+  }
+
+  ul {
+    box-shadow: 0px 3px 16px #00000029;
+    border: 0px;
+    width: 445px;
+  }
+
+  li {
+    margin-top: 15px;
+
+    a {
+      border: 0px;
+      padding: 0px;
+
+      &:hover {
+        border: 0px;
+      }
+
+      .form-check-inline label {
+        text-align: left;
+        padding: 12px 20px;
+        padding-left: 45px;
+        white-space: normal;
+      }
+    }
+  }
+}
+
+.doropdown_radio .btn.dropdown-toggle:after{
+  right : 1% !important;
+}
+
+.load-more-btn{
+  color: #fff;
+  background-color: #2f779c;
+  border: 1px solid transparent;
+  transition: 0.3s all ease-in-out;
+}
+
+// styles to put background image
+.landing__banner-desc {
+  padding-top: 5%;
+}
+
+.img-title {
+  max-width: 95%;
+  // font-weight: 400 !important;
+  font-size: 45px;
+  color: white !important;
+}
+
+.img-family {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.img-card {
+  width: 766px;
+  height: 383px;
+  border-radius: 40px;
+}
+
+.card-service {
+  background-image: url('../../../assets/images/services/img1.png');
+}
+
+.bottom-card {
+  // border: 3px solid;
+  border-radius: 30px;
+  background-color: #3C759A;
+  position: relative;
+  // bottom: 70px;
+  height: 128px;
+  position: relative;
+  bottom: 70px;
+}
+
+.small-size {
+  min-width: 75px;
+  min-height: 75px;
+  border-radius: 100px;
+  position: relative;
+  background-color: white;
+  right: 35px;
+}
+
+.icon-service {
+  right: 0;
+}
+
+.bg-light-gray {
+  background-color: $light-gray;
+}
+
+
+.img-container {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0;
+}
+
+@media screen and (max-width: 576px) {
+  .advertising-container {
+    padding-top: 100px;
+  }
+}
+
+// styles to card
+.container {
+  max-width: 280px;
+}
+
+.price {
+  color: #EC8F67;
+}
+
+.btn-options {
+  background-color: rgba(60, 117, 154, 0.1);
+}
+
+.btn-see-more {
+  background-color: #3C759A;
+  color: white;
+  max-width: 120px;
+  position: relative;
+}
+
+.card {
+  border-radius: 10px;
+  // min-width: 280px;
+}
+
+.icon-location {
+  color: #4E1F4F;
+  width: 11.69px;
+  height: 16.63px;
+}
+
+.text-location {
+  color: #4E1F4F;
+}
+
+@media screen and (min-width: 992px) {
+  .card-container {
+    position: relative;
+    top: -150px;
+  }
+
+  .advertising-container {
+    height: 200px;
+  }
+
+  .swiper-car {
+    .swiper-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .card-container {
+    position: relative;
+    top: -245px;
+  }
+
+  .advertising-container {
+    height: 100px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .card-container {
+    position: relative;
+    // top: -300px;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .card-new-vehicles {
+    min-width: 452px;
+  }
+}
+
+.advertising-container {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  background-color: rgba(60, 117, 154, 0.06);
+}
+
+// new card
+.card-2 {
+  max-width: 452px;
+}
+
+.btn-2 {
+  background-color: rgba(60, 117, 154, 0.1);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: none;
+}
+
+.card-new-vehicles {
+  max-width: 272px;
+}
+

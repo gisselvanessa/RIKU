@@ -1,0 +1,1353 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="row justify-content-between">
+      <div class="col-xl-3 col-lg-6">
+        <div class="section-header">
+          <!-- <h3 class="font-38 text-primary fw-semibold">
+             Add User
+          </h3> -->
+          <div class="d-flex align-items-center mb-3">
+            <div class="back-to-page d-flex">
+              <span>
+                <a href="javascript:void(0)" routerLink="/admin/users"
+                  ><img src="assets/images/backarrow.svg" /></a
+              ></span>
+            </div>
+            <h3 class="ms-3 font-38 text-primary">
+              {{ "Add User" | translate }}
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-9 col-lg-6">
+        <div class="user-selection-wrp mb-5 row">
+          <div class="col-xl-8 user-type-wrp">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="userType"
+                      id="Buyer"
+                      value="buyer"
+                      (click)="setUserType('buyer')"
+                      [checked]="personalInfoFormControls.type.value == 'buyer'"
+                    />
+                    <label class="form-check-label" for="Buyer">{{
+                      "Buyer" | translate
+                    }}</label>
+                    <span
+                      class="dot-checkmark"
+                      (click)="setUserType('buyer')"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="userType"
+                      id="Seller"
+                      value="seller"
+                      (click)="setUserType('seller')"
+                      [checked]="
+                        personalInfoFormControls.type.value == 'seller'
+                      "
+                    />
+                    <label class="form-check-label" for="Seller">{{
+                      "Seller" | translate
+                    }}</label>
+                    <span
+                      class="dot-checkmark"
+                      (click)="setUserType('seller')"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="radio-check br-12">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="userType"
+                      id="Dealer"
+                      value="dealer"
+                      (click)="setUserType('dealer')"
+                      [checked]="
+                        personalInfoFormControls.type.value == 'dealer'
+                      "
+                    />
+                    <label class="form-check-label" for="Dealer">{{
+                      "Dealer" | translate
+                    }}</label>
+                    <span
+                      class="dot-checkmark"
+                      (click)="setUserType('dealer')"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="
+                isFormSubmitted &&
+                personalInfoFormControls.type.invalid &&
+                personalInfoFormControls.type.errors?.required
+              "
+              class="text-danger"
+            >
+              {{ "User Type is required" | translate }}.
+            </div>
+          </div>
+        </div>
+        <div
+          class="steps-wrp mb-5 d-flex align-items-center"
+          *ngIf="userType == 'dealer'"
+        >
+          <div class="steps-wrp">
+            <div
+              class="step mb-md-0 mb-3"
+              [ngClass]="{ active: currentStep == 1 }"
+            >
+              <span>1</span
+              >{{ "Account Representative Information" | translate }}
+            </div>
+            <span class="line mx-2"></span>
+            <div
+              class="step mt-md-0 mt-3"
+              [ngClass]="{ active: currentStep == 2 }"
+            >
+              <span>2</span>{{ "Dealership Information" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 text-center">
+        <div
+          class="add__user-img justify-content-center flex-wrap mb-4 mb-lg-0"
+        >
+          <div class="admin__add-img d-block mx-auto">
+            <img
+              [src]="profileImageURL"
+              *ngIf="profileImageURL"
+              alt="admin-img"
+            />
+          </div>
+          <input
+            type="file"
+            class="d-none"
+            accept="image/*"
+            (change)="onProfilePhotoChange($event)"
+            #profilePhotoInput
+          />
+          <button
+            class="btn btn-orange mt-4 d-block mx-auto"
+            (click)="profilePhotoInput.click()"
+          >
+            <span
+              *ngIf="isProfileImageUploading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {{ "Upload Image" | translate }}
+          </button>
+          <a
+            class="text-primary-light font-16 mt-4 c-pointer"
+            *ngIf="profileImageURL"
+            (click)="deleteProfilePhoto()"
+            >{{ "Remove Image" | translate }}</a
+          >
+        </div>
+      </div>
+      <div class="col-xl-9 col-lg-6">
+        <form [formGroup]="personalInfoForm" #form="ngForm">
+          <div class="form-group">
+            <div class="row">
+              <ng-container *ngIf="userType != 'dealer' || currentStep == 1">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Name" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'Enter Name' | translate }}"
+                      formControlName="first_name"
+                      (blur)="getUserNameList()"
+                      maxlength="20"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.first_name.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.first_name.invalid &&
+                        personalInfoFormControls.first_name.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.first_name.errors?.required
+                        "
+                      >
+                        {{ "Name is required" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.first_name.errors?.minlength
+                        "
+                      >
+                        {{
+                          "Name must be at least 3 characters long"
+                            | translate
+                        }}.
+                      </small>
+                      <small
+                        *ngIf="
+                          personalInfoFormControls.first_name.errors
+                            ?.cannotContainSpace
+                        "
+                        class="text-danger"
+                      >
+                        {{ "Name should not contain space" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.first_name.hasError(
+                            'specialCharValidator'
+                          )
+                        "
+                      >
+                        {{ "Special characters not allowed" | translate }}!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Surname" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      AlphaNumeric
+                      placeholder="{{ 'Enter Surname' | translate }}"
+                      formControlName="last_name"
+                      (blur)="getUserNameList()"
+                      maxlength="20"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.last_name.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.last_name.invalid &&
+                        personalInfoFormControls.last_name.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.last_name.errors?.required
+                        "
+                      >
+                        {{ "Surname is required" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.last_name.errors?.minlength
+                        "
+                      >
+                        {{
+                          "Surname must be at least 3 characters long"
+                            | translate
+                        }}.
+                      </small>
+                      <small
+                        *ngIf="
+                          personalInfoFormControls.last_name.errors
+                            ?.cannotContainSpace
+                        "
+                        class="text-danger"
+                      >
+                        {{ "Surname should not contain space" | translate }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.last_name.hasError(
+                            'specialCharValidator'
+                          )
+                        "
+                      >
+                        {{ "Special characters not allowed" | translate }}!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">
+                      {{
+                        userType == "dealer"
+                          ? ("Business Email ID" | translate)
+                          : ("Email ID" | translate)
+                      }}</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter {{
+                        userType == 'dealer'
+                          ? ('Business Email ID' | translate)
+                          : ('Email ID' | translate)
+                      }}"
+                      (blur)="checkUserExist()"
+                      formControlName="email"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.email.invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.email.invalid &&
+                        personalInfoFormControls.email.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="personalInfoFormControls.email.errors?.required"
+                      >
+                        {{ "Email is required" | translate }}.
+                      </small>
+
+                      <small
+                        class="text-danger"
+                        *ngIf="personalInfoFormControls.email.errors?.pattern"
+                      >
+                        {{ "Please enter valid Email ID" | translate }}.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      userType == "dealer"
+                        ? ("Business Mobile Number" | translate)
+                        : ("Mobile Number" | translate)
+                    }}</label>
+                    <ngx-intl-tel-input
+                      [cssClass]="'form-control w-100'"
+                      [preferredCountries]="preferredCountries"
+                      [enableAutoCountrySelect]="true"
+                      (change)="checkUserExist()"
+                      (input)="formatNumber($event)"
+                      (countryChange)="clearCountrySearchBox()"
+                      [enablePlaceholder]="true"
+                      [searchCountryFlag]="true"
+                      [searchCountryField]="[
+                        searchCountryField.Iso2,
+                        searchCountryField.Name
+                      ]"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.mobile_no.invalid
+                      }"
+                      [selectFirstCountry]="false"
+                      [selectedCountryISO]="countryISO.Ecuador"
+                      [maxLength]="15"
+                      [phoneValidation]="true"
+                      [separateDialCode]="separateDialCode"
+                      name="mobile_no"
+                      formControlName="mobile_no"
+                    >
+                    </ngx-intl-tel-input>
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.mobile_no.invalid &&
+                        personalInfoFormControls.mobile_no.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.mobile_no.errors
+                            ?.validatePhoneNumber?.valid == false
+                        "
+                      >
+                        {{
+                          "Please enter valid Mobile Number according to selected country"
+                            | translate
+                        }}.
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.mobile_no.errors?.required
+                        "
+                      >
+                        {{"Mobile Number is required" | translate}}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="userType != 'dealer' || currentStep == 2">
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Username" | translate}}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      readonly
+                      (focus)="myTypeDrop.toggle()"
+                      formControlName="user_name"
+                      placeholder="{{'Username' | translate}}"
+                    />
+                  </div>
+                  <div
+                    ngbDropdown
+                    [open]="true"
+                    [autoClose]="true"
+                    [ngClass]="{
+                      'd-none': userType == 'dealer' || userNameList.length == 0
+                    }"
+                    #myTypeDrop="ngbDropdown"
+                    class="doropdown_radio"
+                    [autoClose]="'outside'"
+                  >
+                    <ul
+                      ngbDropdownMenu
+                      class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-2 username-list"
+                    >
+                      <li class="px-3">{{"Available Username List" | translate}}:</li>
+                      <li *ngFor="let username of userNameList; index as i">
+                        <a
+                          ngbDropdownItem
+                          class="dropdown-item"
+                          href="javascript:void(0)"
+                          (click)="setUserName(username); myTypeDrop.close()"
+                        >
+                          <div class="radio-check checkbox-check br-12 me-3">
+                            <div class="form-check form-check-inline">
+                              <label class="form-check-label username-label">{{
+                                username
+                              }}</label>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6" *ngIf="userType != 'dealer'">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                      >{{"Birthdate" | translate}}</label
+                    >
+                    <input
+                      #dateOfBirth
+                      class="form-control b-date"
+                      formControlName="dob"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoFormControls.dob.invalid
+                      }"
+                      type="text"
+                      readonly
+                      placeholder="Enter Birthdate"
+                      bsDatepicker
+                      [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                      [maxDate]="today"
+                    />
+                    <img
+                      (click)="dateOfBirth.click()"
+                      src="assets/images/calender.svg"
+                      class="input-icon"
+                    />
+
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.dob.invalid &&
+                        personalInfoFormControls.dob.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="personalInfoFormControls.dob.errors?.required"
+                      >
+                        {{"Date of Birth is required" | translate}}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <ng-container *ngIf="userType == 'dealer'">
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Company Name" | translate}}</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="company_name"
+                        (blur)="setUserName($event)"
+                        placeholder="{{'Enter Company Name' | translate}}"
+                        [ngClass]="{
+                          'is-invalid':
+                            isFormSubmitted &&
+                            personalInfoFormControls.company_name.invalid
+                        }"
+                      />
+
+                      <div
+                        *ngIf="
+                          isFormSubmitted &&
+                          personalInfoFormControls.company_name.invalid &&
+                          personalInfoFormControls.company_name.errors
+                        "
+                      >
+                        <small
+                          class="text-danger"
+                          *ngIf="
+                            personalInfoFormControls.company_name.errors
+                              ?.required
+                          "
+                        >
+                          {{"Company Name is required" | translate}}.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-xl-6 user-type-wrp">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                      >{{"Vehicle Condition" | translate}}</label
+                    >
+                    <div class="row mb-4">
+                      <div class="col-sm-6">
+                        <div class="radio-check checkbox-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              (change)="setVehicleCondition('new')"
+                              [checked]="
+                                selectedVehicleConditions.includes('new')
+                              "
+                              name="vehicle_condition"
+                              id="New"
+                              value="new"
+                            />
+                            <label class="form-check-label" for="New"
+                              >{{"New" | translate}}</label
+                            >
+                            <span class="check-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="radio-check checkbox-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              name="vehicle_condition"
+                              id="Used"
+                              value="used"
+                              (change)="setVehicleCondition('used')"
+                              [checked]="
+                                selectedVehicleConditions.includes('used')
+                              "
+                            />
+                            <label class="form-check-label" for="Used"
+                              >{{"Used" | translate}}</label
+                            >
+                            <span class="check-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          isFormSubmitted &&
+                          personalInfoFormControls.vehicle_condition.errors
+                            ?.required
+                        "
+                      >
+                        <small class="text-danger">
+                          {{"Vehicle Condition is required" | translate}}.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="col-xl-6">
+                    <div class="form-group">
+                      <label class="mb-3 d-block">{{"Vehicle Types" | translate}}</label>
+                      <div class="row align-items-center">
+                        <div class="col-4">
+                          <div class="radio-check checkbox-check br-12 me-3">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="vehicle_types"
+                                id="Cars"
+                                [checked]="
+                                  selectedVehicleTypes.includes('cars')
+                                "
+                                (change)="setVehicleTypes('cars')"
+                              />
+                              <label class="form-check-label" for="Cars"
+                                >{{"Cars" | translate}}</label
+                              >
+                              <span class="check-checkmark"></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-8">
+                          <div class="radio-check checkbox-check br-12">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="vehicle_types"
+                                id="Commercial vehicles"
+                                [checked]="
+                                  selectedVehicleTypes.includes(
+                                    'commercial_vehicles'
+                                  )
+                                "
+                                (change)="
+                                  setVehicleTypes('commercial_vehicles')
+                                "
+                              />
+                              <label
+                                class="form-check-label"
+                                for="Commercial vehicles"
+                                >{{"Commercial Vehicles" | translate}}</label
+                              >
+                              <span class="check-checkmark"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          isFormSubmitted &&
+                          personalInfoFormControls.vehicle_types.errors
+                            ?.required
+                        "
+                      >
+                        <small class="text-danger">
+                          {{"Vehicle Types are required" | translate}}.
+                        </small>
+                      </div>
+                    </div>
+                  </div> -->
+                </ng-container>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Address" | translate}}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      #additionalAddress
+                      placeholder="{{'Enter Address' | translate}}"
+                      formControlName="additional_address"
+                    />
+                    <img src="assets/images/location.svg" class="input-icon" />
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Province" | translate}}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{'Enter Province' | translate}}"
+                      OnlyAlphabets
+                      formControlName="province"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoFormControls.province.invalid
+                      }"
+                      type="text"
+                      placeholder="Enter Province"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.province.invalid &&
+                        personalInfoFormControls.province.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          personalInfoFormControls.province.errors?.required
+                        "
+                      >
+                        {{"Province is required" | translate}}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"City" | translate}}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{'Enter City' | translate}}"
+                      OnlyAlphabets
+                      formControlName="city"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.city.errors
+                      }"
+                      type="text"
+                      placeholder="Enter City"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.city.invalid &&
+                        personalInfoFormControls.city.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="personalInfoFormControls.city.errors?.required"
+                      >
+                        {{"City is required" | translate}}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Parish" | translate}}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{'Enter Parish' | translate}}"
+                      formControlName="parish"
+                      [ngClass]="{
+                        'is-invalid':
+                          isFormSubmitted &&
+                          personalInfoForm.invalid &&
+                          personalInfoFormControls.parish.errors
+                      }"
+                      type="text"
+                      placeholder="Enter Parish"
+                    />
+                    <div
+                      *ngIf="
+                        isFormSubmitted &&
+                        personalInfoFormControls.parish.invalid &&
+                        personalInfoFormControls.parish.errors
+                      "
+                    >
+                      <small
+                        class="text-danger"
+                        *ngIf="personalInfoFormControls.parish.errors?.required"
+                      >
+                        {{"Parish is required" | translate}}
+                      </small>
+                    </div>
+                  </div>
+                </div> -->
+
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Province" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span class="multipledata-hide" *ngIf="personalInfoFormControls['province'].value">{{
+                            personalInfoFormControls['province'].value | titlecase
+                            }}</span>
+                          <span class="multipledata-hide" *ngIf="!personalInfoFormControls['province'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search Province' | translate}}"
+                                [(ngModel)]="searchProvince" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let province of provinceList
+                            | filter : searchProvince;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                personalInfoFormControls['province'].value ==
+                                  province
+                                " (click)="setProvice(province)" name="province" id="province_{{ i }}"
+                                  value="{{ province }}" />
+                                <label class="form-check-label" for="province_{{ i }}">{{ province | titlecase
+                                  }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="isSubmitted && personalInfoFormControls['province'].errors?.['required']"
+                      class="text-danger"
+                    >
+                      {{ "Province is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "City" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span class="multipledata-hide" *ngIf="personalInfoFormControls['city'].value">{{
+                            personalInfoFormControls['city'].value | titlecase
+                            }}</span>
+                          <span class="multipledata-hide" *ngIf="!personalInfoFormControls['city'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search City' | translate}}"
+                                [(ngModel)]="searchCity" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let city of cityList | filter : searchCity;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                personalInfoFormControls['city'].value == city
+                                " (click)="setCity(city)" name="city" id="city_{{ i }}" value="{{ city }}" />
+                                <label class="form-check-label" for="city_{{ i }}">{{ city | titlecase }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li *ngIf="cityList.length == 0">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            {{ 'No Cities Found' | translate }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                    *ngIf="isSubmitted && personalInfoFormControls['city'].errors?.['required']"
+                    class="text-danger"
+                  >
+                    {{ "City is required" | translate }}
+                  </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Parish" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular w-100"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container>
+                          <span class="multipledata-hide" *ngIf="personalInfoFormControls['parish'].value">{{
+                            personalInfoFormControls['parish'].value | titlecase
+                            }}</span>
+                          <span class="multipledata-hide" *ngIf="!personalInfoFormControls['parish'].value">{{ 'Select' | translate }}</span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="{{'Search Parish' | translate}}"
+                                [(ngModel)]="searchParish" [ngModelOptions]="{ standalone: true }" />
+                              <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                            </div>
+                          </div>
+                        </li>
+                        <li *ngFor="
+                          let parish of parishList | filter : searchParish;
+                          index as i
+                        ">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" [checked]="
+                                personalInfoFormControls['parish'].value == parish
+                                " (click)="setParish(parish)" name="parish" id="parish_{{ i }}"
+                                  value="{{ parish }}" />
+                                <label class="form-check-label" for="parish_{{ i }}">{{ parish | titlecase }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li *ngIf="parishList.length == 0">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            {{ 'No Parish Found' | translate }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div
+                    *ngIf="isSubmitted && personalInfoFormControls['parish'].errors?.['required']"
+                    class="text-danger"
+                  >
+                    {{ "Parish is required" | translate }}
+                  </div>
+                  </div>
+                </div>
+
+                <div class="user-selection-wrp mb-4 row">
+                  <div class="col-12 col-xl-8 user-type-wrp">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Gender" | translate}}</label>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              id="Male"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoFormControls.gender.invalid
+                              }"
+                              (click)="setGender('male')"
+                              [checked]="
+                                personalInfoFormControls.gender.value == 'male'
+                              "
+                            />
+                            <label class="form-check-label" for="Male"
+                              >{{"Male" | translate}}</label
+                            >
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              id="Female"
+                              value="female"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoFormControls.gender.invalid
+                              }"
+                              (click)="setGender('female')"
+                              [checked]="
+                                personalInfoFormControls.gender.value ==
+                                'female'
+                              "
+                            />
+                            <label class="form-check-label" for="Female"
+                              >{{"Female" | translate}}</label
+                            >
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="radio-check br-12">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoFormControls.gender.invalid
+                              }"
+                              id="Others"
+                              value="other"
+                              (click)="setGender('other')"
+                              [checked]="
+                                personalInfoFormControls.gender.value == 'other'
+                              "
+                            />
+                            <label class="form-check-label" for="Others"
+                              >{{"Others" | translate}}</label
+                            >
+                            <span class="dot-checkmark"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="col-12 col-xl-6" *ngIf="userType == 'seller'">
+                    <div class="form-group">
+                      <label class="mb-3 d-block">{{"Vehicle Types" | translate}}</label>
+                      <div class="row align-items-center">
+                        <div class="col-4">
+                          <div class="radio-check checkbox-check br-12 me-3">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="vehicle_types"
+                                id="Cars"
+                                [checked]="
+                                  selectedVehicleTypes.includes('cars')
+                                "
+                                (change)="setVehicleTypes('cars')"
+                              />
+                              <label class="form-check-label" for="Cars"
+                                >{{"Cars" | translate}}</label
+                              >
+                              <span class="check-checkmark"></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-8">
+                          <div class="radio-check checkbox-check br-12">
+                            <div class="form-check form-check-inline">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="vehicle_types"
+                                id="Commercial vehicles"
+                                [checked]="
+                                  selectedVehicleTypes.includes(
+                                    'commercial_vehicles'
+                                  )
+                                "
+                                (change)="
+                                  setVehicleTypes('commercial_vehicles')
+                                "
+                              />
+                              <label
+                                class="form-check-label"
+                                for="Commercial vehicles"
+                                >{{"Commercial Vehicles" | translate}}</label
+                              >
+                              <span class="check-checkmark"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          isFormSubmitted &&
+                          personalInfoFormControls.vehicle_types.errors
+                            ?.required
+                        "
+                      >
+                        <small class="text-danger">
+                          {{"Vehicle Types are required" | translate}}.
+                        </small>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+                <ng-container *ngIf="userType == 'dealer'">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Place Reference(optional)" | translate}}</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        #otherAddress
+                        placeholder="{{'Enter Place Reference' | translate}}"
+                        formControlName="other_address"
+                      />
+                      <img
+                        src="assets/images/location.svg"
+                        class="input-icon"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-12 col-xl-8">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                      >{{"Upload Document" | translate}}</label
+                    >
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input
+                            type="file"
+                            class="c-none"
+                            placeholder="{{'Upload RUC Document' | translate}}"
+                            #rucDocument
+                            (change)="onRUCDocumentChange($event)"
+                            multiple
+                            placeholder="{{'RUC Document' | translate}}"
+                          />
+                          <input
+                            type="text"
+                            readonly
+                            class="form-control c-pointer"
+                            (click)="rucDocument.click()"
+                            placeholder="{{'RUC Document' | translate}}"
+                          />
+                          <img
+                            src="assets/images/upload-icon.svg"
+                            (click)="rucDocument.click()"
+                            class="input-icon uplode-icon"
+                          />
+                          <span
+                            *ngIf="isRUCDocumentUploading"
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          <div
+                            *ngIf="
+                              isFormSubmitted && dealerRUCDocuments.length == 0
+                            "
+                          >
+                            <span class="text-danger">
+                              {{"Please upload RUC Documents" | translate}}</span
+                            >
+                          </div>
+                          <div
+                            class="vehicle__uploaded-photo mt-3"
+                            *ngIf="dealerRUCDocuments.length > 0"
+                          >
+                            <div class="d-flex flex-wrap">
+                              <div
+                                class="photo-wrp me-2 mb-2"
+                                *ngFor="
+                                  let document of dealerRUCDocuments;
+                                  index as i
+                                "
+                              >
+                                <span class="c-pointer" (click)="deleteRUCDocument(i)">×</span>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'image'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img class="br-12" [src]="document.src"
+                                  /></a>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'pdf'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img
+                                      class="br-12"
+                                      src="assets/images/pdf_icon.png"
+                                  /></a>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'doc'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img
+                                      class="br-12"
+                                      src="assets/images/doc_icon.png"
+                                  /></a>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input
+                            type="file"
+                            class="c-none"
+                            placeholder="{{'Upload Legal Document' | translate}}"
+                            #legalDocument
+                            (change)="onLegalDocumentChange($event)"
+                            multiple
+                            placeholder="{{'Legal Document' | translate}}"
+                          />
+                          <input
+                            type="text"
+                            readonly
+                            class="form-control c-pointer"
+                            (click)="legalDocument.click()"
+                            placeholder="{{'Legal Document' | translate}}"
+                          />
+                          <img
+                            src="assets/images/upload-icon.svg"
+                            (click)="legalDocument.click()"
+                            class="input-icon uplode-icon"
+                          />
+                          <span
+                            *ngIf="isLegalDocumentUploading"
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          <div
+                            *ngIf="
+                              isFormSubmitted &&
+                              dealerLegalDocuments.length == 0
+                            "
+                          >
+                            <span class="text-danger">
+                              {{"Please upload Legal Documents" | translate}}</span
+                            >
+                          </div>
+                          <div
+                            class="vehicle__uploaded-photo mt-3"
+                            *ngIf="dealerLegalDocuments.length > 0"
+                          >
+                            <div class="d-flex flex-wrap">
+                              <div
+                                class="photo-wrp me-2 mb-2"
+                                *ngFor="
+                                  let document of dealerLegalDocuments;
+                                  index as i
+                                "
+                              >
+                                <span class="c-pointer" (click)="deleteLegalDocument(i)">×</span>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'image'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img class="br-12" [src]="document.src"
+                                  /></a>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'pdf'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img
+                                      class="br-12"
+                                      src="assets/images/pdf_icon.png"
+                                  /></a>
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="getFileType(document.src) == 'doc'"
+                                >
+                                  <a href="{{ document.src }}" target="_blank"
+                                    ><img
+                                      class="br-12"
+                                      src="assets/images/doc_icon.png"
+                                  /></a>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+          <div class="btn-grp mt-5 d-flex flex-wrap">
+            <button
+              class="btn primary-btn-outline mb-2 me-3"
+              *ngIf="currentStep == 2 && userType == 'dealer'"
+              (click)="changeStep()"
+            >
+              {{"Previous" | translate}}
+            </button>
+            <button
+              class="btn primary-btn me-3 mb-2 border-1"
+              type="submit"
+              *ngIf="
+                userType != 'dealer' ||
+                (currentStep == 2 && userType == 'dealer')
+              "
+              (click)="addUpdateUser()"
+            >
+              {{"Submit" | translate}}
+            </button>
+            <button
+              class="btn primary-btn border-1 mb-2 mx-3"
+              *ngIf="currentStep == 1 && userType == 'dealer'"
+              (click)="changeStep()"
+            >
+              {{"Next" | translate}}
+            </button>
+            <a
+              [routerLink]="['/admin/users']"
+              class="btn primary-btn-outline mb-2"
+              *ngIf="
+                userType != 'dealer' ||
+                (currentStep == 1 && userType == 'dealer')
+              "
+              >{{"Cancel" | translate}}</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

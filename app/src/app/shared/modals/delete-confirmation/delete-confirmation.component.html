@@ -1,0 +1,234 @@
+<div class="modal-header border-0">
+  <button type="button" class="btn-close p-md-4 p-2" data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('Cross click')" aria-label="Close"></button>
+</div>
+<div *ngIf="error_message">
+  <p class="text-danger">{{ error_message }}</p>
+</div>
+<div *ngIf="vehicleId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete Vehicle" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this vehicle" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+<div *ngIf="userId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+
+    <div *ngIf="user_type.length > 1">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Delete" | translate}} {{ (user_type.toString()) | translate  }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to delete this" | translate}} {{ (user_type.toString()) | translate }}?
+      </p>
+    </div>
+    <div *ngIf="user_type.length === 1">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Delete" | translate}} {{ (user_type.toString()) | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to delete this" | translate}} {{ (user_type.toString()) | translate }}?
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="expertId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete Expert User" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this Expert User" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="teamMemberId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete Team Member" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this team member" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="conversationId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete Conversation" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this Conversation" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="blockUserId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Block User" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to Block this Person" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openBlockConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Block" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="unblockUserId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Unblock User" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to Unblock this Person" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openBlockConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"UnBlock" | translate}}
+    </button>
+  </div>
+</div>
+
+
+<!--  -->
+<div *ngIf="blogId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete Blog" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this blog" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="faqId">
+  <div class="modal-body border-0">
+    <div class="round-icon-wrp">
+      <img src="../../../../assets/images/vehicle-list/del-icon.svg" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Delete FAQ" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Are you sure you want to delete this question" | translate}}?
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button class="btn btn-outline-purple" (click)="activeModal.dismiss('Cross click')">
+      {{"Cancel" | translate}}
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="openDeleteConfirmation()"
+      data-bs-toggle="modal" data-bs-target="#deleteconfirmModal">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{"Delete" | translate}}
+    </button>
+  </div>
+</div>

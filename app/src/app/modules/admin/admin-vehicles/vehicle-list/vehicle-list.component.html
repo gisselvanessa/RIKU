@@ -1,0 +1,797 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div class="d-flex justify-content-between align-items-center section-header">
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Vehicles" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <div class="row">
+        <div class="col-xl-9 col-lg-6">
+          <div class="form-group search-grp">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+              "Search" | translate
+              }}</label>
+            <div class="position-relative">
+              <input type="text" class="form-control border-0" [(ngModel)]="searchText" (keyup.enter)="setSearchText()"
+                placeholder="{{
+                  'Search By Make, Model or Keyword' | translate
+                }}" />
+              <!-- <a
+                *ngIf="searchText"
+                (click)="searchText = ''; getFilterVehicleList()"
+                ><img
+                  src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                  class="search-btn"
+              /></a> -->
+              <img src="../../../../../assets/images/vehicle-list/grey-search.svg" class="search-icon" />
+              <button class="search-btn" (click)="setSearchText()">
+                <img src="../../../../../assets/images/vehicle-list/search-btn.svg" alt="search-btn" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div ngbDropdown #myTypeDrop="ngbDropdown" class="doropdown_radio" [autoClose]="'outside'">
+              <button ngbDropdownToggle
+              class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+              [ngClass]="{ 'text-primary': selectedTypes.length > 0 }" type="button"
+                id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                <ng-container *ngIf="selectedTypes.length > 1">
+                  <span class="multipledata-hide">
+                    {{ selectedTypes[selectedTypes.length - 1] | translate}} {{"and" | translate}}
+                    {{ selectedTypes.length - 1 }} {{"others" | translate}}.
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="selectedTypes.length == 1">
+                  <span>
+                    {{ selectedTypes[selectedTypes.length - 1] | translate}}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="selectedTypes.length == 0">
+                  <span> {{ 'Vehicle Type' | translate }} </span>
+                </ng-container>
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let vehicletype of vehicleTypes">
+                  <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" (change)="getVehicleMake($event, vehicletype.type)"
+                          type="checkbox" name="Vehicle Type" id="{{ vehicletype.id }}" value="{{ vehicletype.id }}"
+                          [checked]="
+                            selectedTypeId.indexOf(vehicletype.id) > -1
+                          " />
+                        <label class="form-check-label" for="{{ vehicletype.id }}">{{ vehicletype.type | translate
+                          }}</label>
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myTypeDrop.close(); getFilterVehicleList()" href="javascript:void(0)">
+                    {{ "Apply" | translate }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div ngbDropdown #myMakeDrop="ngbDropdown" [autoClose]="'outside'" class="doropdown_radio">
+              <button ngbDropdownToggle
+              class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+              [ngClass]="{ 'text-primary': selectedMake }" type="button"
+                id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ selectedMake ? selectedMake : ("Make" | translate) }}
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li ngbDropdownItem>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input type="text" class="form-control" (input)="searchInput($event, 'makes')"
+                        placeholder="{{'Search by Make' | translate}}" />
+                      <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                    </div>
+                  </div>
+                </li>
+                <li><label>{{"Popular Makes" | translate}}</label></li>
+                <li ngbDropdownItem class="make-brand-logo" *ngIf="popularMakes.length > 0">
+                  <ul *ngFor="let popularMakeRow of popularMakes" class="d-flex align-items-center">
+                    <li *ngFor="let popularMake of popularMakeRow">
+                      <a (click)="
+                          getVehicleModel(popularMake.id, popularMake.name)
+                        " href="javascript:void(0)">
+                        <img class="make-logo" src="{{ popularMake.icon_url }}" alt="{{ popularMake.name }}" />
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li *ngIf="popularMakes.length == 0">
+                  <p>{{"No Popular makes available" | translate}}</p>
+                </li>
+                <li><label>{{"More Makes" | translate}}</label></li>
+                <li *ngFor="let notpopular of nonPopularMakes">
+                  <a ngbDropdownItem (click)="getVehicleModel(notpopular.id, notpopular.name)"
+                    class="dropdown-item dropdown-car-brand" href="javascript:void(0)">
+                    {{ notpopular.name }}
+                  </a>
+                </li>
+                <li *ngIf="nonPopularMakes.length == 0">
+                  <p>{{"No more makes available" | translate}}</p>
+                </li>
+                <li>
+                  <a class="dropdown-item btn primary-btn text-center w-50 mx-auto text-white py-3"
+                    (click)="myMakeDrop.close(); getFilterVehicleList()" href="javascript:void(0)">{{"Apply" |
+                    translate}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div ngbDropdown #myModelDrop="ngbDropdown" class="doropdown_radio" [autoClose]="'outside'">
+              <button ngbDropdownToggle
+              class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+              [ngClass]="{ 'text-primary': selectedModels.length > 0 }" type="button"
+                id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="multipledata-hide">
+                  {{
+                  selectedModels.length > 0
+                  ? selectedModels.join(", ")
+                  : ("Model" | translate)
+                  }}
+                </span>
+              </button>
+              <ul ngbDropdownMenu class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li ngbDropdownItem>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input type="text" class="form-control" (input)="searchInput($event, 'model')"
+                        placeholder="{{'Search by Model' | translate}}" />
+                      <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                    </div>
+                  </div>
+                </li>
+                <li><label>{{"Model Name" | translate}}</label></li>
+                <li *ngFor="let vehiclemodelsdata of vehicleModels">
+                  <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" (change)="
+                            selectValue(
+                              $event,
+                              vehiclemodelsdata.id,
+                              vehiclemodelsdata?.name
+                            )
+                          " name="Model" id="{{ vehiclemodelsdata.id }}" value="{{ vehiclemodelsdata.id }}" [checked]="
+                            selectedModelId.indexOf(vehiclemodelsdata.id) > -1
+                          " />
+                        <label class="form-check-label" for="{{ vehiclemodelsdata.id }}">{{ vehiclemodelsdata?.name
+                          }}</label>
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li *ngIf="vehicleModels.length == 0">
+                  <p>{{"No models available" | translate}}</p>
+                </li>
+                <li>
+                  <a ngbDropdownItem class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myModelDrop.close(); getFilterVehicleList()" href="javascript:void(0)">{{"Apply" |
+                    translate}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div ngbDropdown class="doropdown_radio dropdown-assets/images">
+              <button ngbDropdownToggle
+              class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+              [ngClass]="{ 'text-primary': selectedProvince }" type="button"
+                id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                {{
+                !selectedProvince
+                ? ("Location" | translate)
+                : (selectedProvince | titlecase)
+                }}
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let provienceData of province">
+                  <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)">
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline" (click)="
+                          getFilterVehicleList(this.order, provienceData)
+                        ">
+                        <input class="form-check-input" type="radio" name="location" [(ngModel)]="selectedProvince"
+                          id="{{ provienceData }}" value="{{ provienceData }}" />
+                        <label class="form-check-label" for="{{ provienceData }}">{{ provienceData | titlecase
+                          }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="searchApplied" class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">{{"Search Results" | translate}}</h3>
+          <a href="javascript:void(0)"  (click)="clearAll()"
+            class="ms-4 text-secondary text-underline">{{"Clear All Filters" | translate}}</a>
+        </div>
+      </div>
+      <div class="result-pills" >
+        <span class="pill" *ngIf="searchText && searchText.trim() != ''"> {{ searchText }}<a class="ms-3"
+            href="javascript:void(0)" (click)="searchText = '';getFilterVehicleList()"><img
+              src="../../../../../assets/images/vehicle-list/blue-cross.svg" alt="" /></a></span>
+        <ng-container *ngFor="let type of selectedTypes">
+          <span class="pill">{{ type | translate
+            }}<a class="ms-3" href="javascript:void(0)" (click)="removeType(type)"><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg" alt="" /></a>
+          </span>
+        </ng-container>
+        <span class="pill" *ngIf="selectedMake">{{ selectedMake }}
+          <a class="ms-3" href="javascript:void(0)" (click)="selectedMake = null; getFilterVehicleList()"><img
+              src="../../../../../assets/images/vehicle-list/blue-cross.svg" alt="" /></a></span>
+        <ng-container *ngFor="let model of selectedModels">
+          <span class="pill">{{ model
+            }}<a class="ms-3" href="javascript:void(0)" (click)="removeModel(model)"><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg" alt="" /></a>
+          </span>
+        </ng-container>
+        <span class="pill" *ngIf="selectedProvince">
+          {{ selectedProvince | titlecase
+          }}<a class="ms-3" href="javascript:void(0)" (click)="selectedProvince = null; getFilterVehicleList()"><img
+              src="../../../../../assets/images/vehicle-list/blue-cross.svg" alt="" /></a></span>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-all-tab" [ngClass]="{ active: selectedTab == 'all' }"
+                (click)="selectTab('all')" data-bs-toggle="pill" type="button" role="tab" aria-controls="Condition-all"
+                aria-selected="true">
+                {{"All" | translate}}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approval-tab" [ngClass]="{ active: selectedTab == 'pending' }"
+                (click)="selectTab('pending')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approval" aria-selected="false">
+                {{"Awaiting Approval" | translate}}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-approved-tab" [ngClass]="{ active: selectedTab == 'approved' }"
+                (click)="selectTab('approved')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-approved" aria-selected="false">
+                {{"Approved" | translate}}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="Condition-rejected-tab" [ngClass]="{ active: selectedTab == 'rejected' }"
+                (click)="selectTab('rejected')" data-bs-toggle="pill" type="button" role="tab"
+                aria-controls="Condition-rejected" aria-selected="false">
+                {{"Rejected" | translate}}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div class="tab-pane fade" id="Condition-all" [ngClass]="{ 'show active': selectedTab == 'all' }"
+            role="tabpanel" aria-labelledby="Condition-all-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('VEHICLE_ID')">
+                    <span>{{"ID" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Image" | translate}}</span></th>
+                  <th><span>{{"Vehicle Type" | translate}}</span></th>
+                  <th (click)="setSorting('MAKE')">
+                    <span>
+                      {{"Make" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('MODEL')">
+                    <span>{{"Model" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('YEAR')">
+                    <span>{{"Year" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Condition" | translate}}</span></th>
+                  <th (click)="setSorting('LOCATION')">
+                    <span>{{"Location" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('PRICE')">
+                    <span>{{"Price" | translate}}<img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LISTED_DATE')">
+                    <span>{{"Listed Date" | translate}}<img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Status" | translate}}</span></th>
+                  <th><span>{{"Start Date" | translate}}</span></th>
+                  <th><span>{{"End Date" | translate}}</span></th>
+                  <th><span>{{"Approve / Reject" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="vehicleList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let vehicle of vehicleList; let i = index">
+                        <td>{{  vehicle.id.slice(0, 6) | uppercase }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="vehicle.cover_img?.url">
+                              <img [src]="vehicle.cover_img?.url" />
+                            </ng-container>
+                            <ng-container *ngIf="!vehicle.cover_img?.url">
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-container>
+                          </div>
+                        </td>
+                        <td>{{ (vehicle.vehicle_type?.type) | translate}}</td>
+                        <td>{{ vehicle.brand?.name }}</td>
+                        <td>{{ vehicle.brand_model?.model }}</td>
+                        <td>{{ vehicle.vehicle_details?.year }}</td>
+
+                        <td>
+                          {{ vehicle.vehicle_details?.condition | titlecase | translate }}
+                        </td>
+                        <td>{{ vehicle.location?.province | titlecase }}</td>
+                        <td>${{ vehicle.price | spanishNumber }}</td>
+                        <td>{{ vehicle.created_at | date : "MM-dd-yyyy" }}</td>
+
+                        <td>
+                          <ng-container *ngIf="vehicle.status == 'pending'">
+                            <label class="pending-approval">{{"Awaiting Approval" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="vehicle.status == 'approved'">
+                            <label class="approved">{{"Approved" | translate}}</label>
+                          </ng-container>
+                          <ng-container *ngIf="vehicle.status == 'rejected'">
+                            <label class="rejected">{{"Rejected" | translate}}</label>
+                          </ng-container>
+                        </td>
+                        <td>
+                          {{ vehicle?.published_at | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td>
+                          {{ vehicle?.end_date | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td class="action-class text-center">
+                          <ng-container *ngIf="vehicle.status == 'pending' || vehicle.status == 'approved'">
+                            <a class="approve-reject-link" *ngIf="vehicle.status == 'approved'"><img
+                                src="assets/images/vehicle-list/approve-disable.svg" /></a>
+                            <a href="javascript:void(0)" *ngIf="vehicle.status != 'approved'" (click)="onChangeStatus(true,vehicle.uuid, i)"
+                              class="approve-reject-link"><img src="assets/images/vehicle-list/approve.svg" /></a>
+                            <a href="javascript:void(0)" (click)="onChangeStatus(false, vehicle.uuid, i)" class="approve-reject-link"><img
+                                src="assets/images/vehicle-list/reject.svg" class="ms-3" /></a>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/vehicles/vehicle-details/{{
+                              vehicle.uuid
+                            }}">
+                            <img src="assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete"
+                            (click)="deleteVehicle(vehicle.uuid)">
+                            <img src="../../../../../assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" [ngClass]="{ 'show active': selectedTab == 'pending' }" id="Condition-approval"
+            role="tabpanel" aria-labelledby="Condition-approval-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('VEHICLE_ID')">
+                    <span>{{"ID" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Image" | translate}}</span></th>
+                  <th><span>{{"Vehicle Type" | translate}}</span></th>
+                  <th (click)="setSorting('MAKE')">
+                    <span>
+                      {{"Make" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('MODEL')">
+                    <span>{{"Model" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('YEAR')">
+                    <span>{{"Year" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Condition" | translate}}</span></th>
+                  <th (click)="setSorting('LOCATION')">
+                    <span>{{"Location" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('PRICE')">
+                    <span>{{"Price"|translate}}<img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LISTED_DATE')">
+                    <span>{{"Listed Date" | translate}}<img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Status" | translate}}</span></th>
+                  <th><span>{{"Start Date" | translate}}</span></th>
+                  <th><span>{{"End Date" | translate}}</span></th>
+                  <th><span>{{"Approve / Reject" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="vehicleList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="let vehicle of vehicleList | filter : 'pending'; let i = index">
+                        <td>{{ vehicle.id }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="vehicle.cover_img?.url">
+                              <img [src]="vehicle.cover_img?.url" />
+                            </ng-container>
+                            <ng-container *ngIf="!vehicle.cover_img?.url">
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-container>
+                          </div>
+                        </td>
+                        <td>{{ vehicle.vehicle_type?.type | translate }}</td>
+                        <td>{{ vehicle.brand?.name }}</td>
+                        <td>{{ vehicle.brand_model?.model }}</td>
+                        <td>{{ vehicle.vehicle_details?.year }}</td>
+                        <td>
+                          {{ vehicle.vehicle_details?.condition | titlecase | translate }}
+                        </td>
+                        <td>{{ vehicle.location?.province | titlecase }}</td>
+                        <td>${{ vehicle.price | spanishNumber }}</td>
+                        <td>{{ vehicle.created_at | date : "MM-dd-yyyy" }}</td>
+                        <td>
+                          <label class="pending-approval">{{"Awaiting Approval" | translate}}</label>
+                        </td>
+                        <td>
+                          {{ vehicle?.published_at | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td>
+                          {{ vehicle?.end_date | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td class="action-class text-center">
+                          <ng-container *ngIf="vehicle.status == 'pending' || vehicle.status == 'approved'">
+                            <a class="approve-reject-link" *ngIf="vehicle.status == 'approved'"><img
+                                src="assets/images/vehicle-list/approve-disable.svg" /></a>
+                            <a href="javascript:void(0)" *ngIf="vehicle.status != 'approved'" (click)="onChangeStatus(true, vehicle.uuid, i)"
+                              class="approve-reject-link"><img src="assets/images/vehicle-list/approve.svg" /></a>
+                            <a href="javascript:void(0)" (click)="onChangeStatus(false, vehicle.uuid, i)" class="approve-reject-link"><img
+                                src="assets/images/vehicle-list/reject.svg" class="ms-3" /></a>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/vehicles/vehicle-details/{{
+                              vehicle.uuid
+                            }}">
+                            <img *ngIf="modulePermissions.can_delete"
+                              src="../../../../../assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" (click)="deleteVehicle(vehicle.uuid)">
+                            <img src="../../../../../assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-approved" [ngClass]="{ 'show active': selectedTab == 'approved' }"
+            role="tabpanel" aria-labelledby="Condition-approved-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('VEHICLE_ID')">
+                    <span>{{"ID" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Image" | translate}}</span></th>
+                  <th><span>{{"Vehicle Type" | translate}}</span></th>
+                  <th (click)="setSorting('MAKE')">
+                    <span>
+                      {{"Make" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('MODEL')">
+                    <span>{{"Model" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('YEAR')">
+                    <span>{{"Year" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Condition" | translate}}</span></th>
+                  <th (click)="setSorting('LOCATION')">
+                    <span>{{"Location" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('PRICE')">
+                    <span>{{"Price" | translate}}<img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LISTED_DATE')">
+                    <span>{{"Listed Date" | translate}}<img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Status" | translate}}</span></th>
+                  <th><span>{{"Start Date" | translate}}</span></th>
+                  <th><span>{{"End Date" | translate}}</span></th>
+                  <th><span>{{"Approve / Reject" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="vehicleList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="
+                          let vehicle of vehicleList | filter : 'approved'; let i = index
+                        ">
+                        <td>{{ vehicle.id }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="vehicle.cover_img?.url">
+                              <img [src]="vehicle.cover_img?.url" />
+                            </ng-container>
+                            <ng-container *ngIf="!vehicle.cover_img?.url">
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-container>
+                          </div>
+                        </td>
+                        <td>{{ vehicle.vehicle_type?.type | translate }}</td>
+                        <td>{{ vehicle.brand?.name }}</td>
+                        <td>{{ vehicle.brand_model?.model }}</td>
+                        <td>{{ vehicle.vehicle_details?.year }}</td>
+                        <td>
+                          {{ vehicle.vehicle_details?.condition | titlecase | translate }}
+                        </td>
+                        <td>{{ vehicle.location?.province | titlecase }}</td>
+                        <td>${{ vehicle.price | spanishNumber }}</td>
+                        <td>{{ vehicle.created_at | date : "MM-dd-yyyy" }}</td>
+                        <td>
+                          <label class="approved">{{"Approved" | translate}}</label>
+                        </td>
+                        <td>
+                          {{ vehicle?.published_at | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td>
+                          {{ vehicle?.end_date | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td class="action-class text-center">
+                          <ng-container>
+                            <a class="approve-reject-link" *ngIf="vehicle.status == 'approved'"><img
+                                src="assets/images/vehicle-list/approve-disable.svg" /></a>
+                            <a href="javascript:void(0)" (click)="onChangeStatus(false, vehicle.uuid, i)" class="approve-reject-link"><img
+                                src="assets/images/vehicle-list/reject.svg" class="ms-3" /></a>
+                          </ng-container>
+                        </td>
+                        <td class="action-class">
+                          <a href="javascript:void(0)" *ngIf="modulePermissions.can_view_details" routerLink="/admin/vehicles/vehicle-details/{{
+                              vehicle.uuid
+                            }}">
+                            <img src="../../../../../assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete"
+                            (click)="deleteVehicle(vehicle.uuid)">
+                            <img src="../../../../../assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="Condition-rejected" [ngClass]="{ 'show active': selectedTab == 'rejected' }"
+            role="tabpanel" aria-labelledby="Condition-rejected-tab">
+            <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('VEHICLE_ID')">
+                    <span>{{"ID" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Image" | translate}}</span></th>
+                  <th><span>{{"Vehicle Type" | translate}}</span></th>
+                  <th (click)="setSorting('MAKE')">
+                    <span>
+                      {{"Make" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('MODEL')">
+                    <span>{{"Model" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('YEAR')">
+                    <span>{{"Year" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Condition" | translate}}</span></th>
+                  <th (click)="setSorting('LOCATION')">
+                    <span>{{"Location" | translate}}
+                      <img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('PRICE')">
+                    <span>{{"Price" | translate}}<img src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2" /></span>
+                  </th>
+                  <th (click)="setSorting('LISTED_DATE')">
+                    <span>{{"Listed Date" | translate}}<img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                  </th>
+                  <th><span>{{"Status" | translate}}</span></th>
+                  <th><span>{{"Start Date" | translate}}</span></th>
+                  <th><span>{{"End Date" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container *ngIf="vehicleList.length > 0; else noRecordsTemplate">
+                      <tr *ngFor="
+                          let vehicle of vehicleList | filter : 'rejected'
+                        ">
+                        <td>{{ vehicle.id }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <ng-container *ngIf="vehicle.cover_img?.url">
+                              <img [src]="vehicle.cover_img?.url" />
+                            </ng-container>
+                            <ng-container *ngIf="!vehicle.cover_img?.url">
+                              <img src="../../../../../assets/images/no_preview.jpeg" />
+                            </ng-container>
+                          </div>
+                        </td>
+                        <td>{{ vehicle.vehicle_type?.type | translate }}</td>
+                        <td>{{ vehicle.brand?.name }}</td>
+                        <td>{{ vehicle.brand_model?.model }}</td>
+                        <td>{{ vehicle.vehicle_details?.year }}</td>
+                        <td>
+                          {{ vehicle.vehicle_details?.condition | titlecase | translate }}
+                        </td>
+                        <td>{{ vehicle.location?.province | titlecase }}</td>
+                        <td>${{ vehicle.price | spanishNumber }}</td>
+                        <td>{{ vehicle.created_at | date : "MM-dd-yyyy" }}</td>
+                        <td>
+                          <label class="rejected">{{"Rejected" | translate}}</label>
+                        </td>
+                        <td>
+                          {{ vehicle?.published_at | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td>
+                          {{ vehicle?.end_date | date : "MM-dd-yyyy" }}
+                        </td>
+                        <td class="action-class">
+                          <a *ngIf="modulePermissions.can_view_details" href="javascript:void(0)" routerLink="/admin/vehicles/vehicle-details/{{
+                              vehicle.uuid
+                            }}">
+                            <img src="../../../../../assets/images/eye-open.svg" /></a>
+                          <a href="javascript:void(0);" *ngIf="modulePermissions.can_delete"
+                            (click)="deleteVehicle(vehicle.uuid)">
+                            <img src="../../../../../assets/images/vehicle-list/del-icon.svg" class="ms-3" />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination *ngIf="paginationData?.total_pages && !loading" [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)">
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

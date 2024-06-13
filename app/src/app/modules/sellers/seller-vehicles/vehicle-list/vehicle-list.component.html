@@ -1,0 +1,1036 @@
+<section class="section vehicle__listing bg-blue">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="font-38 text-primary fw-semibold">
+          {{ "My Vehicles" | translate }}
+        </h3>
+      </div>
+      <!-- <button
+        class="btn primary-btn btn-md"
+        routerLink="/seller/vehicles/add-vehicle"
+      >
+        + Add Vehicle
+      </button> -->
+    </div>
+
+    <div class="vehicle__listing--search">
+      <div class="row">
+        <div class="col-xl-9 col-md-6">
+          <div class="form-group search-grp">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+              "Search" | translate
+            }}</label>
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control form-control--search"
+                [(ngModel)]="searchText"
+                (keyup.enter)="searchVehicle()"
+                placeholder="{{
+                  'Search By Make, Model or Keyword' | translate
+                }}"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="searchVehicle()">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+              "Location" | translate
+            }}</label>
+            <div ngbDropdown class="doropdown_radio dropdown-assets/images">
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-secondary': selectedProvince }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="multipledata-hide">
+                  {{
+                    !selectedProvince
+                      ? ("Location" | translate)
+                      : (selectedProvince | titlecase)
+                  }}</span
+                >
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li>
+                  <input
+                    type="text"
+                    class="form-control"
+                    (input)="searchInput($event, 'location')"
+                    placeholder="{{ 'Search by Location' | translate }}"
+                  />
+                </li>
+                <li *ngFor="let provienceData of province">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div
+                        class="form-check form-check-inline"
+                        (click)="
+                          getFilterVehicleList(this.order, provienceData)
+                        "
+                      >
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="location"
+                          [(ngModel)]="selectedProvince"
+                          id="{{ provienceData }}"
+                          value="{{ provienceData }}"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ provienceData }}"
+                          >{{ provienceData | titlecase }}</label
+                        >
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- vehicle type dropdown start here -->
+        <!-- <div class="col-sm-6 col-md-4 col-xl-2">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #vehicleTypeDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedTypeId.length > 0 }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedTypeId.length > 1"
+                >
+                  {{
+                    selectedType[selectedTypeId.length - 1]
+                      | titlecase
+                      | translate
+                  }}
+                  {{ "and" | translate }} {{ selectedTypeId.length - 1 }}
+                  {{ "others" | translate }}.
+                </span>
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedTypeId.length == 1"
+                >
+                  {{ selectedType[0] | titlecase | translate }}
+                </span>
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedTypeId.length == 0"
+                >
+                  {{ "Vehicle Type" | translate }}
+                </span>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let vehicletype of vehicleTypes; let i = index">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          (change)="
+                            selectValue($event, 'type', vehicletype.type)
+                          "
+                          type="checkbox"
+                          name="Vehicle Type"
+                          id="{{ vehicletype.id }}"
+                          value="{{ vehicletype.id }}"
+                          [checked]="
+                            selectedType.indexOf(vehicletype.type) > -1
+                          "
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ vehicletype.id }}"
+                          >{{ vehicletype.type | translate }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="
+                      vehicleTypeDrop.close();
+                      searchApplied = true;
+                      getFilterVehicleList()
+                    "
+                    href="javascript:void(0)"
+                  >
+                    {{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div> -->
+        <!-- vehicle type dropdown end here -->
+        <!-- vehicle body dropdown start here -->
+        <div class="col-sm-6 col-md-4 col-xl-2">
+          <div class="form-group position-unset">
+            <div ngbDropdown #vehicleBody="ngbDropdown" class="doropdown_radio position-unset dropdown-images"
+              [autoClose]="'outside'">
+              <button ngbDropdownToggle class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedBody }" type="button" id="vehicle-type" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span class="multipledata-hide">
+                  {{ selectedBody ? selectedBody : ("Vehicle Type" | translate) }}
+                </span>
+              </button>
+
+              <div ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <div *ngFor="let bodytyperow of bodyTypeList" class="row">
+                  <li *ngFor="let bodytype of bodytyperow" class="col-6 col-md-3">
+                    <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)">
+                      <div class="radio-check br-12">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" (change)="
+                              selectValue($event, 'bodytype', bodytype.type)
+                            " type="radio" name="body_type" id="{{ bodytype.type }}_body" value="{{ bodytype.id }}" />
+                          <label class="form-check-label body-type text-center" for="{{ bodytype.type }}_body"><img
+                              [src]="bodytype.url" /><span class="d-block mt-2">{{ bodytype.type }}</span></label>
+                          <!-- <span class="dot-checkmark"></span> -->
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <div class="next-button mt-2 me-3 btn-wrp d-inline-block py-3">
+                    <button class="btn primary-btn btn-md px-5" (click)="vehicleBody.close(); getFilterVehicleList()">
+                      {{ "Apply" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- vehicle body dropdown end here -->
+        <div class="col-sm-6 col-md-4 col-xl-3">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #vehicleMakeDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                (click)="getVehicleMake()"
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedMake }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="multipledata-hide">
+                  {{ selectedMake ? selectedMake : ("Make" | translate) }}</span
+                >
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li ngbDropdownItem>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        (input)="searchInput($event, 'makes')"
+                        placeholder="{{ 'Search By Make' | translate }}"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <label>{{ "Popular Makes" | translate }}</label>
+                </li>
+                <li ngbDropdownItem class="make-brand-logo px-0">
+                  <ul
+                    *ngFor="let popularmakeRow of popularMakes"
+                    class="d-flex align-items-center"
+                  >
+                    <li class="my-2" *ngFor="let popularmake of popularmakeRow">
+                      <a
+                        (click)="
+                          getVehicleModel(popularmake.id, popularmake.name)
+                        "
+                        href="javascript:void(0)"
+                      >
+                        <img
+                          class="make-logo"
+                          src="{{ popularmake.icon_url }}"
+                          alt="{{ popularmake.name }}"
+                        />
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <label>{{ "More Makes" | translate }}</label>
+                </li>
+                <li *ngFor="let notpopular of nonPopularMakes">
+                  <a
+                    ngbDropdownItem
+                    (click)="getVehicleModel(notpopular.id, notpopular.name)"
+                    class="dropdown-item dropdown-car-brand"
+                    href="javascript:void(0)"
+                  >
+                    {{ notpopular.name }}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center w-50 mx-auto text-white py-3"
+                    (click)="
+                      vehicleMakeDrop.close();
+                      searchApplied = true;
+                      getFilterVehicleList()
+                    "
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-3">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #vehicleModelDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedModel.length > 0 }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedModel.length > 1"
+                >
+                  {{ selectedModel.join(", ") }}
+                </span>
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedModel.length == 1"
+                  >{{ selectedModel[0] }}</span
+                >
+                <span
+                  class="multipledata-hide"
+                  *ngIf="selectedModel.length == 0"
+                  >{{ "Model" | translate }}</span
+                >
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li ngbDropdownItem>
+                  <div class="form-group search-grp">
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        (input)="searchInput($event, 'model')"
+                        placeholder="{{ 'Search by Model' | translate }}"
+                      />
+                      <img
+                        src="assets/images/vehicle-list/search-blue.svg"
+                        class="search-icon"
+                      />
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <label>{{ "Model Name" | translate }}</label>
+                </li>
+                <li
+                  *ngFor="let vehiclemodelsdata of vehicleModels; let i = index"
+                >
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          (change)="
+                            selectValue(
+                              $event,
+                              'model',
+                              vehiclemodelsdata?.name
+                            )
+                          "
+                          name="Model"
+                          id="{{ vehiclemodelsdata.id }}"
+                          value="{{ vehiclemodelsdata.id }}"
+                          [checked]="
+                            selectedModel.indexOf(vehiclemodelsdata.name) > -1
+                          "
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ vehiclemodelsdata.id }}"
+                          >{{ vehiclemodelsdata?.name }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <!--<li *ngIf="vehicleModels.length == 0">
+                   <p>No Data available Please Select</p>
+                 </li>-->
+
+                <li>
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="
+                      vehicleModelDrop.close();
+                      searchApplied = true;
+                      getFilterVehicleList()
+                    "
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-2">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #vehicleYear="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                (click)="getYearList()"
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedyear }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span class="multipledata-hide">
+                  {{ selectedyear ? selectedyear : ("Year" | translate) }}</span
+                >
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 p-3 dropdown-scroll"
+                aria-labelledby="vehicle-type"
+              >
+                <li *ngFor="let years of yearList?.years">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item px-4 dropdown-car-brand"
+                    (click)="selectValue($event, 'year', years)"
+                    href="javascript:void(0)"
+                    >{{ years }}</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="vehicleYear.close(); getFilterVehicleList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-xl-2">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #vehicleStatusDrop="ngbDropdown"
+              class="doropdown_radio"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedStatus.length > 0 }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <ng-container *ngIf="selectedStatus.length > 1">
+                  <span class="multipledata-hide">
+                    {{
+                      selectedStatus[selectedStatus.length - 1]
+                        | titlecase
+                        | translate
+                    }}
+                    {{ "and" | translate }} {{ selectedStatus.length - 1 }}
+                    {{ "others" | translate }}.
+                  </span></ng-container
+                >
+
+                <ng-container *ngIf="selectedStatus.length == 1">
+                  <span class="multipledata-hide">
+                    {{
+                      selectedStatus[0] == "pending"
+                        ? ("Awaiting Approval" | translate)
+                        : (selectedStatus[0] | titlecase | translate)
+                    }}</span
+                  >
+                </ng-container>
+                <ng-container *ngIf="selectedStatus.length == 0">
+                  <span class="multipledata-hide">
+                    {{ "Status" | translate }}</span
+                  >
+                </ng-container>
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let statusData of statusList; let i = index">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="Status"
+                          (change)="selectValue($event, 'status')"
+                          id="{{ statusData.id }}"
+                          value="{{ statusData.id }}"
+                          [checked]="selectedStatus.indexOf(statusData.id) > -1"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ statusData.id }}"
+                          >{{ statusData.status | translate }}</label
+                        >
+                        <span class="check-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <!-- <li *ngIf="statusList.length == 0">
+                   <p>no data available</p>
+                 </li>-->
+
+                <li>
+                  <a
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="
+                      vehicleStatusDrop.close();
+                      searchApplied = true;
+                      getFilterVehicleList()
+                    "
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing&#45;&#45;result mt-5">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-lg-7">
+          <div
+            class="d-sm-flex align-items-center mb-3 mb-lg-0"
+            *ngIf="searchApplied"
+          >
+            <h3 class="text-primary fw-semibold font-28">
+              {{ "Search Results" | translate }}
+            </h3>
+            <a
+              href="javascript:void(0)"
+              class="ms-sm-4 text-secondary text-underline"
+              (click)="clearAll()"
+              >{{ "Clear All Filters" | translate }}</a
+            >
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="d-flex align-items-center justify-content-lg-end">
+            <p>{{ "Sort By" | translate }}:</p>
+            <div class="form-group mb-0">
+              <div ngbDropdown class="doropdown_radio">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-white dropdown-toggle btn-dropdown text-secondary font-14 fw-regular"
+                  type="button"
+                  id="vehicle-type"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span *ngIf="order == 'ASC'; else desc">
+                    <img
+                      src="assets/images/vehicle-list/up-down-arrow.svg"
+                      class="me-1"
+                      alt=""
+                    />
+                  </span>
+                  <ng-template #desc>
+                    <img
+                      src="assets/images/vehicle-list/down-up-arrow.svg"
+                      class="me-1"
+                      alt=""
+                    />
+                  </ng-template>
+
+                  <span>{{
+                    order == "ASC"
+                      ? ("Ascending" | translate)
+                      : ("Descending" | translate)
+                  }}</span>
+                </button>
+                <ul
+                  ngbDropdownMenu
+                  class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                >
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                    >
+                      <div class="radio-check br-12">
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            [(ngModel)]="order"
+                            (click)="getFilterVehicleList('ASC')"
+                            name="sort by"
+                            id="Ascending"
+                            value="ASC"
+                          />
+                          <label class="form-check-label" for="Ascending"
+                            ><img
+                              src="assets/images/vehicle-list/up-down-arrow.svg"
+                              alt=""
+                            />
+                            {{ "Ascending" | translate }}</label
+                          >
+                          <span class="dot-checkmark"></span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                    >
+                      <div class="radio-check br-12">
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            [(ngModel)]="order"
+                            name="sort by"
+                            id="Descending"
+                            (click)="getFilterVehicleList('DESC')"
+                            value="DESC"
+                          />
+                          <label class="form-check-label" for="Descending"
+                            ><img
+                              src="assets/images/vehicle-list/down-up-arrow.svg"
+                              alt=""
+                            />
+                            {{ "Descending" | translate }}</label
+                          >
+                          <span class="dot-checkmark"></span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="result-pills">
+        <span class="pill" *ngIf="searchValue">
+          {{ searchValue
+          }}<a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="searchValue = null; getFilterVehicleList()"
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt=""
+          /></a>
+        </span>
+
+        <ng-container *ngFor="let type of selectedType">
+          <span class="pill"
+            >{{ type | translate
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="removeType(type); getFilterVehicleList()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+        <span class="pill" *ngIf="selectedMakeId"
+          >{{ selectedMake }}
+          <a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="
+                selectedMakeId = null;
+                selectedMake = null;
+                getFilterVehicleList()
+              "
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedModelId.length == 1"
+          >{{ selectedModel[0] }}
+          <a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="
+                selectedModelId = []; selectedModel = []; getFilterVehicleList()
+              "
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedModelId.length > 1"
+          >{{ "Models Applied" | translate
+          }}<a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="
+                selectedModelId = []; selectedModel = []; getFilterVehicleList()
+              "
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedyear"
+          >{{ selectedyear }}
+          <a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="selectedyear = null; getFilterVehicleList()"
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedStatus.length > 1">
+          {{ "Status Applied" | translate
+          }}<a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="selectedStatus = []; getFilterVehicleList()"
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedStatus.length == 1">
+          {{
+            selectedStatus[0] == "pending"
+              ? ("Awaiting Approval" | translate)
+              : (selectedStatus[0] | titlecase | translate)
+          }}<a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="selectedStatus = []; getFilterVehicleList()"
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <span class="pill" *ngIf="selectedProvince">
+          {{ selectedProvince | titlecase
+          }}<a class="ms-3" href="javascript:void(0)"
+            ><img
+              (click)="selectedProvince = null; getFilterVehicleList()"
+              src="assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+      </div>
+    </div>
+    <div class="vehicle__listing--cards">
+      <div class="row gy-3 gy-sm-4">
+        <ng-container *ngIf="!loading; else loadingTemplate">
+          <div
+            *ngIf="
+              vehicleListData?.items?.length == 0 ||
+              vehicleListData?.items == undefined
+            "
+          >
+            <p class="text-primary font-22 fw-semibold">
+              {{ "No vehicles are added yet. Please add vehicle" | translate }}
+            </p>
+          </div>
+          <div
+            class="col-md-6 col-xl-4"
+            *ngFor="let vehicle_list of vehicleListData?.items"
+          >
+            <div class="listing_cards">
+              <div
+                routerLink="/user/my-vehicles/view-vehicle-details/{{
+                  vehicle_list?.id
+                }}"
+                class="card_img"
+              >
+                <img
+                  src="{{ vehicle_list?.cover_img_url }}"
+                  alt="car-1"
+                  (error)="handleMissingImage($event)"
+                />
+              </div>
+              <div class="card_text-box p-3">
+                <div
+                  routerLink="/seller/vehicles/view-vehicle-details/{{
+                    vehicle_list?.id
+                  }}"
+                >
+                  <div class="d-flex justify-content-between">
+                    <p class="text-secondary font-14">
+                      #{{
+                        vehicle_list?.id.length <= 7
+                          ? vehicle_list?.id
+                          : (vehicle_list?.id | slice : 0 : 7) + "..."
+                      }}
+                    </p>
+                    <p
+                      class="text-green approved"
+                      *ngIf="vehicle_list.status == 'approved'"
+                    >
+                      <img
+                        class="me-2"
+                        src="assets/images/view_vehicle/green_check.svg"
+                        alt=""
+                      />{{ "Approved" | translate }}
+                    </p>
+                    <p
+                      class="text-danger reject"
+                      *ngIf="vehicle_list.status == 'rejected'"
+                    >
+                      {{ "Rejected" | translate }}
+                    </p>
+                    <p
+                      class="text-purple draft"
+                      *ngIf="vehicle_list.status == 'draft'"
+                    >
+                      <img
+                        class="me-2"
+                        src="assets/images/vehicle-list/draft.svg"
+                        alt=""
+                      />{{ "Saved as Draft" | translate }}
+                    </p>
+                    <p
+                      class="text-purple draft"
+                      *ngIf="vehicle_list.status == 'pending'"
+                    >
+                      <img
+                        class="me-2"
+                        src="assets/images/vehicle-list/draft.svg"
+                        alt=""
+                      />{{ "Awaiting Approval" | translate }}
+                    </p>
+                  </div>
+                  <div class="d-flex justify-content-between my-3 my-md-4">
+                    <a
+                      class="vehicle-card-title"
+                      title="{{ vehicle_list?.model_year }} {{
+                        vehicle_list?.make
+                      }} {{ vehicle_list?.make_model }}"
+                    >
+                      <h5
+                        class="text-secondary text-wrap car_model text-primary font-28 fw-semibold"
+                      >
+                        {{ vehicle_list?.model_year }}
+                        {{ vehicle_list?.make }}
+                        {{ vehicle_list?.make_model }}
+                      </h5>
+                    </a>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <a title="{{ vehicle_list?.price }}">
+                      <h4 class="text-green font-24 car_price">
+                        ${{ vehicle_list?.price | spanishNumber }}
+                      </h4>
+                    </a>
+                  </div>
+                  <div
+                    class="d-sm-flex align-items-center my-3 my-md-4 details_location-date"
+                  >
+                    <p class="text-purple-2 font-16">
+                      <img
+                        src="assets/images/view_vehicle/location.svg"
+                        alt=""
+                      />
+                      {{ vehicle_list?.location.city | titlecase }}
+                    </p>
+                    <img
+                      src="assets/images/view_vehicle/dot.svg"
+                      class="my-2 my-sm-0 mx-sm-3"
+                      alt=""
+                    />
+                    <p class="text-purple-2 font-16">
+                      <img src="assets/images/view_vehicle/menu.svg" alt="" />
+                      {{ vehicle_list?.created_at | date : "d-MMMM-y" }}
+                    </p>
+                  </div>
+                  <div class="details_labels">
+                    <label
+                      *ngIf="vehicle_list?.fuel_type"
+                      for="exampleFormControlInput1"
+                      class="form-label details__label me-3"
+                      >{{ vehicle_list?.fuel_type | translate }}</label
+                    >
+                    <label
+                      *ngIf="
+                        vehicle_list?.distance_travelled_unit === 'Kilometers'
+                      "
+                      for="exampleFormControlInput2"
+                      class="form-label details__label"
+                      >{{
+                        vehicle_list?.distance_travelled | spanishNumber
+                      }}
+                      km</label
+                    >
+                    <label
+                      *ngIf="vehicle_list?.distance_travelled_unit === 'Miles'"
+                      for="exampleFormControlInput2"
+                      class="form-label details__label"
+                      >{{
+                        vehicle_list?.distance_travelled | spanishNumber
+                      }}
+                      mi</label
+                    >
+                    <label
+                      *ngIf="vehicle_list?.distance_travelled_unit === 'Hours'"
+                      for="exampleFormControlInput2"
+                      class="form-label details__label"
+                      >{{
+                        vehicle_list?.distance_travelled | spanishNumber
+                      }}
+                      Hr</label
+                    >
+                  </div>
+                </div>
+                <div class="details-btn-grp">
+                  <button
+                    class="border-end btn-outline-purple text-primary"
+                    routerLink="/seller/vehicles/edit-vehicle/{{
+                      vehicle_list?.id
+                    }}"
+                  >
+                    <img
+                      class="me-2"
+                      src="assets/images/view_vehicle/edit_purple.svg"
+                      width="24px"
+                      alt=""
+                    />{{ "Edit" | translate }}
+                  </button>
+                  <button
+                    class="btn-outline-red text-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deletevehicleModal"
+                    (click)="openDeleteConfirmation(vehicle_list?.id)"
+                  >
+                    <img
+                      class="me-2"
+                      src="assets/images/vehicle-list/del-icon.svg"
+                      width="24px"
+                      alt=""
+                    />{{ "Delete" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <app-loader></app-loader>
+        </ng-template>
+      </div>
+      <div *ngIf="vehicleListData?.pagination?.total_pages && !loading">
+        <pagination
+          [paginationData]="vehicleListData.pagination"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

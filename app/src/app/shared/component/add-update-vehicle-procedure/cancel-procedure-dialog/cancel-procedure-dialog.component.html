@@ -1,0 +1,35 @@
+<div class="modal-header border-0">
+  <button type="button" class="btn-close p-md-4 p-2" (click)="activeModal.close(false)" aria-label="Close"></button>
+</div>
+<div class="modal-body border-0 p-2 m-4">
+  <div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2 p-1">
+      {{ "Are your sure you want to cancel this vehicle processing service?" | translate }}
+    </h3>
+    <p class="font-14 text-primary-light mb-2 p-1">
+      {{ "At RIKU we value your trust and are committed to providing quality service. By requesting our services, the user declares to know the terms and conditions of the RIKU platform, as well as the payment and cancellation policies that govern each of its services." | translate }}
+    </p>
+    <p class="font-14 text-primary-light mb-2 p-1">
+      {{ "As a previously accepted vehicle procedure cancellation policy, the RIKU platform immediately refunds the payment for the service minus 1% as a penalty. Our policy is based on a firm commitment to quality and excellence in each of our services because once the service has been canceled, time and resources have been reserved to allow service with the greatest possible professionalism." | translate }}
+    </p>
+    <p class="font-14 text-primary-light mb-2 p-1">
+     {{ "We appreciate your understanding of our Policies." | translate }}
+    </p>
+    <p class="font-14 text-primary-light mb-2 p-1">
+      {{ '*For more details review “Payment and Cancellation Policies”' | translate }}
+    </p>
+  </div>
+</div>
+<div class="modal-footer d-flex justify-content-center border-0 mb-5">
+  <button type="button" class="btn primary-btn-outline " (click)="activeModal.close(false)">
+    {{ "Cancel" | translate }}
+  </button>
+  <button type="submit" class="btn primary-btn" (click)="onSubmit()">
+    <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        *ngIf="loading"
+        aria-hidden="true"
+      ></span> {{ "Yes" | translate }}
+  </button>
+</div>

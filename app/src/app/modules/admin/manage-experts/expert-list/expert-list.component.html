@@ -1,0 +1,227 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">{{"Expert Management" | translate}}</h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Search" | translate}}</label>
+      <div class="row">
+        <div class="col-lg-9 col-md-8">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="searchKeyword"
+                (keyup.enter)="setSearchText(searchKeyword)"
+                placeholder="{{'Search by Keyword' | translate}}"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="setSearchText(searchKeyword)">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4" *ngIf="modulePermissions.can_create">
+          <div class="form-group search-grp add-vehicle ms-2">
+            <a
+              routerLink="/admin/experts/add"
+              class="btn primary-btn btn-sm br-12 py-3"
+            >
+              + {{"Add Expert User" | translate}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5" *ngIf="searchApplied">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+          <h3 class="text-primary fw-semibold font-28">{{"Search Results" | translate}}</h3>
+          <a href="javascript:void(0)"(click)="searchText = ''; clearAll()"
+            class="ms-4 text-secondary text-underline">{{"Clear All Filters" | translate}}</a>
+        </div>
+      </div>
+      <div class="result-pills">
+        <span class="pill">{{ searchText }}
+        </span>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade"
+            id="Condition-all"
+            [ngClass]="{ 'show active': selectedTab == 'all' }"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>{{"Sr. No." | translate}}</span>
+                  </th>
+                  <th>
+                    <span>{{"Image" | translate}}</span>
+                  </th>
+                  <th (click)="setSorting('FIRST_NAME')">
+                    <span
+                      >{{"Name" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th (click)="setSorting('LAST_NAME')">
+                    <span
+                      >{{"Surname" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th><span>{{"Email" | translate}}</span></th>
+                  <th><span>{{"Mobile Number" | translate}}</span></th>
+                  <th (click)="setSorting('LOCATION')">
+                    <span
+                      >{{"Location" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th><span>{{"Expert Licence" | translate}}</span></th>
+                  <!-- <th><span>Code Number System</span></th> -->
+                  <th (click)="setSorting('CREATED_DATE')">
+                    <span
+                      >{{"Created Date" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th><span>{{"Active/Inactive" | translate}}</span></th>
+                  <th><span>{{"Actions" | translate}}</span></th>
+                </thead>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="expertList.length > 0; else noRecordsTemplate"
+                    >
+                      <tr *ngFor="let expert of expertList; let i = index">
+                        <td>{{ limit * (page - 1) + (i + 1) }}</td>
+                        <td>
+                          <div class="small-img-list">
+                            <img
+                              [src]="
+                                expert.image
+                                  ? expert.image
+                                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                              "
+                            />
+                          </div>
+                        </td>
+                        <td>{{ expert.first_name | titlecase }}</td>
+                        <td>{{ expert.last_name | titlecase }}</td>
+                        <td>{{ expert.email }}</td>
+                        <td>{{ expert.mobile_no }}</td>
+                        <td>{{ expert.location }}</td>
+                        <td>{{ expert.expert_code }}</td>
+                        <!-- <td>{{ expert.expert_code_num_sys }}</td> -->
+                        <td>{{ expert.created_at | date : "MM-dd-YYYY" }}</td>
+                        <td>
+                          <div
+                            class="switch-wrp d-flex align-items-center mb-2"
+                            *ngIf="modulePermissions.can_edit"
+                          >
+                            <input
+                              type="checkbox"
+                              [checked]="expert.is_active == true"
+                              name="checkbox-list"
+                              (click)="changeStatus($event, i)"
+                              value="{{ expert.is_active }}"
+                              id="switch0{{ i }}"
+                            /><label class="switch" for="switch0{{ i }}"
+                              >Toggle</label
+                            >
+                          </div>
+                        </td>
+                        <td class="action-class">
+                          <a
+                            *ngIf="modulePermissions.can_view_details"
+                            href="javascript:void(0)"
+                            routerLink="/admin/experts/details/{{ expert.id }}"
+                          >
+                            <img src="assets/images/eye-open.svg"
+                          /></a>
+                          <a
+                            *ngIf="modulePermissions.can_edit"
+                            href="javascript:void(0);"
+                            (click)="editUser(expert.id)"
+                          >
+                            <img
+                              src="assets/images/vehicle-list/pen-purple-icon.svg"
+                              class="ms-3"
+                            />
+                          </a>
+                          <a
+                            href="javascript:void(0);"
+                            *ngIf="modulePermissions.can_delete"
+                            (click)="deleteUser(i)"
+                          >
+                            <img
+                              src="assets/images/vehicle-list/del-icon.svg"
+                              class="ms-3"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="10">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

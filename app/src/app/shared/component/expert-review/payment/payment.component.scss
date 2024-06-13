@@ -1,0 +1,185 @@
+@import "../../../../../variables";
+@import "../../../../../function";
+
+.back-to-page span {
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  background-color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// css for buy now page 17-01-2023 //
+.payment_wrapper {
+  & .price-grp {
+    // width: max-content;
+    padding: 30px;
+
+    & .form-check-inline {
+      margin-bottom: 30px;
+      width: unset;
+
+      & input[type="radio"]:checked {
+        & ~ .dot-checkmark::after {
+          width: 10px;
+          height: 10px;
+        }
+
+        & + label {
+          background-color: transparent;
+          // color: $primary-color;
+        }
+      }
+
+      & .dot-checkmark {
+        width: 19px;
+        height: 19px;
+      }
+    }
+  }
+
+  &--radio {
+    & .form-check-inline {
+      max-width: 340px;
+      display: block;
+      margin-right: 0;
+      @include for-tablet-portrait-up {
+        max-width: 320px;
+      }
+      & label {
+        padding-block: 14px;
+      }
+
+      & input:checked {
+        & ~ label {
+          & img[src][data-card] {
+            //  content: url("../../../../../../assets/images/card-blue.svg");
+          }
+
+          & img[src][data-cash] {
+            //  content: url("../../../../../../assets/images/cash-blue.svg");
+          }
+
+          & img[src][data-bank] {
+            //    content: url("../../../../../../assets/images/bank-blue.svg");
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal-btn-close {
+  position: absolute;
+  right: 2%;
+  top: 17%;
+}
+
+.justify-content-left {
+  justify-content: flex-start;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.c-none {
+  display: none;
+}
+
+.form-group {
+  & .input-icon {
+    top: 54px;
+    position: absolute;
+    right: 23px;
+    cursor: pointer;
+
+    @include for-laptop {
+      top: 65px;
+    }
+
+    @include for-phone-only {
+      top: 50px;
+    }
+
+    &.uplode-icon {
+      top: 28px;
+    }
+  }
+}
+
+input.form-control {
+  border: 1px solid rgba(137, 112, 143, 0.5);
+  height: 60px;
+  background: #fff;
+  font-size: 1rem;
+  padding: 20px;
+  color: #3b1144;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.vehicle__uploaded-photo {
+  & .photo-wrp {
+    width: 65px;
+    height: 65px;
+    position: relative;
+
+    & img {
+      border-radius: 12px;
+      height: 68px;
+      width: 68px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    & span {
+      background-color: #b1a0b4;
+      height: 22px;
+      width: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 22px;
+    }
+  }
+}
+
+.upload {
+  &--report {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 1400px) {
+
+  .font-16 {
+    font-size: 14px
+  }
+  .font-15{
+    font-size: 13px
+  }
+
+  input.form-control {
+    font-size: 15px;
+  }
+
+  .font-22 {
+    font-size: 20px
+  }
+}
+.form-check-label {
+  @media (max-width: 1400px) {
+    height: 50px;
+  }
+}
+

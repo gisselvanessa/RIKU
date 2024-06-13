@@ -1,0 +1,209 @@
+<ng-container *ngIf="!isPriceNegotiated">
+  <h3
+    class="text-primary font-24 mt-4 mt-xl-0 mb-2 fw-semibold"
+  >
+    {{ "Negotiation Amount Title" | translate }}
+  </h3>
+
+  <p class="mb-3 fw-medium font-13 text-primary">Seleccione el resumen de la reunión para seguir comprando</p>
+  <!-- <div class="form-group mb-3 mb-md-4 mb-xl-5">
+    <label class="mb-xl-2 mb-lg-1 d-block">{{
+      "Actual Vehicle Price" | translate
+    }}</label>
+    <h3 class="text-secondary font-24 fw-semibold mb-0">
+      $ {{ currentOrder.original_price | spanishNumber }}
+    </h3>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Enter Your Offer Price" | translate
+        }}</label>
+        <div class="text">
+          <input
+            type="text"
+            minlength="5"
+            maxlength="11"
+            (focus)="formatToNumber($event)"
+            (blur)="formatPrice($event)"
+            [(ngModel)]="offeredPrice"
+            [ngModelOptions]="{ standalone: true }"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="row gx-4">
+    <div class="col-12 col-sm-6">
+      <div class="ps-3 rounded bg-white pb-4 pt-2">
+        <div class="form-group mb-3">
+          <label class="mb-xl-2 mb-lg-1">{{
+            "Actual Vehicle Price" | translate
+          }}</label>
+          <h3 class="text-secondary font-24 fw-semibold mb-0">
+            $ {{ currentOrder.original_price | spanishNumber }}
+          </h3>
+        </div>
+        <div class="form-group mb-1">
+          <label class="mb-xl-3 mb-lg-2 mb-1">{{
+            "Enter Your Offer Price" | translate
+          }}</label>
+          <div class="text">
+            <input
+              type="text"
+              minlength="5"
+              maxlength="11"
+              (focus)="formatToNumber($event)"
+              (blur)="formatPrice($event)"
+              [(ngModel)]="offeredPrice"
+              [ngModelOptions]="{ standalone: true }"
+              class="form-control w-50"
+              [readonly]="isEnabledFields"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="bg-white d-flex justify-content-center flex-column align-items-center rounded py-3 mt-sm-0 mt-2">
+        
+        <p class="mb-4 fw-medium text-primary px-3 mt-3">¿Pudiste negociar el precio con el vendedor?</p>
+  
+        <div class="justify-content-center mb-4 mt-2 pb-2">
+          <button type="submit" class="btn primary-btn me-4" (click)="enabledFields()">
+            {{ 'Yes' | translate }}
+          </button>
+          <button type="button" class="btn primary-btn-outline" (click)="rejectVehiclePriceNegociation();">
+            {{ 'No' | translate }}
+          </button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="btn-grp mt-3 mt-md-4 mt-xl-5 d-sm-flex">
+    <button
+      class="btn primary-btn-outline btn-sm btn--small me-sm-3"
+      (click)="currentOrder.vehicle.is_price_negotiable && currentOrder.meetings.length === 0 ?  backOrderList() : setPreviousStep()"
+    >
+      {{ "Previous" | translate }}
+    </button>
+    <button
+      class="btn primary-btn mt-3 mt-sm-0 btn-sm btn--small border-1"
+      (click)="onSubmit()"
+      [disabled]="isEnabledFields"
+    >
+      {{ "Submit1" | translate }}
+    </button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isPriceNegotiated">
+  <div class="row mt-4 mt-xl-0">
+    <h3 class="title fw-semibold font-22 text-primary mb-1">{{ "Negotiation Amount" | translate }}</h3>
+    <p class="font-16 text-primary col-xl-7 col-lg-10 col-md-12 mb-4">
+      {{ "PriceNegotiaonMessage" | translate }}
+    </p>
+    <div class="col-lg-6 col-sm-12 mb-3 mb-lg-4">
+      <div class="br-12 bg-white p-3 p-md-4">
+        <div class="row">
+          <div class="col-sm-6 col-lg-4">
+            <div class="mb-3 mb-md-4">
+              <label class="mb-md-3 text-primary-light font-14 fw-regular">{{
+                "Actual Vehicle Price" | translate
+              }}</label>
+              <p class="mb-2 text-secondary font-16 fw-regular">
+                ${{ currentOrder.original_price | spanishNumber }}
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="mb-3 mb-md-4">
+              <label class="mb-md-3 text-primary-light font-14 fw-regular">{{
+                "Offer Price" | translate
+              }}</label>
+              <p class="mb-2 text-primary font-16 fw-regular">
+                ${{
+                  currentOrder.negotiation_details.negotiated_price
+                    | spanishNumber
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <span
+          class="offer-label rejected py-1 px-3 py-lg-2 px-lg-4 mt-3 mt-md-4 d-inline-block"
+          *ngIf="currentOrder.negotiation_details.is_offer_accepted === false"
+          >{{ "Offer Rejected" | translate }}</span
+        >
+        <!-- add class accepted for showing offer accepted-->
+        <span
+          class="offer-label accepted py-1 px-3 py-lg-2 px-lg-4 mt-3 mt-md-4 d-inline-block"
+          *ngIf="currentOrder.negotiation_details.is_offer_accepted === true"
+          >{{ "Offer Accepted" | translate }}</span
+        >
+        <!-- add class accepted for showing offer accepted-->
+        <span
+          class="offer-label py-1 px-3 py-lg-2 px-lg-4 mt-3 mt-md-4 d-inline-block"
+          *ngIf="currentOrder.negotiation_details.is_offer_accepted === null"
+          >{{ "Offer Submitted" | translate }}</span
+        >
+        <!-- add class accepted for showing offer accepted-->
+      </div>
+    </div>
+  </div>
+  <div class="btn-grp mt-3 mt-lg-4 d-sm-flex">
+    <button
+      class="btn primary-btn-outline btn-sm btn--small me-sm-3 mt-3 mt-sm-0"
+      *ngIf="currentOrder.negotiation_details.is_offer_accepted !== false" 
+      (click)="currentOrder.vehicle.is_price_negotiable && currentOrder.meetings.length === 0 ?  backOrderList() : setPreviousStep()"
+    >
+      {{ "Previous" | translate }}
+    </button>
+    <button
+      class="btn primary-btn btn-light me-sm-3 mt-3 mt-sm-0 btn-sm btn--small border-1"
+      *ngIf="
+        currentOrder.negotiation_details.is_offer_accepted === null &&
+        currentOrder.negotiation_details.is_price_negotiating
+      "
+    >
+      {{ "Buy Now" | translate }}
+    </button>
+    <!-- remove class btn-light for showing offer accepted-->
+    <button
+      class="btn primary-btn me-sm-3 mt-3 mt-sm-0 btn-sm btn--small border-1"
+      (click)="setNextStep(currentStep + 1)"
+      *ngIf="
+        currentOrder.negotiation_details.is_offer_accepted !== null &&
+        !currentOrder.bank_receipt.is_bank_receipt &&
+        currentOrder.payment.amount == 0
+      "
+    >
+      {{ "Next" | translate }}
+    </button>
+    <!-- remove class btn-light for showing offer accepted-->
+    <button
+      class="btn primary-btn me-sm-3 mt-3 mt-sm-0 btn-sm btn--small border-1"
+      (click)="setNextStep(currentStep + 1)"
+      *ngIf="
+        currentOrder.negotiation_details.is_offer_accepted !== null &&
+        (currentOrder.bank_receipt.is_bank_receipt ||
+          currentOrder.payment.amount > 0)
+      "
+    >
+      {{ "Next" | translate }}
+    </button>
+    <!-- remove class btn-light for showing offer accepted-->
+    <button
+      class="btn primary-btn-outline btn-sm btn--small me-sm-3 mt-3 mt-sm-0"
+      *ngIf="currentOrder.negotiation_details.is_offer_accepted === false"
+      (click)="cancelOrder()"
+    >
+      {{ "Cancel Order" | translate }}
+    </button>
+  </div>
+</ng-container>

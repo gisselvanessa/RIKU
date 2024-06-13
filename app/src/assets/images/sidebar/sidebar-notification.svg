@@ -1,0 +1,18 @@
+<svg id="Component_65_48" data-name="Component 65 – 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2900" data-name="Rectangle 2900" width="40" height="40" transform="translate(22 171)" fill="#a82424"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_68" data-name="Mask Group 68" transform="translate(-22 -171)" clip-path="url(#clip-path)">
+    <g id="Group_10666" data-name="Group 10666" transform="translate(-38.663 172.367)">
+      <g id="Component_54_93" data-name="Component 54 – 93" transform="translate(71.411 8.386)">
+        <g id="Group_1589" data-name="Group 1589" transform="translate(0)">
+          <g id="Group_299" data-name="Group 299">
+            <path id="Subtraction_7" data-name="Subtraction 7" d="M9.376,20.493a4.077,4.077,0,0,1-3.982-3.254l-.056-.283H4.064A4.062,4.062,0,0,1,.1,12.011l1.3-5.845A7.872,7.872,0,0,1,8.881,0H9.09a7.9,7.9,0,0,1,7.59,5.768L18.358,11.8l.015.057a4.063,4.063,0,0,1-3.93,5.095H13.416l-.062.283A4.075,4.075,0,0,1,9.376,20.493ZM6.458,16.956v.209l.093.265a2.991,2.991,0,0,0,5.646,0l.172-.474H6.458Zm2.45-15.9A6.816,6.816,0,0,0,2.427,6.4l-1.3,5.845A3.008,3.008,0,0,0,4.064,15.9H14.455a3,3,0,0,0,2.885-3.812L15.662,6.049A6.816,6.816,0,0,0,9.095,1.054Z" fill="#fff"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

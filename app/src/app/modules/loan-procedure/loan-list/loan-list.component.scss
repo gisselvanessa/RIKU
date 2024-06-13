@@ -1,0 +1,194 @@
+@import "../../../../function";
+@import "../../../../variables";
+
+.vehicle-item {
+  &-box-wrp {
+    h3 {
+      font-size: 32px;
+      @include for-laptop-only {
+        font-size: 28px;
+      }
+    }
+
+    & .vehicle {
+      &-item {
+        &-img {
+          min-width: 100%;
+          width: 100%;
+          height: auto;
+          overflow: hidden;
+          @include for-tablet-portrait-up {
+            height: 210px;
+            min-width: 220px;
+            width: 220px;
+          }
+          @include for-laptop {
+            height: 310px;
+            min-width: 320px;
+            width: 320px;
+          }
+          @include for-big-desktop {
+            height: 350px;
+            min-width: 370px;
+            width: 370px;
+          }
+          > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+
+      .card_img-fav {
+        width: 35px;
+        height: 35px;
+        background-color: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 5%;
+        right: 3%;
+        padding: 4px 9px;
+      }
+    }
+
+    & .vehicle-item-desc {
+      .label-wrp {
+        margin-bottom: 38px;
+
+        @include for-laptop-only {
+          margin-bottom: 20px;
+        }
+      }
+
+      li {
+        background-color: rgba(47, 119, 156, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 8px;
+        min-width: 110px;
+        width: 1px;
+        text-align: center;
+        display: inline-block;
+        margin-right: 8px;
+
+        @include for-laptop-only {
+          padding: 5px;
+          min-width: 100px;
+        }
+
+        @include for-tablet-landscape-only {
+          min-width: unset;
+          width: auto;
+        }
+      }
+
+      .small-disc-seprator {
+        background-color: $purple-grey;
+        height: 5px;
+        width: 5px;
+        border-radius: 50%;
+        margin: 0px 20px;
+      }
+
+      .btn-grp {
+        .btn {
+          padding: 12px;
+          font-size: 14px;
+          @include for-laptop {
+            font-size: 1rem;
+            padding: 12px;
+          }
+          @include for-middle-desktop {
+            min-width: 285px;
+            width: 1px;
+          }
+        }
+
+        .text-underline {
+          text-decoration: underline;
+          color: #2f779c !important;
+        }
+      }
+
+      .status-label {
+        label {
+          font-size: 1rem;
+
+          @include for-laptop-only {
+            font-size: 12px;
+          }
+        }
+
+        .label {
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-size: 20px;
+
+          @include for-laptop-only {
+            font-size: 1rem;
+          }
+
+          &.in-progress {
+            color: rgba(153, 76, 152, 1);
+            background-color: rgba(153, 76, 152, 0.1);
+          }
+
+          &.completed {
+            color: rgba(70, 188, 57, 1);
+            background-color: rgba(70, 188, 57, 0.1);
+          }
+
+          &.canceled {
+            color: rgba(241, 64, 64, 1);
+            background-color: rgba(241, 64, 64, 0.1);
+          }
+        }
+      }
+    }
+
+    .total-price {
+      border-top: 1px solid rgba(177, 160, 180, 0.5);
+    }
+  }
+}
+
+.condition-tabs {
+  & .tabs-list {
+    padding: 8px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  & .nav-link {
+    padding: 12px 5px;
+    border-radius: 12px;
+    color: $thired-color;
+    font-size: 1.125rem;
+    &.active {
+      background-color: $secondary-color;
+      color: $white;
+    }
+  }
+}
+
+.condition-tabs {
+  & .nav-link {
+    padding: 12px 40px;
+    font-size: 1rem;
+  }
+}
+
+.continue {
+  padding: 12px 40px;
+  font-size: 1rem;
+  @include for-tablet-portrait-up {
+  }
+}
+
+.suggestions {
+  background-color: rgba($color: $purple-grey, $alpha: 0.15);
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 8px;
+}

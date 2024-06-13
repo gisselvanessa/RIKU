@@ -1,0 +1,64 @@
+<div class="call-wrp d-flex align-items-center justify-content-center w-100 vh-100 bg-purple flex-column">
+    <div class="caller-img-wrp">
+        <img src="{{callObject.profile_pic}}" width="100%" height="100%" alt="caller-img" *ngIf="callObject?.profile_pic;else noImage">
+        <ng-template #noImage>
+            <img src="assets/images/user.png" width="100%" height="100%" alt="caller-img">
+        </ng-template>
+    </div>
+    <h4 class="caller-name font-30 fw-regular text-white mt-4 mb-2">{{callObject?.first_name}} {{callObject?.last_name}}</h4>
+    <ng-container *ngIf="timerStatus == 1;else second">
+        <p class="font-22 text-white mb-5">{{'Calling' | translate }}...</p>
+    </ng-container>
+    <ng-template #second>
+        <ng-container *ngIf="timerStatus == 2;else third">
+            <p class="font-22 text-white mb-5">{{callTime | date:'HH:mm:ss':'UTC'}}</p>
+        </ng-container>
+    </ng-template>
+    <ng-template #third>
+        <p class="font-22 text-white mb-5 text-center">
+            {{'Call Ended' | translate }}
+            <br>{{callTime | date:'HH:mm:ss':'UTC'}}
+        </p>
+    </ng-template>
+    <!-- <p class="font-22 text-white" >
+        <span>
+        </span>
+    </p> -->
+    <div class="btn-grp d-flex mt-5" *ngIf="!disabledActions">
+        <button  *ngIf="!isMicMute;else muteMic" class="icon-btn bg-white me-4 br-12 d-inline-flex justify-content-center align-items-center" (click)="muteCalls()">
+            <img src="assets/images/call_chat/microphone.svg" width="22px">
+        </button>
+        <ng-template #muteMic>
+            <button class="icon-btn bg-white me-4 br-12 d-inline-flex justify-content-center align-items-center" (click)="unmuteCalls()">
+                <img src="assets/images/call_chat/mute_microphone.svg" width="22px">
+            </button>
+        </ng-template>
+        <ng-container *ngIf="!userService.isFromMobile">
+          <div ngbDropdown #vehicleYear="ngbDropdown" class="doropdown_radio speaker-calling" [autoClose]="'outside'">
+            <button ngbDropdownToggle
+              class="icon-btn bg-white me-4 br-12 d-inline-flex justify-content-center align-items-center dropdown-toggle btn-dropdown"
+              type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="assets/images/call_chat/speacker.svg" width="30px">
+            </button>
+            <ul ngbDropdownMenu class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 p-2 dropdown-scroll"
+              aria-labelledby="vehicle-type">
+
+              <li class="my-2" *ngFor="let speaker of device; let i = index">
+                <a ngbDropdownItem class="dropdown-item px-4 dropdown-car-brand"
+                  [ngClass]="{'active': speaker.deviceId === currentSpeaker}" (click)="setSpeaker(speaker.deviceId)"
+                  href="javascript:void(0)">
+                  Speaker {{i+1}}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <button class="icon-btn bg-white me-4 br-12 d-inline-flex justify-content-center align-items-center"
+            (click)="openContact('seller')">
+            <img src="assets/images/call_chat/chat.svg" width="25px">
+          </button>
+        </ng-container>
+        <button class="icon-btn bg-red br-12 d-inline-flex justify-content-center align-items-center" (click)="disconnectCall()">
+            <img src="assets/images/call_chat/end-call.svg" width="32px">
+        </button>
+    </div>
+</div>

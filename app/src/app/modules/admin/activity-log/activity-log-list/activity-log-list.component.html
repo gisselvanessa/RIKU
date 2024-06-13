@@ -1,0 +1,734 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Activity Log" | translate }}
+        </h3>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <div class="row">
+        <div class="col-xl-9 col-lg-6">
+          <div class="form-group search-grp">
+            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+              "Search" | translate
+            }}</label>
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="searchText"
+                (keyup.enter)="setSearchText(searchText)"
+                placeholder="{{
+                  'Search by User, Username and Email' | translate
+                }}"
+              />
+              <!-- <a
+                  *ngIf="searchText"
+                  (click)="searchText = ''; getFilterVehicleList()"
+                  ><img
+                    src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                    class="search-btn"
+                /></a> -->
+              <img
+                src="../../../../../assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="setSearchText(searchText)">
+                <img
+                  src="../../../../../assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-all-tab"
+                [ngClass]="{ active: selectedTab == 'all_user' }"
+                (click)="selectTab('all_user')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-all"
+                aria-selected="true"
+              >
+                {{ "All Users" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-approval-tab"
+                [ngClass]="{ active: selectedTab == 'staff_member' }"
+                (click)="selectTab('staff_member')"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="Condition-approval"
+                aria-selected="false"
+              >
+                {{ "Staff Member" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--search">
+      <div class="row">
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <input
+              #meetingDate
+              class="form-control input-meeting-date"
+              type="text"
+              placeholder="{{ 'Enter Date' | translate }}"
+              bsDaterangepicker
+              [maxDate]="maxDate"
+              [bsConfig]="{ rangeInputFormat: 'DD/MMM/YYYY' }"
+              [(ngModel)]="selectedDate"
+              (bsValueChange)="getFilterActivityLogList($event)"
+            />
+            <img
+              (click)="meetingDate.click()"
+              src="assets/images/calender.svg"
+              class="input-icon"
+            />
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myOperationTypeDrop="ngbDropdown"
+              class="doropdown_radio dropdown-assets/images"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedOperationType }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{
+                  selectedOperationType
+                    ? (selectedOperationType | translate)
+                    : ("Operation Type" | translate)
+                }}
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let operationTypeData of operationType">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="location"
+                          (change)="
+                            selectValue(
+                              $event,
+                              operationTypeData.type,
+                              'operation_type'
+                            )
+                          "
+                          id="{{ operationTypeData.id }}"
+                          value="{{ operationTypeData.id }}"
+                          [checked]="
+                            operationTypeData.type == selectedOperationType
+                          "
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ operationTypeData.id }}"
+                          >{{ operationTypeData.type | translate }}</label
+                        >
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="
+                      myOperationTypeDrop.close(); getFilterActivityLogList()
+                    "
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myModuleDrop="ngbDropdown"
+              class="doropdown_radio dropdown-assets/images"
+              [autoClose]="'outside'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedModule }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{
+                  selectedModule
+                    ? (selectedModule | translate)
+                    : ("Module" | translate)
+                }}
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let moduleData of module">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="location"
+                          (change)="
+                            selectValue($event, moduleData.name, 'module')
+                          "
+                          id="{{ moduleData.id }}"
+                          value="{{ moduleData.id }}"
+                          [checked]="moduleData.name == selectedModule"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="{{ moduleData.id }}"
+                          >{{ moduleData.name | translate }}</label
+                        >
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myModuleDrop.close(); getFilterActivityLogList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="form-group position-relative">
+            <div
+              ngbDropdown
+              #myUserTypeDrop="ngbDropdown"
+              class="doropdown_radio dropdown-assets/images"
+              [autoClose]="'outside'"
+              *ngIf="selectedTab === 'all_user'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedUserType }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{
+                  selectedUserType
+                    ? (selectedUserType | translate)
+                    : ("User Type" | translate)
+                }}
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let user of userType">
+                  <a
+                    ngbDropdown
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="usertype"
+                          (change)="selectValue($event, user.type, 'user_type')"
+                          id="{{ user.id }}"
+                          value="{{ user.id }}"
+                          [checked]="user.type == selectedUserType"
+                        />
+                        <label class="form-check-label" for="{{ user.id }}">{{
+                          user.type | translate
+                        }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myUserTypeDrop.close(); getFilterActivityLogList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div
+              ngbDropdown
+              #myRoleTypeDrop="ngbDropdown"
+              class="doropdown_radio dropdown-assets/images"
+              [autoClose]="'outside'"
+              *ngIf="selectedTab === 'staff_member'"
+            >
+              <button
+                ngbDropdownToggle
+                class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                [ngClass]="{ 'text-primary': selectedRoleType }"
+                type="button"
+                id="vehicle-type"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {{
+                  selectedRoleType
+                    ? (selectedRoleType | translate)
+                    : ("Role Type" | translate)
+                }}
+              </button>
+              <ul
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+              >
+                <li *ngFor="let role of roleType">
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                  >
+                    <div class="radio-check checkbox-check br-12 me-3">
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="location"
+                          (change)="selectValue($event, role.type, 'role_type')"
+                          id="{{ role.id }}"
+                          value="{{ role.id }}"
+                          [checked]="role.type == selectedRoleType"
+                        />
+                        <label class="form-check-label" for="{{ role.id }}">{{
+                          role.type | translate
+                        }}</label>
+                        <span class="dot-checkmark"></span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item btn primary-btn text-center text-white py-3"
+                    (click)="myRoleTypeDrop.close(); getFilterActivityLogList()"
+                    href="javascript:void(0)"
+                    >{{ "Apply" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vehicle__listing--result seller-listing mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center" *ngIf="searchApplied">
+          <h3 class="text-primary fw-semibold font-28">
+            {{ "Search Results" | translate }}
+          </h3>
+          <a
+            href="javascript:void(0)"
+            (click)="clearAll()"
+            class="ms-4 text-secondary text-underline"
+            >{{ "Clear All Filters" | translate }}</a
+          >
+        </div>
+      </div>
+      <div class="result-pills" *ngIf="searchApplied">
+        <ng-container *ngIf="selectedOperationType">
+          <span class="pill"
+            >{{ selectedOperationType | translate
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="selectedOperationType = null; getFilterActivityLogList()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+        <ng-container *ngFor="let date of selectedDate; let i = index">
+          <span class="pill"
+            >{{ date | date : "dd-MMM-YYYY"
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="selectedDate = []; getFilterActivityLogList()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="searchText">
+          <span class="pill"
+            >{{ searchText
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="searchText = ''; getFilterActivityLogList()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+
+        <span class="pill" *ngIf="selectedModule"
+          >{{ selectedModule | translate }}
+          <a
+            class="ms-3"
+            href="javascript:void(0)"
+            (click)="selectedModule = null; getFilterActivityLogList()"
+            ><img
+              src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+        <ng-container *ngIf="selectedUserType">
+          <span class="pill"
+            >{{ selectedUserType | translate
+            }}<a
+              class="ms-3"
+              href="javascript:void(0)"
+              (click)="selectedUserType = null; getFilterActivityLogList()"
+              ><img
+                src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+                alt=""
+            /></a>
+          </span>
+        </ng-container>
+        <span class="pill" *ngIf="selectedRoleType">
+          {{ selectedRoleType | translate
+          }}<a
+            class="ms-3"
+            href="javascript:void(0)"
+            (click)="selectedRoleType = null; getFilterActivityLogList()"
+            ><img
+              src="../../../../../assets/images/vehicle-list/blue-cross.svg"
+              alt="" /></a
+        ></span>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade"
+            id="Condition-all"
+            [ngClass]="{ 'show active': selectedTab == 'all_user' }"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('created_at')">
+                    <span
+                      >{{ "Date" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th (click)="setSorting('operation_type')">
+                    <span
+                      >{{ "Operation Type" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th>
+                    <span>{{ "Module" | translate }}</span>
+                  </th>
+                  <th (click)="setSorting('roles')">
+                    <span
+                      >{{ "User Type" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th>
+                    <span>{{ "User" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Username" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Action" | translate }}</span>
+                  </th>
+                </thead>
+                <!-- <tbody *ngIf="!modulePermissions.can_list"> -->
+                <!-- <tbody>
+                  <tr class="text-center">
+                    <td colspan="10">You Can't Access to these Data</td>
+                  </tr>
+                </tbody> -->
+                <!-- <tbody *ngIf="modulePermissions.can_list"> -->
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="
+                        activityLogListData?.length > 0;
+                        else noRecordsTemplate
+                      "
+                    >
+                      <tr *ngFor="let logList of activityLogListData">
+                        <td>
+                          {{ logList.date | date : "dd-MMMM-YYYY hh:mm a" }}
+                        </td>
+                        <td>{{ logList.operation_type | titlecase | translate }}</td>
+
+                        {{
+                          logList.module
+                            ? (logList.module.split("_").join(" ") | titlecase | translate)
+                            : "-"
+                        }}
+
+                        <td>
+                          {{
+                            logList.role_type.split("_").join(" ") | titlecase | translate
+                          }}
+                        </td>
+                        <td>{{ logList.user | titlecase }}</td>
+                        <td>{{ logList.email }}</td>
+                        <td data-bs-toggle="tooltip" data-bs-placement="right">
+                          <span [title]="logList.userName | titlecase">
+                            {{ (logList.userName | slice : 0 : 4) + "..." }}
+                          </span>
+                        </td>
+                        <td class="action-class">
+                          <button
+                            class="btn primary-btn px-3 py-2 nowrap br-12"
+                            (click)="updatedDetails(logList.id)"
+                            *ngIf="modulePermissions.can_view_details"
+                          >
+                            {{ "View Details" | translate }}
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="Condition-all"
+            [ngClass]="{ 'show active': selectedTab == 'staff_member' }"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th (click)="setSorting('created_at')">
+                    <span
+                      >{{ "Date" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th (click)="setSorting('operation_type')">
+                    <span
+                      >{{ "Operation Type" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th>
+                    <span>{{ "Module" | translate }}</span>
+                  </th>
+                  <th (click)="setSorting('roles')">
+                    <span
+                      >{{ "Role Type" | translate }}
+                      <img
+                        src="../../../../../assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                    /></span>
+                  </th>
+                  <th>
+                    <span>{{ "User" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Email" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Username" | translate }}</span>
+                  </th>
+                  <th>
+                    <span>{{ "Action" | translate }}</span>
+                  </th>
+                </thead>
+                <!-- <tbody *ngIf="!modulePermissions.can_list"> -->
+                <!-- <tbody>
+                  <tr class="text-center">
+                    <td colspan="10">You Can't Access to these Data</td>
+                  </tr>
+                </tbody> -->
+                <!-- <tbody *ngIf="modulePermissions.can_list"> -->
+                <tbody>
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="
+                        activityLogListData?.length > 0;
+                        else noRecordsTemplate
+                      "
+                    >
+                      <tr *ngFor="let logList of activityLogListData">
+                        <td>
+                          {{ logList.date | date : "dd-MMMM-YYYY hh:mm a" }}
+                        </td>
+                        <td>{{ logList.operation_type | titlecase | translate }}</td>
+                        <td>
+                          {{
+                            logList.module
+                              ? (logList.module.split("_").join(" ")
+                                | titlecase | translate)
+                              : "-"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            ((logList.role_type.split("_").join(" ") | titlecase) | translate)
+                          }}
+                        </td>
+                        <td>{{ logList.user | titlecase }}</td>
+                        <td>{{ logList.email }}</td>
+                        <td data-bs-toggle="tooltip" data-bs-placement="right">
+                          <span [title]="logList.userName | titlecase">
+                            {{ (logList.userName | slice : 0 : 4) + "..." }}
+                          </span>
+                        </td>
+                        <td class="action-class">
+                          <button
+                            class="btn primary-btn px-3 py-2 nowrap br-12"
+                            (click)="updatedDetails(logList.id)"
+                          >
+                            {{ "View Details" | translate }}
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">
+                          {{ "No records found" | translate }}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

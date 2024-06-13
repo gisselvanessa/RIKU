@@ -1,0 +1,1840 @@
+<div class="d-flex justify-content-between w-100 flex-wrap mt-4 mt-xl-0" *ngIf="currentOrder && vehicleProcedureDetail">
+  <h3 class="text-primary plus-jakarta font-24 pb-4 fw-semibold">
+    {{ "Vehicle Procedure" | translate }} <!--  tramite vehicular -->
+  </h3>
+  
+  <!-- <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto">
+    <p class="label in-progress procedure-status d-inline-block d-lg-block"
+      *ngIf="vehicleProcedureDetail.status == 'pending'">
+      {{ "In Progress" | translate }}
+    </p>
+    <p class="label completed procedure-status d-inline-block d-lg-block"
+      *ngIf="vehicleProcedureDetail.status == 'completed'">
+      {{ "Complete" | translate }}
+    </p>
+    <p class="label canceled procedure-status d-inline-block d-lg-block"
+      *ngIf="vehicleProcedureDetail.status == 'cancelled'">
+      {{ "Canceled" | translate }}
+    </p>
+  </div> -->
+</div>
+<div class="bg-white mb-4 shw p-4">
+  <div class="back-to-page section-header d-flex" *ngIf="vehicleProcedureDetail && !currentOrder">
+    <span class="c-pointer" (click)="back()"><img src="assets/images/backarrow.svg" /></span>
+    <div class="w-100 ms-3 d-sm-flex justify-content-between align-items-center">
+      <div class="me-sm-3">
+        <h3 class="font-38 text-primary fw-semibold mb-3">
+          {{ "Vehicle Procedure" | translate }}
+        </h3>
+        <p class="text-primary-light font-14">
+          {{ "VehicleProcedureDescription" | translate }}
+        </p>
+      </div>
+      <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto">
+        <p class="label in-progress procedure-status d-inline-block d-lg-block"
+          *ngIf="vehicleProcedureDetail.status == 'pending'">
+          {{ "In Progress" | translate }}
+        </p>
+        <p class="label completed procedure-status d-inline-block d-lg-block"
+          *ngIf="vehicleProcedureDetail.status == 'completed'">
+          {{ "Complete" | translate }}
+        </p>
+        <p class="label canceled procedure-status d-inline-block d-lg-block"
+          *ngIf="vehicleProcedureDetail.status == 'cancelled'">
+          {{ "Canceled" | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="!loadingProcedureInfo">
+    <div class="procedure-main-wrp">
+      <div class="procedure-box">
+        <div class="row justify-content-between w-100">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed':
+                    vehicleProcedureSteps[
+                      vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                    ]?.is_completed
+                }">1</span>
+              <span class="font-18 fw-semibold">{{ "Request for Documents" | translate }}</span>
+            </h4>
+            <p class="text-secondary font-16" *ngIf="
+                !vehicleProcedureSteps[
+                  vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                ]?.is_completed
+              ">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                vehicleProcedureSteps[
+                  vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                ]?.is_completed
+              ">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[
+                vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                ]?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+          <div class="col-xl-5 col-md-6">
+            <h5 class="text-primary font-16 fw-semibold mb-4">
+              {{ "Documents Required" | translate }}
+            </h5>
+            <div class="check-form">
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input class="form-check-input" type="checkbox" disabled name="request-doc"
+                        id="identification_documents" [checked]="
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('identification_documents')
+                        " />
+                      <label class="form-check-label" for="identification_documents">{{
+                        "Identification documents, certificates of the seller"
+                        | translate
+                        }}</label>
+                        <label class="form-check-label font-13 fw-medium" for="identification_documents">{{
+                          "(if married, include both spouses)"
+                          | translate
+                          }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                    <div class="mx-3">
+                      <ng-container *ngIf="
+                        vehicleProcedureDetail.current_step ==
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                        vehicleProcedureDetail.order.status != 'confirmed' &&
+                        vehicleProcedureDetail.order.status != 'cancelled' &&
+                        vehicleProcedureDetail.order.status != 'rejected' &&
+                        vehicleProcedureDetail.status != 'cancelled'
+                      ">
+                      <input type="file" #requestDocuments (change)="
+                          onFileChange(
+                            $event,
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                            'identification_documents'
+                          )
+                        " class="d-none" accept="image/*, application/pdf" />
+                      <span *ngIf="loading  && loadingLabel =='identification_documents'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                          loading ||
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('identification_documents')
+                        " (click)="requestDocuments.click()">
+                        <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                      </button>
+                    </ng-container>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input class="form-check-input" type="checkbox" disabled name="request-doc"
+                        id="identification_documents_buyer" [checked]="
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('identification_documents_buyer')
+                        " />
+                      <label class="form-check-label" for="identification_documents_buyer">{{
+                        "Identification documents, certificates of the buyer"
+                        | translate
+                        }}</label>
+                        <label class="form-check-label font-13 fw-medium" for="identification_documents_buyer">{{
+                          "(if married, include both spouses)"
+                          | translate
+                          }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                    <div class="mx-3">
+                      <ng-container *ngIf="
+                        vehicleProcedureDetail.current_step ==
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                        vehicleProcedureDetail.order.status != 'confirmed' &&
+                        vehicleProcedureDetail.order.status != 'cancelled' &&
+                        vehicleProcedureDetail.order.status != 'rejected' &&
+                        vehicleProcedureDetail.status != 'cancelled'
+                      ">
+                      <input type="file" #requestDocuments (change)="
+                          onFileChange(
+                            $event,
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                            'identification_documents_buyer'
+                          )
+                        " class="d-none" accept="image/*, application/pdf" />
+                      <span *ngIf="loading  && loadingLabel =='identification_documents_buyer'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                          loading ||
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('identification_documents_buyer')
+                        " (click)="requestDocuments.click()">
+                        <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                      </button>
+                    </ng-container>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="request-doc"
+                      id="unique_vehicle_certificate_ant" value="resignation-policy" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.documents?.includes('unique_vehicle_certificate_ant')
+                      " />
+                    <label class="form-check-label" for="unique_vehicle_certificate_ant">
+                      {{ "Unique vehicle certificate" | translate }}</label>
+                      <label class="form-check-label font-13 fw-medium" for="unique_vehicle_certificate_ant">{{
+                        "(seller)"
+                        | translate
+                        }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                          'unique_vehicle_certificate_ant'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading && loadingLabel =='unique_vehicle_certificate_ant'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.documents?.includes('unique_vehicle_certificate_ant')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between">
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="request-doc" id="copy_of_registration"
+                      [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.documents?.includes('copy_of_registration')
+                      " />
+                    <label class="form-check-label" for="copy_of_registration">{{
+                      "Registration" | translate
+                      }}</label>
+                      <label class="form-check-label font-13 fw-medium" for="copy_of_registration">{{
+                        "(seller)"
+                        | translate
+                        }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                          'copy_of_registration'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading && loadingLabel =='copy_of_registration'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.is_completed
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between">
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="request-doc"
+                      id="commercial_certificate" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.documents?.includes('commercial_certificate')
+                      " />
+                    <label class="form-check-label" for="commercial_certificate">{{ "Commercial certificate" | translate
+                      }}</label>
+                      <label class="form-check-label font-13 fw-medium" for="commercial_certificate">{{
+                        "(Only in case of purchasing with a loan)"
+                        | translate
+                        }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                          'commercial_certificate'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading && loadingLabel =='commercial_certificate'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                        ]?.is_completed
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input class="form-check-input" type="checkbox" disabled name="request-doc"
+                        id="special_power" [checked]="
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('special_power')
+                        " />
+                      <label class="form-check-label" for="special_power">{{
+                        "Special power to manage procedures"
+                        | translate
+                        }}</label>
+                        <label class="form-check-label font-13 fw-medium" for="special_power">{{
+                          "(if required)"
+                          | translate
+                          }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                    <!-- <div class="mx-3">
+                      <ng-container *ngIf="
+                        vehicleProcedureDetail.current_step ==
+                          vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                        vehicleProcedureDetail.order.status != 'confirmed' &&
+                        vehicleProcedureDetail.order.status != 'cancelled' &&
+                        vehicleProcedureDetail.order.status != 'rejected' &&
+                        vehicleProcedureDetail.status != 'cancelled'
+                      ">
+                      <input type="file" #requestDocuments (change)="
+                          onFileChange(
+                            $event,
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                            'special_power'
+                          )
+                        " class="d-none" accept="image/*, application/pdf" />
+                      <span *ngIf="loading  && loadingLabel =='special_power'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                          loading ||
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                          ]?.documents?.includes('special_power')
+                        " (click)="requestDocuments.click()">
+                        <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                      </button>
+                    </ng-container>
+                    </div> -->
+                  </div>
+                  
+                </div>
+              </div>              
+            </div>
+          </div>
+          <div class="col-xl-7 col-md-6 border-left ps-lg-4 ps-xl-5">
+            <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+              <h5 class="text-primary font-16 fw-semibold underline-wrp mb-4 mb-lg-0 d-block">
+                {{ "Uploaded Documents" | translate }}
+              </h5>
+              <!-- <ng-container *ngIf="
+                  vehicleProcedureDetail.current_step ==
+                    vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS &&
+                  vehicleProcedureDetail.order.status != 'confirmed' &&
+                  vehicleProcedureDetail.order.status != 'cancelled' &&
+                  vehicleProcedureDetail.order.status != 'rejected' &&
+                  vehicleProcedureDetail.status != 'cancelled'
+                ">
+                <input type="file" #requestDocuments multiple="multiple" (change)="
+                    onFileChange(
+                      $event,
+                      vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                      5
+                    )
+                  " class="d-none" accept="image/*, application/pdf" />
+                <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button class="upload-doc-btn outline-btn ms-0 ms-lg-3" [disabled]="
+                    loading ||
+                    vehicleProcedureSteps[
+                      vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                    ]?.is_completed
+                  " (click)="requestDocuments.click()">
+                  <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />{{ "Upload Document" | translate }}
+                </button>
+              </ng-container> -->
+            </div>
+            <div class="row" *ngIf="
+                vehicleProcedureDocuments[
+                  vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                ]?.length > 0
+              ">
+              <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                  let item of vehicleProcedureDocuments[
+                    vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                  ];
+                  index as i
+                ">
+                <div class="position-relative">
+                  <div class="uploded-document">
+                    <a [href]="item.url" target="_blank">
+                      <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                      <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                      <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                    </a>
+                  </div>
+                  <span class="delete-doc c-pointer" (click)="
+                      deleteDocument(
+                        item.id,
+                        vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS,
+                        i
+                      )
+                    " *ngIf="
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled' &&
+                      item.is_allowed_to_delete &&
+                      !vehicleProcedureSteps[
+                        vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                      ]?.is_completed
+                    ">&times;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="procedure-box" [ngClass]="{
+          disable:
+            !vehicleProcedureSteps[
+              vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+            ]?.is_completed
+        }">
+        <div class="row justify-content-between">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed':
+                    currentProcedureStepNumber >
+                    procedureStepNumber.CONTRACT_DEVELOPMENT
+                }">2</span>
+              <span class="font-18 fw-semibold">{{ "Contract Development" | translate }}</span>
+            </h4>
+            <p class="text-secondary font-16" *ngIf="
+                !vehicleProcedureSteps[
+                  vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                ]?.is_completed
+              ">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                vehicleProcedureSteps[
+                  vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                ]?.is_completed
+              ">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[
+                vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                ]?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+          <div class="col-xl-5 col-md-6">
+            <h5 class="text-primary font-16 fw-semibold mb-4">
+              {{ "To be held" | translate }}
+            </h5>
+            <div class="check-form">
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between">
+
+                    <div class="form-check form-check-inline check-bg-none">
+                      <input class="form-check-input" type="checkbox" disabled name="contract-doc" id="purchase_contract"
+                        [checked]="
+                          vehicleProcedureSteps[
+                            vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                          ]?.documents?.includes('purchase_contract')
+                        " />
+                      <label class="form-check-label" for="purchase_contract">{{
+                        "Purchase Contract" | translate
+                        }}</label>
+                      <span class="check-checkmark"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="contract-doc"
+                      id="contracts_of_power_to_carry_out_the_vehicle_process" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                        ]?.documents?.includes(
+                          'contracts_of_power_to_carry_out_the_vehicle_process'
+                        )
+                      " />
+                    <label class="form-check-label" for="contracts_of_power_to_carry_out_the_vehicle_process">{{
+                      "Contracts of power to carry out the vehicle process"
+                      | translate
+                      }}</label>
+                      <label class="form-check-label font-13 fw-medium" for="contracts_of_power_to_carry_out_the_vehicle_process">{{
+                        "(Only on vehicles purchased with a loan)"
+                        | translate
+                        }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <!-- <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.CONTRACT_DEVELOPMENT &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.CONTRACT_DEVELOPMENT,
+                          'contracts_of_power_to_carry_out_the_vehicle_process'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='contracts_of_power_to_carry_out_the_vehicle_process'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                        ]?.documents?.includes('contracts_of_power_to_carry_out_the_vehicle_process')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div> -->
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-7 col-md-6 border-left ps-lg-4 ps-xl-5">
+            <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+              <!-- <h5 class="text-primary font-16 fw-semibold underline-wrp mb-4 mb-lg-0 d-block">
+                {{ "Uploaded Documents" | translate }}
+              </h5> -->
+              <!-- <ng-container *ngIf="
+                  vehicleProcedureDetail.current_step ==
+                    vehicleProcedureStepsName.CONTRACT_DEVELOPMENT &&
+                  vehicleProcedureDetail.order.status != 'confirmed' &&
+                  vehicleProcedureDetail.order.status != 'cancelled' &&
+                  vehicleProcedureDetail.order.status != 'rejected' &&
+                  vehicleProcedureDetail.status != 'cancelled'
+                ">
+                <input type="file" #contractDocuments multiple="multiple" (change)="
+                    onFileChange(
+                      $event,
+                      vehicleProcedureStepsName.CONTRACT_DEVELOPMENT,
+                      5
+                    )
+                  " class="d-none" accept="image/*, application/pdf" />
+                <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                  aria-hidden="true"></span><button class="upload-doc-btn outline-btn ms-0 ms-lg-3" [disabled]="
+                    loading ||
+                    !vehicleProcedureSteps[
+                      vehicleProcedureStepsName.REQUEST_FOR_DOCUMENTS
+                    ]?.is_completed ||
+                    vehicleProcedureSteps[
+                      vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                    ]?.is_completed
+                  " (click)="contractDocuments.click()">
+                  <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />{{ "Upload Document" | translate }}
+                </button>
+              </ng-container> -->
+            </div>
+            <div class="row" *ngIf="
+                vehicleProcedureDocuments[
+                  vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                ]?.length > 0
+              ">
+              <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                  let item of vehicleProcedureDocuments[
+                    vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                  ];
+                  index as i
+                ">
+                <div class="position-relative">
+                  <div class="uploded-document">
+                    <a [href]="item.url" target="_blank">
+                      <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                      <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                      <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                    </a>
+                  </div>
+                  <span class="delete-doc c-pointer" (click)="
+                      deleteDocument(
+                        item.id,
+                        vehicleProcedureStepsName.CONTRACT_DEVELOPMENT,
+                        i
+                      )
+                    " *ngIf="
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled' &&
+                      item.is_allowed_to_delete &&
+                      !vehicleProcedureSteps[
+                        vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                      ]?.is_completed
+                    ">&times;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="procedure-box" [ngClass]="{
+          disable:
+            !vehicleProcedureSteps[vehicleProcedureStepsName.CONTRACT_DEVELOPMENT]
+              ?.is_completed
+        }">
+        <div class="row justify-content-between">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed':
+                    currentProcedureStepNumber > procedureStepNumber.NOTARY
+                }">3</span>
+              <span class="font-18 fw-semibold">{{ "Notary" | translate }}</span>
+            </h4>
+            <p class="text-secondary font-16" *ngIf="
+                !vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                  ?.is_completed
+              ">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }} a 2 {{ "Days" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                  ?.is_completed
+              ">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                ?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+          <div class="col-xl-5 col-md-6">
+            <h5 class="text-primary font-16 fw-semibold mb-4 ">
+              {{ "To be held" | translate }}
+            </h5>
+            <div class="check-form">
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="notary-doc"
+                      id="notarization_of_sales_contract" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NOTARY
+                        ]?.documents?.includes('notarization_of_sales_contract')
+                      " />
+                    <label class="form-check-label" for="notarization_of_sales_contract">
+                      {{ "Notarization of sales contract" | translate }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <!-- <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.NOTARY &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.NOTARY,
+                          'notarization_of_sales_contract'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='notarization_of_sales_contract'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NOTARY
+                        ]?.documents?.includes('notarization_of_sales_contract')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div> -->
+                </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="notary-doc"
+                      id="contract_of_power_to_carry_out_the_vehicle_procedure" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NOTARY
+                        ]?.documents?.includes(
+                          'contract_of_power_to_carry_out_the_vehicle_procedure'
+                        )
+                      " />
+                    <label class="form-check-label" for="contract_of_power_to_carry_out_the_vehicle_procedure">{{
+                      "Contracts of power to carry out the vehicle process"
+                      | translate
+                      }}</label>
+                      <label class="form-check-label font-13 fw-medium" for="contract_of_power_to_carry_out_the_vehicle_procedure">{{
+                        "(Only on vehicles purchased with a loan)"
+                        | translate
+                        }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <!-- <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.NOTARY &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.NOTARY,
+                          'contract_of_power_to_carry_out_the_vehicle_procedure'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='contract_of_power_to_carry_out_the_vehicle_procedure'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NOTARY
+                        ]?.documents?.includes('contract_of_power_to_carry_out_the_vehicle_procedure')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div> -->
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-7 col-md-6 border-left ps-lg-4 ps-xl-5">
+            <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+              <!-- <h5 class="text-primary font-16 fw-semibold underline-wrp mb-4 mb-lg-0 d-block">
+                {{ "Uploaded Documents" | translate }}
+              </h5> -->
+              <!-- <ng-container *ngIf="
+                  vehicleProcedureDetail.current_step ==
+                    vehicleProcedureStepsName.NOTARY &&
+                  vehicleProcedureDetail.order.status != 'confirmed' &&
+                  vehicleProcedureDetail.order.status != 'cancelled' &&
+                  vehicleProcedureDetail.order.status != 'rejected' &&
+                  vehicleProcedureDetail.status != 'cancelled'
+                ">
+                <input type="file" #notaryDocuments multiple="multiple" (change)="
+                    onFileChange($event, vehicleProcedureStepsName.NOTARY,6)
+                  " class="d-none" accept="image/*, application/pdf" />
+                <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                  aria-hidden="true"></span><button class="upload-doc-btn outline-btn ms-0 ms-lg-3" [disabled]="
+                    loading ||
+                    vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                      ?.is_completed ||
+                    !vehicleProcedureSteps[
+                      vehicleProcedureStepsName.CONTRACT_DEVELOPMENT
+                    ]?.is_completed
+                  " (click)="notaryDocuments.click()">
+                  <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />{{ "Upload Document" | translate }}
+                </button>
+              </ng-container> -->
+            </div>
+            <div class="row" *ngIf="
+                vehicleProcedureDocuments[vehicleProcedureStepsName.NOTARY]
+                  ?.length > 0
+              ">
+              <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                  let item of vehicleProcedureDocuments[
+                    vehicleProcedureStepsName.NOTARY
+                  ];
+                  index as i
+                ">
+                <div class="position-relative">
+                  <div class="uploded-document">
+                    <a [href]="item.url" target="_blank">
+                      <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                      <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                      <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                    </a>
+                  </div>
+                  <span class="delete-doc c-pointer" (click)="
+                      deleteDocument(item.id, vehicleProcedureStepsName.NOTARY, i)
+                    " *ngIf="
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled' &&
+                      item.is_allowed_to_delete &&
+                      !vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                        ?.is_completed
+                    ">&times;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="procedure-box" [ngClass]="{
+          disable:
+            !vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+              ?.is_completed && !vehicleProcedureDetail.payment_confirmation.id
+        }">
+        <div class="row justify-content-between">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed':
+                    currentProcedureStepNumber >
+                    procedureStepNumber.MONEY_TRANSFER_TO_SELLER
+                }">4</span>
+                  <div class="d-flex justify-content-between align-items-center ">
+
+              <span class="font-18 fw-semibold">{{ "Transfer of money to the seller" | translate }}</span>
+              <!-- <div class="mx-3">
+                <ng-container *ngIf="
+                  vehicleProcedureDetail.current_step ==
+                    vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER &&
+                  vehicleProcedureDetail.order.status != 'confirmed' &&
+                  vehicleProcedureDetail.order.status != 'cancelled' &&
+                  vehicleProcedureDetail.order.status != 'rejected' &&
+                  vehicleProcedureDetail.status != 'cancelled'
+                ">
+                <input type="file" #requestDocuments (change)="
+                    onFileChange(
+                      $event,
+                      vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER,
+                      'money_transfer_to_seller'
+                    )
+                  " class="d-none" accept="image/*, application/pdf" />
+                <span *ngIf="loading  && loadingLabel =='money_transfer_to_seller'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                    loading ||
+                    vehicleProcedureSteps[
+                      vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+                    ]?.documents?.includes('money_transfer_to_seller')
+                  " (click)="requestDocuments.click()">
+                  <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                </button>
+              </ng-container>
+              </div> -->
+            </div>
+            </h4>
+            <p class="text-secondary font-16">
+              {{ "Payment Status" | translate }}
+              <span class="label completed procedure-status font-16 fw-semibold ms-2" *ngIf="vehicleProcedureDetail.payment_confirmation.id">{{ "Paid" | translate
+                }}</span>
+              <span class="label in-progress procedure-status font-16 fw-semibold ms-2" *ngIf="!vehicleProcedureDetail.payment_confirmation.id">{{ "Pending" |
+                translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                !vehicleProcedureSteps[
+                  vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+                ]?.is_completed
+              ">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                vehicleProcedureSteps[
+                  vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+                ]?.is_completed
+              ">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[
+                vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+                ]?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+        </div>
+        <ng-container *ngIf="
+            vehicleProcedureDetail.payment_confirmation.id ||
+            vehicleProcedureDocuments[
+              vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+            ]?.length > 0
+          ">
+          <div>
+            <div class="row">
+              <div class="col-4">
+                <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+                  <h5 class="text-primary-light font-14 underline-wrp mb-4 mb-lg-0 d-block">
+                    {{ "Proof of transfer" | translate }}
+                  </h5>
+                </div>
+                <div class="row">
+                  <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                      let item of vehicleProcedureDocuments[
+                        vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER
+                      ];
+                      index as i
+                    ">
+                    <div class="position-relative">
+                      <div class="uplodedP-document">
+                        <a [href]="item.url" target="_blank">
+                          <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                          <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                          <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-8">
+                <div class="row" *ngIf="vehicleProcedureDetail.payment_confirmation.id">
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label class="text-primary-light font-14 d-block mb-md-2">{{
+                        "Transaction Amount" | translate
+                        }}</label>
+                      <p class="text-secondary font-14 mb-0 fw-medium">
+                        ${{
+                        vehicleProcedureDetail.payment_confirmation.amount
+                        | spanishNumber
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group">
+                      <label class="text-primary-light font-14 d-block mb-md-2">{{
+                        "Date" | translate
+                        }}</label>
+                      <p class="text-secondary font-14 mb-0 fw-medium">
+                        {{
+                        vehicleProcedureDetail.payment_confirmation.date
+                        | date : "dd-MMMM-YYYY"
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4">
+                    <div class="form-group mb-0">
+                      <label class="text-primary-light font-14 d-block mb-md-2">{{
+                        "Time" | translate
+                        }}</label>
+                      <p class="text-secondary font-14 mb-0 fw-medium">
+                        {{ vehicleProcedureDetail.payment_confirmation.time }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="
+                (currentUser == 'seller' || currentUserType == 'dealer') &&
+                vehicleProcedureDetail.payment_confirmation.id &&
+                !vehicleProcedureDetail.payment_confirmation.is_confirmed
+              ">
+              <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+                <h5 class="text-primary font-16 fw-semibold mb-0">
+                  {{
+                  "Payment Confirmation" | translate
+                  }}
+                </h5>
+              </div>
+              <div class="form-group">
+                <div class="col-12">
+                  <button class="btn primary-btn btn-sm br-12 me-3" (click)="confirmPayment(true)">
+                    {{ "Yes, Received" | translate }}
+                  </button>
+                  <button class="btn primary-btn-outline btn-sm" (click)="confirmPayment(false)">
+                    {{ "Not Received" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="procedure-box" [ngClass]="{
+        disable:
+          !vehicleProcedureSteps[vehicleProcedureStepsName.MONEY_TRANSFER_TO_SELLER]?.is_completed || !vehicleProcedureDetail.payment_confirmation.is_confirmed
+      }">
+      <div class="row justify-content-between">
+        <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+          <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+            <span class="step-number" [ngClass]="{
+                'step-completed':
+                  currentProcedureStepNumber >
+                  procedureStepNumber.TAX_PAYMENT_ORDERS
+              }">5</span>
+            <span class="font-18 fw-semibold">{{ "Vehicle tax payment orders" | translate }}</span>
+          </h4>
+          <div>
+            <div style="display:flex; flex-direction: column; justify-content: flex-end; align-items:flex-end;" 
+            *ngIf="
+            !vehicleProcedureSteps[
+              vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+            ]?.is_completed
+          ">
+              <p class="text-secondary font-16" >
+            {{ "Expected Time" | translate }}:<span class="fw-semibold">
+              1 {{ "Day" | translate }} {{ "to" | translate }} 2 {{ "Days" | translate }}</span>
+          </p>
+          <span class="text-primary font-14 fw-medium">{{ "Light Cars" | translate }}</span>
+            </div>
+            <div style="display:flex; flex-direction: column; justify-content: flex-end; align-items:flex-end;" 
+            *ngIf="
+            !vehicleProcedureSteps[
+              vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+            ]?.is_completed
+          ">
+
+              <p class="text-secondary font-16" >
+                {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                  1 {{ "Day" | translate }} {{ "to" | translate }} 30 {{ "Days" | translate }}</span>
+              </p>
+              <span class="text-primary font-14 fw-medium">{{ "Heavy Trucks and Transport" | translate }}</span>
+            </div>
+          </div>
+          <p class="text-secondary font-16" *ngIf="
+              vehicleProcedureSteps[
+                vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+              ]?.is_completed
+            ">
+            {{ "Completion Time" | translate }}:<span class="fw-semibold">
+              {{
+              vehicleProcedureSteps[
+              vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+              ]?.days_to_complete
+              }}</span>
+          </p>
+    
+        </div>
+        <div class="col-xl-5 col-md-6">
+          <h5 class="text-primary font-16 fw-semibold mb-4 ">
+            {{ "To be held" | translate }}
+          </h5>
+          <div class="check-form">
+            <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="tuition_payment" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('tuition_payment')
+                    " />
+                  <label class="form-check-label" for="tuition_payment">{{
+                    "Tution Payment" | translate
+                    }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    vehicleProcedureDetail.payment_confirmation.is_confirmed == true
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'tuition_payment'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='tuition_payment'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('tuition_payment')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="duplicate_registration_payment" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('duplicate_registration_payment')
+                    " />
+                  <label class="form-check-label" for="duplicate_registration_payment">{{
+                    "Duplication registation
+                    payment(original)" | translate
+                    }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled'
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'duplicate_registration_payment'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='duplicate_registration_payment'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('duplicate_registration_payment')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+              </div>
+            </div> -->
+            <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="sri_domain_transfer_payment" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('sri_domain_transfer_payment')
+                    " />
+                  <label class="form-check-label" for="sri_domain_transfer_payment">{{
+                    "SRI domain transfer payment(original)" | translate
+                    }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    vehicleProcedureDetail.payment_confirmation.is_confirmed == true
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'sri_domain_transfer_payment'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='sri_domain_transfer_payment'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('sri_domain_transfer_payment')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="municipal_tax_payments" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('municipal_tax_payments')
+                    " />
+                  <label class="form-check-label" for="municipal_tax_payments">{{ "Municipal tax payments" | translate
+                    }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    vehicleProcedureDetail.payment_confirmation.is_confirmed == true
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'municipal_tax_payments'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='municipal_tax_payments'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('municipal_tax_payments')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="payments_of_fines_and_infractions" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes(
+                        'payments_of_fines_and_infractions'
+                      )
+                    " />
+                  <label class="form-check-label" for="payments_of_fines_and_infractions">{{
+                    "Payments of fines and infractions" | translate
+                    }}</label>
+                    <label class="form-check-label font-13 fw-medium" for="payments_of_fines_and_infractions">{{
+                      "(if they exist)" | translate
+                      }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    vehicleProcedureDetail.payment_confirmation.is_confirmed == true
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'payments_of_fines_and_infractions'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='payments_of_fines_and_infractions'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('payments_of_fines_and_infractions')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="radio-check checkbox-check br-12">
+                <div class="d-flex justify-content-between align-items-center ">
+
+                <div class="form-check form-check-inline check-bg-none">
+                  <input class="form-check-input" type="checkbox" disabled name="tax-payment-orders-doc"
+                    id="request_for_shift_application_of_the_ant" [checked]="
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes(
+                        'request_for_shift_application_of_the_ant'
+                      )
+                    " />
+                  <label class="form-check-label" for="request_for_shift_application_of_the_ant">{{
+                    "Request for shift in the application of the ANT"
+                    | translate
+                    }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+                <div class="mx-3">
+                  <ng-container *ngIf="
+                    vehicleProcedureDetail.current_step ==
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS &&
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    vehicleProcedureDetail.payment_confirmation.is_confirmed == true
+                  ">
+                  <input type="file" #requestDocuments (change)="
+                      onFileChange(
+                        $event,
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                        'request_for_shift_application_of_the_ant'
+                      )
+                    " class="d-none" accept="image/*, application/pdf" />
+                  <span *ngIf="loading  && loadingLabel =='request_for_shift_application_of_the_ant'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                      loading ||
+                      vehicleProcedureSteps[
+                        vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                      ]?.documents?.includes('request_for_shift_application_of_the_ant')
+                    " (click)="requestDocuments.click()">
+                    <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                  </button>
+                </ng-container>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-7 col-md-6 border-left ps-lg-4 ps-xl-5">
+          <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+            <h5 class="text-primary font-16 fw-semibold underline-wrp mb-4 mb-lg-0 d-block">
+              {{ "Uploaded Documents" | translate }}
+            </h5>
+            <!-- <ng-container *ngIf="
+                vehicleProcedureDetail.current_step ==
+                vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+              ">
+              <input type="file" #taxPaymentDocuments multiple="multiple" (change)="
+                  onFileChange(
+                    $event,
+                    vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                    7
+                  )
+                " class="d-none" accept="image/*, application/pdf" />
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                aria-hidden="true"></span><button class="upload-doc-btn outline-btn ms-0 ms-lg-3" [disabled]="
+                  loading ||
+                  vehicleProcedureSteps[
+                    vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                  ]?.is_completed ||
+                  !vehicleProcedureSteps[vehicleProcedureStepsName.NOTARY]
+                    ?.is_completed
+                " (click)="taxPaymentDocuments.click()">
+                <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />{{ "Upload Document" | translate }}
+              </button>
+            </ng-container> -->
+          </div>
+          <div class="row" *ngIf="
+              vehicleProcedureDocuments[
+                vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+              ]?.length > 0
+            ">
+            <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                let item of vehicleProcedureDocuments[
+                  vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                ];
+                index as i
+              ">
+              <div class="position-relative">
+                <div class="uploded-document">
+                  <a [href]="item.url" target="_blank">
+                    <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                    <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                    <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                  </a>
+                </div>
+                <span class="delete-doc c-pointer" (click)="
+                    deleteDocument(
+                      item.id,
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS,
+                      i
+                    )
+                  " *ngIf="
+                    vehicleProcedureDetail.order.status != 'confirmed' &&
+                    vehicleProcedureDetail.order.status != 'cancelled' &&
+                    vehicleProcedureDetail.order.status != 'rejected' &&
+                    vehicleProcedureDetail.status != 'cancelled' &&
+                    item.is_allowed_to_delete &&
+                    !vehicleProcedureSteps[
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                    ]?.is_completed
+                  ">&times;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+      <div class="procedure-box" [ngClass]="{
+          disable:
+            !vehicleProcedureSteps[vehicleProcedureStepsName.NATIONAL_TRANSIT]
+              ?.is_completed &&
+            vehicleProcedureDetail.current_step !=
+              vehicleProcedureStepsName.NATIONAL_TRANSIT
+        }">
+        <div class="row justify-content-between">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed':
+                    currentProcedureStepNumber >
+                    procedureStepNumber.NATIONAL_TRANSIT
+                }">6</span>
+              <span class="font-18 fw-semibold">{{ "National Transit Agency Register" | translate }}</span>
+            </h4>
+            <p class="text-secondary font-16" *ngIf="
+                !vehicleProcedureSteps[vehicleProcedureStepsName.NATIONAL_TRANSIT]
+                  ?.is_completed
+              ">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }} a 4 {{ "Days" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="
+                vehicleProcedureSteps[vehicleProcedureStepsName.NATIONAL_TRANSIT]
+                  ?.is_completed
+              ">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[
+                vehicleProcedureStepsName.NATIONAL_TRANSIT
+                ]?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+          <div class="col-xl-5 col-md-6">
+            <h5 class="text-primary font-16 fw-semibold mb-4 underline-wrp">
+              {{ "To be held" | translate }}
+            </h5>
+            <div class="check-form">
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="national-transit-doc"
+                      id="enabling_and_sales_contract" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('enabling_and_sales_contract')
+                      " />
+                    <label class="form-check-label" for="enabling_and_sales_contract">{{
+                      "Shift generation in ANT" | translate
+                      }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <!-- <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.NATIONAL_TRANSIT &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT,
+                          'enabling_and_sales_contract'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='enabling_and_sales_contract'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('enabling_and_sales_contract')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div> -->
+                </div>
+              </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="national-transit-doc"
+                      id="tax_payments_made" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('tax_payments_made')
+                      " />
+                    <label class="form-check-label" for="tax_payments_made">{{
+                      "Documents delivery" | translate
+                      }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <!-- <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.NATIONAL_TRANSIT &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT,
+                          'tax_payments_made'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='tax_payments_made'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('tax_payments_made')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div> -->
+                </div>
+                </div>
+              </div>
+              <!-- <div class="form-group">
+                <div class="radio-check checkbox-check br-12">
+                  <div class="d-flex justify-content-between align-items-center ">
+
+                  <div class="form-check form-check-inline check-bg-none">
+                    <input class="form-check-input" type="checkbox" disabled name="national-transit-doc"
+                      id="power_of_attorney_contract" [checked]="
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('power_of_attorney_contract')
+                      " />
+                    <label class="form-check-label" for="power_of_attorney_contract">{{
+                      "Proceedings management power of
+                      attorney contract (Original, if it exists)" | translate
+                      }}</label>
+                    <span class="check-checkmark"></span>
+                  </div>
+                  <div class="mx-3">
+                    <ng-container *ngIf="
+                      vehicleProcedureDetail.current_step ==
+                        vehicleProcedureStepsName.NATIONAL_TRANSIT &&
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled'
+                    ">
+                    <input type="file" #requestDocuments (change)="
+                        onFileChange(
+                          $event,
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT,
+                          'power_of_attorney_contract'
+                        )
+                      " class="d-none" accept="image/*, application/pdf" />
+                    <span *ngIf="loading  && loadingLabel =='power_of_attorney_contract'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button class="upload-doc-btn  ms-0 ms-lg-3" [disabled]="
+                        loading ||
+                        vehicleProcedureSteps[
+                          vehicleProcedureStepsName.NATIONAL_TRANSIT
+                        ]?.documents?.includes('power_of_attorney_contract')
+                      " (click)="requestDocuments.click()">
+                      <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />
+                    </button>
+                  </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+          </div>
+          <div class="col-xl-7 col-md-6 border-left ps-lg-4 ps-xl-5">
+            <div class="d-lg-flex align-items-center justify-content-between mb-3 mb-lg-4">
+              <h5 class="text-primary font-16 fw-semibold underline-wrp mb-4 mb-lg-0 d-block">
+                {{ "Uploaded Documents" | translate }}
+              </h5>
+              <!-- <ng-container *ngIf="
+                  vehicleProcedureDetail.current_step ==
+                  vehicleProcedureStepsName.NATIONAL_TRANSIT
+                ">
+                <input type="file" #nationalTransitDocuments multiple="multiple" (change)="
+                    onFileChange(
+                      $event,
+                      vehicleProcedureStepsName.NATIONAL_TRANSIT,
+                      8
+                    )
+                  " class="d-none" accept="image/*, application/pdf" />
+                <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                  aria-hidden="true"></span><button class="upload-doc-btn outline-btn ms-0 ms-lg-3" [disabled]="
+                    loading ||
+                    !vehicleProcedureDetail.payment_confirmation.is_confirmed ||
+                    vehicleProcedureSteps[
+                      vehicleProcedureStepsName.NATIONAL_TRANSIT
+                    ]?.is_completed ||
+                    !vehicleProcedureSteps[
+                      vehicleProcedureStepsName.TAX_PAYMENT_ORDERS
+                    ]?.is_completed
+                  " (click)="nationalTransitDocuments.click()">
+                  <img src="assets/images/upload-icon.svg" width="22px" class="me-3" />{{
+                  "Upload
+                  Document" | translate
+                  }}
+                </button>
+              </ng-container> -->
+            </div>
+            <div class="row" *ngIf="
+                vehicleProcedureDocuments[
+                  vehicleProcedureStepsName.NATIONAL_TRANSIT
+                ]?.length > 0
+              ">
+              <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                  let item of vehicleProcedureDocuments[
+                    vehicleProcedureStepsName.NATIONAL_TRANSIT
+                  ];
+                  index as i
+                ">
+                <div class="position-relative">
+                  <div class="uploded-document">
+                    <a [href]="item.url" target="_blank">
+                      <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                      <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                      <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                    </a>
+                  </div>
+                  <span class="delete-doc c-pointer" (click)="
+                      deleteDocument(
+                        item.id,
+                        vehicleProcedureStepsName.NATIONAL_TRANSIT,
+                        i
+                      )
+                    " *ngIf="
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled' &&
+                      item.is_allowed_to_delete &&
+                      !vehicleProcedureSteps[
+                        vehicleProcedureStepsName.NATIONAL_TRANSIT
+                      ]?.is_completed
+                    ">&times;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="procedure-box mb-0" [ngClass]="{
+          disable:
+            !vehicleProcedureSteps[vehicleProcedureStepsName.NATIONAL_TRANSIT]
+              ?.is_completed
+        }">
+        <div class="row justify-content-between">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-center mb-3 mb-md-4 mb-xl-5">
+            <h4 class="text-secondary font-22 mb-3 mb-md-0 d-flex align-items-center">
+              <span class="step-number" [ngClass]="{
+                  'step-completed': vehicleProcedureDetail.status == 'completed'
+                }">7</span>
+              <span class="font-18 fw-semibold">{{
+                "Delivery of the
+                registration to the client" | translate
+                }}</span>
+            </h4>
+            <p class="text-secondary font-16" *ngIf="vehicleProcedureDetail.status != 'completed'">
+              {{ "Expected Time" | translate }}:<span class="fw-semibold">
+                1 {{ "Day" | translate }}</span>
+            </p>
+            <p class="text-secondary font-16" *ngIf="vehicleProcedureDetail.status == 'completed'">
+              {{ "Completion Time" | translate }}:<span class="fw-semibold">
+                {{
+                vehicleProcedureSteps[
+                vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                ]?.days_to_complete
+                }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="row justify-content-left">
+          <div class="col-sm-12 d-md-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-center">
+              <label class="form-check-label fw-semibold">
+                {{ "Delivery of the registration to the new owner status" | translate }}
+              </label>
+              <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto">
+                <p class="label in-progress font-16 fw-semibold procedure-status d-inline-block d-lg-block"
+                  *ngIf="vehicleProcedureDetail.status !== 'completed'">
+                  {{ "Delivery Due" | translate }}
+                </p>
+                <p class="label completedP font-16 fw-semibold procedure-status d-inline-block d-lg-block"
+                  *ngIf="vehicleProcedureDetail.status === 'completed'">
+                  {{ "Completed" | translate }}
+                </p>
+                <!-- <p class="label in-progress procedure-status d-inline-block d-lg-block"
+                  *ngIf="!vehicleProcedureSteps[
+                  vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                ]?.is_completed">
+                  {{ "Delivery Due" | translate }}
+                </p>
+                <p class="label completedP procedure-status d-inline-block d-lg-block"
+                  *ngIf="vehicleProcedureSteps[
+                  vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                ]?.is_completed">
+                  {{ "Completed" | translate }}
+                </p> -->
+                
+              </div>
+            </div>
+            <br />
+            <div class="row" *ngIf="
+                vehicleProcedureDocuments[
+                  vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                ]?.length > 0
+              ">
+              <div class="document-uploded-wrp mb-3 col-xl-2 col-lg-3 col-md-4 justify-content-center" *ngFor="
+                  let item of vehicleProcedureDocuments[
+                    vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                  ];
+                  index as i
+                ">
+                <div class="position-relative">
+                  <div class="uploded-document">
+                    <a [href]="item.url" target="_blank">
+                      <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url" />
+                      <img *ngIf="getFileType(item.url) == 'pdf'" src="assets/images/pdf_icon.png" />
+                      <img *ngIf="getFileType(item.url) == 'doc'" src="assets/images/doc_icon.png" />
+                    </a>
+                  </div>
+                  <span class="delete-doc c-pointer" (click)="
+                      deleteDocument(
+                        item.id,
+                        vehicleProcedureStepsName.REGISTRATION_DELIVERY,
+                        i
+                      )
+                    " *ngIf="
+                      vehicleProcedureDetail.order.status != 'confirmed' &&
+                      vehicleProcedureDetail.order.status != 'cancelled' &&
+                      vehicleProcedureDetail.order.status != 'rejected' &&
+                      vehicleProcedureDetail.status != 'cancelled' &&
+                      item.is_allowed_to_delete &&
+                      !vehicleProcedureSteps[
+                        vehicleProcedureStepsName.REGISTRATION_DELIVERY
+                      ]?.is_completed
+                    ">&times;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 d-sm-flex">
+      <button class="btn primary-btn-outline btn-sm btn--small me-sm-3" *ngIf="currentOrder" (click)="setPreviousStep()">
+        {{ "Previous" | translate }}
+      </button>
+      <button class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0" *ngIf="
+          (vehicleProcedureDetail.status == 'completed' ||
+            vehicleProcedureDetail.status == 'cancelled') &&
+          currentOrder
+        " (click)="finalizeOrder()">
+        {{ "Finalize Order" | translate }}
+      </button>
+      <button class="btn primary-btn btn-sm btn--small mt-3 mt-sm-0" *ngIf="
+          !vehicleProcedureSteps[vehicleProcedureStepsName.TAX_PAYMENT_ORDERS]
+            ?.is_completed &&
+          vehicleProcedureDetail.status != 'cancelled' &&
+          currentUser == 'buyer'
+        " (click)="cancelVehicleProcedure()">
+        {{
+        "Cancel Vehicle
+        Procedure" | translate
+        }}
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loadingProcedureInfo">
+    <app-loader></app-loader>
+  </ng-container>
+</div>
+

@@ -1,0 +1,170 @@
+<section class="section bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="back-to-page d-flex" [routerLink]="['/admin/roles']">
+        <span class="me-3"><img src="assets/images/backarrow.svg" /></span>
+        <h3 class="font-38 text-primary fw-semibold">
+          {{"Role" | translate }} & {{"Permissions" | translate}} {{"Detail" | translate}}
+        </h3>
+      </div>
+      <div
+        class="switch-wrp d-flex align-items-center pe-3"
+        *ngIf="modulePermissions.can_edit"
+      >
+        <a
+          [routerLink]="['/admin/roles/edit/' + roleId]"
+          routerLinkActive="router-link-active"
+          class="btn"
+        >
+          <img
+            src="assets/images/vehicle-list/pen-purple-icon.svg"
+            class="ms-3"
+          />
+          {{"Edit" | translate}}
+        </a>
+      </div>
+    </div>
+    <div class="admin__user--list pb-5" *ngIf="!loading; else loadingTemplate">
+      <div class="d-flex align-items-center justify-content-between pb-3 mb-4">
+        <h5 class="font-24 text-primary fw-semibold">{{"Role" | translate}}</h5>
+      </div>
+      <div class="bg-white p-4 br-12 mb-4">
+        <div class="row admin_detail-wrp">
+          <div class="col-12">
+            <div class="form-group">
+              <p class="text-primary-light font-20">
+                {{"Created" | translate}}:
+                <span class="text-primary ms-2 font-18 fw-semibold">{{
+                  roleDetail.created_at | date : "MM-dd-YYYY"
+                }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="br-12"></div>
+          <div class="col-lg-6 col-md-6 col-12">
+            <div class="form-group">
+              <label class="text-primary-light font-14 d-block mb-2"
+                >{{"Role Name" | translate}}</label
+              >
+              <p class="text-primary font-18 mb-0 fw-semibold">
+                {{ roleDetail.role_name }}
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-12">
+            <div class="form-group">
+              <label class="text-primary-light font-14 d-block mb-2"
+                >{{"Status" | translate}}</label
+              >
+              <p class="text-primary font-18 mb-0 fw-semibold">
+                {{ roleDetail.is_active ? ("Active" | translate) : ("Inactive"|translate) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h5 class="font-24 text-primary fw-semibold pb-3 mb-4">{{"Permissions" | translate}}</h5>
+      <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+        <table class="table mb-0 p-1">
+          <thead>
+            <th>{{"Module" | translate}}</th>
+            <th>{{"Listing" | translate}}</th>
+            <th>{{"Detail" | translate}}</th>
+            <th>{{"Create" | translate}}</th>
+            <th>{{"Edit" | translate}}</th>
+            <th>{{"Delete" | translate}}</th>
+            <th>{{"Export" | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let permission of permissions; index as i">
+              <td>{{ permission.module_display_name | translate}}</td>
+              <td *ngFor="let name of permission_names; index as i">
+                <div class="form-group new-check my-0">
+                  <input
+                    type="checkbox"
+                    disabled
+                    [checked]="permission.module_permissions[name]"
+                  />
+                  <label
+                    for="{{ permission.module_name + '_' + name }}"
+                  ></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h5 class="font-24 text-primary fw-semibold pb-3 mt-5 pt-5 mb-4">
+        {{"Team members assigned with this role" | translate}}
+      </h5>
+      <div
+        class="table-responsive admin--listing-table bg-white br-12 p-3"
+        *ngIf="!membersLoading; else loadingTemplate"
+      >
+        <table class="table mb-0 p-1">
+          <thead>
+            <tr>
+              <th>{{"Sr. No." | translate}}</th>
+              <th (click)="setSorting('FIRST_NAME')">
+                {{"Name" | translate}}<img
+                  src="assets/images/vehicle-list/sorting-arrow.svg"
+                  class="ms-2"
+                />
+              </th>
+              <th (click)="setSorting('LAST_NAME')">
+                {{"Surname" | translate}}<img
+                  src="assets/images/vehicle-list/sorting-arrow.svg"
+                  class="ms-2"
+                />
+              </th>
+              <th>{{"Email" | translate}}</th>
+              <th>{{"Mobile Number" | translate}}</th>
+              <th>{{"Actions" | translate}}</th>
+            </tr>
+          </thead>
+          <tbody
+            *ngIf="teamMembers.length > 0 && !loading; else noRecordsTemplate"
+          >
+            <tr *ngFor="let teamMember of teamMembers; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>
+                {{ teamMember.first_name | titlecase }}
+              </td>
+              <td>
+                {{ teamMember.last_name | titlecase }}
+              </td>
+              <td>
+                {{ teamMember.email }}
+              </td>
+              <td>{{ teamMember.country_code }} {{ teamMember.mobile_no }}</td>
+              <td>
+                <a
+                  routerLink="/admin/team-members/team-member-details/{{
+                    teamMember.user_id
+                  }}"
+                  ><img src="assets/images/eye-open.svg"
+                /></a>
+              </td>
+            </tr>
+          </tbody>
+          <ng-template #noRecordsTemplate>
+            <tbody>
+              {{"No records found" | translate}}
+            </tbody>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+    <ng-template #loadingTemplate>
+      <h3 class="font-26 text-primary fw-semibold text-center p-5 m-2">
+        <span
+          class="spinner-border text-primary"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </h3>
+    </ng-template>
+  </div>
+</section>

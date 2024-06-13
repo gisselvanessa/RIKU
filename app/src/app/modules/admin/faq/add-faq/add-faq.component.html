@@ -1,0 +1,74 @@
+<section class="section admin_add__user bg-blue">
+    <div class="jakay-container admin-container">
+        <div class="row justify-content-between">
+            <div class="col-xl-3 col-lg-6">
+            <div class="section-header">
+                <div class="back-to-page d-flex">
+                <span (click)="back()"><img src="assets/images/backarrow.svg" style="cursor: pointer" /></span>
+                <h3 class="font-38 text-primary ms-4 fw-semibold">
+                    {{"Add FQA" | translate}}
+                </h3>
+                </div>
+            </div>
+            </div>
+        </div>
+        <form [formGroup]="faqForm">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="form-group">
+                            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Question" | translate}}</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="{{'Enter Question' | translate}}"
+                                formControlName="question"
+                                [ngClass]="{'is-invalid':
+                                    isFormSubmitted &&
+                                    faqForm.invalid &&
+                                    faqFormControls.question.invalid
+                                }"/>
+                            <div *ngIf="isFormSubmitted &&
+                                faqFormControls.question.invalid &&
+                                faqFormControls.question.errors"
+                            >
+                                <small class="text-danger" *ngIf="faqFormControls.question.errors?.required">
+                                    {{"Question is required" | translate}}.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-9">
+                        <div class="form-group position-relative">
+                            <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Answer" | translate}}</label>
+                            <textarea class="form-control" formControlName="answer" placeholder="{{'Enter Answer' | translate}}"
+                            [ngClass]="{
+                            'is-invalid':
+                                isFormSubmitted &&
+                                faqForm.invalid &&
+                                faqFormControls.answer.invalid
+                            }"></textarea>
+
+                            <div *ngIf="
+                                isFormSubmitted &&
+                                faqFormControls.answer.invalid &&
+                                faqFormControls.answer.errors
+                                ">
+                            <small class="text-danger" *ngIf="faqFormControls.answer.errors?.required">
+                                {{"Answer is required" | translate}}
+                            </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex flex-wrap">
+                <button class="btn primary-btn me-3 mb-2 border-1" type="submit" (click)="submitFaq()">
+                    {{"Submit" | translate}}
+                </button>
+                <a [routerLink]="['/admin/faq']" class="btn primary-btn-outline mb-2">{{"Cancel" | translate}}</a>
+            </div>
+        </form>
+    </div>
+  </section>

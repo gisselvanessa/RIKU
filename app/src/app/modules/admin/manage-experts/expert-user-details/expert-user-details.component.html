@@ -1,0 +1,223 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container admin-container">
+    <div class="back-to-page d-flex">
+      <span>
+        <a href="javascript:void(0)" (click)="goback()"
+          ><img src="assets/images/backarrow.svg" /></a
+      ></span>
+      <div
+        class="d-flex section-header justify-content-between w-100 align-items-center"
+      >
+        <h3 class="ms-3 font-38 text-primary fw-semibold">
+          {{"Expert User Details" | translate}}
+        </h3>
+        <div class="d-flex">
+          <button
+            *ngIf="modulePermissions.can_edit"
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{"Edit" | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="admin_user-detail">
+      <div class="row justify-content-between">
+        <div class="col-xl-2 col-lg-4 text-center">
+          <div class="add__user-img mb-4 mb-lg-0">
+            <div class="admin__add-img">
+              <img
+                [src]="
+                  expertUserDetails.profile_img_url
+                    ? expertUserDetails.profile_img_url
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s'
+                "
+                alt="admin-img"
+              />
+            </div>
+          </div>
+          <!-- <div
+            class="add__user-img mb-4 mb-lg-0"
+          >
+            <div class="admin__add-img">
+
+            </div>
+          </div> -->
+        </div>
+
+        <div class="col-xl-9 col-lg-6">
+          <div class="bg-white p-4 br-12">
+            <div class="row admin_detail-wrp">
+              <div class="col-12">
+                <div class="form-group">
+                  <p class="text-primary-light font-20">
+                    {{"Created Date" | translate}}:
+                    <span class="text-secondary ms-2 font-18">
+                      {{
+                        expertUserDetails.created_at | date : "MM-dd-YYYY"
+                      }}</span
+                    >
+                  </p>
+                  <hr />
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"ID Number" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.id.slice(0, 6) | uppercase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Name" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.first_name | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Surname" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.last_name | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Gender" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.gender | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Expert License" | translate}}</label
+                  >
+                  <p class="text-primary text-break font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.expert_code }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Email ID" | translate}}</label
+                  >
+                  <p class="text-primary text-break font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.email }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Mobile Number" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ expertUserDetails.country_code }}
+                    {{ expertUserDetails.mobile_no }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12" *ngIf="expertUserDetails.address != null">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Address" | translate}}</label
+                  >
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{
+                      expertUserDetails.address.parish
+                        ? expertUserDetails.address.parish + ", "
+                        : ""
+                    }}
+                    {{
+                      expertUserDetails.address.city
+                        ? expertUserDetails.address.city + ", "
+                        : ""
+                    }}
+                    {{
+                      expertUserDetails.address.province
+                        ? expertUserDetails.address.province
+                        : ""
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2"
+                    >{{"Documents" | translate}}</label
+                  >
+                  <div class="d-flex" *ngIf="expertUserDetails.documents.length > 0">
+                    <div  class="me-4" *ngFor="let doc of expertUserDetails.documents">
+                      <p
+                        class="vehicle-img-wrp mb-0 text-primary-light font-12"
+                      >
+                        <ng-container *ngIf="getFileType(doc) == 'image'">
+                          <a href="{{ doc }}" target="_blank"
+                            ><img
+                              class="br-12"
+                              style="
+                                top: 792px;
+                                left: 873px;
+                                width: 68px;
+                                height: 68px;
+                                border-radius: 12px;
+                                opacity: 1;
+                              "
+                              [src]="doc"
+                          /></a>
+                        </ng-container>
+                        <ng-container *ngIf="getFileType(doc) == 'pdf'">
+                          <a href="{{ doc }}" target="_blank"
+                            ><img
+                              class="br-12"
+                              src="assets/images/pdf_icon.png"
+                          /></a>
+                        </ng-container>
+                        <ng-container *ngIf="getFileType(doc) == 'doc'">
+                          <a href="{{ doc }}" target="_blank"
+                            ><img
+                              class="br-12"
+                              src="assets/images/doc_icon.png"
+                          /></a>
+                        </ng-container>
+                      </p>
+                    </div>
+                  </div>
+                  <div *ngIf="expertUserDetails?.documents?.length === 0">
+                    <p
+                      class="vehicle-img-wrp mb-0 text-primary-light font-12 ms-5"
+                    >
+                      {{"No Documents Uploaded" | translate}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,231 @@
+<article>
+  <section>
+    <div class="landing__about position-relative">
+      <div class="landing__about-desc">
+        <div class="jakay-container">
+          <div class="row py-5 py-md-4 py-lg-0">
+            <div class="col-lg-6 col-md-10">
+              <h2 class="font-60 fw-semibold text-white mb-3 mb-md-4 mb-lg-5">
+                {{
+                aboutUsPageDetails?.header?.title
+                ? (aboutUsPageDetails?.header?.title )
+                : "-"
+                }}
+              </h2>
+              <p class="font-24 align-justify fw-regular pe-lg-5 me-2">
+                {{
+                aboutUsPageDetails?.header?.sub_title
+                ? (aboutUsPageDetails?.header?.sub_title )
+                : "-"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-p-100">
+    <div class="jakay-container">
+      <div class="mission-vission-wrp mt-3">
+        <span class="text-secondary pb-2 mb-4 heading-border-bottom font-24 position-relative d-inline-block">{{
+          aboutUsPageDetails.text.mission.title
+          ? (aboutUsPageDetails.text.mission.title )
+          : "-"
+          }}</span>
+        <p class="text-purple-2 align-justify font-16 fw-regular">
+          {{
+          aboutUsPageDetails.text.mission.sub_title
+          ? (aboutUsPageDetails.text.mission.sub_title )
+          : "-"
+          }}
+        </p>
+      </div>
+      <div class="mission-vission-wrp mt-3">
+        <span class="text-secondary pb-2 mb-4 heading-border-bottom font-24 position-relative d-inline-block">{{
+          aboutUsPageDetails.text.vision.title
+          ? (aboutUsPageDetails.text.vision.title )
+          : "-"
+          }}</span>
+        <p class="text-purple-2 align-justify font-16 fw-regular">
+          {{
+          aboutUsPageDetails.text.vision.sub_title
+          ? (aboutUsPageDetails.text.vision.sub_title )
+          : "-"
+          }}
+        </p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="jakay-container">
+      <div class="landing__process-heading mt-4">
+        <div class="row text-center justify-content-center pt-4">
+          <div class="col-xl-8 col-lg-10 col-md-12 px-xl-4">
+            <h2 class="font-60 fw-semibold text-primary mb-3">
+              {{
+              aboutUsPageDetails?.process?.title
+              ? (aboutUsPageDetails?.process?.title )
+              : "-"
+              }}
+            </h2>
+            <p class="font-20 fw-regular align-justify text-primary-light mt-2">
+              {{
+              aboutUsPageDetails?.process?.sub_title
+              ? (aboutUsPageDetails?.process?.sub_title )
+              : "-"
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="buy-or-sell-heading pt-5 text-center">
+          <span
+            class="font-38 fw-semibold text-secondary position-relative d-inline-block heading-border-bottom pb-2">{{
+            'To Buy' | translate }}</span>
+        </div>
+      </div>
+      <div class="landing__process-detail-wrp">
+        <div class="row mb-5 mb-lg-4 align-items-center justify-content-center" *ngFor="
+            let process of aboutUsPageDetails?.process?.to_buy;
+            let i = index
+          ">
+          <div class="col-lg-6 col-10" [ngClass]="{ 'order-lg-2': i % 2 != 0 }">
+            <div class="pe-md-4 with-border-image text-center" [ngClass]="i % 2 != 0 ? 'right-side' : 'left-side'">
+              <img [src]="process?.icon?.download_url" width="100%" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="overview-detail px-4">
+              <span class="font-48 text-orange pb-1 mb-4 heading-border-bottom d-block w-100">0{{ process?.order
+                }}</span>
+              <h2 class="font-34 fw-semibold text-primary pt-2 pb-2 mb-3">
+                {{ process?.title ? (process?.title ) : "-" }}
+              </h2>
+              <p class="font-20 fw-regular align-justify text-primary-light">
+                {{
+                process?.sub_title ? (process?.sub_title ) : "-"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="landing__process-heading mt-4">
+        <div class="buy-or-sell-heading pt-5 text-center">
+          <span
+            class="font-38 fw-semibold text-secondary position-relative d-inline-block heading-border-bottom pb-2">{{
+            'To Sell' | translate }}</span>
+        </div>
+      </div>
+      <div class="landing__process-detail-wrp">
+        <div class="row mb-5 mb-lg-4 align-items-center justify-content-center" *ngFor="
+            let process of aboutUsPageDetails?.process?.to_sell;
+            let i = index
+          ">
+          <div class="col-lg-6 col-10" [ngClass]="{ 'order-lg-2': i % 2 != 0 }">
+            <div class="pe-md-4 with-border-image text-center" [ngClass]="i % 2 != 0 ? 'right-side' : 'left-side'">
+              <img [src]="process?.icon?.download_url" width="100%" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="overview-detail px-4">
+              <span class="font-48 text-orange pb-1 mb-4 heading-border-bottom d-block w-100">0{{ process?.order
+                }}</span>
+              <h2 class="font-34 fw-semibold text-primary pt-2 pb-2 mb-3">
+                {{ process?.title ? (process?.title ) : "-" }}
+              </h2>
+              <p class="font-20 fw-regular align-justify text-primary-light">
+                {{
+                process?.sub_title ? (process?.sub_title ) : "-"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section-p-100">
+    <div class="landing__loan position-relative">
+      <!-- <div class="landing__loan-bg">
+          <img src="././assets/images/lending/loan.png" width="100%">
+        </div> -->
+      <div class="landing__about-desc landing__loan-desc w-100">
+        <div class="jakay-container">
+          <div class="row justify-content-center">
+            <div class="text-center">
+              <h2 class="font-60 fw-semibold text-white mb-3 mb-md-4">
+                {{
+                aboutUsPageDetails?.eligibility?.title
+                ? (aboutUsPageDetails?.eligibility?.title )
+                : "-"
+                }}
+              </h2>
+              <p class="font-24 align-justify fw-regular mb-5">
+                {{
+                aboutUsPageDetails?.eligibility?.sub_title
+                ? (aboutUsPageDetails?.eligibility?.sub_title )
+                : "-"
+                }}
+              </p>
+              <button disabled class="btn btn-orange font-16 fw-regular btn-sm">
+                {{
+                aboutUsPageDetails?.eligibility?.button_text
+                ? (aboutUsPageDetails?.eligibility?.button_text )
+                : "-"
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="landing__provide py-4">
+      <div class="jakay-container">
+        <div class="row text-center justify-content-center pt-4">
+          <div class="col-xl-8 col-lg-10 col-md-12 px-xl-4">
+            <h2 class="font-60 fw-semibold text-primary mb-3">
+              {{
+              aboutUsPageDetails.services.title
+              ? (aboutUsPageDetails.services.title )
+              : "-"
+              }}
+            </h2>
+            <p class="font-20 align-justify fw-regular text-primary-light mt-2">
+              {{
+              aboutUsPageDetails.services.sub_title
+              ? (aboutUsPageDetails.services.sub_title )
+              : "-"
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="row  pt-5 landing__about-fetures">
+          <div class="col-md-6 col-xl-4 col-12" *ngFor="
+                        let service of aboutUsPageDetails?.services?.services;
+                        let i = index
+                      ">
+            <div class="landing__card mb-4">
+              <div class="landing__card-body">
+                <p class="feature-count font-24 text-white mb-4">
+                   {{ service.order ? service.order : i }}
+                </p>
+                <h4 class="font-24 text-center fw-semibold mb-3 pb-2 text-primary">
+                  {{ service.title ? (service.title ) : "-" }}
+                </h4>
+                <p class="font-16 align-justify fw-regular text-primary-light">
+                  {{
+                  service.sub_title ? (service.sub_title ) : "-"
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>

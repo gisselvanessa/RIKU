@@ -1,0 +1,452 @@
+<div class="mt-4 mt-xl-0" [ngClass]="hideClass ? 'jakay-container' : ''">
+  <div class="row justify-content-between">
+    <!-- <h3 class="text-primary font-24 pb-4 fw-semibold">
+      {{ "Summary" | translate }}
+    </h3> -->
+    <ng-container *ngIf="!loading; else loader">
+      <div class="col-sm-12" *ngIf="summaryDetails">
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="bg-white p-3 p-md-4 br-12 mb-3 shw-card-2 sm-card">
+              <h3 class="font-20 fw-semibold text-primary mb-3 mb-md-4">
+                {{ "Selected Service" | translate }}
+              </h3>
+              <ng-container>
+                <h3 class="font-16 text-primary">
+                  {{
+                    (summaryDetails.package_details
+                      ? summaryDetails.package_details.package_name 
+                      : "-"
+                    ) | translate
+                  }}
+                </h3>                
+              </ng-container>
+            </div>
+
+            <div class="bg-white p-3 p-md-4 br-12 mb-3 shw-card-2">
+              <h3 class="text-primary font-20 mb-4 fw-semibold">
+                {{ "Vehicle Information" | translate }}
+              </h3>
+              <div class="row">
+                <div class="col-sm-6 col-xl-4 mb-4">
+                  <div class="speciffication__wrapper--box d-flex align-items-center">
+                    <div class="specifications__wrapper--img">
+                      <img
+                        src="assets/images/tag.svg"
+                        alt="tag"
+                        width="40px"
+                        height="100%"
+                      />
+                    </div>
+                    <div class="specifications__wrapper--text ms-3">
+                      <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                        "Make" | translate
+                      }}</label>
+                      <p class="text-purple font-18 mb-0 fw-bold">
+                        {{
+                          summaryDetails.vehicle_information
+                            ? summaryDetails.vehicle_information.make
+                            : "-"
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-4">
+                  <div class="speciffication__wrapper--box d-flex align-items-center">
+                    <div class="specifications__wrapper--img">
+                      <img
+                        src="assets/images/car.svg"
+                        alt="car"
+                        width="40px"
+                        height="100%"
+                      />
+                    </div>
+                    <div class="specifications__wrapper--text ms-3">
+                      <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                        "Model" | translate
+                      }}</label>
+                      <p class="text-purple font-18 mb-0 fw-bold">
+                        {{
+                          summaryDetails.vehicle_information
+                            ? summaryDetails.vehicle_information.model
+                            : "-"
+                        }}
+                      </p>
+                  </div>
+                </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-4">
+                  <div class="speciffication__wrapper--box d-flex align-items-center">
+                    <div class="specifications__wrapper--img">
+                      <img
+                        src="assets/images/view_vehicle/calendar.png"
+                        alt="calendar"
+                        width="40px"
+                        height="100%"
+                      />
+                    </div>
+                    <div class="specifications__wrapper--text ms-3">
+                    <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                      "Year" | translate
+                    }}</label>
+                    <p class="text-purple font-18 mb-0 fw-bold">
+                      {{
+                        summaryDetails.vehicle_information
+                          ? summaryDetails.vehicle_information.year
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+                <div
+                  class="col-sm-6 col-xl-4 mb-4"
+                  *ngIf="
+                    summaryDetails?.vehicle_information?.is_insider == true
+                  "
+                >
+                <div class="speciffication__wrapper--box d-flex align-items-center">
+                  <div class="specifications__wrapper--img">
+                    <img
+                      src="assets/images/view_vehicle/car.svg"
+                      alt="car"
+                      width="40px"
+                      height="100%"
+                    />
+                  </div>
+                  <div class="specifications__wrapper--text ms-3">
+                    <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                      "Body Type" | translate
+                    }}</label>
+                    <p class="text-purple font-18 mb-0 fw-bold">
+                      {{
+                        summaryDetails.vehicle_information
+                          ? summaryDetails.vehicle_information.body_type
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                </div>
+                <div class="col-sm-6 col-xl-4 mb-4">
+                  <div class="speciffication__wrapper--box d-flex align-items-center">
+                    <div class="specifications__wrapper--img">
+                      <img
+                        src="assets/images/plate.svg"
+                        alt="gear"
+                        width="40px"
+                        height="100%"
+                      />
+                    </div>
+                    <div class="specifications__wrapper--text ms-3">
+                    <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                      "Number Plate" | translate
+                    }}</label>
+                    <p class="text-purple font-18 mb-0 fw-bold">
+                      {{
+                        summaryDetails.vehicle_information
+                          ? summaryDetails.vehicle_information.number_plate
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                </div>
+                <div
+                  class="col-sm-6 col-xl-4 mb-4"
+                  *ngIf="
+                    summaryDetails?.vehicle_information?.is_insider == true
+                  "
+                >
+                <div class="speciffication__wrapper--box d-flex align-items-center">
+                  <div class="specifications__wrapper--img">
+                    <img
+                      src="assets/images/moneybag.svg"
+                      alt="fuel"
+                      width="40px"
+                      height="100%"
+                    />
+                  </div>
+                  <div class="specifications__wrapper--text ms-3">
+                    <label class="text-primary fw-medium font-16 d-block mb-2"
+                      >{{ "Price" | translate }} $</label
+                    >
+                    <p class="text-purple font-18 mb-0 fw-bold">
+                      ${{
+                        summaryDetails.vehicle_information
+                          ? (summaryDetails.vehicle_information.price
+                            | spanishNumber)
+                          : "-"
+                      }}
+                    </p>
+                  </div>
+                </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                      "Vehicle Source" | translate
+                    }}</label>
+                    <p
+                      class="text-purple font-18 mb-0 fw-bold"
+                      *ngIf="
+                        summaryDetails?.order_id ||
+                        summaryDetails?.vehicle_information?.is_insider == true
+                      "
+                    >
+                      {{ "Riku Insider" | translate }}
+                    </p>
+                    <p
+                      class="text-primary font-18 mb-0 fw-semibold"
+                      *ngIf="
+                        !summaryDetails?.order_id &&
+                        summaryDetails?.vehicle_information?.is_insider == false
+                      "
+                    >
+                      {{ "Outsider" | translate }}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-lg-12 col-md-12 col-12"
+                  *ngIf="
+                    summaryDetails?.vehicle_information?.is_insider == true
+                  "
+                >
+                  <div class="form-group mb-0">
+                    <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                      "Images" | translate
+                    }}</label>
+                    <div class="scroll-container">
+                      <div
+                        class="vehicle-image-wrp me-3 me-xl-4 mb-2"
+                        *ngFor="
+                          let image of summaryDetails?.vehicle_information
+                            ?.images
+                        "
+                      >
+                        <img [src]="image" width="100%" height="100%" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-3 p-md-4 br-12 mb-3 pb-3 shw-card-2">
+              <h3 class="text-primary font-20 mb-4 fw-semibold">
+                {{ "Contact Information" | translate }}
+              </h3>
+              <div class="row">
+                <div class="col-sm-6 col-xl-6">
+                  <div class="form-group">
+                    <label class="text-primary font-15 d-block mb-2">{{
+                      "Full Name" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-16 mb-0 fw-medium"
+                      *ngIf="summaryDetails.contact_info"
+                    >
+                      {{ summaryDetails.contact_info.full_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-6">
+                  <div class="form-group">
+                    <label class="text-primary font-15 d-block mb-2">{{
+                      "Cedula ID" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-16 mb-0 fw-medium"
+                      *ngIf="summaryDetails.contact_info"
+                    >
+                      {{ summaryDetails.contact_info.cadula_id }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="text-primary font-15 d-block mb-2">{{
+                      "Email" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-16 font-md-18 mb-0 fw-medium"
+                      *ngIf="summaryDetails.contact_info"
+                    >
+                      {{ summaryDetails.contact_info.email }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-6">
+                  <div class="form-group">
+                    <label class="text-primary font-15 d-block mb-2">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-16 mb-0 fw-medium"
+                      *ngIf="summaryDetails.contact_info"
+                    >
+                      {{ summaryDetails.contact_info.country_code }}
+                      {{
+                        summaryDetails.contact_info.mobile_no.replace(
+                          summaryDetails.contact_info.country_code,
+                          ""
+                        )
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="text-primary font-15 d-block mb-2">{{
+                      "Address" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-16 font-md-18 mb-0 fw-medium"
+                      *ngIf="summaryDetails.contact_info.location"
+                    >
+                      {{ summaryDetails.contact_info.location.address }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="bg-white p-3 p-md-4 br-12 mb-3 pb-3 shw-card-2 sm-card">
+              <h3 class="font-20 fw-semibold text-primary mb-4">
+                {{ "Selected Payment Method" | translate }}
+              </h3>
+              <ng-container>
+                <div class="row justify-content-between">
+                  <div
+                    class="col-sm-6 col-xl-6 mb-3 mb-sm-0"
+                    *ngIf="summaryDetails.payment"
+                  >
+                    <label
+                      class="text-primary font-15 fw-medium"
+                      *ngIf="summaryDetails.payment.method == 'cash'"
+                      ><img
+                        class="me-1"
+                        data-cash
+                        src="assets/images/cash-blue.svg"
+                        alt="cash"
+                      />
+                      {{ "Transfer or Deposit" | translate }}</label
+                    >
+                    <label
+                      class="text-secondary"
+                      *ngIf="summaryDetails.payment.method == 'bank'"
+                      ><img
+                        class="me-1"
+                        data-cash
+                        src="assets/images/bank-blue.svg"
+                        alt="bank"
+                      />
+                      {{ "Bank Transfer" | translate }}</label
+                    >
+                    <label
+                      class="text-secondary"
+                      *ngIf="summaryDetails.payment.method == 'card'"
+                      ><img
+                        class="me-1"
+                        data-cash
+                        src="assets/images/card-blue.svg"
+                        alt="card"
+                      />
+                      {{ "Card" | translate }}</label
+                    >
+                  </div>
+                  <div class="col-sm-6 col-xl-4">
+                    <span class="text-primary font-16 me-2 mb-2 fw-medium"
+                      >{{ "Amount" | translate }}:</span
+                    >
+                    <label class="text-secondary"
+                      >${{
+                        summaryDetails.package_details.package_price | spanishNumber
+                      }}</label
+                    >
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            
+            <!-- Expert Information -->
+            <div class="bg-white p-3 p-md-4 br-12 mb-3 pb-3 shw-card-2">
+              <h3 class="text-primary font-20 mb-4 fw-semibold">
+                {{ "Expert Information" | translate }}
+              </h3>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group mb-3 mb-md-4">
+                    <label
+                      class="text-primary font-15 d-block mb-1 mb-md-2"
+                      >{{ "Expert Appraiser" | translate }}</label
+                    >
+                    <p
+                      class="text-primary font-16 mb-0 fw-semibold"
+                      *ngIf="summaryDetails.expert_information"
+                    >
+                      {{
+                        (summaryDetails.expert_information.first_name | titlecase) +
+                          " " +
+                          (summaryDetails.expert_information.last_name | titlecase)
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group mb-0">
+                    <label
+                      class="text-primary font-15 d-block mb-1 mb-md-2"
+                      >{{ "Location" | translate }}</label
+                    >
+                    <p class="text-primary font-16 mb-0 fw-semibold">
+                      {{
+                        summaryDetails.expert_information.location.city
+                          | uppercase
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 d-sm-flex">
+        <button
+          type="sumbit"
+          *ngIf="!currentExpertReview.order_id"
+          class="btn px-3 primary-btn btn-sm btn--small border-1 me-sm-3"
+          (click)="goBackTo()"
+        >
+          {{ "Back to Listing" | translate }}
+        </button>
+
+        <button
+          type="sumbit"
+          *ngIf="currentExpertReview.order_id"
+          class="btn px-3 primary-btn-outline btn-sm btn--small border-1 me-sm-3"
+          (click)="goBackTo()"
+        >
+          {{ "Back To My Order Details" | translate }}
+        </button>
+
+        <button
+          type="sumbit"
+          *ngIf="currentExpertReview.order_id"
+          class="btn px-3 primary-btn btn-sm btn--small border-1"
+          (click)="goToNextStep()"
+        >
+          {{ "Continue Process" | translate }}
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #loader>
+      <app-loader></app-loader>
+    </ng-template>
+  </div>
+</div>

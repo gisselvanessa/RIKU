@@ -1,0 +1,63 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+*{
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.vehicle-image-wrp {
+  height: 130px;
+  max-width: 195px;
+  min-width: 130px;
+  border-radius: 15px;
+  border: 1px solid #2F779C;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+.font {
+  &-18 {
+    font-size: 1rem;
+    @include for-tablet-portrait-up {
+      &-md {
+        font-size: 18px;
+      }
+    }
+  }
+  &-16 {
+    @media (max-width: 1400px) {
+      font-size: 14px !important;
+    }
+  }
+  &-20 {
+    @media (max-width: 1400px) {
+      font-size: 18px !important;
+    }
+  }
+  &-15 {
+    @media (max-width: 1400px) {
+      font-size: 13px !important;
+    }
+  }
+}
+.sm-card{
+  height: 120px;
+}
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+}
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+  height: 10px; 
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #E0E0E0; 
+  border-radius: 4px; 
+  cursor: pointer;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background-color: transparent; 
+}

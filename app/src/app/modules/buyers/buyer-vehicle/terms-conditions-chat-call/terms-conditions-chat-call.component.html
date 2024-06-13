@@ -1,0 +1,114 @@
+<div *ngIf="showTermsAndConditions; else shoWarningOnly">
+  <div class="modal-header flex-column position-relative border-0">
+    <p *ngIf="typeOfContact === 'Chat' && isWarning" class="text-danger">
+      {{"To begin your chat, your call will be disconnected" | translate}}.
+    </p>
+    <h3
+      class="modal-title text-center mt-4 w-100 text-primary fw-semibold mb-2"
+      *ngIf="typeOfContact === 'Call'"
+    >
+      {{ "Contact" | translate }} {{ userType | titlecase | translate }}
+    </h3>
+    <h3
+      class="modal-title text-center mt-4 w-100 text-primary fw-semibold mb-2"
+      *ngIf="typeOfContact === 'Chat'"
+    >
+      {{ typeOfContact | translate }} with {{ userType | translate }}
+    </h3>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="activeModal.dismiss('cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 px-4">
+        <p
+          class="font-14 fw-bold font-sm-10 text-primary mb-sm-3 mb-0">
+          {{ "Please accept the below terms to proceed" | translate }}.
+          {{ typeOfContact === 'Chat' ? (("Chat with '+userType) | translate) : (("Contact "+userType) | translate) }}
+       </p>
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{"The RIKU platform makes communication services available to its users, which facilitates their contact through calls or sending messages. This service is free of charge and allows users to ask and answer questions or comments made by users of the Site, being prohibited, for their own safety, from providing personal data such as telephone numbers, full names, identifications , addresses, postal codes, internet addresses, emails, exchange of information or documentation." | translate}}
+        </p>
+
+        <p class="font-14 font-sm-10 text-primary-light mb-sm-3 mb-0">
+          {{"The RIKU platform handles the information provided with high levels of security, which is why we ask you to take the recommendations into account and follow the communication processes that will allow satisfactory negotiations to be carried out. In case of breaching the policies for user communication, RIKU is not responsible for the damages that this could cause and the user will not be able to file any claim." | translate}}
+        </p>
+
+        <div class="form-group">
+          <div class="radio-check checkbox-check br-12 me-3 mt-3">
+            <div class="form-check form-check-inline check-bg-none">
+              <input
+                class="form-check-input"
+                [checked]="isTermsAccepted === 'true'"
+                (click)="sendTermsResponse($event)"
+                type="checkbox"
+                id="terms and policy"
+                value="terms and policy"
+              />
+              <label class="form-check-label" for="terms and policy">
+                {{ "He leído y acepto los términos" | translate }}</label
+              >
+
+              <span class="check-checkmark"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="d-flex mt-3">
+          <input
+            type="checkbox"
+            [checked]="isTermsAccepted === 'true'"
+            (click)="sendTermsResponse($event)"
+            class="form-check-input"
+          />
+          <p class="text-primary font-16 mx-2">I accept terms & conditions</p>
+        </div> -->
+      </div>
+      <div class="modal-footer d-flex justify-content-center border-0">
+        <button
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="proceed()"
+        >
+          {{ "Accept" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #shoWarningOnly>
+  <div class="modal-header flex-column position-relative border-0">
+    <div class="mt-5">
+      <p class="text-danger">
+        {{ "To begin your chat, your call will be disconnected" | translate }}.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="btn-close modal-btn-close p-4"
+      (click)="activeModal.dismiss('cross click')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body border-0">
+    <div class="row justify-content-center">
+      <div class="modal-footer d-flex justify-content-center border-0">
+        <button
+          type="submit"
+          class="btn btn-md primary-btn forgot-btn"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          (click)="redirectToChat()"
+        >
+          {{ "Accept" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

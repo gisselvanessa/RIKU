@@ -1,0 +1,197 @@
+@import "../../../../../../function";
+@import "../../../../../../variables";
+.box-heading-wrp{
+    h4{
+
+      margin-right: 30px;
+    }
+    .form-check-inline{
+      display: inline-block;
+      width: auto;
+      label{
+        width: auto;
+        color: $purple-grey;
+        font-size: 14px;
+        border: 1px solid $purple-grey!important;
+        border-radius: 12px;
+        padding:8px 15px;
+        padding-left:40px;
+        display: inline-block;
+      }
+      &.check-bg-none{
+        .check-checkmark{
+          border-radius: 100%;
+          left:12px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+      input[type="checkbox"]{
+        &:checked{
+          ~ label{
+            background-color: $light-purple!important;
+            border:1px solid $light-purple!important;
+            color: $white!important;
+          }
+          ~ .check-checkmark{
+            background-color: $white;
+            &::after{
+              border-bottom: 3px solid $light-purple;
+              border-right: 3px solid $light-purple;
+            }
+          }
+        }
+      }
+    }
+}
+
+.underline-wrp{
+    position: relative;
+    display: inline-block;
+    &::after{
+        content: "";
+        display: block;
+        background-color: #B1A0B4;
+        width: 55%;
+        height: .5px;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+    }
+}
+.check-form{
+    .checkbox-check{
+        .form-check-inline{
+            &.check-bg-none{
+                .form-check-label{
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+                input{
+                    //pointer-events: none; //comment by rushabh to fix checkbox check issue by Jon
+                }
+                .check-checkmark{
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+.outline-btn{
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid $secondary-color;
+    color: $secondary-color;
+    font-size: 14px;
+}
+.border-left{
+    border-left:1px solid rgba($color: $purple-grey, $alpha: .5);
+    padding-left: 40px;
+}
+
+
+
+.upload-receipt-box{
+  .upload-button{
+      background-color: rgba($color: $secondary-color, $alpha: 0.1);
+      width: 84px;
+      height: 84px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .document-uploded-wrp{
+      .uploded-document{
+          width: 80px;
+          height: 80px;
+          box-shadow: 0px 3px 6px #00000029;
+          border-radius: 5px;
+          overflow: hidden;
+          a{
+            width: 100%;
+            height: 100%;
+          }
+          img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+             object-position: center;
+          }
+      }
+  }
+}
+.download-icon{
+  background-color: $secondary-color;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.delete-doc{
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: $purple-grey;
+  position: absolute;
+  right: -6px;
+  top:-8px;
+}
+
+.font-10{
+  font-size: 10px;
+}
+
+
+div.text {
+  position: relative;
+}
+
+div.text input {
+  padding-left: 25px;
+}
+
+div.text:after {
+  position: absolute;
+  left: 9px;
+  top: 10px;
+  font-size: 24px;
+  content: "$";
+  color: #89708F;
+}
+
+.mark-completed-opacity{
+  opacity: 1 !important;
+}
+
+
+.search-grp {
+  input {
+    padding-left: 40px;
+  }
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+  }
+}
+
+.custom-checkbox{
+  position: relative !important;
+  // top: 18px !important;
+  top: 5px !important;
+  left: 25px !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+  width: 24px !important;
+}

@@ -1,0 +1,22 @@
+@import "../../../function";
+@import "../../../variables";
+.notification-drawer1{
+  ul{
+    height: 325px;
+    overflow: auto;
+  }
+  .active{
+    background-color: #E8EAEB !important;
+  }
+  .img-wrapper{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    min-width: 50px;
+    img{
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

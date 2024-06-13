@@ -1,0 +1,153 @@
+<div class="page-wrapper p-4">
+  <div class="row align-items-center">
+    <div class="col-lg-6 col-xl-5">
+      <div class="background-image">
+        <img src="assets/images/signup-bg.png" alt="Riku" class="jakay-bg" />
+        <img
+          src="assets/images/jakay-logo.png"
+          alt="Riku marketplace"
+          class="logo"
+        />
+        <h1 class="h1 fw-regular mb-0">
+          {{ 'A perfect platform to buy or' | translate }} {{ 'sell your car' | translate }}
+        </h1>
+      </div>
+    </div>
+    <div class="col-lg-6 col-xl-7">
+      <div class="px-xxl-5 px-0 mx-xs-4 mx-0 mt-lg-0 mt-5">
+          <div class="d-flex justify-content-center flex-wrap w-100 mb-md-4 mb-2 pb-2">
+              <h2 class="h2 text-primary fw-semibold mb-0 w-100 text-center mb-3">{{"Mobile Number Verification" | translate}}</h2>
+              <a   *ngIf="!inputMobile"class="text-primary-light fw-regular font-14 mb-0 edit-number d-flex align-items-start">{{"Enter the OTP sent to" | translate}} {{ country_code }} {{ this.mobile_no }}
+            <img
+              (click)="showInput()"
+              src="assets/images/edit-icon.svg"
+              width="14px"
+              heihgt="14px"
+              alt="Edit"
+              class="ms-3"
+          /></a>
+          <div class="row justify-content-center" *ngIf="inputMobile">
+            <form [formGroup]="mobileInfo" #form="ngForm">
+              <div class="col-md-12 d-inline-flex justify-content-center">
+                <div>
+                  <ngx-intl-tel-input
+                    [cssClass]="'form-control w-100'"
+                    [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true"
+                    [enablePlaceholder]="true"
+                    [searchCountryFlag]="true"
+                    [searchCountryField]="[
+                      SearchCountryField.Iso2,
+                      SearchCountryField.Name
+                    ]"
+                    [selectFirstCountry]="false"
+                    [selectedCountryISO]="CountryISO.Ecuador"
+                    [maxLength]="15"
+                    [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode"
+                    [numberFormat]="PhoneNumberFormat.National"
+                    (countryChange)="clearCountrySearchBox()"
+                    name="mobile_no"
+                    formControlName="mobile_no"
+                  >
+                  </ngx-intl-tel-input>
+                  <span
+                    *ngIf="
+                      form.form.value.mobile_no &&
+                      form.form.controls['mobile_no'].errors
+                    "
+                    class="text-danger"
+                  >
+                    {{"Please enter a valid number" | translate}}
+                  </span>
+
+                  <span
+                    *ngIf="!form.form.value.mobile_no"
+                    class="text-danger"
+                    style="font-size: 0.875em"
+                  >
+                    {{"Mobile number is required" | translate}}
+                  </span>
+                </div>
+
+                <!--<input  class="form-control " placeholder="Enter Mobile Number" (focusout)="mobileNumEdit($event)">-->
+                <button
+                  class="btn btn-primary btn-sm m-1"
+                  (click)="submitMobile()"
+                >
+                  <span class="fa fa-check"></span>
+                </button>
+                <button class="btn btn-danger btn-sm m-1" (click)="showInput()">
+                  <span class="fa fa-times"> </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-10 col-xl-8">
+              <div class="mobile-verification-form mt-md-4 mt-3 pt-2">
+              <form>
+                <!-- first-step -->
+                <div class="mobile-verify-form">
+                  <div class="row">
+                    <div class="col-md-12 d-inline-flex justify-content-center">
+                      <div class="form-group">
+                        <ng-otp-input
+                          (onInputChange)="onOtpChange($event)"
+                          *ngIf="showOtpComponent"
+                          [config]="config"
+                        ></ng-otp-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center mb-3">
+                    <p class="font-14 text-primary-light fw-regular">
+                      00:{{
+                        secondsConter > 9 ? secondsConter : "0" + secondsConter
+                      }}
+                    </p>
+                  </div>
+                  <div class="d-flex justify-content-center mb-4">
+                    <p class="font-14 text-primary-light fw-regular">
+                      {{"Didn't receive OTP" | translate}}?
+                      <a
+                        *ngIf="disabledResendButton"
+                        href="javascript:void(0);"
+                        style="pointer-events: none"
+                        class="forgot-link text-secondary fw-regular"
+                        >{{"RESEND" | translate}}</a
+                      >
+                      <a
+                        href="javascript:void(0)"
+                        (click)="resendVerificationCode()"
+                        *ngIf="!disabledResendButton"
+                        class="forgot-link text-secondary fw-regular"
+                        >{{"RESEND" | translate}}</a
+                      >
+                    </p>
+                  </div>
+                  <div
+                    class="next-button d-flex justify-content-center flex-wrap mt-2"
+                  >
+                    <button
+                      class="btn primary-btn btn-lg next-btn"
+                      [disabled]="!otp || otp.length < 4"
+                      (click)="verifyMobile()"
+                    >
+                      {{"Verify" | translate}}
+                    </button>
+                    <button class="btn w-100 mt-4 btn-link" routerLink="/">
+                      {{"Cancel" | translate}}
+                    </button>
+                  </div>
+                </div>
+                <!-- End first-step -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

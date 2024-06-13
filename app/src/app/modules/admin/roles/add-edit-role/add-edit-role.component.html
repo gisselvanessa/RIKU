@@ -1,0 +1,190 @@
+<section class="section bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="back-to-page d-flex">
+        <a (click)="goBack()"
+          ><span class="me-3"><img src="assets/images/backarrow.svg" /></span
+        ></a>
+        <h3 class="font-38 text-primary fw-semibold">
+          {{ roleId ? ("Edit" | translate) : ("Add New" | translate) }}
+          {{ "Role" | translate }} & {{ "Permissions" | translate }}
+        </h3>
+      </div>
+      <div class="switch-wrp d-flex align-items-center pe-3" *ngIf="roleId">
+        <p class="font-16 text-primary me-3" for="">
+          {{
+            roleDetail.is_active
+              ? ("Active" | translate)
+              : ("Deactivate" | translate)
+          }}
+        </p>
+        <button data-bs-toggle="modal" data-bs-target="#deactivateuser">
+          <input
+            type="checkbox"
+            id="switch"
+            (click)="changeStatus($event)"
+            [(ngModel)]="roleDetail.is_active"
+          /><label class="switch" for="switch"> Toggle </label>
+        </button>
+        <button
+          *ngIf="modulePermissions.can_delete"
+          class="d-flex align-items-center ms-5"
+          (click)="deleteRole()"
+        >
+          <img src="assets/images/view_vehicle/delete_red.svg" alt="delete" />
+          <span class="ms-2 text-red font-18">{{ "Delete" | translate }}</span>
+        </button>
+      </div>
+    </div>
+    <form #addUpdateRoleForm="ngForm">
+      <ng-container *ngIf="!loading">
+        <div class="admin__user--list">
+          <div
+            class="d-flex align-items-center justify-content-between pb-3 mb-4"
+          >
+            <h5 class="font-24 text-primary fw-semibold">
+              {{ "Role" | translate }}
+            </h5>
+            <p class="text-primary font-18 fw-semibold" *ngIf="roleId">
+              <span class="text-primary-light font-14 me-2 fw-normal"
+                >{{ "Created Date" | translate }}:</span
+              >{{ roleDetail.created_at | date : "MM-dd-YYYY" }}
+            </p>
+          </div>
+          <div class="row mb-2">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                  "Role Name" | translate
+                }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  AlphaNumeric
+                  placeholder="{{ 'Enter Role Name' | translate }}"
+                  (keyup)="formatRoleName($event)"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="roleName"
+                  required
+                />
+                <div
+                  class="text-danger"
+                  *ngIf="submitted && (roleName == '' || !roleName)"
+                >
+                  <span>
+                    {{ "Role Name" | translate }}
+                    {{ "is required" | translate }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <h5 class="font-28 text-primary fw-semibold pb-3 mb-2">
+            {{ "Permissions" | translate }}
+          </h5>
+
+          <h6 class="font-20 text-primary pb-3 mb-1">
+            <u>
+              {{
+                "Here are some instructions on roles and permissions"
+                  | translate
+              }}:
+            </u>
+          </h6>
+          <ul
+            class="mx-4 font-12 text-primary mb-4"
+            style="list-style-type: circle"
+          >
+            <li>
+              {{
+                "Identify the roles: First, you need to identify the roles of the users who will be working with the documents"
+                  | translate
+              }}.
+            </li>
+            <li>
+              {{
+                "Define the permissions: Once you have identified the roles, you need to define the level of permissions for each role. For example, an editor may have permission to create, modify, and delete the content, while a reviewer may only have permission to view the content"
+                  | translate
+              }}.
+            </li>
+            <li>
+              {{
+                "Assign permissions to roles: Assign the appropriate permissions to each role. For example: In case you provide permission to edit a module, the system by default will allow permission for the view of listing & details, and similar to that other permission combinations will work"
+                  | translate
+              }}.
+            </li>
+          </ul>
+
+          <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+            <table class="table mb-0 p-1">
+              <thead>
+                <th>{{ "Module" | translate }}</th>
+                <th>{{ "Listing" | translate }}</th>
+                <th>{{ "Detail" | translate }}</th>
+                <th>{{ "Create" | translate }}</th>
+                <th>{{ "Edit" | translate }}</th>
+                <th>{{ "Delete" | translate }}</th>
+                <th>{{ "Export" | translate }}</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let permission of permissions; index as i">
+                  <td>{{ permission.module_display_name | translate}}</td>
+                  <td *ngFor="let name of permission_names; index as i">
+                    <div class="form-group new-check my-0">
+                      <input
+                        type="checkbox"
+                        (change)="
+                          onChangePermission(
+                            $event,
+                            permission.module_name,
+                            name
+                          )
+                        "
+                        id="{{ permission.module_name + '_' + name }}"
+                        [checked]="permission.module_permissions[name]"
+                      />
+                      <label
+                        for="{{ permission.module_name + '_' + name }}"
+                      ></label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="btn-grp mt-5 pb-5">
+          <button
+            class="btn primary-btn btn-md me-3"
+            [disabled]="addUpdateRoleForm.invalid || loading"
+            (click)="addUpdateRole()"
+          >
+            <span
+              class="spinner-border text-primary"
+              *ngIf="loading"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {{ roleId ? ("Save" | translate) : ("Create" | translate) }}
+          </button>
+          <a
+            class="btn primary-btn-outline btn-md prev-btn"
+            (click)="goBack()"
+            >{{ "Cancel" | translate }}</a
+          >
+        </div>
+      </ng-container>
+      <ng-container *ngIf="loading">
+        <h3 class="font-26 text-primary fw-semibold text-center p-5 m-2">
+          <span
+            class="spinner-border text-primary"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </h3>
+      </ng-container>
+    </form>
+  </div>
+</section>

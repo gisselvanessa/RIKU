@@ -1,0 +1,46 @@
+<section class="section bg-blue view-vehicle buyyer__view-vehicle">
+  <div class="jakay-container">
+    <div class="row">
+      <div>
+        <div class="back-to-page d-flex">
+          <span (click)="back()" style="cursor: pointer"
+            ><img class="arrowbg" src="assets/images/backarrow.svg"
+          /></span>
+          <div class="d-flex justify-content-between w-100">
+            <h3
+              *ngIf="policyName === 'terms_and_condition'"
+              class="ms-3 section-header font-38 text-primary fw-semibold"
+            >
+              {{ "Terms & Conditions" | translate }}
+            </h3>
+            <h3
+              *ngIf="policyName === 'payment_cancellation_policy'"
+              class="ms-3 section-header font-38 text-primary fw-semibold"
+            >
+              {{ "Payment and Cancellation Policy" | translate }}
+            </h3>
+            <h3
+              *ngIf="policyName === 'financing_policy'"
+              class="ms-3 section-header font-38 text-primary fw-semibold"
+            >
+              {{ "Financing Policy" | translate }}
+            </h3>
+            <h3
+              *ngIf="policyName === 'privacy_policy'"
+              class="ms-3 section-header font-38 text-primary fw-semibold"
+            >
+              {{ "Privacy Policy" | translate }}
+            </h3>
+            <h3
+              *ngIf="policyName === 'payment_info'"
+              class="ms-3 section-header font-38 text-primary fw-semibold"
+            >
+              {{ "Payment Info" | translate }}
+            </h3>
+          </div>
+        </div>
+        <app-cms-page [policyData]="policyData"></app-cms-page>
+      </div>
+    </div>
+  </div>
+</section>

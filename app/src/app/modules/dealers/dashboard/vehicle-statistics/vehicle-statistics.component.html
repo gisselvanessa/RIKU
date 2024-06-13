@@ -1,0 +1,107 @@
+
+<div class="col-12 mt-4">
+  <div class="bg-white br-12 p-4 mt-4">
+    <div class="d-flex align-items-start justify-content-between">
+      <h5 class="font-18 text-primary fw-bold mt-2">{{ 'Vehicles Statistics' | translate }}</h5>
+      <div class="d-inline-flex flex-grow-1 justify-content-end">
+        <div class="data-sorting-tabs">
+          <div class="form-group">
+            <div class="tabs-list br-12">
+              <ul class="nav nav-pills " id="Condition-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link font-15 fw-semibold" [ngClass]="{ active: selectedTab == 'all'}" (click)="selectTab('all')"
+                    id="Condition-all-tab" type="button" role="tab" aria-controls="Condition-all"
+                    aria-selected="true">{{ 'All' | translate }}</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link font-15 fw-semibold" [ngClass]="{ active: selectedTab == 'new'}" (click)="selectTab('new')"
+                    type="button" role="tab" aria-controls="Condition-new" aria-selected="false">{{ 'New' | translate }}</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link font-15 fw-semibold" [ngClass]="{ active: selectedTab == 'used'}" (click)="selectTab('used')"
+                    type="button" role="tab" aria-controls="Condition-used" aria-selected="false">{{ 'Used' | translate }}</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <div class="filter-box cusotmer-heading ms-3">
+          <div class="form-group position-relative mb-0">
+            <div ngbDropdown class="doropdown_radio">
+              <button ngbDropdownToggle
+                class="btn btn-white dropdownP-toggle btn-dropdown  text-color multipledata-hide" type="button"
+                id="filter" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ startDate | date: 'MMMM dd, yyyy' }} - {{ endDate | date: 'MMMM dd, yyyy' }} &nbsp;<img
+                  src="assets/images/solar_calendar-broken.svg" class="input-icon">
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let filter of filters">
+                  <a ngbDropdownItem class="dropdown-item font-14" href="javascript:void(0)" [ngClass]="{
+                                      'selected-dropdown-item':
+                                      vehicleStatFilter == filter
+                                    }" (click)="onChangeFilter(filter)">{{ filter | translate }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <span bsDaterangepicker #drp="bsDaterangepicker" placement="right" [maxDate]="today" [bsConfig]="bsConfig"
+            [bsValue]="bsRangeValue" (bsValueChange)="getDateValues($event)"></span>
+        </div>
+      </div>
+
+    </div>
+    <div class="row vehicleTypes mb-3">
+      <div class="col-md-2">
+        <div class="d-flex flex-column">
+          <p class="font-14 text-primary fw-semibold">{{ 'Automobiles' | translate }}</p>
+          <div class="badges d-flex gap-2 mt-2">
+            <span class="bg-orange-lite text-orange">{{ vehicleStats?.vehicle_type_counts[0].total_vehicles}}</span>
+            <span class="bg-purple-lite text-primary">{{
+              vehicleStats?.vehicle_type_counts[0].total_order_vehicles}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex flex-column">
+          <p class="font-14 text-primary fw-semibold">{{ 'Heavy' | translate }}</p>
+          <div class="badges d-flex gap-2 mt-2">
+            <span class="bg-orange-lite text-orange">{{ vehicleStats?.vehicle_type_counts[1].total_vehicles}}</span>
+            <span class="bg-purple-lite text-primary">{{
+              vehicleStats?.vehicle_type_counts[1].total_order_vehicles}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex flex-column">
+          <p class="font-14 text-primary fw-semibold">{{ 'Buses' | translate }}</p>
+          <div class="badges d-flex gap-2 mt-2">
+            <span class="bg-orange-lite text-orange">{{ vehicleStats?.vehicle_type_counts[2].total_vehicles}}</span>
+            <span class="bg-purple-lite text-primary">{{
+              vehicleStats?.vehicle_type_counts[2].total_order_vehicles}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex flex-column">
+          <p class="font-14 text-primary fw-semibold">{{ 'Work Machinery' | translate }}</p>
+          <div class="badges d-flex gap-2 mt-2">
+            <span class="bg-orange-lite text-orange">{{ vehicleStats?.vehicle_type_counts[3].total_vehicles}}</span>
+            <span class="bg-purple-lite text-primary">{{
+              vehicleStats?.vehicle_type_counts[3].total_order_vehicles}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="data-wrp">
+      <div class="chart-container" *ngIf="vehicleStats && vehicleStats.dates.length > 0">
+        <canvas id="dealerVehicleStatsChart"></canvas>
+      </div>
+
+      <p *ngIf="vehicleStats && vehicleStats.dates.length == 0" class="font-14 text-primary px-4 pt-4 fw-semibold">{{ 'No records available for this duration' | translate }}
+      </p>
+    </div>
+  </div>
+</div>
+

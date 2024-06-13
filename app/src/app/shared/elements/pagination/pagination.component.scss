@@ -1,0 +1,95 @@
+@import "../../../../variables";
+
+ngb-pagination ul {
+  li {
+
+    &.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        color: $white !important;
+        background-color: $secondary-color !important;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        box-shadow: 0px 3px 6px rgb(0 0 0 / 40%);
+        @media (max-width: 1400px) {
+          font-size: 14px;
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+
+    a {
+      color: #000 !important;
+      background-color: transparent !important;
+      border: none !important;
+      @media (max-width: 1400px) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.shw {
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 40%);
+}
+
+.br-16 {
+  border-radius: 16px;
+}
+.disabled {
+  h3 {
+    color: #b1a0b4 !important;
+  }
+
+  button.btn {
+    background-color: rgb(187, 211, 223);
+    // opacity: 0.5;
+    color: #fff;
+    box-shadow: 0px 3px 6px #44444429;
+
+    &.btn-dropdown {
+      background-color: #B1A0B41A;
+      border: 1px solid rgba($color: #89708F, $alpha: 0.5);
+      color: #B1A0B4 !important;
+
+      &::after {
+        border-top: 2px solid #B1A0B4;
+        border-left: 2px solid #B1A0B4;
+      }
+    }
+  }
+
+  .procedure-steps-wrp {
+    & .step {
+      color: #b1a0b4 !important;
+
+      & span {
+        border: 1px solid #B1A0B4;
+        background-color: $white !important;
+        z-index: 1;
+        &::before {
+          background-color: #b1a0b4 !important;
+        }
+
+        &::after {
+          content: none;
+        }
+      }
+    }
+
+    &::after {
+      background-color: #b1a0b4;
+    }
+  }
+
+
+}

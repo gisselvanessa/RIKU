@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2780" data-name="Rectangle 2780" width="40" height="40" transform="translate(0)" fill="#a82424"/>
+    </clipPath>
+  </defs>
+  <g id="Group_2094" data-name="Group 2094" transform="translate(-25 -332)">
+    <g id="Mask_Group_52" data-name="Mask Group 52" transform="translate(25 332)" clip-path="url(#clip-path)">
+      <g id="Group_2095" data-name="Group 2095" transform="translate(21189.277 -8884.759)">
+        <path id="Subtraction_48" data-name="Subtraction 48" d="M-10866.277,14737.761h-10a4,4,0,0,1-4-4v-17a4,4,0,0,1,4-4h.5v1h-.5a3,3,0,0,0-3,3v17a3,3,0,0,0,3,3h10a3,3,0,0,0,3-3v-17a3,3,0,0,0-3-3h-.5v-1h.5a4.006,4.006,0,0,1,4,4v17A4.006,4.006,0,0,1-10866.277,14737.761Z" transform="translate(-10298 -5821)" fill="#fff"/>
+        <g id="Group_2090" data-name="Group 2090" transform="translate(-21174.277 8896.99)">
+          <line id="Line_1687" data-name="Line 1687" x2="10" transform="translate(0 2)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+          <line id="Line_1688" data-name="Line 1688" x2="3.5" transform="translate(0 5.904)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+          <line id="Line_1689" data-name="Line 1689" x2="10" transform="translate(0 9.809)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+          <line id="Line_1690" data-name="Line 1690" x2="6.5" transform="translate(0 13.713)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+        </g>
+      </g>
+      <g id="Rectangle_16874" data-name="Rectangle 16874" transform="translate(15 5)" fill="none" stroke="#fff" stroke-width="1">
+        <rect width="10" height="5" rx="2" stroke="none"/>
+        <rect x="0.5" y="0.5" width="9" height="4" rx="1.5" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>

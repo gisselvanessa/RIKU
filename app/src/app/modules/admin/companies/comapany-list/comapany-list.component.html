@@ -1,0 +1,161 @@
+<section class="section vehicle__listing buyer--listing bg-blue admin--listing">
+  <div class="jakay-container admin-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <h3 class="mb-3 font-38 text-primary fw-semibold">{{"Company Management" | translate}}</h3>
+    </div>
+    <div class="vehicle__listing--search">
+      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Search" | translate}}</label>
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="form-group search-grp">
+            <div class="position-relative">
+              <input
+                type="text"
+                class="form-control border-0"
+                [(ngModel)]="updatedSearchText"
+                placeholder="{{'Search by Keyword' | translate}}"
+                (keyup)="searchTextChange($event)"
+                (keyup.enter)="getFilterUserList(true)"
+              />
+              <img
+                src="assets/images/vehicle-list/grey-search.svg"
+                class="search-icon"
+              />
+              <button class="search-btn" (click)="getFilterUserList(true)">
+                <img
+                  src="assets/images/vehicle-list/search-btn.svg"
+                  alt="search-btn"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3" *ngIf="modulePermissions.can_create">
+          <div class="form-group search-grp add-vehicle ms-2">
+            <a
+              routerLink="/admin/companies/add"
+              class="btn primary-btn btn-sm br-12 py-3"
+            >
+              + {{"Add New Company" | translate}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="condition-tabs mt-5">
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content  pb-5" id="Condition-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="Condition-all"
+            role="tabpanel"
+            aria-labelledby="Condition-all-tab"
+          >
+            <div
+              class="table-responsive admin--listing-table bg-white br-12 p-3"
+            >
+              <table class="table mb-0 p-1">
+                <thead>
+                  <th>
+                    <span>{{"Sr. No." | translate}}</span>
+                  </th>
+                  <th (click)="setSorting('name')">
+                    <span>
+                      {{"Company Name" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('created_by')">
+                    <span>
+                      {{"Created By" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th (click)="setSorting('created_at')">
+                    <span
+                      >{{"Created Date" | translate}}
+                      <img
+                        src="assets/images/vehicle-list/sorting-arrow.svg"
+                        class="ms-2"
+                      />
+                    </span>
+                  </th>
+                  <th>
+                    <span>{{"Actions" | translate}}</span>
+                  </th>
+                </thead>
+                <tbody *ngIf="!modulePermissions.can_list">
+                  <tr class="text-center">
+                    <td colspan="10">{{"You Can't Access to these Data" | translate}}</td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="modulePermissions.can_list">
+                  <ng-container *ngIf="!loading; else loadingTemplate">
+                    <ng-container
+                      *ngIf="companyList.length > 0; else noRecordsTemplate"
+                    >
+                      <tr *ngFor="let company of companyList; let i = index">
+                        <td>{{ limit * (page - 1) + (i + 1) }}</td>
+                        <td>{{ company.company_name }}</td>
+                        <td>{{ company.created_by | titlecase }}</td>
+                        <td>
+                          {{
+                            company.created_date | date : "MM-dd-YYYY hh:mm a"
+                          }}
+                        </td>
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            *ngIf="modulePermissions.can_view_details"
+                            (click)="gotoCompanyDetail(company)"
+                          >
+                            <img src="assets/images/eye-open.svg" />
+                          </a>
+                          <a
+                            href="javascript:void(0);"
+                            *ngIf="modulePermissions.can_delete"
+                            (click)="deleteCompany(company.id)"
+                          >
+                            <img
+                              src="assets/images/vehicle-list/del-icon.svg"
+                              class="ms-3"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-template #noRecordsTemplate>
+                      <tr class="text-center">
+                        <td colspan="5">{{"No records found" | translate}}</td>
+                      </tr>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #loadingTemplate>
+                    <tr class="text-center">
+                      <td colspan="5">
+                        <app-loader></app-loader>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <pagination *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

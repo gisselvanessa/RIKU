@@ -1,0 +1,304 @@
+<article>
+  <section class="i-want-to-sell-banner h-100">
+    <div class="jakay-container">
+      <div class="landing__banner-desc iwant-to-sell-desc">
+        <h1 class="mb-5 text-white font-80 fw-semibold">
+          {{
+            homePageDetails?.header.title
+              ? (homePageDetails?.header.title )
+              : "-"
+          }}
+        </h1>
+        <h5 class="text-white font-34 fw-regular">
+          {{
+            homePageDetails?.header.sub_title
+              ? (homePageDetails?.header.sub_title )
+              : "-"
+          }}
+        </h5>
+        <div class="bg-white br-32 sell-features">
+          <div class="row">
+            <div
+              *ngFor="let searchBy of homePageDetails?.header?.search_by"
+              class="col-md-4 detail-wrp d-flex align-items-center"
+            >
+              <img
+                height="95px"
+                width="95px"
+                [src]="searchBy?.icon?.download_url"
+                class="me-4"
+              />
+              <p class="font-24 fw-regular text-secondary">
+                {{ searchBy.title }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="landing__provide py-4">
+      <div class="jakay-container">
+        <div class="row text-center justify-content-center pt-4">
+          <div class="col-xl-8 col-lg-10 col-md-12 px-xl-4">
+            <h2 class="font-60 fw-semibold text-primary mb-3">
+              {{
+                homePageDetails?.services.title
+                  ? (homePageDetails?.services.title )
+                  : "-"
+              }}
+            </h2>
+            <p
+              class="font-20 align-justify fw-regular text-primary-light mt-2 mb-5 mb-md-4 mb-lg-3"
+            >
+              {{
+                homePageDetails?.services.sub_title
+                  ? (homePageDetails?.services.sub_title )
+                  : "-"
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-md-6 col-xl-3 col-11"
+            *ngFor="let service of homePageDetails?.services?.services"
+          >
+            <div class="landing__card mb-4">
+              <div class="landing__card-body">
+                <div class="icon-wrapper mx-auto text-center">
+                  <img
+                    [src]="service?.icon?.download_url"
+                    class="mb-4 offhover"
+                  />
+                  <img
+                    [src]="service?.icon?.download_url"
+                    class="mb-4 onhover"
+                  />
+                </div>
+                <h4 class="font-34 text-center fw-semibold mb-3 pb-2 text-primary">
+                  {{ service?.title ? (service?.title ) : "-" }}
+                </h4>
+                <p class="font-20 align-justify fw-regular text-primary-light">
+                  {{
+                    service?.sub_title ? (service?.sub_title ) : "-"
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="jakay-container">
+      <div class="landing__process-heading mt-4">
+        <div class="row text-center justify-content-center pt-4">
+          <div class="col-xl-8 col-lg-10 col-md-12 px-xl-4">
+            <h2 class="font-60 fw-semibold text-primary mb-3">
+              {{
+                homePageDetails?.process?.title
+                  ? (homePageDetails?.process?.title )
+                  : "-"
+              }}
+            </h2>
+            <p class="font-20 align-justify fw-regular text-primary-light mt-2">
+              {{
+                homePageDetails?.process?.sub_title
+                  ? (homePageDetails?.process?.sub_title )
+                  : "-"
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="landing__process-detail-wrp">
+        <div
+          class="row mb-5 mb-lg-4 align-items-center justify-content-center"
+          *ngFor="
+            let process of homePageDetails?.process?.process;
+            let i = index
+          "
+        >
+          <div class="col-lg-6 col-10" [ngClass]="{ 'order-lg-2': i % 2 != 0 }">
+            <div
+              class="pe-md-4 with-border-image text-center"
+              [ngClass]="i % 2 != 0 ? 'right-side' : 'left-side'"
+            >
+              <img
+                [src]="process?.icon?.download_url"
+                width="100%"
+                class="img-fluid"
+              />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="overview-detail px-4">
+              <span
+                class="font-48 text-orange pb-1 mb-4 heading-border-bottom d-block w-100"
+                >0{{ process?.order }}</span
+              >
+              <h2 class="font-34 fw-semibold text-primary pt-2 pb-2 mb-3">
+                {{ process?.title ? (process?.title ) : "-" }}
+              </h2>
+              <p class="font-20 align-justify fw-regular text-primary-light">
+                {{
+                  process?.sub_title ? (process?.sub_title ) : "-"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-p-100">
+    <div class="landing__about position-relative">
+      <!-- <div class="landing__about-bg">
+              <img src="././assets/images/lending/about-bg.png" width="100%">
+            </div> -->
+      <div class="landing__about-desc">
+        <div class="jakay-container">
+          <div class="row py-5 py-md-4 py-lg-0">
+            <div class="col-lg-6 col-md-10">
+              <h2 class="font-60 fw-semibold text-white mb-3 mb-md-4 mb-lg-5">
+                {{
+                  homePageDetails?.about_us?.title
+                    ? (homePageDetails?.about_us?.title )
+                    : "-"
+                }}
+              </h2>
+              <p class="font-24 align-justify fw-regular pe-lg-5 me-2">
+                {{
+                  homePageDetails?.about_us?.sub_title
+                    ? (homePageDetails?.about_us?.sub_title )
+                    : "-"
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="jakay-container">
+      <div class="landing__overview my-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-10">
+            <div class="with-border-image left-side pe-lg-4 mb-5">
+              <img
+                [src]="homePageDetails?.overview?.icon?.download_url"
+                class="img-fluid"
+                width="100%"
+              />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="overview-detail px-4">
+              <h2 class="font-60 fw-semibold text-primary mb-4">
+                {{
+                  homePageDetails?.overview?.title
+                    ? (homePageDetails?.overview?.title )
+                    : "-"
+                }}
+              </h2>
+              <p class="font-24 align-justify fw-regular text-primary-light mb-5">
+                {{
+                  homePageDetails?.overview?.sub_title
+                    ? (homePageDetails?.overview?.sub_title )
+                    : "-"
+                }}
+              </p>
+              <button
+                (click)="navigateToSellPage()"
+                class="btn btn-sm primary-btn fw-regular font-16"
+              >
+                {{
+                  homePageDetails?.overview?.button_text
+                    ? (homePageDetails?.overview?.button_text )
+                    : "-"
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-p-100">
+    <div class="jakay-container">
+      <div class="row text-center justify-content-center pt-4">
+        <div class="col-xl-8 col-lg-10 col-md-12 px-xl-4">
+          <h2 class="font-60 fw-semibold text-primary mb-3">
+            {{
+              homePageDetails?.brand?.title
+                ? (homePageDetails?.brand?.title )
+                : "-"
+            }}
+          </h2>
+          <p class="font-20 align-justify fw-regular text-primary-light mt-2">
+            {{
+              homePageDetails?.brand?.sub_title
+                ? (homePageDetails?.brand?.sub_title )
+                : "-"
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-dark-blue section-p-100">
+    <div class="jakay-container">
+      <div class="brnad-slider">
+        <swiper
+          [config]="swiperBrand"
+          [direction]="'horizontal'"
+          [spaceBetween]="30"
+          [mousewheel]="true"
+          [loopFillGroupWithBlank]="true"
+          [navigation]="true"
+          class="brnad-slider brand-swipper"
+        >
+          <ng-template
+            *ngFor="let brandImage of homePageDetails?.brand?.brands"
+            swiperSlide
+            class="swiper-slide"
+          >
+            <div class="brand-slider-wrapper">
+              <img [src]="brandImage?.icon?.download_url" />
+            </div>
+          </ng-template>
+          <!-- <ng-template swiperSlide class="swiper-slide"
+                ><img src="././assets/images//lending/jaguar-1.png"
+              /></ng-template>
+              <ng-template swiperSlide class="swiper-slide"
+                ><img src="././assets/images//lending/mercedes-benz-8.png"
+              /></ng-template>
+              <ng-template swiperSlide class="swiper-slide"
+                ><img src="././assets/images//lending/bmw-logo.png"
+              /></ng-template>
+              <ng-template swiperSlide class="swiper-slide"
+                ><img src="././assets/images//lending/porsche-3.png"
+              /></ng-template> -->
+        </swiper>
+
+        <!--<div class="swiper brand-swipper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="././assets/images//lending/kia-4.png"></div>
+                <div class="swiper-slide"><img src="././assets/images//lending/jaguar-1.png"></div>
+                <div class="swiper-slide"><img src="././assets/images//lending/mercedes-benz-8.png"></div>
+                <div class="swiper-slide"><img src="././assets/images//lending/bmw-logo.png"></div>
+                <div class="swiper-slide"><img src="././assets/images//lending/porsche-3.png"></div>
+              </div>
+            </div>-->
+      </div>
+    </div>
+  </section>
+</article>

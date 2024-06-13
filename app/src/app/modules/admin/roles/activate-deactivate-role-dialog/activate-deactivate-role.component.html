@@ -1,0 +1,49 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    (click)="activeModal.close(false)"
+    aria-label="Close"
+  ></button>
+</div>
+<div *ngIf="errorMessage">
+  <p class="text-danger text-center">{{ errorMessage }}</p>
+</div>
+<div>
+  <div class="modal-body border-0">
+    <div>
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{
+          isActivate ? ("Activate" | translate) : ("Deactivate" | translate)
+        }}
+        {{ "Role" | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Are you sure you want to" | translate }}
+        {{
+          isActivate ? ("activate" | translate) : ("deactivate" | translate)
+        }}
+        {{ "this" | translate }} {{ "role" | translate }}?
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn-outline"
+      (click)="activeModal.close(false)"
+    >
+      No
+    </button>
+    <button type="submit" class="btn primary-btn" (click)="onSubmit()">
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{ "Yes" | translate }},
+      {{ isActivate ? ("Activate" | translate) : ("Deactivate" | translate) }}
+    </button>
+  </div>
+</div>

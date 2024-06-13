@@ -1,0 +1,263 @@
+<section class="section vehicle__listing buyer--listing bg-blue">
+  <div class="jakay-container">
+    <div
+      class="d-flex justify-content-between align-items-center section-header"
+    >
+      <div class="">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "My Orders" | translate }}
+        </h3>
+        <p class="text-purple-2 font-16">
+          {{
+            "It is very important to continue with your pending orders, this will allow the seller to know if you have made the decision to purchase the vehicle."
+              | translate
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="condition-tabs">
+      <div class="form-group">
+        <div class="tabs-list br-12">
+          <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="Condition-inprogress-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#Condition-inprogress"
+                type="button"
+                [ngClass]="{ active: selectedTab == 'IN_PROGRESS' }"
+                (click)="selectTab('IN_PROGRESS')"
+                role="tab"
+                aria-controls="Condition-inprogress"
+                aria-selected="true"
+              >
+                {{ "In Progress" | translate }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="Condition-past-tab"
+                data-bs-toggle="pill"
+                [ngClass]="{ active: selectedTab == 'PAST' }"
+                (click)="selectTab('PAST')"
+                data-bs-target="#Condition-past"
+                type="button"
+                role="tab"
+                aria-controls="Condition-past"
+                aria-selected="false"
+              >
+                {{ "Past" | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="vehicle__listing--cards buyer-cards">
+        <div class="tab-content" id="Condition-tabContent">
+          <div *ngIf="orderList.length === 0">
+            <h3 class="text-primary fw-semibold mb-xl-3 mb-2">
+              {{ "No Records Available" | translate }}
+            </h3>
+          </div>
+          <div
+            class="tab-pane fade show active"
+            id="Condition-inprogress"
+            role="tabpanel"
+            aria-labelledby="Condition-inprogress-tab"
+            *ngIf="orderList.length > 0 && !loading"
+          >
+            <div
+              class="bg-white br-32 vehicle-item-box-wrp mb-4"
+              *ngFor="let item of orderList; let i = index"
+            >
+              <div
+                class="d-flex w-100 p-3 p-md-4 align-items-md-center align-items-start flex-md-row flex-column"
+              >
+                <div
+                  class="vehicle-item-img card_img position-relative mb-md-0 mb-3"
+                >
+                  <img src="{{ item.vehicle.primary_image }}" />
+                  <a
+                    href="javascript:void(0)"
+                    class="card_img-fav"
+                    style="cursor: pointer"
+                    *ngIf="!this.favVehicleId.includes(item.vehicle_id)"
+                    (click)="favVehicle(i)"
+                  >
+                    <img
+                      class="fav-icon"
+                      src="assets/images/vehicle-list/purple-heart.svg"
+                      alt=""
+                    />
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="card_img-fav"
+                    style="cursor: pointer"
+                    *ngIf="this.favVehicleId.includes(item.vehicle_id)"
+                    (click)="favVehicle(i)"
+                  >
+                    <img
+                      class="fav-icon"
+                      src="assets/images/view_vehicle/red-heart.svg"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div class="ps-0 ps-md-3 ps-lg-4 vehicle-item-desc flex-grow-1">
+                  <div
+                    class="d-lg-flex justify-content-between w-100 align-items-lg-center align-items-start mb-3 flex-lg-row flex-column"
+                  >
+                    <div>
+                      <h3 class="text-primary fw-semibold mb-xl-3 mb-2">
+                        {{ item.vehicle.year }}
+                        {{ item.vehicle.model }}
+                        {{ item.vehicle.make }}
+                      </h3>
+                      <div class="d-flex align-items-center">
+                        <p>
+                          <img
+                            src="assets/images/view_vehicle/location.svg"
+                            class="me-2 mb-1"
+                            width="22px"
+                            height="18px"
+                          />{{ item.vehicle.location?.city | titlecase }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="status-label text-lg-end d-lg-block">
+                      <label class="text-purple-2 mb-2"
+                        >{{ "Order Status" | translate }}:</label
+                      >
+                      <p
+                        class="label in-progress d-inline-block d-lg-block nowrap ms-2 ms-lg-0"
+                        *ngIf="
+                          item.order_status != 'confirmed' &&
+                          item.order_status != 'cancelled' &&
+                          item.order_status != 'rejected'
+                        "
+                      >
+                        {{ "In Progress" | translate }}
+                      </p>
+                      <p
+                        class="label completed d-inline-block d-lg-block nowrap"
+                        *ngIf="item.order_status == 'confirmed'"
+                      >
+                        {{ "Completed" | translate }}
+                      </p>
+                      <p
+                        class="label canceled d-inline-block d-lg-block nowrap ms-2 ms-lg-0"
+                        *ngIf="
+                          item.order_status === 'cancelled' ||
+                          item.order_status === 'rejected'
+                        "
+                      >
+                        {{ "Canceled" | translate }}
+                      </p>
+                      <!-- if process is completed add class completed if process is canceled add class canceled -->
+                    </div>
+                  </div>
+
+                  <div class="label-wrp">
+                    <ul class="p-0 m-0">
+                      <li class="text-secondary font-16">
+                        {{ item.vehicle.condition | titlecase | translate }}
+                      </li>
+                      <li class="text-secondary font-16">
+                        {{ item.vehicle.fuel_type | titlecase | translate }}
+                      </li>
+                      <li class="text-secondary font-16">
+                        {{ item.vehicle.distance_travelled | spanishNumber }}
+
+                        <span
+                          *ngIf="
+                            item.vehicle.distance_travelled_unit ===
+                            'Kilometers'
+                          "
+                        >
+                          km
+                        </span>
+                        <span
+                          *ngIf="
+                            item.vehicle.distance_travelled_unit === 'Miles'
+                          "
+                        >
+                          mi
+                        </span>
+                        <span
+                          *ngIf="
+                            item.vehicle.distance_travelled_unit === 'Hours'
+                          "
+                        >
+                          Hr
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="btn-grp">
+                    <button
+                      class="btn primary-btn btn-sm br-12 me-2 me-md-3 mt-2"
+                      (click)="continueOrder(item.order_id)"
+                      *ngIf="selectedTab == 'IN_PROGRESS'"
+                    >
+                      {{ "Continue Order Process" | translate }}
+                    </button>
+                    <button
+                      class="btn primary-btn-outline btn-sm br-12 me-2 me-md-3 mt-2"
+                      (click)="cancelOrder(item.order_id)"
+                      *ngIf="selectedTab == 'IN_PROGRESS'"
+                    >
+                      {{ "Cancel Order" | translate }}
+                    </button>
+                    <a
+                      class="btn primary-btn-outline btn-sm br-12 mt-2"
+                      href="javascript:void(0)"
+                      routerLink="/user/buyer-orders/order-details/{{
+                        item.order_id
+                      }}"
+                    >
+                      {{ "View Order Detail" | translate }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="total-price mt-3 px-4 py-3 d-flex justify-content-between align-items-md-center align-items-start flex-md-row flex-column"
+              >
+                <p class="text-purple-2 font-16 fw-regular">
+                  <img src="assets/images/calender.svg" class="me-2 mb-1" />{{
+                    "Order Date" | translate
+                  }}:
+                  {{ item.order_date | date : "dd-MMMM-YYYY" }}
+                </p>
+                <h4
+                  class="text-secondary font-28 fw-semibold d-sm-flex align-items-center mt-2 mt-md-0"
+                >
+                  <span class="text-secondary font-16 fw-regular me-3"
+                    >{{ "Total Amount" | translate }}: </span
+                  >${{ item.original_price | spanishNumber }}
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="Condition-past"
+            role="tabpanel"
+            aria-labelledby="Condition-past-tab"
+          ></div>
+          <app-loader *ngIf="loading"></app-loader>
+        </div>
+
+        <pagination
+          *ngIf="paginationData?.total_pages && !loading"
+          [paginationData]="paginationData"
+          (selectedPage)="jumpToThePage($event)"
+        >
+        </pagination>
+      </div>
+    </div>
+  </div>
+</section>

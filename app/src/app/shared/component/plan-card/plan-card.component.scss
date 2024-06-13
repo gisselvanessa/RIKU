@@ -1,0 +1,66 @@
+.plan-card {
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    max-width: 380px;
+    font-family: Pl;
+    &__header {
+        background-color: #9E438F;
+        border-top-right-radius: 30px;
+    }
+    &__body {
+        border-bottom-left-radius: 30px;
+        background-color: #FFF;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+}
+
+.header__title {
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.item__point {
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 100px;
+    background-color: #9E438F;
+}
+
+.btn-plan {
+    background-color: #9E438F;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.bg-free {
+    background-color: #EC8F67;
+}
+
+.bg-basic {
+    background-color: #9E438F;
+}
+
+.bg-recommend {
+    background-color: #3C759A;
+}
+
+.bg-plus {
+    background-color: #4E1F4F;
+}
+
+h1, h2, .btn-plan {
+    font-family: "Plus Jakarta San", sans-serif;
+}
+
+h1 {
+    font-size: 1.75rem;
+}
+
+h2, .btn-plan {
+    font-size: 1rem;
+}
+
+.card-shadow {
+    box-shadow: 0 4px 16px 8px rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+}

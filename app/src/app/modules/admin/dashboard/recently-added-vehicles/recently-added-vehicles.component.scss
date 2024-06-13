@@ -1,0 +1,229 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.cusotmer-heading{
+  h4{
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      &:after{
+          content: "";
+          height: 2px;
+          width: 8%;
+          left: 0;
+          bottom: 0;
+          position: absolute;
+          background-color: $secondary-color;
+          border-radius: 1px;
+      }
+  }
+  .doropdown_radio{
+      .btn{
+          padding:5px 15px 5px 35px;
+          border: 1px solid #CACED5;
+          border-radius: 5px;
+          .input-icon{
+              left:15px;
+              right:unset;
+              top:15px;
+              width: 15px;
+              height: auto;
+          }
+          &.dropdown-toggle{
+              &:after{
+                  top:38%;
+                  right:15px;
+              }
+          }
+      }
+      .dropdown-menu{
+          left:unset;
+          right: 0;
+          min-width: 8rem;
+          padding: 6px;
+      }
+      li{
+          margin:5px 0px;
+          a{
+              border: 1px solid rgba($color: #CACED5, $alpha: 0.5);
+              padding:6px;
+              border-radius: 5px;
+              text-align: left;
+              font-size: 10px;
+          }
+      }
+  }
+}
+.data-count{
+  border-radius: 100%;
+  height: 90px;
+  width: 90px;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($color: $secondary-color, $alpha: 0.1);
+  display: inline-flex;
+  &.small-data-count{
+      height: 40px;
+      width: 40px;
+  }
+}
+.cutomer-data-wrp{
+  p{
+      color: #B1A0B4;
+  }
+  .border-right{
+      border-right: 1px solid rgba($color: #B1A0B4, $alpha: 0.5);
+  }
+}
+
+.selected-dropdown-item{
+  background-color: rgba(47, 119, 156, 0.1) !important;
+}
+
+
+.data-sorting-tabs {
+  & .tabs-list {
+    border: 1px solid #CACED5;
+    border-radius: 5px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  & .nav-item {
+    @include for-phone-only {
+      width: 100%;
+    }
+  }
+
+  & .nav-link {
+    padding: 6px 20px;
+    font-size: 14px;
+    color: $thired-color;
+    @include for-phone-only {
+      width: 100%;
+    }
+
+    &.active {
+      background-color: $secondary-color;
+      color: $white;
+    }
+  }
+}
+
+
+
+.admin {
+  &--listing {
+    .condition-tabs {
+      & .nav-link {
+        min-width: 150px;
+        padding: 12px 40px;
+        font-size: 1rem;
+      }
+    }
+    &-table {
+      box-shadow: 0px 3px 10px #B1A0B470;
+
+      table {
+        thead {
+          border-radius: 6px;
+          background: rgba($color: $secondary-color, $alpha: 0.1);
+
+          th {
+            color: #191919;
+            font-size: 14px;
+            padding: 15px 10px;
+            font-weight: 600;
+            cursor: pointer;
+
+            span {
+              display: flex;
+              align-items: center;
+              padding: 0px;
+              white-space: nowrap;
+            }
+          }
+
+          th:first-child {
+            border-radius: 10px 0 0 10px;
+            padding-left: 20px;
+          }
+
+          th:last-child {
+            border-radius: 0 10px 10px 0;
+            padding-right: 20px;
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #D5DCE6;
+
+            &:last-child {
+              border-bottom: 0px transparent;
+            }
+          }
+
+          td {
+            vertical-align: middle;
+            padding: 15px 8px;
+            font-size: 14px;
+
+
+            &:first-child {
+              padding-left: 20px;
+            }
+
+            &:last-child.action-class {
+              padding-right: 20px;
+              display: flex;
+              align-items: center;
+            }
+
+            .small-img-list {
+              border-radius: 12px;
+              overflow: hidden;
+              width: 40px;
+              height: 40px;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            label {
+              font-size: 12px;
+              font-weight: 400;
+              border-radius: 15px;
+              padding: 8px 12px;
+              background-color: rgba($color: #4DB143, $alpha: 0.1);
+              color: #46BC39;
+
+              &.pending-approval {
+                color: #994C98;
+                background-color: rgba($color: #8D5099, $alpha: 0.1);
+              }
+
+              &.approved {
+                color: #46BC39;
+                background-color: rgba($color: #4DB143, $alpha: 0.1);
+              }
+
+              &.rejected {
+                color: #EE3232;
+                background-color: rgba($color: #DE3F34, $alpha: 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#recently-added-vehicles{
+  display: block !important;
+}
+

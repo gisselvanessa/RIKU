@@ -1,0 +1,2479 @@
+<app-dealer-add-vehicle
+  *ngIf="vehicleId"
+  [vehicleId]="vehicleId"
+  [vehicleDetail]="vehicleDetail"
+></app-dealer-add-vehicle>
+<div class="page-wrapper">
+  <div class="add__vehicle_form bg-blue py-5">
+    <div class="jakay-container">
+      <label class="usage-pill" [ngClass]="{ 'd-none': step == 4 }">{{
+        vehicleCondition | titlecase | translate
+      }}</label>
+      <div
+        class="vehicle__heading d-flex justify-content-between align-items-center"
+        [ngClass]="{ 'd-none': step == 4 }"
+      >
+        <div class="d-inline-flex align-items-center">
+          <h2 class="font-38 fw-regular me-5" *ngIf="basicVehicleDetails">
+            {{ basicVehicleDetails?.vehicle_type | translate }},
+            {{ basicVehicleDetails?.vehicle_make }}
+            {{ basicVehicleDetails?.make_year }}
+            {{ basicVehicleDetails?.vehicle_model }}
+          </h2>
+          <a
+            href="javascript:void(0)"
+            *ngIf="!vehicleId"
+            class="btn-link__blue text-secondary font-18 text-underline"
+            routerLink="/dealer/vehicles/add-vehicle"
+            >{{ "Change Vehicle" | translate }}</a
+          >
+        </div>
+        <button
+          *ngIf="!vehicleId"
+          class="btn primary-btn-outline br-8 font-16 fw-regular btn-sm"
+          (click)="onSubmit(true)"
+        >
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ "Save As Draft" | translate }}
+        </button>
+      </div>
+      <div
+        class="vehicle__steps d-flex align-items-center mt-4"
+        [ngClass]="{ 'd-none': step == 4 }"
+        *ngIf="!vehicleId"
+      >
+        <div class="steps-wrp">
+          <div class="step mb-md-0 mb-3" [ngClass]="{ active: step == 1 }">
+            <span>1</span>{{ "Basic Details" | translate }}
+          </div>
+          <span class="line"></span>
+          <div
+            class="step mt-md-0 mt-3"
+            (click)="step = 2"
+            [ngClass]="{ active: step == 2 }"
+          >
+            <span>2</span>{{ "Specifications" | translate }}
+          </div>
+          <span class="line"></span>
+          <div class="step mt-md-0 mt-3" [ngClass]="{ active: step == 3 }">
+            <span>3</span>{{ "Upload Photos" | translate }}
+          </div>
+        </div>
+      </div>
+      <div class="vehicle__form mt-5">
+        <fieldset
+          [ngClass]="{ 'd-none': !vehicleId && step != 1, '': vehicleId }"
+        >
+          <div class="first-step">
+            <h3 class="font-24 fw-regular text-primary mb-4">
+              {{ "Basic Details" | translate }}
+            </h3>
+            <form [formGroup]="basicDetailsForm" #form="ngForm">
+              <div class="row">
+                <div
+                  class="col-12 col-md-4 col-lg-6 col-xl-4"
+                  [ngStyle]="{
+                    display:
+                      (vehicleCondition | lowercase) == 'new' ? 'none' : 'block'
+                  }"
+                >
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "VIN Number(CHASIS)" | translate
+                    }}</label>
+                    <input
+                      class="form-control"
+                      minlength="17"
+                      maxlength="17"
+                      formControlName="licence_number"
+                      AlphaNumeric
+                      [ngClass]="{
+                        'is-invalid':
+                          basic_detail_step &&
+                          !basicDetailControls.licence_number.valid
+                      }"
+                      type="text"
+                      placeholder="{{ 'Enter VIN Number(CHASIS)' | translate }}"
+                    />
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.licence_number.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "VIN Number(CHASIS) is required" | translate }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        (basicDetailControls.licence_number.errors?.minlength ||
+                          basicDetailControls.licence_number.errors?.maxlength)
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{
+                        "License number must be 17 characters long" | translate
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="col-12 col-md-4 col-lg-6 col-xl-4"
+                  [ngStyle]="{
+                    display:
+                      (vehicleCondition | lowercase) == 'new' ? 'none' : 'block'
+                  }"
+                >
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Number Plate" | translate
+                    }}</label>
+                    <input
+                      formControlName="number_plate"
+                      minlength="7"
+                      maxlength="8"
+                      [ngClass]="{
+                        'is-invalid':
+                          basic_detail_step &&
+                          !basicDetailControls.number_plate.valid
+                      }"
+                      type="text"
+                      class="form-control"
+                      (input)="formatNumberPlate($event)"
+                      placeholder="{{ 'Enter Number Plate' | translate }}"
+                    />
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.number_plate.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Number plate is required" | translate }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        (basicDetailControls.number_plate.errors?.minlength ||
+                          basicDetailControls.number_plate.errors?.maxlength)
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Number plate must be of 7-8 characters" | translate }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.number_plate.errors?.pattern
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{
+                        "Number plate should follow PBX-1234 pattern"
+                          | translate
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="col-12 col-md-4 col-lg-6 col-xl-4"
+                  [ngStyle]="{
+                    display:
+                      (vehicleCondition | lowercase) == 'new' ? 'none' : 'block'
+                  }"
+                >
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Registration Year" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      formControlName="registration_year"
+                      [ngClass]="{
+                        'is-invalid':
+                          basic_detail_step &&
+                          !basicDetailControls.registration_year.valid
+                      }"
+                      type="text"
+                      OnlyNumber
+                      maxlength="4"
+                      class="form-control"
+                      placeholder="{{ 'Enter Registration Year' | translate }}"
+                    />
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.registration_year.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Registration year is required" | translate }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.registration_year.errors?.maxlength
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{
+                        "Registration year must not be more than 4 digits"
+                          | translate
+                      }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.registration_year.errors?.pattern
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Only digits are allowed" | translate }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.registration_year.errors?.min
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{
+                        "Registration year must be a number between 1980 and current year+1"
+                          | translate
+                      }}
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.registration_year.errors?.max
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{
+                        "Registration year must be a number between 1980 and current year+1"
+                          | translate
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row margin-fix">
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Distance Traveled" | translate
+                      }}</label>
+                      <input
+                        type="text"
+                        formControlName="distance_travelled"
+                        maxlength="7"
+                        PriceDirective
+                        (blur)="formatPrice($event, 'distance_travelled')"
+                        (focus)="formatToNumber($event, 'distance_travelled')"
+                        [ngClass]="{
+                          'is-invalid':
+                            basic_detail_step &&
+                            !basicDetailControls.distance_travelled.valid
+                        }"
+                        class="form-control"
+                      />
+                      <div
+                        *ngIf="
+                          submitting &&
+                          basicDetailControls.distance_travelled.errors
+                            ?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Distance travelled is required" | translate }}
+                      </div>
+                      <!-- <div *ngIf="submitting && basicDetailControls.distance_travelled.errors?.maxlength"
+                    class="invalid-feedback">
+                    Distance travelled is required
+                  </div> -->
+                      <div
+                        ngbDropdown
+                        class="doropdown_selection doropdown_radio"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-secondary': distance_travelled_unit
+                          }"
+                          type="button"
+                          id="vehicle-type"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          style="bottom: 0px"
+                        >
+                          {{ distance_travelled_unit | translate }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li ngbDropdownItem>
+                            <a
+                              (click)="distance_travelled_unit = 'Kilometers'"
+                              class="dropdown-item"
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="distance"
+                                    [checked]="
+                                      distance_travelled_unit == 'Kilometers'
+                                    "
+                                    id="distance_Kilometers"
+                                    value="Kilometers"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="distance_Kilometers"
+                                    >{{ "Kilometers" | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li ngbDropdownItem>
+                            <a
+                              (click)="distance_travelled_unit = 'Miles'"
+                              class="dropdown-item"
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    [checked]="
+                                      distance_travelled_unit == 'Miles'
+                                    "
+                                    type="radio"
+                                    name="distance"
+                                    id="distance_Miles"
+                                    value="Miles"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="distance_Miles"
+                                    >{{ "Miles" | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li ngbDropdownItem>
+                            <a
+                              (click)="distance_travelled_unit = 'Hours'"
+                              class="dropdown-item"
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    [checked]="
+                                      distance_travelled_unit == 'Hours'
+                                    "
+                                    type="radio"
+                                    name="distance"
+                                    id="distance_Hours"
+                                    value="Hours"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="distance_Hours"
+                                    >{{ "Hours" | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Price" | translate }} $</label
+                      >
+                      <div class="text">
+                        <input
+                          type="text"
+                          formControlName="price"
+                          minlength="4"
+                          maxlength="11"
+                          PriceDirective
+                          (blur)="formatPrice($event, 'price')"
+                          (focus)="formatToNumber($event, 'price')"
+                          [ngClass]="{
+                            'is-invalid':
+                              basic_detail_step &&
+                              !basicDetailControls.price.valid
+                          }"
+                          class="form-control"
+                          placeholder="{{ 'Enter Price' | translate }}"
+                        />
+                      </div>
+
+                      <div
+                        *ngIf="
+                          submitting &&
+                          basicDetailControls.price.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Price is required" | translate }}
+                      </div>
+                      <!-- <div *ngIf="submitting && basicDetailControls.price.errors?.pattern" class="invalid-feedback">
+                    Numbers only
+                  </div> -->
+                      <div
+                        *ngIf="
+                          submitting &&
+                          (basicDetailControls.price.errors?.minlength ||
+                            basicDetailControls.price.errors?.maxlength)
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Price must be between 4 to 9 digits" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Negotiable" | translate
+                      }}</label>
+                      <div ngbDropdown class="doropdown_radio">
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{ 'text-secondary': is_negotiable }"
+                          type="button"
+                          id="vehicle-type"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            is_negotiable
+                              ? (is_negotiable | translate)
+                              : ("Select" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type"
+                          class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              (click)="
+                                is_negotiable = 'Yes';
+                                basicDetailControls.is_negotiable.setValue(
+                                  'Yes'
+                                )
+                              "
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="negotiable"
+                                    id="Yes"
+                                    [checked]="is_negotiable == 'Yes'"
+                                    value="Yes"
+                                  />
+                                  <label class="form-check-label" for="Yes">{{
+                                    "Yes" | translate
+                                  }}</label>
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              (click)="
+                                is_negotiable = 'No';
+                                basicDetailControls.is_negotiable.setValue('No')
+                              "
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    [checked]="is_negotiable == 'No'"
+                                    type="radio"
+                                    name="negotiable"
+                                    id="No"
+                                    value="No"
+                                  />
+                                  <label class="form-check-label" for="No">{{
+                                    "No" | translate
+                                  }}</label>
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          basicDetailControls.is_negotiable.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Negotiation is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                    "Vehicle Current Address Entry" | translate
+                  }}</label>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Province" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': basicDetailControls.province.value
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container>
+                          <span *ngIf="basicDetailControls.province.value">{{
+                            basicDetailControls?.province.value | titlecase
+                          }}</span>
+                          <span *ngIf="!basicDetailControls?.province.value">{{
+                            "Select" | translate
+                          }}</span>
+                        </ng-container>
+                      </button>
+                      <ng-container *ngIf="provinceList.length > 0">
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type"
+                          class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li>
+                            <div class="form-group search-grp">
+                              <div class="position-relative">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="{{
+                                    'Search Province' | translate
+                                  }}"
+                                  [(ngModel)]="searchProvince"
+                                  [ngModelOptions]="{ standalone: true }"
+                                />
+                                <img
+                                  src="assets/images/vehicle-list/search-blue.svg"
+                                  class="search-icon"
+                                />
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            *ngFor="
+                              let province of provinceList
+                                | filter : searchProvince;
+                              index as i
+                            "
+                          >
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    [checked]="
+                                      basicDetailControls?.province?.value ==
+                                      province
+                                    "
+                                    (click)="setProvice(province)"
+                                    name="province"
+                                    id="province_{{ i }}"
+                                    value="{{ province }}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="province_{{ i }}"
+                                    >{{ province | titlecase }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </ng-container>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.province.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Province is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "City" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': basicDetailControls.city.value
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container>
+                          <span *ngIf="basicDetailControls.city.value">{{
+                            basicDetailControls.city.value | titlecase
+                          }}</span>
+                          <span *ngIf="!basicDetailControls?.city.value">{{
+                            "Select" | translate
+                          }}</span>
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="{{ 'Search City' | translate }}"
+                                [(ngModel)]="searchCity"
+                                [ngModelOptions]="{ standalone: true }"
+                              />
+                              <img
+                                src="assets/images/vehicle-list/search-blue.svg"
+                                class="search-icon"
+                              />
+                            </div>
+                          </div>
+                        </li>
+                        <li
+                          *ngFor="
+                            let city of cityList | filter : searchCity;
+                            index as i
+                          "
+                        >
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  [checked]="
+                                    basicDetailControls?.city?.value == city
+                                  "
+                                  (click)="setCity(city)"
+                                  name="city"
+                                  id="city_{{ i }}"
+                                  value="{{ city }}"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="city_{{ i }}"
+                                  >{{ city | titlecase }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li *ngIf="cityList.length == 0">
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            {{ "No Cities Found" | translate }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting && basicDetailControls.city.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "City is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                      "Parish" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': basicDetailControls.parish.value
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container>
+                          <span *ngIf="basicDetailControls.parish.value">{{
+                            basicDetailControls.parish.value | titlecase
+                          }}</span>
+                          <span *ngIf="!basicDetailControls.parish.value">{{
+                            "Select" | translate
+                          }}</span>
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        aria-labelledby="vehicle-type"
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li>
+                          <div class="form-group search-grp">
+                            <div class="position-relative">
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="{{ 'Search Parish' | translate }}"
+                                [(ngModel)]="searchParish"
+                                [ngModelOptions]="{ standalone: true }"
+                              />
+                              <img
+                                src="assets/images/vehicle-list/search-blue.svg"
+                                class="search-icon"
+                              />
+                            </div>
+                          </div>
+                        </li>
+                        <li
+                          *ngFor="
+                            let parish of parishList | filter : searchParish;
+                            index as i
+                          "
+                        >
+                          <a class="dropdown-item" href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  [checked]="
+                                    basicDetailControls?.parish?.value == parish
+                                  "
+                                  (click)="setParish(parish)"
+                                  name="parish"
+                                  id="parish_{{ i }}"
+                                  value="{{ parish }}"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="parish_{{ i }}"
+                                  >{{ parish | titlecase }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        submitting &&
+                        basicDetailControls.parish.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Parish is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-8 col-lg-12 col-xl-8">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Description' | translate }}</label>
+                    <textarea rows="2" type="text" formControlName="description" maxlength="1000" [ngClass]="{
+                      'is-invalid':
+                        basic_detail_step &&
+                        !basicDetailControls.description.valid
+                    }" class="form-control"></textarea>
+                    <div *ngIf="
+                      submitting &&
+                      basicDetailControls.description.errors?.required
+                    " class="invalid-feedback">
+                      {{ 'Description is required' | translate }}
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <div class="d-flex static-bottom-btn mt-3" *ngIf="!vehicleId">
+                <div class="prv-button mt-2 me-3 btn-wrp">
+                  <button
+                    class="btn primary-btn-outline btn-md prev-btn"
+                    routerLink="/dealer/vehicles/add-vehicle"
+                  >
+                    {{ "Previous" | translate }}
+                  </button>
+                </div>
+                <div class="next-button mt-2 btn-wrp">
+                  <button class="btn primary-btn btn-md" (click)="next()">
+                    {{ "Next" | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </fieldset>
+        <fieldset
+          [ngClass]="{ 'd-none': !vehicleId && step != 2, '': vehicleId }"
+        >
+          <div class="second-step">
+            <h3 class="font-24 fw-regular text-primary mb-4">
+              {{ "Specifications" | translate }}
+            </h3>
+            <form [formGroup]="specificationsForm">
+              <div class="row">
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-unset">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Body Type" | translate
+                    }}</label>
+                    <div
+                      ngbDropdown
+                      class="doropdown_radio position-unset dropdown-images"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{ 'text-secondary': vehicleBodyType }"
+                        type="button"
+                        id="vehicle-type-btn-body-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            vehicleBodyType
+                              ? vehicleBodyType
+                              : ("Select Body Type" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <ng-container *ngIf="bodyTypeList.length > 0">
+                          <div *ngFor="let datarow of bodyTypeList" class="row">
+                            <li
+                              *ngFor="let data of datarow"
+                              class="col-6 col-md-3"
+                            >
+                              <a
+                                ngbDropdownItem
+                                class="dropdown-item"
+                                (click)="checkNgbDropdown('body_type_id', data)"
+                                href="javascript:void(0)"
+                              >
+                                <div class="radio-check br-12">
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="body_type_id"
+                                      id="Kilometers_body_type"
+                                      [checked]="
+                                        specificationsValue.body_type_id ==
+                                        data.id
+                                      "
+                                      value="{{ data.id }}"
+                                    />
+                                    <label
+                                      class="form-check-label text-center"
+                                      for="Kilometers"
+                                      ><img
+                                        src="assets/images/car.svg"
+                                        class="img-fluid"
+                                      /><span class="d-block mt-2">{{
+                                        data.type
+                                      }}</span></label
+                                    >
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </div>
+                        </ng-container>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.body_type_id.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Body type is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Mileage' | translate }} ({{ 'Per Litre' | translate
+                      }})</label>
+                    <input type="text" class="form-control" pattern="\d{0,3}(?:[.,]\d{0,2})?" maxlength="6"
+                      (keyup)="changeToDecimal($event)" TwoDigitDecimaNumber [ngClass]="{
+                      'is-invalid':
+                        submitting &&
+                        specificationsControls.mileage.touched &&
+                        specificationsControls.mileage.errors?.required
+                    }" formControlName="mileage" />
+                    <div *ngIf="
+                      submitting &&
+                      specificationsControls.mileage.errors?.required
+                    " class="invalid-feedback">
+                      {{ 'Mileage is required' | translate }}
+                    </div>
+                    <div *ngIf="
+                      submitting &&
+                      specificationsControls.mileage.errors?.pattern
+                    " class="invalid-feedback">
+                      {{ 'Please enter valid Mileage' | translate }}
+                    </div>
+                    <div *ngIf="
+                      submitting && specificationsControls.mileage.errors?.max
+                    " class="invalid-feedback">
+                      {{ 'Mileage can not be greater than 100' | translate }}
+                    </div>
+                    <div ngbDropdown class="doropdown_selection doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                         [ngClass]="{ 'text-secondary': specificationsValue.mileage_unit }"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ (specificationsValue.mileage_unit | translate) | titlecase }}
+                      </button>
+                      <ul ngbDropdownMenu class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                        <li *ngFor="let mileage of mileageList">
+                          <a ngbDropdownItem class="dropdown-item" (click)="checkNgbDropdown('mileage_unit', mileage)"
+                            href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio"
+                                 [checked]="specificationsValue.mileage_unit == mileage"
+                                  name="mileage_unit" id="mileage_unit_{{ mileage }}" value="{{ mileage }}" />
+                                <label class="form-check-label" for="mileage_unit_{{ mileage }}">{{ mileage | translate }}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Passenger Capacity" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio dropdown-images">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary':
+                            specificationsValue.passanger_capacity
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.passanger_capacity
+                              ? specificationsValue.passanger_capacity
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <div class="d-flex row">
+                          <li
+                            *ngFor="let data of passangerCapacity; index as i"
+                            class="me-2 col-2"
+                          >
+                            <a
+                              ngbDropdownItem
+                              class="dropdown-item"
+                              (click)="
+                                checkNgbDropdown('passanger_capacity', data)
+                              "
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="passanger_capacity"
+                                    id="pas_{{ i }}"
+                                    [checked]="
+                                      specificationsValue.passanger_capacity ==
+                                      data
+                                    "
+                                    value="{{ data }}"
+                                  />
+                                  <label
+                                    class="form-check-label text-center"
+                                    for="pas_{{ i }}"
+                                    >{{ data }}</label
+                                  >
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </div>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.passanger_capacity.errors
+                          ?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Passenger Capacity is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">
+                      {{ "Passenger Doors" | translate }}</label
+                    >
+                    <div ngbDropdown class="doropdown_radio dropdown-images">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.passanger_doors
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.passanger_doors
+                              ? specificationsValue.passanger_doors
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <div class="d-flex">
+                          <ng-container
+                            *ngFor="
+                              let data of passangerCapacity;
+                              let i = index
+                            "
+                          >
+                            <li *ngIf="data <= 6" class="me-2">
+                              <a
+                                ngbDropdownItem
+                                (click)="
+                                  checkNgbDropdown('passanger_doors', data)
+                                "
+                                class="dropdown-item"
+                                href="javascript:void(0)"
+                              >
+                                <div class="radio-check br-12">
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="passanger_doors"
+                                      id="door_{{ data }}"
+                                      [checked]="
+                                        specificationsValue.passanger_doors ==
+                                        data
+                                      "
+                                      value="{{ data }}"
+                                    />
+                                    <label
+                                      class="form-check-label text-center"
+                                      for="door_{{ data }}"
+                                      >{{ data }}</label
+                                    >
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ng-container>
+                        </div>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.passanger_doors.errors
+                            ?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Passenger Doors" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Transmission" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.transmission
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.transmission
+                              ? (specificationsValue.transmission | translate)
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li *ngFor="let transmission of transmissionList">
+                          <a
+                            ngbDropdownItem
+                            (click)="
+                              checkNgbDropdown('transmission', transmission)
+                            "
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="transmission"
+                                  name="transmission"
+                                  id="trans_{{ transmission }}"
+                                  [value]="transmission"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="trans_{{ transmission }}"
+                                  >{{ transmission }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.transmission.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Transmission is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Brakes" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.break_type
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">{{
+                          specificationsValue.break_type
+                            ? (specificationsValue.break_type | translate)
+                            : ("Select" | translate)
+                        }}</span>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li>
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="
+                              checkNgbDropdown('break_type', 'Disc Brakes')
+                            "
+                            href="javascript:void(0)"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="break_type"
+                                  id="Disc Brakes"
+                                  formControlName="break_type"
+                                  value="Disc Brakes"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="Disc Brakes"
+                                  >{{ "Disc Brakes" | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="
+                              checkNgbDropdown('break_type', 'Drum Brakes')
+                            "
+                            href="javascript:void(0)"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="break_type"
+                                  name="break_type"
+                                  id="Drum Brakes"
+                                  value="Drum Brakes"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="Drum Brakes"
+                                  >{{ "Drum Brakes" | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="
+                              checkNgbDropdown('break_type', 'Mixed Breakes')
+                            "
+                            href="javascript:void(0)"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="break_type"
+                                  name="break_type"
+                                  id="Mixed Breakes"
+                                  value="Mixed Breakes"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="Mixed Breakes"
+                                  >{{ "Mixed Breakes" | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.break_type.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Break Type is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Outside Color" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.color
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.color
+                              ? (specificationsValue.color | translate)
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <div class="d-flex row">
+                          <li
+                            *ngFor="let colordata of outsideColor"
+                            class="me-2 col-4"
+                          >
+                            <a
+                              ngbDropdownItem
+                              class="dropdown-item"
+                              (click)="checkNgbDropdown('color', colordata)"
+                              href="javascript:void(0)"
+                            >
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    formControlName="color"
+                                    name="color"
+                                    id="color_{{ colordata }}"
+                                    [value]="colordata"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="color_{{ colordata }}"
+                                    >{{ colordata | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </div>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.color.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Color is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Fuel Type" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.fuel_type
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.fuel_type
+                              ? (specificationsValue.fuel_type | translate)
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li *ngFor="let fuelType of fuelTypeList">
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="checkNgbDropdown('fuel_type', fuelType)"
+                            href="javascript:void(0);"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="fuel_type"
+                                  name="fuel_type"
+                                  id="fuel_{{ fuelType }}"
+                                  [value]="fuelType"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="fuel_{{ fuelType }}"
+                                  >{{ fuelType | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.fuel_type.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Fuel Type is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Glasses" | translate
+                    }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.glass_type
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.glass_type
+                              ? (specificationsValue.glass_type | translate)
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li *ngFor="let glass of glassTypeList">
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="checkNgbDropdown('glass_type', glass)"
+                            href="javascript:void(0)"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="glass_type"
+                                  name="glass_type"
+                                  id="input_{{ glass }}"
+                                  [value]="glass"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="input_{{ glass }}"
+                                  >{{ glass | translate }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsControls.glass_type.errors?.required
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Glass Type is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ "Bodywork" | translate }}</label>
+                    <div ngbDropdown class="doropdown_radio">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                         [ngClass]="{ 'text-secondary': specificationsValue.body_work }"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="multipledata-hide">   {{
+                        specificationsValue.body_work
+                        ? (specificationsValue.body_work | translate)
+                        : "Select" | translate
+                        }}</span>
+                      </button>
+                      <ul ngbDropdownMenu class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                        <li>
+                          <a ngbDropdownItem class="dropdown-item" (click)="
+                            checkNgbDropdown('body_work', 'Fiberglass')
+                          " href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" formControlName="body_work"
+                                  name="body_work" id="Fiberglass" value="Fiberglass" />
+                                <label class="form-check-label" for="Fiberglass">{{"Fiberglass" | translate}}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        <li>
+                          <a ngbDropdownItem class="dropdown-item" (click)="checkNgbDropdown('body_work', 'Metalic')"
+                            href="javascript:void(0)">
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" formControlName="body_work"
+                                  name="body_work" id="Metalic" value="Metalic" />
+                                <label class="form-check-label" for="Metalic">{{"Metalic" | translate}}</label>
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div *ngIf="
+                        submitting &&
+                        specificationsControls.body_work.errors?.required
+                      " class="invalid-feedback">
+                        {{ "Body Work is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Engine Size" | translate
+                    }}</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="engine_size"
+                      placeholder="{{ 'Enter Engine Size' | translate }}"
+                      maxlength="8"
+                      PriceDirevcitve
+                      (blur)="formatPrice($event, 'engine_size')"
+                      (focus)="formatToNumber($event, 'engine_size')"
+                    />
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.engine_size.errors?.required &&
+                        submitting
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Engine Size is required" | translate }}
+                    </div>
+                    <span
+                      class="doropdown_selection doropdown_radio text-primary-light dropdown-cc"
+                      >CC</span
+                    >
+                  </div>
+                </div>
+                <div
+                  class="col-12 col-md-4 col-lg-6 col-xl-4"
+                  *ngIf="
+                    basicVehicleDetails?.vehicle_type == 'Heavy' ||
+                    basicVehicleDetails?.vehicle_type == 'Work Machinery'
+                  "
+                >
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3"
+                      >{{ "Tonnage capacity" | translate }} ({{
+                        "only for heavy vehicles and machinery" | translate
+                      }})</label
+                    >
+                    <div ngbDropdown class="doropdown_radio">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': specificationsValue.tonage_capacity
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="multipledata-hide">
+                          {{
+                            specificationsValue.tonage_capacity
+                              ? specificationsValue.tonage_capacity
+                              : ("Select" | translate)
+                          }}</span
+                        >
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                      >
+                        <li *ngFor="let tonCapacity of tonCapacityList">
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            (click)="
+                              checkNgbDropdown('tonage_capacity', tonCapacity)
+                            "
+                            href="javascript:void(0)"
+                          >
+                            <div class="radio-check br-12">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  formControlName="tonage_capacity"
+                                  name="tonage_capacity"
+                                  id="ton_{{ tonCapacity }}"
+                                  value="{{ tonCapacity }}"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="ton_{{ tonCapacity }}"
+                                  >{{ tonCapacity }}</label
+                                >
+                                <span class="dot-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          specificationsForm.value.tonage_capacity == '' &&
+                          (basicVehicleDetails.vehicle_type == 'Heavy' ||
+                            basicVehicleDetails.vehicle_type ==
+                              'Work Machinery')
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Tonnage Capacity is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h3 class="font-24 fw-regular text-primary mt-4 mb-4">
+                {{ "Highlights" | translate }}
+              </h3>
+              <div class="row">
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3"
+                      >{{ "Comfort" | translate }}
+                    </label>
+                    <div
+                      ngbDropdown
+                      class="doropdown_radio"
+                      [autoClose]="'outside'"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{ 'text-secondary': comforts.length > 0 }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container *ngIf="comforts.length > 1">
+                          <span class="multipledata-hide">
+                            {{ comforts[comforts.length - 1] | translate }}
+                            {{ "and" | translate }} {{ comforts.length - 1 }}
+                            {{ "others" | translate }}.
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="comforts.length == 1">
+                          <span class="multipledata-hide"
+                            >{{ comforts[comforts.length - 1] | translate }}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="comforts.length == 0">
+                          <span class="multipledata-hide">
+                            {{ "Select" | translate }}</span
+                          >
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+                      >
+                        <li *ngFor="let comfort of comfortList; index as j">
+                          <a ngbDropdownItem class="dropdown-item">
+                            <div class="checkbox-check br-12 me-3 radio-check">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  [checked]="comforts.indexOf(comfort) > -1"
+                                  type="checkbox"
+                                  name="comforts"
+                                  id="comfort_{{ j }}"
+                                  [value]="comfort"
+                                  (change)="
+                                    checkNgbDropdown('comforts', comfort)
+                                  "
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="comfort_{{ j }}"
+                                  >{{ comfort | translate }}</label
+                                >
+                                <span class="check-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.comforts.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Comfort is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Technology" | translate
+                    }}</label>
+                    <div
+                      ngbDropdown
+                      class="doropdown_radio"
+                      [autoClose]="'outside'"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': technologies.length > 0
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container *ngIf="technologies.length > 1">
+                          <span class="multipledata-hide">
+                            {{
+                              technologies[technologies.length - 1] | translate
+                            }}
+                            {{ "and" | translate }}
+                            {{ technologies.length - 1 }}
+                            {{ "others" | translate }}.
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="technologies.length == 1">
+                          <span class="multipledata-hide">
+                            {{
+                              technologies[technologies.length - 1] | translate
+                            }}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="technologies.length == 0">
+                          <span class="multipledata-hide"
+                            >{{ "Select" | translate }}
+                          </span>
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+                      >
+                        <li
+                          *ngFor="let technology of technologyList; index as i"
+                        >
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                          >
+                            <div class="checkbox-check br-12 me-3">
+                              <div class="form-check-inline radio-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="technologies"
+                                  id="tech_{{ i }}"
+                                  [value]="technology"
+                                  (change)="
+                                    checkNgbDropdown('technologies', technology)
+                                  "
+                                  [checked]="
+                                    technologies.indexOf(technology) > -1
+                                  "
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="tech_{{ i }}"
+                                  >{{ technology | translate }}</label
+                                >
+                                <span class="check-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.technologies.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Technology is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Security" | translate
+                    }}</label>
+                    <div
+                      ngbDropdown
+                      class="doropdown_radio"
+                      [autoClose]="'outside'"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{ 'text-secondary': securities.length > 0 }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container *ngIf="securities.length > 1">
+                          <span class="multipledata-hide">
+                            {{ securities[securities.length - 1] | translate }}
+                            {{ "and" | translate }} {{ securities.length - 1 }}
+                            {{ "others" | translate }}.
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="securities.length == 1">
+                          <span class="multipledata-hide">
+                            {{ securities[securities.length - 1] | translate }}
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="securities.length == 0">
+                          <span class="multipledata-hide">{{
+                            "Select" | translate
+                          }}</span>
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+                      >
+                        <li *ngFor="let security of securityList; index as i">
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                          >
+                            <div class="checkbox-check br-12 me-3">
+                              <div class="form-check-inline radio-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="securities"
+                                  id="security_{{ i }}"
+                                  [value]="security"
+                                  (change)="
+                                    checkNgbDropdown('securities', security)
+                                  "
+                                  [checked]="securities.indexOf(security) > -1"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="security_{{ i }}"
+                                  >{{ security | translate }}</label
+                                >
+                                <span class="check-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.securities.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Security is required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3">{{
+                      "Entertainment" | translate
+                    }}</label>
+                    <div
+                      ngbDropdown
+                      class="doropdown_radio"
+                      [autoClose]="'outside'"
+                    >
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+                        [ngClass]="{
+                          'text-secondary': entertainments.length > 0
+                        }"
+                        type="button"
+                        id="vehicle-type"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <ng-container *ngIf="entertainments.length == 1">
+                          <span
+                            class="multipledata-hide"
+                            *ngIf="entertainments.length == 1"
+                            >{{
+                              entertainments[entertainments.length - 1]
+                                | translate
+                            }}</span
+                          >
+                        </ng-container>
+                        <ng-container *ngIf="entertainments.length > 1">
+                          <span
+                            class="multipledata-hide"
+                            *ngIf="entertainments.length > 1"
+                            >{{
+                              entertainments[entertainments.length - 1]
+                                | translate
+                            }}
+                            {{ "and" | translate }}
+                            {{ entertainments.length - 1 }}
+                            {{ "others" | translate }}.</span
+                          >
+                        </ng-container>
+                        <ng-container *ngIf="entertainments.length == 0">
+                          <span
+                            class="multipledata-hide"
+                            *ngIf="entertainments.length == 0"
+                          >
+                            {{ "Select" | translate }}
+                          </span>
+                        </ng-container>
+                      </button>
+                      <ul
+                        ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+                      >
+                        <li
+                          *ngFor="
+                            let entertainment of entertainmentList;
+                            index as i
+                          "
+                        >
+                          <a
+                            ngbDropdownItem
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                          >
+                            <div class="checkbox-check br-12 me-3">
+                              <div class="form-check-inline radio-check">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="entertainments"
+                                  id="ent_{{ i }}"
+                                  [value]="entertainment"
+                                  (change)="
+                                    checkNgbDropdown(
+                                      'entertainments',
+                                      entertainment
+                                    )
+                                  "
+                                  [checked]="
+                                    entertainments.indexOf(entertainment) > -1
+                                  "
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="ent_{{ i }}"
+                                  >{{ entertainment | translate }}</label
+                                >
+                                <span class="check-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div
+                      *ngIf="
+                        submitting &&
+                        specificationsControls.entertainments.errors?.required
+                      "
+                      class="invalid-feedback"
+                    >
+                      {{ "Entertainments are required" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Utility' | translate }}</label>
+                    <div ngbDropdown class="doropdown_radio" [autoClose]="'outside'">
+                      <button ngbDropdownToggle
+                        class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                         [ngClass]="{ 'text-secondary': utilities.length > 0 }"
+                        type="button" id="vehicle-type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ng-container *ngIf="utilities.length > 1">
+                          <span class="multipledata-hide">
+                            {{ utilities[utilities.length - 1] | translate }} {{"and" | translate}}
+                            {{ utilities.length - 1 }} {{"others" | translate}}.
+                          </span>
+                        </ng-container>
+                        <ng-container *ngIf="utilities.length == 1">
+                          <span class="multipledata-hide">{{ utilities[utilities.length - 1] | translate }} </span>
+                        </ng-container>
+                        <ng-container *ngIf="utilities.length == 0">
+                          <span class="multipledata-hide">{{ 'Select' | translate }} </span>
+                        </ng-container>
+                      </button>
+                      <ul ngbDropdownMenu
+                        class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll">
+                        <li *ngFor="let utility of utilityList; index as i">
+                          <a ngbDropdownItem class="dropdown-item" href="javascript:void(0);">
+                            <div class="checkbox-check br-12 me-3">
+                              <div class="form-check-inline radio-check">
+                                <input class="form-check-input" type="checkbox" name="utilities" id="uti_{{ i }}"
+                                  [value]="utility" (change)="
+                                  checkNgbDropdown('utilities', utility)
+                                " [checked]="utilities.indexOf(utility) > -1" />
+                                <label class="form-check-label" for="uti_{{ i }}">{{ utility | translate }}</label>
+                                <span class="check-checkmark"></span>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div *ngIf="
+                      submitting &&
+                      specificationsControls.utilities.errors?.required
+                    " class="invalid-feedback">
+                      {{ 'Utility is required' | translate }}
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </form>
+            <div class="d-flex static-bottom-btn mt-3" *ngIf="!vehicleId">
+              <div class="prv-button mt-2 me-3 btn-wrp">
+                <button
+                  class="btn primary-btn-outline btn-md prev-btn"
+                  (click)="previous()"
+                >
+                  {{ "Previous" | translate }}
+                </button>
+              </div>
+              <div class="next-button mt-2 btn-wrp">
+                <button class="btn primary-btn btn-md" (click)="next()">
+                  {{ "Next" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset
+          [ngClass]="{ 'd-none': !vehicleId && step != 3, '': vehicleId }"
+        >
+          <div class="thired-step">
+            <div
+              [ngStyle]="{
+                display:
+                  (vehicleCondition | lowercase) == 'new' ? 'none' : 'block'
+              }"
+            >
+              <h3 class="font-24 fw-regular text-primary mb-4">
+                {{ "Upload Photos" | translate }}
+              </h3>
+              <form>
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label
+                        class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3"
+                        >{{ "Primary Photo" | translate }}</label
+                      >
+                      <input
+                        type="file"
+                        class="d-none"
+                        accept="image/*"
+                        (change)="onPrimaryPhotoChange($event)"
+                        #primaryPhotoInput
+                      />
+                      <input
+                        type="text"
+                        class="form-control"
+                        (click)="primaryPhotoInput.click()"
+                        placeholder=" {{
+                          primaryPhotoName
+                            ? primaryPhotoName
+                            : ('Upload Photo' | translate)
+                        }}"
+                      />
+                      <img
+                        src="assets/images/upload-icon.svg"
+                        (click)="primaryPhotoInput.click()"
+                        class="input-icon"
+                      />
+                      <div
+                        class="vehicle__uploaded-photo mt-3"
+                        *ngIf="primaryPhotoUrl"
+                      >
+                        <div class="d-flex">
+                          <div class="photo-wrp">
+                            <span
+                              class="c-pointer"
+                              (click)="deletePrimaryPhoto()"
+                              >&times;</span
+                            >
+                            <img [src]="primaryPhotoUrl" />
+                            <!-- <p class="text-center mt-2">{{ primaryPhotoName }}</p> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="vehicle__uploaded-photo mt-3"
+                        *ngIf="isImageUploading"
+                      >
+                        <div class="d-flex">
+                          {{ "Primary Photo uploading" | translate }}...
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label
+                        class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3"
+                        >{{ "Additional Photos" | translate }}</label
+                      >
+                      <input
+                        type="file"
+                        class="d-none"
+                        accept="image/*"
+                        (change)="onOtherPhotosChange($event)"
+                        multiple
+                        #otherPhotoInput
+                      />
+                      <input
+                        type="text"
+                        class="form-control"
+                        (click)="otherPhotoInput.click()"
+                        placeholder="{{ 'Upload Photos' | translate }}"
+                      />
+                      <img
+                        src="assets/images/upload-icon.svg"
+                        (click)="otherPhotoInput.click()"
+                        class="input-icon"
+                      />
+                      <div
+                        class="vehicle__uploaded-photo mt-3"
+                        *ngIf="otherPhotoUrls.length > 0"
+                      >
+                        <div class="row additional-image-height">
+                          <ng-container
+                            *ngFor="
+                              let otherPhoto of otherPhotoUrls;
+                              index as i
+                            "
+                          >
+                            <div class="photo-wrp me-3 mt-3">
+                              <span
+                                class="c-pointer"
+                                (click)="deleteOtherPhotos(i)"
+                                >&times;</span
+                              >
+                              <img [src]="otherPhoto.src" />
+                              <!-- <p class="text-center mt-2">{{ otherPhoto.name }}</p> -->
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div
+                        class="vehicle__uploaded-photo mt-3"
+                        *ngIf="isAdditionalImagesUploading"
+                      >
+                        <div class="d-flex">
+                          {{ "Additional Photos are uploading" | translate }}...
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label
+                        class="mb-xl-3 mb-lg-2 mb-1 d-block text-purple-3"
+                        >{{ "Add Vehicle Description" | translate }}</label
+                      >
+                      <textarea
+                        rows="2"
+                        cols="6"
+                        type="text"
+                        [(ngModel)]="vehicleDescription"
+                        [ngModelOptions]="{ standalone: true }"
+                        maxlength="1000"
+                        [ngClass]="{
+                          'is-invalid':
+                            submitting &&
+                            (!vehicleDescription ||
+                              vehicleDescription.trim() == '')
+                        }"
+                        class="form-control"
+                      ></textarea>
+                      <div
+                        *ngIf="
+                          submitting &&
+                          (!vehicleDescription ||
+                            vehicleDescription.trim() == '')
+                        "
+                        class="invalid-feedback"
+                      >
+                        {{ "Description is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex static-bottom-btn mt-3">
+                  <div class="prv-button mt-2 me-3 btn-wrp" *ngIf="!vehicleId">
+                    <button
+                      class="btn primary-btn-outline btn-md prev-btn"
+                      (click)="previous()"
+                    >
+                      {{ "Previous" | translate }}
+                    </button>
+                  </div>
+                  <!-- Sumit for Approval button start -->
+                  <button
+                    class="btn primary-btn btn-sm btn--small mt-3 mt-sm-0"
+                    (click)="next()"
+                  >
+                    {{ "Next" | translate }}
+                  </button>
+                  <!-- <div class="next-button mt-2 me-3 btn-wrp">
+                  <button (click)="onSubmit(false)" [disabled]="isImageUploading || isAdditionalImagesUploading"
+                    class="btn primary-btn btn-md">
+                    {{ vehicleId ? ( "Save Changes" | translate ) : "Submit for Approval" | translate }}
+                  </button>
+                </div>
+                <div class="prv-button mt-2 btn-wrp" *ngIf="vehicleId">
+                  <a routerLink="/dealer/vehicles" class="btn primary-btn-outline btn-md">
+                    {{ 'Cancel' | translate }}
+                  </a>
+                </div> -->
+                </div>
+              </form>
+            </div>
+            <div
+              [ngStyle]="{
+                display:
+                  (vehicleCondition | lowercase) == 'new' ? 'block' : 'none'
+              }"
+            >
+              <app-dealer-form-new></app-dealer-form-new>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset
+          class="section pt-0"
+          [ngClass]="{ 'd-none': !vehicleId && step != 4, '': vehicleId }"
+        >
+          <div class="fourth-step">
+            <h1 class="mb-3 fw-bold text-primary text-center pb-3">
+              Bienvenidos a Riku
+            </h1>
+            <h2 class="fw-regular text-primary text-center pb-3">
+              Escoje Tu Mejor Plan que se Ajuste a Tus Necesidades
+            </h2>
+
+            <div class="row gy-5 justify-content-around">
+              <div
+                class="col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center"
+                *ngFor="let planDealer of plans"
+              >
+                <sellers-plan-card
+                  [name]="planDealer.name"
+                  [price]="planDealer?.price || '0'"
+                  [characteristics]="planDealer.characteristics"
+                  [bgColor]="planDealer.bgColor"
+                >
+                </sellers-plan-card>
+              </div>
+            </div>
+
+            <div class="d-sm-flex" style="margin-top: 100px">
+              <div
+                class="prv-button btn--small me-sm-3 mb-3 mb-sm-0"
+                *ngIf="!vehicleId"
+              >
+                <button
+                  class="btn primary-btn-outline btn--small btn-md prev-btn"
+                  (click)="previous()"
+                >
+                  {{ "Previous" | translate }}
+                </button>
+              </div>
+
+              <!-- <div class="next-button btn--small me-sm-3">
+                  <button
+                    (click)="onSubmit(false)"
+                    [disabled]="
+                      isImageUploading ||
+                      isAdditionalImagesUploading ||
+                      dataSubmitting
+                    "
+                    class="btn primary-btn btn--small btn-md"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm btn--small"
+                      role="status"
+                      *ngIf="dataSubmitting"
+                      aria-hidden="true"
+                    ></span>
+                    {{
+                      vehicleId
+                        ? ("Save Changes" | translate)
+                        : ("Submit for Approval" | translate)
+                    }}
+                  </button>
+                </div> -->
+
+              <div class="prv-button btn--small mt-3 mt-sm-0" *ngIf="vehicleId">
+                <a
+                  routerLink="/seller/vehicles"
+                  class="btn primary-btn-outline btn-md btn--small"
+                >
+                  {{ "Cancel" | translate }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1347 @@
+<div class="modal-header border-0" *ngIf="isShowCloseBtn">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="redirectPage(); activeModal.dismiss('Cross click')"
+    aria-label="Close"
+  ></button>
+</div>
+<div *ngIf="loginSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+       {{ 'Password Changed' | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your password has been changed' | translate }}<br />
+      {{ 'successfully.' | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('Cross click')"
+    >
+
+      {{ 'Back to Login' | translate }}
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="
+    deleteSuccessBtnText === ('Back to Vehicle Listing' | translate) ||
+    deleteSuccessBtnText === ('Back to Dashboard' | translate)
+  "
+>
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Vehicle Deleted" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Your vehicle have been deleted successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="
+    teamMemberaddedSuccess === ('Team member added successfully' | translate)
+  "
+>
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Team Member Added" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ teamMemberaddedSuccess  | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="emailSuccessBtnText === 'Email Sent Successfully!!'">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Email Sent Successfully' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your email reply has been sent successfilly' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('ok')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+<div
+  *ngIf="
+    teamMemberaddedSuccess === ('Team member updated successfully' | translate)
+  "
+>
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Team Member Updated" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ teamMemberaddedSuccess | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="contactsuccessBtnText === 'Contact us'">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Message Sent Successfully' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your message has been sent successfully, and our team will get in touch with you shortly' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('ok')"
+      data-bs-toggle="modal"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="contentUpdatedSuccess === ('Content updated successfully' | translate)">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Content Updated" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ contentUpdatedSuccess | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{"OK" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="deleteSuccessBtnText === ('Back to User Listing' | translate)">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"User Deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"User have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="deleteSuccessBtnText === ('Back to Team Listing' | translate)">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Team Member Deleted" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Team Member have been deleted successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+<div *ngIf="deleteSuccessBtnText === ('Back to Expert Listing' | translate)">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Expert User Deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Expert User have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="appraisalReportSuccess === 'Appraisal Report Created Successfully.'"
+>
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Congratulations" | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ appraisalReportSuccess | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('ok')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="draftSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+     {{ 'Saved as Draft' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+
+      {{ 'Your vehicle details have been saved as draft' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="deleteSuccessBtnText === ('Back to Chat List' | translate)">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Conversation Deleted' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Conversation has been deleted successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectToChat(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="unblockSuccessBtnText">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Unblocked User' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'User has been Unblocked successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectToChat(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal">
+      {{ unblockSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="blockSuccessBtnText">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Blocked User' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'User has been Blocked successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectToChat(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ blockSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="submittedForApproval">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Submitted for Approval!!' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your vehicle details have been submitted to admin for approval' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="editedSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Changes Saved' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your changes have been saved successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="rejectSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Vehicle Rejected" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "This vehicle have been rejected" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectAdminVehicleList(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="approveSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Vehicle Approved" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "This vehicle has been approved" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectAdminVehicleList(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal">
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="addUserSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ userAddSuccessText | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "User has been added successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectAdminUserList(); activeModal.dismiss('Cross click')"
+    >{{ "Back to User Management" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="addBlogSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"New Blog Published" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Blog has been added successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+    >
+      {{ addBlogSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="changeSuccessBtnText === ('Back to User Listing' | translate)">
+  <div class="modal-body border-0 mt-4">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <div *ngIf="changedStatusValue === 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Deactivated" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"User has been Deactivated successfully" | translate}}
+      </p>
+    </div>
+    <div *ngIf="changedStatusValue === 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Activated" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"User has been Activated successfully" | translate}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('confirm')"
+    >
+      {{"Back to User Management" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="changeSuccessBtnText === ('Back to Team Listing' | translate)">
+  <div class="modal-body border-0 mt-4">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <div *ngIf="changedStatusValue === 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Team Member Deactivated" | translate }}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Team member have been Deactivated successfully" | translate }}
+      </p>
+    </div>
+    <div *ngIf="changedStatusValue === 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Team Member Activated" | translate }}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Team member have been Activated successfully" | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectPage(); activeModal.dismiss('confirm')"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="changeSuccessBtnText === ('Back to Edit Team Member' | translate)">
+  <div class="modal-body border-0 mt-4">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <div *ngIf="changedStatusValue === 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Team Member Deactivated" | translate }}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Team member have been Deactivated successfully" | translate }}
+      </p>
+    </div>
+    <div *ngIf="changedStatusValue === 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ "Team Member Activated" | translate }}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{ "Team member have been Activated successfully" | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('confirm')"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="changeSuccessBtnText === ('Back to Edit Details' | translate)">
+  <div class="modal-body border-0 mt-4">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <div *ngIf="changedStatusValue === 'Active'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Deactivated" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"User has been Deactivated successfully" | translate}}
+      </p>
+    </div>
+    <div *ngIf="changedStatusValue === 'Inactive'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Activated" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"User has been Activated successfully" | translate}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('confirm')"
+    >
+      {{ "Back to User Management" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="companyDeleted">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Company Deleted" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Company have been deleted successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.close()"
+      data-bs-toggle="modal"
+    >
+      {{ "Back to Company Listing" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="companyAdded">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "New Company Added" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "New company added successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectCompaniesList(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="roleDeleted">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Role" | translate }} {{ "Deleted" | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Role has been deleted successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectRoleList(); activeModal.dismiss('Cross click')"
+    >
+      {{ "Back to Role Listing" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="roleAdded || roleUpdated">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{
+        roleAdded
+          ? ("New Role Added" | translate) + "!!"
+          : ("Changes Saved" | translate) + "!!"
+      }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{
+        roleAdded
+          ? ("New Role Added" | translate)
+          : ("Role changes saved" | translate)
+      }}
+      {{ "successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectRoleList(); activeModal.dismiss('Cross click')"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="isRoleStatusChanged">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ "Role" | translate }}
+      {{
+        isRoleActivate
+          ? ("Activated" | translate)
+          : ("Deactivated" | translate)
+      }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ "Role has been" | translate }}
+      {{
+        isRoleActivate ? ("activated" | translate) : ("deactivated" | translate)
+      }}
+      {{ "successfully" | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('Cross click')"
+    >
+      {{ "OK" | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="passwordChanged">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Password Changed' | translate }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your password has been changed' | translate }}<br />
+      {{ 'successfully' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectToProfile(); activeModal.dismiss('Cross click')"
+    >{{ 'Back to Profile' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="editProfileType">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ OTPtype ? ("Email Changed Successfully" | translate) : "Mobile Number Changed Successfully" | translate }} !!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      <ng-container *ngIf="OTPtype; else noOTPType">
+        {{ 'OTP is verified & your email has been changed successfully' | translate }}.
+      </ng-container>
+      <ng-template #noOTPType>
+        {{ 'OTP is verified & your mobile number has been changed successfully' | translate }}.
+      </ng-template>
+
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="receiptUploaded">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Receipt uploaded Successfully' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your receipt uploaded successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectToOrder(); activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="paymentSuccess || reviewPaymentSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Payment Successful' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your payment has been made successfully' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="ngOnDestroy(); activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cancelOrderSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Order Canceled' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your order has been cancelled successfully' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="ngOnDestroy(); activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="cancelLoanSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Loan Application Canceled!' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'You have successfully canceled Loan Application' | translate }}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="ngOnDestroy(); activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+
+
+
+
+
+<div *ngIf="cancelExpertReviewSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Expert Review Canceled' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your have successfully cancelled expert review' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.dismiss('Cross click')"
+    >
+    {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="procedureCancelSuccess">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{ 'Process Canceled' | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{ 'Your have successfilly withdrawn from Vehicle Processing Service' | translate }}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="activeModal.close(true)"
+    >
+    {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="expertAdded || expertUpdated">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      Expert User {{ expertUpdated ? ( "Updated" | translate ): "Added" | translate }}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      Expert User {{ expertUpdated ? ("updated" | translate) : "added" | translate }} {{ 'successfully' | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="ngOnDestroy(); activeModal.dismiss('Cross click')"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="changeSuccessBtnText === ('Back to Expert Listing' | translate)">
+  <div class="modal-body border-0 mt-4">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <div *ngIf="changedStatusValue === true">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Expert User Deactivated" | translate}}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Expert User have been Deactivated successfully" | translate}}
+      </p>
+    </div>
+    <div *ngIf="changedStatusValue === false">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Expert User Activated" | translate}}!!
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Expert User have been Activated successfully" | translate}}
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectPage(); activeModal.dismiss('confirm')"
+    >
+      {{"OK" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="blogDeleted">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Blog deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your blog have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="singleBlogDeleted">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Blog deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your blog have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectToBlogList(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="faqAdded">
+  <div class="modal-body border-0 mt-4">
+    <div class="text-center">
+      <img src="././assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"FAQ" | translate}} {{ faqType === "add" ? ("Added" | translate) : ("Updated" | translate) }} {{"Successfully" | translate}}
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your question has been" | translate}}
+      {{ faqType === "add" ? "added" : "updated" }} {{"successfully" | translate}}.
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0">
+    <button
+      type="button"
+      class="btn primary-btn"
+      (click)="redirectToFaqList(); activeModal.dismiss('Cross click')"
+    >
+      {{"OK" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="faqDeleted">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"FAQ Deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your question have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectPage(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="blogStatus">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Blog" | translate}} {{ blogStatusType ? ("Published" | translate) : ("Unpublished" | translate) }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your blog have been" | translate}}
+      {{ blogStatusType ? ("published" | translate) : ("unpublished" | translate) }} {{"successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="editBlogSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Blog updated" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your blog have been updated successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="redirectToBlogList(); activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ editBlogSuccessBtnText  }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="readNotifications">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"All Notifications Read" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your all notifications is read successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="deleteNotifications">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"All notifications Deleted" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your notifications have been deleted successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="notificationStatus">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Notification" | translate}} {{ notificationStatusType ? ("Allowed" | translate) : ("Stoped" | translate) }}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"Your notifications have been" | translate}} {{ notificationStatusType ? ("allowed" | translate) : ("stoped" | translate) }} {{"successfully" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ deleteSuccessBtnText | translate }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="becomeTypeStatus">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <ng-container *ngIf="becomeType == 'buyer';else forSeller">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ 'Registered as a Buyer!!' | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3 w-75 mx-auto">
+
+        {{ "You have successfully registered as a buyer. you can log in as a buyer user now" | translate }}
+      </p>
+    </ng-container>
+    <ng-template #forSeller>
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{ 'Registered as a Seller!!' | translate }}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3 w-75 mx-auto">
+
+        {{ 'You have successfully registered as a seller. you can log in as a seller user now' | translate }}
+      </p>
+    </ng-template>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{"OK" | translate}}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="registrationSuccess">
+  <div class="modal-body border-0">
+    <div class="mx-auto text-center">
+      <img src="assets/images/vehicle-list/correction.gif" alt="" />
+    </div>
+    <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+      {{"Registration Successful" | translate}}!!
+    </h3>
+    <p class="text-center font-14 text-primary-light mb-3">
+      {{"You have been registered successfully, please verify your email to sign in" | translate}}
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      type="button"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      data-bs-toggle="modal"
+    >
+      {{ 'OK' | translate }}
+    </button>
+  </div>
+</div>

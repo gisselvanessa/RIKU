@@ -1,0 +1,24 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.bg-blue {
+  background-color: $bg-blue;
+}
+
+.back-to-page{
+    align-items: center;
+    span{
+      width: 45px;
+      height: 45px;
+      background-color: $white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include for-tablet-only{
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+      }
+    }
+}

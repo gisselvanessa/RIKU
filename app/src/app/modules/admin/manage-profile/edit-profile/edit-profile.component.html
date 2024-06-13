@@ -1,0 +1,312 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container">
+    <div class="row justify-content-between" *ngIf="userDetails else loader;">
+      <div class="col-xl-6 col-lg-6">
+        <div class="section-header d-flex">
+          <div class="back-to-page d-flex">
+            <span (click)="goback()">
+              <a href="javascript:void(0)"><img src="assets/images/backarrow.svg" /></a>
+            </span>
+          </div>
+          <h3 class="ms-3 font-38 text-primary fw-semibold">
+            {{ 'Edit Profile' | translate }}
+          </h3>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 text-end">
+        <a class="text-underline text-primary" href="javascript:void(0)" (click)="changePassword()">{{ 'Change Password' | translate }}</a>
+      </div>
+      <div class="col-xl-2 col-lg-6 text-center">
+        <div class="add__user-img d-flex justify-content-center flex-wrap mb-4 mb-lg-0">
+          <div class="admin__add-img">
+            <img
+              [src]="profileImageURL"
+              *ngIf="profileImageURL"
+              alt="admin-img"
+            />
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+              *ngIf="!profileImageURL"
+              alt="admin-img"
+            />
+          </div>
+          <input
+            type="file"
+            class="d-none"
+            accept="image/*"
+            (change)="onProfilePhotoChange($event)"
+            #profilePhotoInput
+          />
+          <button
+            class="btn btn-orange mt-4 d-block mx-auto"
+            [disabled]="isProfileImageUploading"
+            (click)="profilePhotoInput.click()"
+          >
+            <span
+              *ngIf="isProfileImageUploading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {{ 'Change Image' | translate }}
+          </button>
+          <a class="text-primary-light font-16 mt-4 c-pointer text-underline" href="javascript:void(0)" *ngIf="profileImageURL" (click)="removeProfile()">
+            <span
+              *ngIf="isPhotoRemove"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            {{ 'Remove Image' | translate }}
+          </a>
+        </div>
+      </div>
+      <div class="col-xl-10 col-lg-6">
+        <div class="bg-white p-4 br-12" *ngIf="userType == 'admin'">
+          <div class="row admin_detail-wrp">
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label class="text-primary-light font-14 d-block mb-2">First Name</label>
+                <p class="text-primary font-18 mb-0 fw-semibold">
+                  {{
+                  userDetails.first_name
+                  ? (userDetails.first_name | titlecase)
+                  : "-"
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label class="text-primary-light font-14 d-block mb-2">Last Name</label>
+                <p class="text-primary font-18 mb-0 fw-semibold">
+                  {{
+                  userDetails.last_name
+                  ? (userDetails.last_name | titlecase)
+                  : "-"
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12" *ngIf="userType === 'admin'">
+              <div class="form-group">
+                <label class="text-primary-light font-14 d-block mb-2">Company Type</label>
+                <ng-container *ngFor="let companyType of userDetails.company_role">
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ companyType.company.name | titlecase }}
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12" *ngIf="userType === 'admin'">
+              <div class="form-group">
+                <label class="text-primary-light font-14 d-block mb-2">Role</label>
+                <ng-container *ngFor="let role of userDetails.company_role">
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ role.company_role.name | titlecase }}
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row p-4 br-12">
+          <form [formGroup]="personalInfoForm" #form="ngForm">
+            <div class="form-group">
+              <div class="row">
+                <!--First Name-->
+                <div class="col-12 col-md-6" *ngIf="userType == 'super_admin'">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Name' | translate }}</label>
+                    <input type="text" class="form-control" OnlyAlphabets
+                    maxlength="20" placeholder="{{ 'Enter Name' | translate }}"
+                      formControlName="first_name" [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoForm.invalid &&
+                                  personalInfoFormControls.first_name.invalid
+                              }" />
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                personalInfoFormControls.first_name.invalid &&
+                                personalInfoFormControls.first_name.errors
+                              ">
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.first_name.errors?.required
+                                ">
+                                {{ 'FirstNameRequired' | translate }}
+                      </small>
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.first_name.errors?.minlength
+                                ">
+                        {{ 'FirstNameLengthError' | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!--First Name-->
+
+                <!--Last Name-->
+                <div class="col-12 col-md-6" *ngIf="userType == 'super_admin'">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Surname' | translate }}</label>
+                    <input type="text" class="form-control"
+                    maxlength="20" OnlyAlphabets placeholder="{{ 'Enter Surname ' | translate }}"
+                      formControlName="last_name" [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoForm.invalid &&
+                                  personalInfoFormControls.last_name.invalid
+                              }" />
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                personalInfoFormControls.last_name.invalid &&
+                                personalInfoFormControls.last_name.errors
+                              ">
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.last_name.errors?.required
+                                ">
+                                {{ 'LastNameRequired' | translate }}
+                      </small>
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.last_name.errors?.minlength
+                                ">
+                                {{ 'LastNameLengthError' | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!--Last Name-->
+
+                <!--Email-->
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Email' | translate }}</label>
+                    <input type="text" class="form-control" placeholder="Enter Email ID" formControlName="email" readonly
+                      [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoForm.invalid &&
+                                  personalInfoFormControls.email.invalid
+                              }" />
+                    <span class="change_mobile_number text-secondary font-16">
+                      <a href="javascript:void(0);" class="text-underline text-secondary" (click)="changeEmail()">{{ 'Change' | translate }}</a>
+                    </span>
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                personalInfoFormControls.email.invalid &&
+                                personalInfoFormControls.email.errors
+                              ">
+                      <small class="text-danger" *ngIf="personalInfoFormControls.email.errors?.required">
+                        {{ 'EmailRequired' | translate }}
+                      </small>
+
+                      <small class="text-danger" *ngIf="personalInfoFormControls.email.errors?.pattern">
+                        {{ 'InvalidEmail' | translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!--Email-->
+
+                <!--Mobile number-->
+                <div class="col-12 col-md-6">
+                  <div class="form-group position-relative d-none">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">
+                      {{ 'Mobile Number' | translate }}</label>
+                    <ngx-intl-tel-input [cssClass]="'form-control w-100'" [preferredCountries]="preferredCountries"
+                      [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                      [searchCountryField]="[
+                                searchCountryField.Iso2,
+                                searchCountryField.Name
+                              ]" [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoForm.invalid &&
+                                  personalInfoFormControls.mobile_no.invalid
+                              }" [selectFirstCountry]="false" [selectedCountryISO]="countryISO.Ecuador" [maxLength]="15"
+                      [phoneValidation]="true" [separateDialCode]="separateDialCode" (countryChange)="clearCountrySearchBox()"
+                      name="mobile_no" formControlName="mobile_no">
+                    </ngx-intl-tel-input>
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                personalInfoFormControls.mobile_no.invalid &&
+                                personalInfoFormControls.mobile_no.errors
+                              ">
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.mobile_no.errors
+                                    ?.validatePhoneNumber?.valid == false
+                                ">
+                        <!-- Please enter valid Mobile Number according to selected
+                        country. -->
+                        {{ 'InvalidMobileError'| translate }}
+                      </small>
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.mobile_no.errors?.required
+                                ">
+                        {{ 'MobileRequired' | translate }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="form-group position-relative">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{ 'Mobile Number' | translate }}</label>
+                    <ngx-intl-tel-input [cssClass]="'form-control w-100'" [preferredCountries]="preferredCountries"
+                      [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                      [searchCountryField]="[
+                                searchCountryField.Iso2,
+                                searchCountryField.Name
+                              ]" [ngClass]="{
+                                'is-invalid':
+                                  isFormSubmitted &&
+                                  personalInfoForm.invalid &&
+                                  personalInfoFormControls.mobile_no.invalid
+                              }" [selectFirstCountry]="false" [selectedCountryISO]="countryISO.Ecuador" [maxLength]="15"
+                      [phoneValidation]="true" [separateDialCode]="separateDialCode" (countryChange)="clearCountrySearchBox()"
+                      name="mobile_no1" formControlName="mobile_no1">
+                    </ngx-intl-tel-input>
+                    <span class="change_mobile_number text-secondary font-16">
+                      <a href="javascript:void(0);" class="text-underline text-secondary" (click)="changeMobileNumber()">{{ 'Change' | translate }}</a>
+                    </span>
+                    <div *ngIf="
+                                isFormSubmitted &&
+                                personalInfoFormControls.mobile_no.invalid &&
+                                personalInfoFormControls.mobile_no.errors
+                              ">
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.mobile_no.errors
+                                    ?.validatePhoneNumber?.valid == false
+                                ">
+                        <!-- Please enter valid Mobile Number according to selected
+                        country. -->
+                        {{ 'InvalidMobileError'| translate }}
+                      </small>
+                      <small class="text-danger" *ngIf="
+                                  personalInfoFormControls.mobile_no.errors?.required
+                                ">
+                        {{ 'MobileRequired'| translate }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <!--Mobile number-->
+              </div>
+            </div>
+            <div class="btn-grp mt-5 d-flex flex-wrap">
+              <button class="btn primary-btn me-3 mb-2 border-1" type="submit" (click)="updateUser()">
+                {{ 'Save'| translate }}
+              </button>
+              <a (click)="location.back()" class="btn primary-btn-outline mb-2" *ngIf="
+                          userType != 'dealer' ||
+                          (currentStep == 1 && userType == 'dealer')
+                        ">{{ 'Cancel'| translate }}</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <ng-template #loader>
+      <app-loader></app-loader>
+    </ng-template>
+
+  </div>
+</section>

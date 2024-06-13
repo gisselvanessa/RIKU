@@ -1,0 +1,195 @@
+<div class="row">
+  <div class="col-lg-5 mt-4">
+    <div class="bg-white br-12 p-3">
+      <div class="d-flex cusotmer-heading adjust-date align-items-start justify-content-between">
+        <h5 class="font-18 text-primary fw-bold ">{{ 'Customers Related' | translate }}</h5>
+        <div class="filter-box cusotmer-heading ">
+          <div class="form-group position-relative mb-0">
+            <div ngbDropdown class="doropdown_radio" [autoClose]="true">
+              <button ngbDropdownToggle
+                class="btn btn-white dropdownP-toggle btn-dropdown font-14 text-color fw-regular" type="button"
+                id="filter" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ startDate | date: 'MMMM dd, yyyy' }} - {{ endDate | date: 'MMMM dd, yyyy' }} &nbsp;<img
+                  src="assets/images/solar_calendar-broken.svg" class="input-icon">
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let filter of filters">
+                  <a ngbDropdownItem class="dropdown-item" href="javascript:void(0)" [ngClass]="{
+                                                                                  'selected-dropdown-item':
+                                                                                  customerStatFilter == filter
+                                                                                }" (click)="onChangeFilter(filter)">{{
+                    filter | translate }}</a>
+                </li>
+              </ul>
+            </div>
+            <span bsDaterangepicker #drp="bsDaterangepicker" placement="right" [maxDate]="today" [bsConfig]="bsConfig"
+              [bsValue]="bsRangeValue" (bsValueChange)="getDateValues($event)"></span>
+          </div>
+        </div>
+      </div>
+      <div class="cutomer-data-wrp" *ngIf="customerStats && !loadingCustomerStats else showLoader">
+        <div class="row p-4">
+          <div class="col-lg-3">
+            <span class="data-count font-47 text-secondary">{{ customerStats.customer_served }}</span>
+          </div>
+          <div class="col-lg-9 d-inline-flex">
+            <h5 class="font-20 text-primary fw-regular mt-4">{{ 'Customer Served' | translate }}</h5>
+          </div>
+        </div>
+        <div class="row p-4">
+          <div class="col-lg-3">
+            <span class="data-count font-47 text-secondary">{{ customerStats.in_vehicle_procedure }}</span>
+          </div>
+          <div class="col-lg-9 d-inline-flex">
+            <!-- <p class="fw-regular font-14 text-start">
+              Customers in vehicular procedures
+            </p> -->
+            <h5 class="font-20 text-primary fw-regular mt-4">{{ 'Customers in vehicular procedures' | translate }}</h5>
+          </div>
+        </div>
+        <div class="row p-4">
+          <div class="col-lg-3">
+            <span class="data-count font-47 text-secondary">{{ customerStats.out_for_delivery }}</span>
+          </div>
+          <div class="col-lg-9 d-inline-flex">
+            <!-- <p class="fw-regular font-14 text-start">
+              Vehilcles in out of delivery
+            </p> -->
+            <h5 class="font-20 text-primary fw-regular mt-4">{{ 'Vehilcles in out of delivery' | translate }}</h5>
+          </div>
+        </div>
+      </div>
+      <ng-template #showLoader>
+        <app-loader></app-loader>
+      </ng-template>
+    </div>
+  </div>
+  <div class="col-lg-7 mt-4">
+    <div class="bg-white br-12 p-3 h-100">
+      <!-- <ng-container *ngIf="orderStats else loader;"> -->
+      <div class="cusotmer-heading d-flex adjust-date align-items-start justify-content-between">
+        <h5 class="font-18 text-primary fw-bold">{{ 'Recently Added Vehicles' | translate }}</h5>
+        <div class="d-inline-flex align-items-center">
+          <div class="data-sorting-tabs">
+            <div class="form-group mb-0">
+              <div class="tabs-list br-12">
+                <ul class="nav nav-pills " id="Condition-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link font-15 fw-regular" [ngClass]="{ active: selectedTab == 'all'}" (click)="selectTab('all')"
+                      id="Condition-all-tab" type="button" role="tab" aria-controls="Condition-all"
+                      aria-selected="true">{{ 'All' | translate }}</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link font-15 fw-regular" [ngClass]="{ active: selectedTab == 'new'}" (click)="selectTab('new')"
+                      type="button" role="tab" aria-controls="Condition-new" aria-selected="false">{{ 'New' | translate
+                      }}</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link font-15 fw-regular" [ngClass]="{ active: selectedTab == 'used'}" (click)="selectTab('used')"
+                      type="button" role="tab" aria-controls="Condition-used" aria-selected="false">{{ 'Used' |
+                      translate }}</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <a routerLink="/dealer/vehicles/vehicle-list" class="font-18 fw-medium text-underline ms-5 text-secondary">{{
+            'View All' | translate }}</a>
+        </div>
+      </div>
+
+      <div class="cutomer-data-wrp  mt-4">
+        <div class="admin__listing--cards buyer-cards">
+          <div class="tab-content" id="Condition-tabContent">
+            <div class="tab-pane recent-vehicles show" id="recently-added-vehicles" role="tabpanel">
+              <div class="table-responsive admin--listing-table  br-12 p-3">
+                <table class="table mb-0 p-1">
+                  <thead>
+                    <th><span class="text-color font-14">{{ 'Image' | translate }}</span></th>
+                    <th>
+                      <span class="text-color font-14" (click)="setSorting('vehicle_name')">{{ 'Vehicle Name' | translate }}<img
+                          src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                    </th>
+                    <th><span class="text-color font-14">{{ 'Condition' | translate }}</span></th>
+                    <th>
+                      <span class="text-color font-14" (click)="setSorting('price')">{{ 'Price' | translate }}<img
+                          src="assets/images/vehicle-list/sorting-arrow.svg" class="ms-2" /></span>
+                    </th>
+                    <th><span class="text-color font-14">{{ 'Status' | translate }}</span></th>
+                    <th><span class="text-color font-14">{{ 'Actions' | translate }}</span></th>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="!loading; else loadingTemplate">
+                      <ng-container *ngIf="vehicleList.length > 0; else noRecordsTemplate">
+                        <tr *ngFor="let vehicle of vehicleList">
+                          <td>
+                            <div class="small-img-list">
+                              <ng-container *ngIf="vehicle.cover_img_url">
+                                <img [src]="vehicle.cover_img_url" />
+                              </ng-container>
+                              <ng-container *ngIf="!vehicle.cover_img_url">
+                                <img src="assets/images/no_preview.jpeg" />
+                              </ng-container>
+                            </div>
+                          </td>
+
+                          <td class="font-14">{{ vehicle.make }}, {{ vehicle.make_model }}, {{ vehicle.model_year }}</td>
+                          <td class="font-14">
+                            {{ vehicle.condition | translate }}
+                          </td>
+                          <td class="font-14">${{ vehicle.price | spanishNumber }}</td>
+                          <td class="font-14">
+                            <ng-container *ngIf="vehicle.status == 'pending' || vehicle.status == 'draft'">
+                              <label class="pending-approval font-14" *ngIf="vehicle.status == 'pending'">{{ 'Awaiting Approval'
+                                | translate }}</label>
+                              <label class="pending-approval font-14" *nsgIf="vehicle.status == 'draft'">{{ 'Saved as Draft' |
+                                translate }}</label>
+                            </ng-container>
+                            <ng-container *ngIf="vehicle.status == 'approved'">
+                              <label class="approved">{{ 'Approved' | translate }}</label>
+                            </ng-container>
+                            <ng-container *ngIf="vehicle.status == 'rejected'">
+                              <label class="rejected">{{ 'Rejected' | translate }}</label>
+                            </ng-container>
+                          </td>
+                          <td >
+                            <div class="action-class">
+
+                              <a href="javascript:void(0)"
+                                routerLink="/dealer/vehicles/view-vehicle-details/{{ vehicle.id}}">
+                                <img src="assets/images/ph_eye.svg" /></a>
+                              <a href="javascript:void(0);" (click)="deleteVehicle(vehicle.id)">
+                                <img src="assets/images/garbage-can_svgrepo.com.svg"  class="ms-2" />
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-template #noRecordsTemplate>
+                        <tr class="text-center">
+                          <td colspan="14">{{ 'No records found' | translate }}</td>
+                        </tr>
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #loadingTemplate>
+                      <tr class="text-center">
+                        <td colspan="14">
+                          <app-loader></app-loader>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #loader>
+        <app-loader></app-loader>
+      </ng-template>
+    </div>
+  </div>
+</div>

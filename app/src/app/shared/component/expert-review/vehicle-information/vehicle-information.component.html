@@ -1,0 +1,852 @@
+<div class="justify-content-between section--spacing pt-0">
+  <!-- <h3
+    class="text-primary font-24 mt-4 mt-xl-0 mb-3 mb-lg-4 mb-xl-5 fw-semibold"
+  >
+    {{ "Vehicle Information" | translate }}
+  </h3> -->
+  <div class="row mt-2">
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block font-15 text-primary">{{
+          "Vehicle Source" | translate
+        }}</label>
+        <div ngbDropdown #vehicleSource="ngbDropdown" class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            [disabled]="readOnly"
+            class="btn btn-white dropdownP-toggle btn-dropdown font-14 fw-regular"
+            [ngClass]="{ 'text-primary': selectedVehicleSource }"
+            type="button"
+            id="vehicle-source"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="multipledata-hide font-15 fw-medium">
+              {{
+                selectedVehicleSource
+                  ? (selectedVehicleSource | translate)
+                  : ("Vehicle Source" | translate)
+              }}
+            </span>
+          </button>
+          <ul
+            ngbDropdownMenu
+            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+          >
+            <li (click)="selectedVehicleSource = 'Vehicle within the platform'">
+              <a
+                ngbDropdownItem
+                class="dropdown-item"
+                href="javascript:void(0)"
+                [ngClass]="{
+                  'selected-dropdown-item':
+                    selectedVehicleSource == 'Vehicle within the platform'
+                }"
+              >
+                {{ "Vehicle within the platform" | translate }}
+              </a>
+            </li>
+            <li (click)="selectedVehicleSource = 'Vehicle off the platform'">
+              <a
+                ngbDropdownItem
+                class="dropdown-item"
+                href="javascript:void(0)"
+                [ngClass]="{
+                  'selected-dropdown-item':
+                    selectedVehicleSource == 'Vehicle off the platform'
+                }"
+              >
+                {{ "Vehicle off the platform" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div
+          *ngIf="formSubmitted && selectedVehicleSource == ''"
+          class="invalid-feedback"
+        >
+          {{ "Vehicle Source is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block font-15 text-primary">{{
+          "Enter Number Plate" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="{{ 'Number Plate' | translate }}"
+          (keyup)="formatNumberPlate($event); getVehicleDetail()"
+          maxlength="8"
+          [readOnly]="readOnly"
+          (keyup.enter)="getVehicleDetail()"
+          (blur)="getVehicleDetail()"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="numberPlate"
+        />
+        <div
+          *ngIf="formSubmitted && (!numberPlate || numberPlate.trim() == '')"
+          class="invalid-feedback"
+        >
+          {{ "Number Plate is required" | translate }}
+        </div>
+        <div class="text-secondary hint-custom">
+          {{ "Hint" | translate }}:
+          {{ "Number plate should follow PBX-1234 pattern." | translate }}
+        </div>
+      </div>
+    </div>
+    <ng-container
+      *ngIf="
+        numberPlate &&
+        numberPlate.trim() != '' &&
+        !vehicleDetails &&
+        isVehicleFetched
+      "
+    >
+      <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="form-group">
+          <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+            "Select Make" | translate
+          }}</label>
+          <input
+            id="make"
+            type="text"
+            class="form-control"
+            [readOnly]="readOnly"
+            [(ngModel)]="selectedVehicleMake"
+            [ngModelOptions]="{ standalone: true }"
+            (focus)="vehicleMake.open()"
+            (click)="vehicleMake.open()"
+            (keyup)="
+              vehicleMake.open();
+              searchInput($event, 'makes');
+              selectedVehicleMakeYear = '';
+              selectedVehicleModel = ''
+            "
+          />
+          <div ngbDropdown #vehicleMake="ngbDropdown" class="doropdown_radio">
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu dropdown-make vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+            >
+              <li *ngIf="popularMakes.length > 0">
+                <label>{{ "Popular Makes" | translate }}</label>
+              </li>
+              <li>
+                <div class="form-group search-grp">
+                  <div class="position-relative">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="searchMake"
+                      placeholder="{{ 'Search Make' | translate }}"
+                    />
+                    <img
+                      src="assets/images/vehicle-list/search-blue.svg"
+                      class="search-icon"
+                    />
+                  </div>
+                </div>
+              </li>
+              <li class="make-brand-logo" *ngIf="popularMakes.length > 0">
+                <ul
+                  class="d-flex align-items-center"
+                  *ngFor="let items of popularMakes"
+                >
+                  <li
+                    *ngFor="let vehicleMake of items | filter : searchMake"
+                    (click)="
+                      getVehicleMakeYear(vehicleMake.id);
+                      selectedVehicleMake = vehicleMake.name
+                    "
+                  >
+                    <a
+                      ngbDropdownItem
+                      class="make-logo"
+                      [ngClass]="{
+                        'selected-dropdown-item': makeId == vehicleMake.id
+                      }"
+                      href="javascript:void(0)"
+                    >
+                      <img [src]="vehicleMake.icon_url" alt="" />
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li *ngIf="nonPopularMakes.length > 0">
+                <label>{{ "More Makes" | translate }}</label>
+              </li>
+              <ng-container *ngIf="nonPopularMakes.length > 0">
+                <li
+                  *ngFor="
+                    let vehicleMake of nonPopularMakes | filter : searchMake
+                  "
+                  (click)="
+                    getVehicleMakeYear(vehicleMake.id);
+                    selectedVehicleMake = vehicleMake.name
+                  "
+                >
+                  <a
+                    ngbDropdownItem
+                    class="dropdown-item"
+                    href="javascript:void(0)"
+                    [ngClass]="{
+                      'selected-dropdown-item': makeId == vehicleMake.id
+                    }"
+                  >
+                    {{ vehicleMake.name }}
+                  </a>
+                </li>
+              </ng-container>
+              <li
+                *ngIf="
+                  vehicleMakes?.length == 0 &&
+                  selectedVehicleMake &&
+                  selectedVehicleMake.trim() != ''
+                "
+              >
+                <a
+                  ngbDropdownItem
+                  class="dropdown-item"
+                  href="javascript:void(0)"
+                  >{{ "No makes found for this vehicle types" | translate }}</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div
+            *ngIf="
+              formSubmitted &&
+              (!selectedVehicleMake || selectedVehicleMake.trim() == '')
+            "
+            class="invalid-feedback"
+          >
+            {{ "Make is required" | translate }}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="form-group">
+          <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+            "Select Year" | translate
+          }}</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="selectedVehicleMakeYear"
+            maxlength="4"
+            minlength="4"
+            [ngModelOptions]="{ standalone: true }"
+            [readOnly]="readOnly"
+            OnlyNumber
+            (focus)="vehicleYear.open(); resetMakes()"
+            (keyup)="vehicleYear.open(); selectedVehicleModel = ''"
+            (click)="vehicleYear.open()"
+          />
+          <div
+            ngbDropdown
+            #vehicleYear="ngbDropdown"
+            class="doropdown_radio"
+            [hidden]="vehicleMakeYears.length == 0"
+          >
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+            >
+              <li>
+                <label>{{ "Year" | translate }}</label>
+              </li>
+              <li>
+                <div class="form-group search-grp">
+                  <div class="position-relative">
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="searchYear"
+                      placeholder="{{ 'Search Year' | translate }}"
+                    />
+                    <img
+                      src="assets/images/vehicle-list/search-blue.svg"
+                      class="search-icon"
+                    />
+                  </div>
+                </div>
+              </li>
+              <ng-container *ngIf="vehicleMakeYears.length > 0">
+                <ng-container
+                  *ngFor="
+                    let vehicleMakeYear of vehicleMakeYears
+                      | filter : searchYear
+                  "
+                >
+                  <li>
+                    <a
+                      ngbDropdownItem
+                      class="dropdown-item"
+                      href="javascript:void(0)"
+                      [ngClass]="{
+                        'selected-dropdown-item':
+                          selectedVehicleMakeYear == vehicleMakeYear
+                      }"
+                      (click)="
+                        getVehicleModel(vehicleMakeYear);
+                        selectedVehicleMakeYear = vehicleMakeYear
+                      "
+                      >{{ vehicleMakeYear }}</a
+                    >
+                  </li>
+                </ng-container>
+              </ng-container>
+              <li
+                *ngIf="
+                  vehicleMakeYears?.length == 0 &&
+                  selectedVehicleMakeYear &&
+                  selectedVehicleMakeYear != ''
+                "
+              >
+                <a
+                  ngbDropdownItem
+                  class="dropdown-item"
+                  href="javascript:void(0)"
+                  >{{ "No years found for this vehicle make" | translate }}</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div
+            *ngIf="
+              formSubmitted &&
+              (!selectedVehicleMakeYear || selectedVehicleMakeYear == '')
+            "
+            class="invalid-feedback"
+          >
+            {{ "Year is required" | translate }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div
+    class="row"
+    *ngIf="
+      numberPlate &&
+      numberPlate.trim() != '' &&
+      !vehicleDetails &&
+      isVehicleFetched
+    "
+  >
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Select Model" | translate
+        }}</label>
+        <input
+          type="text"
+          class="form-control"
+          [readOnly]="readOnly"
+          [(ngModel)]="selectedVehicleModel"
+          (keyup)="!vehicleModel.isOpen() ? vehicleModel.open() : ''"
+          (focus)="vehicleModel.open()"
+          (click)="vehicleModel.open()"
+        />
+        <div
+          ngbDropdown
+          #vehicleModel="ngbDropdown"
+          class="doropdown_radio"
+          [hidden]="vehicleModels.length == 0"
+        >
+          <ul
+            ngbDropdownMenu
+            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+          >
+            <li>
+              <label>{{ "Model Name" | translate }}</label>
+            </li>
+            <li>
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="searchModel"
+                    placeholder="{{ 'Search Model' | translate }}"
+                  />
+                  <img
+                    src="assets/images/vehicle-list/search-blue.svg"
+                    class="search-icon"
+                  />
+                </div>
+              </div>
+            </li>
+            <ng-container *ngIf="vehicleModels.length > 0">
+              <li
+                *ngFor="
+                  let vehicleModel of vehicleModels | filter : searchModel
+                "
+              >
+                <a
+                  ngbDropdownItem
+                  class="dropdown-item"
+                  href="javascript:void(0)"
+                  [ngClass]="{
+                    'selected-dropdown-item':
+                      selectedVehicleModel == vehicleModel.name
+                  }"
+                  (click)="
+                    selectedVehicleModel = vehicleModel.name;
+                    modelId = vehicleModel.id;
+                    setVehicleModel(vehicleModel.id)
+                  "
+                  >{{ vehicleModel.name }}</a
+                >
+              </li>
+            </ng-container>
+            <li
+              *ngIf="
+                vehicleModels?.length == 0 &&
+                selectedVehicleModel &&
+                selectedVehicleModel.trim() != ''
+              "
+            >
+              <a
+                ngbDropdownItem
+                class="dropdown-item"
+                href="javascript:void(0)"
+                >{{ "No model founds for this year" | translate }}</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div
+          *ngIf="
+            formSubmitted &&
+            (!selectedVehicleModel || selectedVehicleModel.trim() == '')
+          "
+          class="invalid-feedback"
+        >
+          {{ "Model is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Select Color" | translate
+        }}</label>
+        <div ngbDropdown #vehicleColor="ngbDropdown" class="doropdown_radio">
+          <button
+            ngbDropdownToggle
+            [disabled]="readOnly"
+            class="btn btn-white dropdownP-toggle btn-dropdown w-100 font-14 fw-regular"
+            [ngClass]="{ 'text-primary': selectedColor }"
+            type="button"
+            id="makes-type"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{
+              selectedColor
+                ? (selectedColor | translate)
+                : ("Color" | translate)
+            }}
+          </button>
+          <ul
+            ngbDropdownMenu
+            class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3 color-dropdown"
+          >
+            <div class="row mx-0 w-100">
+              <li *ngFor="let colordata of outsideColor" class="col-6">
+                <a
+                  ngbDropdownItem
+                  class="dropdown-item border-0 p-0"
+                  (click)="selectedColor = colordata"
+                  href="javascript:void(0)"
+                >
+                  <div class="radio-check br-12">
+                    <div class="form-check form-check-inline me-0">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="color"
+                        [checked]="selectedColor == colordata"
+                        id="color_{{ colordata }}"
+                        [value]="colordata"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="color_{{ colordata }}"
+                        >{{ colordata | translate }}</label
+                      >
+                      <span class="dot-checkmark"></span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </div>
+          </ul>
+        </div>
+        <div
+          *ngIf="
+            formSubmitted && (!selectedColor || selectedColor.trim() == '')
+          "
+          class="invalid-feedback"
+        >
+          {{ "Color is required" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Vehicle Type" | translate
+        }}</label>
+        <div
+          ngbDropdown
+          #vehicleClass="ngbDropdown"
+          class="doropdown_radio"
+          [autoClose]="'outside'"
+        >
+          <button
+            ngbDropdownToggle
+            [disabled]="readOnly"
+            class="btn btn-white dropdownP-toggle btn-dropdown font-14 w-100 fw-regular"
+            [ngClass]="{ 'text-primary': selectedClass.length > 0 }"
+            type="button"
+            id="vehicle-class"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="multipledata-hide" *ngIf="selectedClass.length > 0">
+              {{ selectedClass.toString() }}</span
+            >
+            <span *ngIf="selectedClass.length == 0">{{
+              "Class" | translate
+            }}</span>
+          </button>
+          <ul
+            ngbDropdownMenu
+            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+          >
+            <li
+              ngbDropdownItem
+              *ngFor="let className of classList; let i = index"
+            >
+              <div class="radio-check checkbox-check br-12 me-3">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="Class"
+                    id="class_{{ i }}"
+                    value="{{ className }}"
+                    (change)="selectClass(className)"
+                    [checked]="selectedClass.indexOf(className) > -1"
+                  />
+                  <label class="form-check-label" for="class_{{ i }}">{{
+                    className
+                  }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+          "Services" | translate
+        }}</label>
+        <div
+          ngbDropdown
+          #vehicleServices="ngbDropdown"
+          class="doropdown_radio"
+          [autoClose]="'outside'"
+        >
+          <button
+            ngbDropdownToggle
+            [disabled]="readOnly"
+            class="btn btn-white dropdownP-toggle btn-dropdown font-14 w-100 fw-regular"
+            [ngClass]="{ 'text-primary': selectedServices.length > 0 }"
+            type="button"
+            id="vehicle-class"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span *ngIf="selectedServices.length > 0">
+              {{ selectedServices.toString() | translate }}</span
+            >
+            <span *ngIf="selectedServices.length == 0">{{
+              "Services" | translate
+            }}</span>
+          </button>
+          <ul
+            ngbDropdownMenu
+            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3 dropdown-scroll"
+          >
+            <li ngbDropdownItem>
+              <div class="radio-check checkbox-check br-12 me-3">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="services"
+                    id="class_public"
+                    value="Public Use"
+                    (change)="
+                      selectedServices.indexOf('Public Use') < 0
+                        ? selectedServices.push('Public Use')
+                        : selectedServices.splice(
+                            selectedServices.indexOf('Public Use'),
+                            1
+                          )
+                    "
+                    [checked]="selectedServices.indexOf('Public Use') > -1"
+                  />
+                  <label class="form-check-label" for="class_public">{{
+                    "Public Use" | translate
+                  }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+              </div>
+            </li>
+            <li ngbDropdownItem>
+              <div class="radio-check checkbox-check br-12 me-3">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="services"
+                    id="class_private"
+                    value="Private Use"
+                    (change)="
+                      selectedServices.indexOf('Private Use') < 0
+                        ? selectedServices.push('Private Use')
+                        : selectedServices.splice(
+                            selectedServices.indexOf('Private Use'),
+                            1
+                          )
+                    "
+                    [checked]="selectedServices.indexOf('Private Use') > -1"
+                  />
+                  <label class="form-check-label" for="class_private">{{
+                    "Private Use" | translate
+                  }}</label>
+                  <span class="check-checkmark"></span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="vehicleDetails">
+    <div class="col-sm-12 col-xl-8">
+      <div class="bg-white p-3 p-md-4 br-12 shw-card">
+        <div class="row">
+          <!-- <div class="col-12">
+            <div class="row align-items-center mb-3">
+              <div class="col-12">
+                <h3 class="mb-xl-3 mb-lg-2 mb-1 d-block">
+                  {{ "Vehicle Information" | translate }}
+                </h3>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-lg-4 col-sm-6 col-12 mb-4">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/tag.svg"
+                  alt="tag"
+                  width="40px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3">
+                <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                  "Make" | translate
+                }}</label>
+              <p class="text-purple font-18 mb-0 fw-bold">
+                {{ vehicleDetails.make }}
+              </p>
+            </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-12 mb-4">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/car.svg"
+                  alt="car"
+                  width="40px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3">
+                <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                  "Model" | translate
+                }}</label>
+              <p class="text-purple font-18 mb-0 fw-bold">
+                {{ vehicleDetails.model }}
+              </p>
+            </div>
+          </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-12 mb-4">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/calendar.png"
+                  alt="calendar"
+                  width="40px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3">
+              <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                "Year" | translate
+              }}</label>
+              <p class="text-purple font-18 mb-0 fw-bold">
+                {{ vehicleDetails.year }}
+              </p>
+            </div>
+          </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-12 mb-4">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/view_vehicle/car.svg"
+                  alt="car"
+                  width="40px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3">
+                <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                  "Body Type" | translate
+                }}</label>
+              <p class="text-purple font-18 mb-0 fw-bold">
+                {{ vehicleDetails.body_type }}
+              </p>
+            </div>
+          </div>
+          </div>
+          <div
+            class="col-lg-4 col-sm-6 col-12 mb-4"
+            *ngIf="vehicleDetails.number_plate"
+          >
+          <div class="speciffication__wrapper--box d-flex align-items-center">
+            <div class="specifications__wrapper--img">
+              <img
+                src="assets/images/plate.svg"
+                alt="gear"
+                width="40px"
+                height="100%"
+              />
+            </div>
+            <div class="specifications__wrapper--text ms-3">
+            <label class="text-primary fw-medium font-16 d-block mb-2">{{
+              "Number Plate" | translate
+            }}</label>
+            <p class="text-purple font-18 mb-0 fw-bold">
+                {{ vehicleDetails.number_plate }}
+              </p>
+            </div>
+          </div>
+          </div>
+          <div class="col-lg-4 col-sm-6 col-12 mb-4">
+            <div class="speciffication__wrapper--box d-flex align-items-center">
+              <div class="specifications__wrapper--img">
+                <img
+                  src="assets/images/moneybag.svg"
+                  alt="fuel"
+                  width="40px"
+                  height="100%"
+                />
+              </div>
+              <div class="specifications__wrapper--text ms-3">
+                <label class="text-primary fw-medium font-16 d-block mb-2"
+                  >{{ "Price" | translate }} $</label
+                >
+                <p class="text-purple font-18 mb-0 fw-bold">
+                ${{ vehicleDetails.price | spanishNumber }}
+              </p>
+            </div>
+          </div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-12">
+            <div class="form-group">
+              <label class="text-primary fw-medium font-16 d-block mb-2">{{
+                "Images" | translate
+              }}</label>
+              <div class="scroll-container">
+                <div
+                  class="vehicle-image-wrp me-4"
+                  *ngIf="vehicleDetails.cover_image"
+                >
+                  <img
+                    [src]="vehicleDetails.cover_image.url"
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
+                <div
+                  class="vehicle-image-wrp me-4"
+                  *ngFor="let image of vehicleDetails.other_images"
+                >
+                  <img [src]="image.url" width="100%" height="100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="apiCalling">
+    <div class="text-center text-primary">
+      <span class="spinner-border" role="status" aria-hidden="true"></span
+      >{{ "Getting Vehicle Information" | translate }}...
+    </div>
+  </div>
+
+  <div class="d-sm-flex mt-4">
+    <button
+      class="btn primary-btn-outline btn-sm btn--small me-sm-3 shw"
+      (click)="previous()"
+    >
+      {{ "Previous" | translate }}
+    </button>
+    <button
+      type="submit"
+      *ngIf="!currentExpertReview?.payment?.method"
+      class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+      [disabled]="loading"
+      (click)="submitVehicleDetails()"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm mr-2"
+        role="status"
+        aria-hidden="true"
+      >
+      </span
+      >{{ "Submit" | translate }}
+    </button>
+    <button
+      *ngIf="currentExpertReview?.payment?.method"
+      class="btn primary-btn btn-sm btn--small border-1 mt-3 mt-sm-0 shw"
+      (click)="next()"
+    >
+      {{ "Next" | translate }}
+    </button>
+  </div>
+</div>

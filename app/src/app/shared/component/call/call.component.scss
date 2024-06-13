@@ -1,0 +1,48 @@
+@import "../../../../variables";
+@import "../../../../function";
+
+.bg-purple{
+    background-color: #502251;
+}
+
+.caller-img-wrp{
+    width: 250px;
+    height: 250px;
+    border: 6px solid $white;
+    overflow: hidden;
+    border-radius: 50%;
+    img{
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+.icon-btn{
+    width: 60px;
+    height: 60px;
+}
+
+.bg-red{
+    background-color: #EE3232;
+}
+
+.speaker-calling{
+    & ul{
+        height: 200px !important;
+        & a{
+           &.active{
+            color: $secondary-color;
+            background-color: #2F779C1A !important;
+           }
+            padding: 14px 15px;
+            color: #3B1144;
+            text-align: center;
+            border: 0.5px solid #89708F;
+            border-radius: 12px;
+          
+           &:hover{
+            background-color: rgba(47, 119, 156, 0.1);
+           }
+        }
+    }
+}

@@ -1,0 +1,442 @@
+<section class="section admin_add__user bg-blue">
+  <div class="jakay-container">
+    <div class="row justify-content-between">
+      <div class="col-xl-9 col-lg-11 section-header">
+        <h3 class="font-38 text-primary fw-semibold">
+          {{ "Appointments" | translate }}
+        </h3>
+        <p class="text-primary-light mt-3 sub-head font-14">
+         {{ "AppointmentListDescription" | translate}}
+        </p>
+      </div>
+
+      <div class="condition-tabs">
+        <div class="form-group">
+          <div class="tabs-list br-12">
+            <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="Condition-all-tab"
+                  [ngClass]="{ active: selectedTab == 'pending' }"
+                  (click)="selectTab('pending')"
+                  data-bs-toggle="pill"
+                  type="button"
+                  role="tab"
+                  aria-controls="Condition-all"
+                  aria-selected="true"
+                >
+                  {{ "Pending Appointments" | translate }}
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="Condition-approval-tab"
+                  [ngClass]="{ active: selectedTab == 'scheduled' }"
+                  (click)="selectTab('scheduled')"
+                  data-bs-toggle="pill"
+                  type="button"
+                  role="tab"
+                  aria-controls="Condition-approval"
+                  aria-selected="false"
+                >
+                  {{ "Scheduled Appointments" | translate }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="vehicle__listing--cards buyer-cards">
+          <div class="tab-content pb-5" id="Condition-tabContent">
+            <div
+              class="tab-pane fade"
+              id="Condition-all"
+              [ngClass]="{ 'show active': selectedTab == 'pending' }"
+              role="tabpanel"
+              aria-labelledby="Condition-all-tab"
+            >
+              <div
+                class="table-responsive admin--listing-table bg-white br-12 p-3"
+              >
+                <table class="table mb-0 p-1">
+                  <thead>
+                    <th>
+                      <span>{{ "Req. No." | translate }}</span>
+                    </th>
+                    <th (click)="setSorting('full_name')">
+                      <span
+                        >{{ "Full Name" | translate }}
+                        <img
+                          src="assets/images/vehicle-list/sorting-arrow.svg"
+                          class="ms-2"
+                      /></span>
+                    </th>
+                    <th>
+                      <span>{{ "Email" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Mobile Number" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Location" | translate }}</span>
+                    </th>
+
+                    <th>
+                      <span>{{ "Vehicle" | translate }}</span>
+                    </th>
+                    <th (click)="setSorting('vehicle_source')">
+                      <span
+                        >{{ "Vehicle Source" | translate }}
+                        <img
+                          src="assets/images/vehicle-list/sorting-arrow.svg"
+                          class="ms-2"
+                        />
+                      </span>
+                    </th>
+                    <th>
+                      <span>{{ "Service" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Actions" | translate }}</span>
+                    </th>
+                    <th><span></span></th>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="!loading; else loadingTemplate">
+                      <ng-container
+                        *ngIf="
+                          appointmentList.length > 0;
+                          else noRecordsTemplate
+                        "
+                      >
+                        <tr
+                          *ngFor="
+                            let appointmentInfo of appointmentList;
+                            let i = index
+                          "
+                        >
+                          <td>
+                            {{ appointmentInfo.id.slice(0, 6) | uppercase }}
+                          </td>
+                          <td>
+                            {{
+                              appointmentInfo.first_name
+                                ? appointmentInfo.first_name
+                                : "-"
+                            }}
+                            {{
+                              appointmentInfo.last_name
+                                ? appointmentInfo.last_name
+                                : "-"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              appointmentInfo.email
+                                ? appointmentInfo.email
+                                : "-"
+                            }}
+                          </td>
+                          <td class="nowrap">
+                            {{ appointmentInfo.country_code }}
+                            {{
+                              appointmentInfo.mobile_no
+                                ? appointmentInfo.mobile_no
+                                : "-"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              appointmentInfo.location.city
+                                ? appointmentInfo.location.city
+                                : "-"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              appointmentInfo.vehicle_name
+                                ? appointmentInfo.vehicle_name
+                                : "-"
+                            }}
+                          </td>
+
+                          <td *ngIf="appointmentInfo.is_insider === false">
+                            {{ "Outsider" | translate }}
+                          </td>
+                          <td *ngIf="appointmentInfo.is_insider === true">
+                            {{ "Riku Insider" | translate }}
+                          </td>
+                          <td>
+                            {{
+                              appointmentInfo.package_name
+                                ? appointmentInfo.package_name
+                                : "-"
+                            }}
+                          </td>
+                          <td class="action-class">
+                            <div class="d-flex align-items-center">
+                              <button
+                                *ngIf="appointmentInfo.meetings_count === 0"
+                                class="btn primary-btn px-3 py-2 br-12"
+                                (click)="
+                                  scheduleMeeting(
+                                    'Schedule',
+                                    appointmentInfo.id
+                                  )
+                                "
+                              >
+                                {{ "Schedule Appointment" | translate }}
+                              </button>
+                              <!-- <a
+                                    *ngIf="modulePermissions.can_view_details"
+                                    href="javascript:void(0)"
+
+                                  >
+                                    <img src="assets/images/eye-open.svg"
+                                  /></a> -->
+                              <a
+                                class="margin-top-1 ml-2"
+                                href="javascript:void(0)"
+                                (click)="viewAppointment(appointmentInfo.id)"
+                              >
+                                <img src="assets/images/eye-open.svg" />
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-template #noRecordsTemplate>
+                        <tr class="text-center">
+                          <td colspan="10">
+                            {{ "No records found" | translate }}
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #loadingTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          <app-loader></app-loader>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                  <!-- <tbody *ngIf="!modulePermissions.can_list">
+                    <tr class="text-center">
+                      <td colspan="10">You Can't Access to these Data</td>
+                    </tr>
+                  </tbody> -->
+                </table>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              [ngClass]="{ 'show active': selectedTab == 'scheduled' }"
+              id="Condition-approval"
+              role="tabpanel"
+              aria-labelledby="Condition-approval-tab"
+            >
+              <div
+                class="table-responsive admin--listing-table bg-white br-12 p-3"
+              >
+                <table class="table mb-0 p-1">
+                  <thead>
+                    <th>
+                      <span>{{ "Req. No." | translate }}</span>
+                    </th>
+                    <th (click)="setSorting('full_name')">
+                      <span
+                        >{{ "Full Name" | translate }}
+                        <img
+                          src="assets/images/vehicle-list/sorting-arrow.svg"
+                          class="ms-2"
+                      /></span>
+                    </th>
+                    <th>
+                      <span>{{ "Email" | translate }} </span>
+                    </th>
+                    <th>
+                      <span>{{ "Mobile Number" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Location" | translate }}</span>
+                    </th>
+
+                    <th>
+                      <span>{{ "Vehicle" | translate }}</span>
+                    </th>
+                    <th (click)="setSorting('vehicle_source')">
+                      <span
+                        >{{ "Vehicle Source" | translate }}
+                        <img
+                          src="assets/images/vehicle-list/sorting-arrow.svg"
+                          class="ms-2"
+                        />
+                      </span>
+                    </th>
+                    <th>
+                      <span>{{ "Service" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Appraisal Report" | translate }}</span>
+                    </th>
+                    <th>
+                      <span>{{ "Actions" | translate }}</span>
+                    </th>
+                    <th><span></span></th>
+                  </thead>
+                  <!-- <tbody *ngIf="!modulePermissions.can_list">
+                    <tr class="text-center">
+                      <td colspan="10">You Can't Access to these Data</td>
+                    </tr>
+                  </tbody> -->
+                  <tbody>
+                    <ng-container *ngIf="!loading; else loadingTemplate">
+                      <ng-container
+                        *ngIf="
+                          appointmentList.length > 0;
+                          else noRecordsTemplate
+                        "
+                      >
+                        <tr
+                          *ngFor="
+                            let appointmentInfo of appointmentList;
+                            let i = index
+                          "
+                        >
+                          <td>
+                            {{ appointmentInfo.id.slice(0, 6) | uppercase }}
+                          </td>
+                          <td>
+                            {{ appointmentInfo.first_name }}
+                            {{ appointmentInfo.last_name }}
+                          </td>
+                          <td>{{ appointmentInfo.email }}</td>
+                          <td class="nowrap">
+                            {{ appointmentInfo.country_code }}
+                            {{ appointmentInfo.mobile_no }}
+                          </td>
+                          <td>
+                            {{ appointmentInfo.location.city | titlecase }}
+                          </td>
+                          <td>{{ appointmentInfo.vehicle_name }}</td>
+
+                          <td *ngIf="appointmentInfo.is_insider === false">
+                            {{ "Outsider" | translate }}
+                          </td>
+                          <td *ngIf="appointmentInfo.is_insider === true">
+                            {{ "Riku Insider" | translate }}
+                          </td>
+                          <td>{{ appointmentInfo.package_name }}</td>
+                          <td
+                            *ngIf="
+                              appointmentInfo.appraisal_status === 'in_pending'
+                            "
+                          >
+                            <label class="pending-approval">
+                              {{ "Pending" | translate }}</label
+                            >
+                          </td>
+                          <td
+                            *ngIf="
+                              appointmentInfo.appraisal_status === 'cancelled'
+                            "
+                          >
+                            <label class="rejected">{{
+                              "Canceled" | translate
+                            }}</label>
+                          </td>
+
+                          <td
+                            *ngIf="
+                              appointmentInfo.appraisal_status === 'completed'
+                            "
+                          >
+                            <div
+                              class="small-img-list c-pointer"
+                              routerLink="/expert/appraisal-report/view/{{
+                                appointmentInfo.id
+                              }}"
+                            >
+                              <img src="assets/images/appraisal.png" />
+                            </div>
+                          </td>
+                          <td class="action-class">
+                            <div class="d-flex align-items-center">
+                              <ng-container
+                                *ngIf="appointmentInfo.meetings_count < 2"
+                              >
+                                <ng-container
+                                  *ngIf="
+                                    appointmentInfo.appraisal_status !=
+                                    'completed'
+                                  "
+                                >
+                                  <button
+                                    class="btn primary-btn px-3 py-2 nowrap br-12"
+                                    (click)="
+                                      scheduleMeeting(
+                                        'Reschedule',
+                                        appointmentInfo.id
+                                      )
+                                    "
+                                  >
+                                    {{ "Reschedule Appointment" | translate }}
+                                  </button>
+                                </ng-container>
+                              </ng-container>
+                              <!-- <a
+                                    *ngIf="modulePermissions.can_view_details"
+                                    href="javascript:void(0)"
+
+                                  >
+                                    <img src="assets/images/eye-open.svg"
+                                  /></a> -->
+                              <a
+                                href="javascript:void(0)"
+                                class="margin-top-1 ml-2"
+                                (click)="viewAppointment(appointmentInfo.id)"
+                              >
+                                <img src="assets/images/eye-open.svg" />
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <!-- <ng-container
+                        *ngIf="userList.length > 0; else noRecordsTemplate"
+                      >
+
+                      </ng-container> -->
+                      <ng-template #noRecordsTemplate>
+                        <tr class="text-center">
+                          <td colspan="10">
+                            {{ "No records found" | translate }}
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #loadingTemplate>
+                      <tr class="text-center">
+                        <td colspan="10">
+                          <app-loader></app-loader>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <pagination
+            *ngIf="paginationData?.total_pages && !loading"
+            [paginationData]="paginationData"
+            (selectedPage)="jumpToThePage($event)"
+          >
+          </pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

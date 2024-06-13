@@ -1,0 +1,145 @@
+<!-- <h3 class="text-primary font-24 mb-5 fw-semibold">
+  {{
+    "Do you want to proceed further for the experts to review the vehicle before purchase?"
+      | translate
+  }}
+</h3> -->
+<div class="row gy-3 gy-xl-4">
+  <ng-container *ngIf="!loading">
+    <!-- <div class="col-md-6 col-xl-4" *ngFor="let package of packageList"> -->
+    <div class="col-md-12 col-xl-6 col-12" >
+      <div
+        [ngClass]="{
+          'expert__wrapper--pricebox-disabled recommended-disabled':
+            packageOnly.name == 'ID Checks' ||
+            packageOnly.name == 'Car Diagnosis Scanner'
+        }"
+        class="expert__wrapper--pricebox recommended shw-card"
+      >
+      <div class="bg-recommend">
+
+        <h3 class="plus-jakarta font-24 text-center fw-bold mb-2 d-flex justify-content-start" style="color: white; margin-top: 24px; margin-left: 6rem;">
+          {{ packageOnly.name | translate }}
+        </h3>
+        <h3 class="plus-jakarta font-32 text-center fw-bold mb-1 d-flex justify-content-end" style="color: white;  margin-right: 2.5rem;">
+          ${{ packageOnly.price | spanishNumber }}
+        </h3>
+      </div>
+        <!-- <ul class="highlights__box--list mb-4 p-3">
+          <li
+            class="highlights__box--items"
+            *ngFor="let item of packageOnly.details"
+          >
+            {{ item }}
+          </li>
+        </ul> -->
+        <div class="row">
+          <div class="col-md-6">
+            <ul class="px-3">
+              <li class="mb-10" *ngFor="let item of packageOnly.details.slice(0, packageOnly.details.length / 2 + 1)">
+                <div class="d-flex">
+                  <div style="margin-top: 3px;">
+                    <span class="highlightsP__box--items"></span>
+                  </div>
+                  <span class="font-14">
+                    {{ item | translate }}
+                  </span>
+                </div>  
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul class="px-3">
+              <li class="mb-10" *ngFor="let item of packageOnly.details.slice(packageOnly.details.length / 2 + 1)">
+                <div class="d-flex">
+                  <div style="margin-top: 3px;">
+                    <span class="highlightsP__box--items"></span>
+                  </div>
+                  <span class="font-14">
+                    {{ item | translate }}
+                  </span>
+                </div>  
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- <span
+          class="recommended bg-ornage-lite"
+          *ngIf="package.is_recommended"
+          >{{ "Recommended" | translate }}</span
+        > -->
+        
+        <div class="text-center pb-3" style="margin-left: 8rem;">
+          <button
+            class="btn primary-btn btn-md btn-sm br-12 border-1 shw"
+            [ngClass]="{
+              'bg-orange': packageOnly.is_recommended
+            }"
+            *ngIf="
+              packageOnly.name == 'Full Appraisal' ||
+              packageOnly.name == 'Evaluación completa'
+            "
+            (click)="selectExpertPackage(packageOnly.id)"
+          >
+            {{ "Purchase Now" | translate }}
+          </button>
+          <button
+            class="btn disabled primary-btn btn-md br-12 border-1 shw"
+            *ngIf="
+              packageOnly.name != 'Full Appraisal' &&
+              packageOnly.name != 'Evaluación completa'
+            "
+          >
+            {{ "Coming Soon" | translate }}1
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class=" col-12 col-md-6 col-xl-6 px-0 py-2" style="position: relative;">
+      <img
+        src="assets/images/vehicle-orders/bg-order-revision.png"
+        alt="background-expert-review"
+        style="width: 100%; position: relative; z-index: 1;"
+      />
+      <div class="bg-line"></div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-6" *ngIf="currentOrder">
+      <div class="expert__wrapper bg-white p-3 br-12 shw-card">
+        <div
+          class="form-check form-check-inline mb-4"
+          (click)="isProceed = !isProceed"
+        >
+          <input
+            class="form-check-input custom-checkbox"
+            type="radio"
+            name="usertype"
+            [checked]="isProceed"
+          />
+          <label
+            class="form-check-label bg-none border-0 py-0"
+            (click)="dontProceed()"
+            >{{
+              "No, I do not wish to proceed further with Expert Evaluation"
+                | translate
+            }}.</label
+          >
+          <span *ngIf="!isProceed" class="text-danger"
+            >{{ errorMessage }}
+          </span>
+
+          <span class="dot-checkmark"></span>
+        </div>
+        <div class="text-start">
+          <button
+            (click)="selectExpertPackage('no')"
+            class="btn primary-btn btn-lg btn-sm btn-md br-12 border-1 shw"
+          >
+            {{ "Select" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <app-loader *ngIf="loading"></app-loader>
+</div>

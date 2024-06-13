@@ -1,0 +1,57 @@
+<div class="modal-header border-0">
+  <button type="button" class="btn-close p-4" (click)="activeModal.dismiss('Cross click')" aria-label="Close"></button>
+</div>
+<div class="modal-body border-0">
+  <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">Authenticate User</h3>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <p class="text-center font-14 text-primary-light mb-3">Please enter your registered email/ mobile number, we will
+        send link
+        on your registered email/ mobile number.</p>
+    </div>
+    <div class="col-lg-7">
+      <form [formGroup]="resendForm" #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="forgot-pass-wrp modal-body-radio-icon mt-4">
+          <div class="row">
+            <div class="col-md-12">
+              <div  *ngIf="email" class="form-group via-email">
+                <label class="mb-xl-3 mb-lg-2 mb-2 d-block">{{ 'Enter registered email' | translate }}</label>
+                <input type="email" class="form-control" formControlName="email"
+                       [ngClass]="{ 'is-invalid':  form.submitted && !resendFormControls.email.valid }"
+                       placeholder="Enter Email" placeholder="{{ 'Enter registered email' | translate }}" value="">
+                <div *ngIf="resendFormControls.email.errors?.required" class="invalid-feedback">
+                  {{ "EmailRequired" | translate }}
+                </div>
+                <div *ngIf="resendFormControls.email.errors?.pattern" class="invalid-feedback">
+                  {{ "InvalidEmail" | translate }}
+                </div>
+              </div>
+              <div *ngIf="mobile"  class="form-group via-number">
+                <label class="mb-3 d-block">Enter registered Mobile number</label>
+                <ngx-intl-tel-input [cssClass]="'form-control w-100'" [preferredCountries]="preferredCountries"
+                                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true"  (countryChange)="clearCountrySearchBox()" [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="CountryISO.Ecuador" [maxLength]="15" [phoneValidation]="true"
+                                    [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="mobile_no"
+                                    formControlName="mobile_no">
+                </ngx-intl-tel-input>
+                <div *ngIf="form.form.value.mobile_no && form.form.controls['mobile_no'].errors" class="text-danger">
+                  Please enter a valid number
+                </div>
+
+                <div *ngIf="resendFormControls.mobile_no.errors?.required && form.submitted" class="text-danger"
+                     style="font-size: .875em;">
+                  Mobile number is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center border-0">
+          <button type="submit" class="btn btn-md primary-btn forgot-btn" data-bs-toggle="modal"
+                  data-bs-target="#mobile-verification-Modal" data-bs-dismiss="modal" >send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

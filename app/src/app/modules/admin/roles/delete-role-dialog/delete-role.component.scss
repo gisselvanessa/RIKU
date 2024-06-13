@@ -1,0 +1,9 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.modal-footer{
+    .btn-outline-purple {
+        border: 1px solid $thired-color;
+        border-radius: 8px;
+    }
+}

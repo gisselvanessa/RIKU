@@ -1,0 +1,194 @@
+<h3 class="text-primary font-24 my-4 my-lg-5 fw-semibold">
+  {{ "Loan Data Verification" | translate }}
+</h3>
+
+<div class="order-process__wrapper">
+  <ng-container>
+    <div class="row justify-content-between align-items-sm-start">
+      <div class="col-sm-8">
+        <!-- <div class="status-label mb-3 mb-md-4 mb-lg-5 d-inline border"> -->
+        <div class="row">
+          <div class="col-4 d-flex">
+            <label class="text-purple-2 mb-2 font-16 w-100 pt-2">{{
+              "Loan Application Status" | translate
+            }}</label>
+          </div>
+          <div class="col d-flex status-label">
+            <p
+              class="label in-progress d-flex"
+              *ngIf="
+                loanDetail?.status == loanStatus.PENDING ||
+                loanDetail?.status == loanStatus.QUALIFIED
+              "
+            >
+              {{ loanDetail?.status | titlecase | translate }}
+            </p>
+            <p
+              class="label completed d-flex"
+              *ngIf="
+                loanDetail?.status == loanStatus.APPROVED ||
+                loanDetail?.status == loanStatus.COMPLETED
+              "
+            >
+              {{ "Approved" | translate }}
+            </p>
+            <p
+              class="label canceled d-flex"
+              *ngIf="
+                loanDetail?.status == loanStatus.REJECTED ||
+                loanDetail?.status == loanStatus.CANCELLED
+              "
+            >
+              {{ loanDetail?.status | titlecase | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="text-purple-2 mb-2 font-15 w-100 pt-2">{{
+            "Unvalidated Documents" | translate
+          }}</label>
+        </div>
+        <!-- </div> -->
+      </div>
+      <div class="col-sm-4 d-flex justify-content-sm-end">
+        <a class="btn btn-sm primary-btn px-3 shw" (click)="viewLoanDetails()">{{
+          "View Loan" | translate
+        }}</a>
+      </div>
+    </div>
+    <div class="appraisal-report__wrapper">
+      <div class="report__accordion" id="report-accordian">
+        <div class="accordion-item bg-transparent App-info-wrp mb-4">
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2 bg-white accordion-button-h2"
+            (click)="selectAccordian(accordianName.APPLICANT_DOCUMENTS, 3)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button plus-jakarta py-4 px-0 bg-transparent text-primary font-22 fw-semibold ps-3 pe-3"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#report1"
+              [ngClass]="{
+                collapsed:
+                  accordianName.APPLICANT_DOCUMENTS != selectedAccordian ||
+                  (accordianName.APPLICANT_DOCUMENTS == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              <img
+                src="assets/images/vehicle-orders/mdi_user.svg"
+                class="me-2"
+              />
+              {{ "Applicant Documents" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.APPLICANT_DOCUMENTS === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div class="bg-white mb-4 shw p-4">
+                <app-applicant-documents
+                  [loanDetail]="loanDetail"
+                  (onUploadDocuments)="updateLoanSummary($event)"
+                  [userDocuments]="applicantDocuments"
+                  [employmentType]="
+                    loanDetail?.applicant_info?.employment_info.type
+                  "
+                  [isCoApplicant]="false"
+                ></app-applicant-documents>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="accordion-item bg-transparent App-info-wrp mb-4"
+          *ngIf="loanDetail?.co_applicant_info?.personal_info"
+        >
+          <h2
+            class="font-24 fw-semibold text-secondary mb-2"
+            (click)="selectAccordian(accordianName.CO_APPLICANT_DOCUMENTS, 4)"
+            id="report-1"
+          >
+            <button
+              class="accordion-button py-4 px-0 bg-transparent text-secondary font-22 fw-semibold"
+              type="button"
+              [ngClass]="{
+                collapsed:
+                  accordianName.CO_APPLICANT_DOCUMENTS != selectedAccordian ||
+                  (accordianName.CO_APPLICANT_DOCUMENTS == selectedAccordian &&
+                    !isOpened)
+              }"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              {{ "Cosigner Documents" | translate }}
+            </button>
+          </h2>
+          <div
+            id="report1"
+            class="accordion-collapse collapse"
+            [ngClass]="
+              accordianName.CO_APPLICANT_DOCUMENTS === selectedAccordian &&
+              isOpened
+                ? 'show'
+                : ''
+            "
+            aria-labelledby="report-1"
+            data-bs-parent="#report-accordian"
+          >
+            <div class="accordion-body px-0">
+              <div class="bg-white mb-4 br-12 p-4">
+                <app-applicant-documents
+                  [loanDetail]="loanDetail"
+                  (onUploadDocuments)="updateLoanSummary($event)"
+                  [userDocuments]="coApplicantDocuments"
+                  [employmentType]="
+                    loanDetail?.co_applicant_info?.employment_info.type
+                  "
+                  [isCoApplicant]="true"
+                ></app-applicant-documents>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-sm-flex">
+      <button
+        type="button"
+        (click)="backOrderList()"
+        class="btn primary-btn-outline btn-sm btn--small me-sm-3"
+      >
+        {{ "Previous" | translate }}
+      </button>
+      <button
+        class="btn primary-btn border-1 btn-sm btn--small mt-3 my-sm-0"
+        (click)="setNextStep()"
+        [disabled]="!loanDetail?.is_all_documents_verified"
+        type="button"
+      >
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        >
+        </span>
+        {{ "Next" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</div>

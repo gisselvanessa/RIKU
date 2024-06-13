@@ -1,0 +1,120 @@
+@import "src/variables";
+
+.edit-number{
+  line-height: 15px;
+  img{
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
+.mobile-verify-form {
+  .form-group{
+    margin-bottom: 90px;
+  }
+  input{
+    border:1px solid rgba(137,112,143,0.5);
+    height: 80px;
+    width: 80px!important;
+    background: $white;
+    font-size: 1.8rem;
+    padding:20px;
+    color:$secondary-color;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.background-image{
+  height: 95vh;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  .jakay-bg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .logo{
+    position: absolute;
+    transform: translateX(-50%);
+    top:90px;
+    left:50%;
+  }
+  h1{
+    position: absolute;
+    bottom: 75px;
+    left:75px;
+    color: $white;
+    z-index: 1;
+  }
+
+  &:after{
+    content: "";
+    background: linear-gradient(0deg, #4E1F4FBF 0%, #4E1F4F00 100%);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    height: 50%;
+    z-index: 0;
+  }
+}
+
+.steps-wrp{
+  .step{
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    color: $thired-color;
+    span{
+      color: $white;
+      background-color: $thired-color;
+      border-radius: 50%;
+      height: 34px;
+      width: 34px;
+      margin-right: 10px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &.active{
+      color: $primary-color;
+      span{
+        background-color: $secondary-color;
+      }
+    }
+  }
+  .line{
+    width: 70px;
+    height: .5px;
+    background-color: #B1A0B4;
+    margin-left: 25px;
+    margin-right: 10px;
+    display: inline-flex;
+  }
+}
+.form-steps{
+  margin-top: 30px;
+}
+.usertype-is{
+  color: $thired-color;
+  font-size: 14px;
+  span{
+    color: $secondary-color;
+  }
+}
+
+.text-primary-light{
+  color: #89708F!important;
+}
+
+.btn-link{
+  background-color: transparent;
+  border: 0px;
+  color: #89708F!important;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+}

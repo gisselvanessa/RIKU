@@ -1,0 +1,149 @@
+<section class="section bg-blue section-p-100">
+  <div class="jakay-container">
+    <div class="row justify-content-center">
+      <div class="col-12 px-4">
+        <div class="form-group">
+          <h5 class="font-28 fw-semibold text-primary mb-4">Bank Details</h5>
+        </div>
+      </div>
+      <div class="col-lg-12 px-4">
+        <p class="font-22 font-sm-10 text-primary mb-sm-3 mb-0">
+          Bank Account Information
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="bg-white p-4 br-12 mb-5 pb-3">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Account Name</label
+                  >
+                </div>
+                <!-- <div class="col-8">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    Lorem Ipsum
+                  </p>
+                </div> -->
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Account Number</label
+                  >
+                </div>
+                <div class="col-8">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    nnnnxxxxxn
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Branch Name</label
+                  >
+                </div>
+                <div class="col-8">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    Lorem Ipsum
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Bank Name</label
+                  >
+                </div>
+                <div class="col-8">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    Lorem Ipsum
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Routing Number</label
+                  >
+                </div>
+                <div class="col-8">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    nnnnxxxxxn
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group row align-items-center">
+                <div class="col-4">
+                  <label class="text-primary-light font-14 d-block"
+                    >Address</label
+                  >
+                </div>
+                <div class="col-7">
+                  <p class="text-primary font-16 mb-0 fw-semibold">
+                    2884 Single Street, Waltham, Massachusetts United States
+                  </p>
+                </div>
+                <div class="col-1">
+                  <img src="assets/images/location.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 px-0">
+      <p class="font-22 font-sm-10 text-primary mb-sm-3 mb-0">
+        Upload Deposit Receipt
+      </p>
+      <div class="form-group">
+        <input
+          type="file"
+          class="c-none"
+          placeholder="Upload Deposit Receipt"
+          #document
+          (change)="onDocumentChange($event)"
+          multiple
+          placeholder="Receipt Document"
+        />
+        <input
+          type="text"
+          readonly
+          class="form-control c-pointer"
+          (click)="document.click()"
+          placeholder="{{ 'Upload Receipt' | translate }}"
+        />
+        <img
+          src="assets/images/upload-icon.svg"
+          (click)="document.click()"
+          class="input-icon uplode-icon"
+        />
+      </div>
+    </div>
+    <div class="btn-grp mt-5 d-md-flex">
+      <button
+        class="btn primary-btn btn-md me-md-3 mb-2 border-1"
+        type="submit"
+      >
+        Confirm
+      </button>
+      <a class="btn primary-btn-outline btn-md mb-2 mt-md-0">Cancel</a>
+    </div>
+  </div>
+</section>

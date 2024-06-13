@@ -1,0 +1,3262 @@
+<section class="pb-5 bg-blue">
+  <div>
+    <form
+      [formGroup]="applicantInformationForm"
+      (ngSubmit)="sendApplicantInformation()"
+    >
+      <div class="appraisal-report__wrapper">
+        <div class="report__accordion" id="report-accordian">
+          <div class="accordion-item bg-transparent">
+            <h2
+              class="accordion-header"
+              (click)="selectAccordian('personal_information', 0)"
+              id="report-1"
+            >
+              <button
+                class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#report1"
+                [ngClass]="{
+                  collapsed:
+                    accordianName.PERSONALINFORMATION != selectedAccordian
+                }"
+                aria-expanded="false"
+                aria-controls="collapseOne"
+              >
+                {{ "Personal Information" | translate }}
+              </button>
+            </h2>
+            <div
+              id="report1"
+              class="accordion-collapse collapse"
+              [ngClass]="
+                accordianName.PERSONALINFORMATION === selectedAccordian &&
+                isOpened
+                  ? 'show'
+                  : ''
+              "
+              aria-labelledby="report-1"
+              data-bs-parent="#report-accordian"
+            >
+              <div class="accordion-body px-0">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Expert" | translate }}
+                          {{ "Cedula Id" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Cedula Id' | translate }}"
+                          name="cedula_id"
+                          maxlength="10"
+                          minlength="10"
+                          OnlyNumber
+                          autocomplete="off"
+                          formControlName="cedula_id"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['cedula_id']
+                                .invalid
+                          }"
+                        />
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['cedula_id']?.errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Cedula Id is required" | translate }}
+                        </div>
+                        <div
+                          *ngIf="
+                            isSubmitted &&
+                            applicantInformationForm.controls['cedula_id']
+                              ?.invalid
+                          "
+                          class="text-danger"
+                        >
+                          {{ "Enter valid Cedula Id" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Full Name" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          maxlength="40"
+                          AlphaNumeric
+                          class="form-control"
+                          placeholder="{{ 'Enter Full Name' | translate }}"
+                          formControlName="full_name"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['full_name']
+                                .invalid
+                          }"
+                        />
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['full_name'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Full name is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Date of Birth" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          #dob
+                          class="form-control input-meeting-date"
+                          type="text"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['dob'].invalid
+                          }"
+                          placeholder="{{ 'Enter Date' | translate }}"
+                          (keydown)="(false)"
+                          bsDatepicker
+                          [maxDate]="today"
+                          [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                          formControlName="dob"
+                        />
+                        <img
+                          (click)="dob.click()"
+                          src="assets/images/calender.svg"
+                          class="input-icon"
+                        />
+                        <!-- <div
+                          class="text-danger"
+                          *ngIf="
+                            scheduleAppointmentForm.submitted &&
+                            appointmentForm.controls['meeting_date'].invalid
+                          "
+                        >
+                          Meeting Date is required
+                        </div> -->
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['dob'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Date of birth is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Marital Status" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedStatus }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedStatus
+                                ? (selectedStatus | translate)
+                                : ("Marital Status" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let maritalStatus of maritalOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="marital_status"
+                                      formControlName="marital_status"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          maritalStatus.value,
+                                          'marital'
+                                        )
+                                      "
+                                      id="{{ maritalStatus.id }}"
+                                      value="{{ maritalStatus.id }}"
+                                      [checked]="
+                                        maritalStatus.value === selectedStatus
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ maritalStatus.id }}"
+                                      >{{
+                                        maritalStatus.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['marital_status'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Marital status is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Separation of Assets" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedSOA }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedSOA
+                                ? (selectedSOA | translate)
+                                : ("Separation of Assets" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let soa of assetsOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="separation_of_assets"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          soa.value,
+                                          'soa',
+                                          soa.id
+                                        )
+                                      "
+                                      id="{{ soa.id }}"
+                                      [checked]="soa.value == selectedSOA"
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ soa.id }}"
+                                      >{{ soa.value | translate }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['separation_of_assets'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Separation of assets is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Email" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Email' | translate }}"
+                          name="email"
+                          formControlName="email"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['email'].invalid
+                          }"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['email'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Email is required" | translate }}
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['email'].errors?.['pattern']"
+                          class="text-danger"
+                        >
+                          {{ "Enter valid email" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Sex" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedSex }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedSex
+                                ? (selectedSex | translate)
+                                : ("Sex" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let sex of sexOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="sex"
+                                      formControlName="sex"
+                                      (change)="
+                                        selectValue($event, sex.value, 'sex')
+                                      "
+                                      id="{{ sex.id }}"
+                                      value="{{ sex.id }}"
+                                      [checked]="sex.value == selectedSex"
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ sex.id }}"
+                                      >{{ sex.value | translate }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['sex'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Sex is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Education Level" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedEducation }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedEducation
+                                ? (selectedEducation | translate)
+                                : ("Education Level" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let education of educationOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="education_level"
+                                      formControlName="education_level"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          education.value,
+                                          'education'
+                                        )
+                                      "
+                                      id="{{ education.id }}"
+                                      value="{{ education.id }}"
+                                      [checked]="
+                                        education.value == selectedEducation
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ education.id }}"
+                                      >{{ education.value | translate }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['education_level'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Education level is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Number Family Charges" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedNfc }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedNfc
+                                ? (selectedNfc | translate)
+                                : ("Number Family Charges" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let nfc of NfcOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="number_family_charges"
+                                      (change)="
+                                        selectValue($event, nfc.value, 'nfc')
+                                      "
+                                      id="{{ nfc.id }}"
+                                      [checked]="nfc.value == selectedNfc"
+                                    />
+
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ nfc.id }}"
+                                      >{{ nfc.value | translate }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['number_family_charges'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Number family charges is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Mobile Number" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <ngx-intl-tel-input
+                          [cssClass]="'form-control w-100'"
+                          [preferredCountries]="preferredCountries"
+                          [enableAutoCountrySelect]="true"
+                          [enablePlaceholder]="true"
+                          [searchCountryFlag]="true"
+                          [searchCountryField]="[
+                            SearchCountryField.Iso2,
+                            SearchCountryField.Name
+                          ]"
+                          [selectFirstCountry]="false"
+                          [selectedCountryISO]="CountryISO.Ecuador"
+                          [maxLength]="15"
+                          [phoneValidation]="true"
+                          [separateDialCode]="separateDialCode"
+                          [numberFormat]="PhoneNumberFormat.National"
+                          (countryChange)="clearCountrySearchBox()"
+                          name="mobile_number"
+                          formControlName="mobile_number"
+                          autocomplete="off"
+                        >
+                        </ngx-intl-tel-input>
+                        <!-- <div
+                          *ngIf="
+                            formControls?.mobile_no.value &&
+                            formControls?.mobile_no.errors &&
+                            submitting
+                          "
+                          class="text-danger"
+                        >
+                          Please enter a valid number
+                        </div> -->
+
+                        <!-- <div
+                          *ngIf="form.submitted && formControls?.mobile_no.errors?.required && submitting"
+                          class="text-danger"
+                          style="font-size: 0.875em"
+                        >
+                          Mobile number is required
+                        </div> -->
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['mobile_number'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Mobile Number is required" | translate }}
+                        </div>
+                        <div
+                          *ngIf="
+                            isSubmitted &&
+                            applicantInformationForm.controls['mobile_number']
+                              .errors
+                          "
+                          class="text-danger"
+                        >
+                          {{ "Please enter a valid number" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Dependency Relationship" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedDependency }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedDependency
+                                ? (selectedDependency | translate)
+                                : ("Dependenncy Relationship" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="
+                                let dependencyRelationship of dependencyRelationships
+                              "
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="dependent_relationship"
+                                      formControlName="dependent_relationship"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          dependencyRelationship.value,
+                                          'dependent_relationship'
+                                        )
+                                      "
+                                      id="{{ dependencyRelationship.id }}"
+                                      value="{{ dependencyRelationship.id }}"
+                                      [checked]="
+                                        dependencyRelationship.value ==
+                                        selectedDependency
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ dependencyRelationship.id }}"
+                                      >{{
+                                        dependencyRelationship.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['dependent_relationship'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{
+                            "Dependency Relationship is required" | translate
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Nationality" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedNationality }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedNationality
+                                ? (selectedNationality | translate)
+                                : ("Nationality" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let nationality of nationalityOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="nationality"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          nationality.value,
+                                          'nationality',
+                                          nationality.val1
+                                        )
+                                      "
+                                      id="{{ nationality.id }}"
+                                      [checked]="
+                                        nationality.value == selectedNationality
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ nationality.id }}"
+                                      >{{
+                                        nationality.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['nationality'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Nationality is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item bg-transparent">
+            <h2
+              class="accordion-header"
+              (click)="selectAccordian('address', 1)"
+              id="report-2"
+            >
+              <button
+                class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#report2"
+                aria-expanded="false"
+                [ngClass]="{
+                  collapsed: accordianName.ADDRESS != selectedAccordian
+                }"
+                aria-controls="collapseOne"
+              >
+                {{ "Address" | translate }}
+              </button>
+            </h2>
+            <div
+              id="report2"
+              class="accordion-collapse collapse"
+              aria-labelledby="report-2"
+              data-bs-parent="#report-accordian"
+              [ngClass]="
+                accordianName.ADDRESS === selectedAccordian && isOpened
+                  ? 'show'
+                  : ''
+              "
+            >
+              <div class="accordion-body px-0">
+                <div class="row">
+                  <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Address" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control map"
+                        #address
+                        [ngClass]="{
+                          'is-invalid':
+                            isSubmitted &&
+                            applicantInformationForm.controls['address'].invalid
+                        }"
+                        placeholder="{{ 'Enter Address' | translate }}"
+                        name="address"
+                        autocomplete="off"
+                        formControlName="address"
+                      />
+                      <img
+                        src="assets/images/location.svg"
+                        class="input-icon"
+                      />
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['address'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Address is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Place Reference" | translate
+                      }}</label>
+                      <input
+                        type="text"
+                        class="form-control border-0"
+                        placeholder="{{ 'Enter Place Reference' | translate }}"
+                        name="additional_address"
+                        formControlName="additional_address"
+                        autocomplete="off"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Province" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div ngbDropdown class="doropdown_radio">
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary':
+                              applicantInformationForm.controls['province']
+                                .value
+                          }"
+                          type="button"
+                          id="vehicle-type"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <ng-container>
+                            <span
+                              *ngIf="
+                                applicantInformationForm.controls['province']
+                                  .value
+                              "
+                              >{{
+                                applicantInformationForm.controls["province"]
+                                  .value | titlecase
+                              }}</span
+                            >
+                            <span
+                              *ngIf="
+                                !applicantInformationForm.controls['province']
+                                  .value
+                              "
+                              >{{ "Select" | translate }}</span
+                            >
+                          </ng-container>
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type"
+                          class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li>
+                            <div class="form-group search-grp">
+                              <div class="position-relative">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="{{
+                                    'Search Province' | translate
+                                  }}"
+                                  [(ngModel)]="searchProvince"
+                                  [ngModelOptions]="{ standalone: true }"
+                                />
+                                <img
+                                  src="assets/images/vehicle-list/search-blue.svg"
+                                  class="search-icon"
+                                />
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            *ngFor="
+                              let province of provinceList
+                                | filter : searchProvince;
+                              index as i
+                            "
+                          >
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    [checked]="
+                                      applicantInformationForm.controls[
+                                        'province'
+                                      ].value == province
+                                    "
+                                    (click)="setProvice(province)"
+                                    name="province"
+                                    id="province_{{ i }}"
+                                    value="{{ province }}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="province_{{ i }}"
+                                    >{{ province | titlecase }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['province'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Province is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "City" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div ngbDropdown class="doropdown_radio">
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary':
+                              applicantInformationForm.controls['city'].value
+                          }"
+                          type="button"
+                          id="vehicle-type"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <ng-container>
+                            <span
+                              *ngIf="
+                                applicantInformationForm.controls['city'].value
+                              "
+                              >{{
+                                applicantInformationForm.controls["city"].value
+                                  | titlecase
+                              }}</span
+                            >
+                            <span
+                              *ngIf="
+                                !applicantInformationForm.controls['city'].value
+                              "
+                              >{{ "Select" | translate }}</span
+                            >
+                          </ng-container>
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type"
+                          class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li>
+                            <div class="form-group search-grp">
+                              <div class="position-relative">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="{{ 'Search City' | translate }}"
+                                  [(ngModel)]="searchCity"
+                                  [ngModelOptions]="{ standalone: true }"
+                                />
+                                <img
+                                  src="assets/images/vehicle-list/search-blue.svg"
+                                  class="search-icon"
+                                />
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            *ngFor="
+                              let city of cityList | filter : searchCity;
+                              index as i
+                            "
+                          >
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    [checked]="
+                                      applicantInformationForm.controls['city']
+                                        .value == city
+                                    "
+                                    (click)="setCity(city)"
+                                    name="city"
+                                    id="city_{{ i }}"
+                                    value="{{ city }}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="city_{{ i }}"
+                                    >{{ city | titlecase }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li *ngIf="cityList.length == 0">
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              {{ "No Cities Found" | translate }}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['city'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "City is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Parish" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div ngbDropdown class="doropdown_radio">
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary':
+                              applicantInformationForm.controls['parish'].value
+                          }"
+                          type="button"
+                          id="vehicle-type"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <ng-container>
+                            <span
+                              *ngIf="
+                                applicantInformationForm.controls['parish']
+                                  .value
+                              "
+                              >{{
+                                applicantInformationForm.controls["parish"]
+                                  .value | titlecase
+                              }}</span
+                            >
+                            <span
+                              *ngIf="
+                                !applicantInformationForm.controls['parish']
+                                  .value
+                              "
+                              >{{ "Select" | translate }}</span
+                            >
+                          </ng-container>
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type"
+                          class="dropdown-menu vehicle-type-menu dropdown-scroll vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li>
+                            <div class="form-group search-grp">
+                              <div class="position-relative">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="{{
+                                    'Search Parish' | translate
+                                  }}"
+                                  [(ngModel)]="searchParish"
+                                  [ngModelOptions]="{ standalone: true }"
+                                />
+                                <img
+                                  src="assets/images/vehicle-list/search-blue.svg"
+                                  class="search-icon"
+                                />
+                              </div>
+                            </div>
+                          </li>
+                          <li
+                            *ngFor="
+                              let parish of parishList | filter : searchParish;
+                              index as i
+                            "
+                          >
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              <div class="radio-check br-12">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    [checked]="
+                                      applicantInformationForm.controls[
+                                        'parish'
+                                      ].value == parish
+                                    "
+                                    (click)="setParish(parish)"
+                                    name="parish"
+                                    id="parish_{{ i }}"
+                                    value="{{ parish }}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="parish_{{ i }}"
+                                    >{{ parish | titlecase }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <li *ngIf="parishList.length == 0">
+                            <a class="dropdown-item" href="javascript:void(0)">
+                              {{ "No Parish Found" | translate }}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['parish'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Parish is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                      >{{"Province" | translate}}<sup class="text-danger font-14">*</sup></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{'Enter Province' | translate}}"
+                      name="province"
+                      formControlName="province"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid':
+                          isSubmitted &&
+                          applicantInformationForm.controls['province']
+                            .invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="isSubmitted && applicantInformationForm.controls['province'].errors?.['required']"
+                      class="text-danger"
+                    >
+                      {{"Province is required" | translate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"City" | translate}}<sup class="text-danger font-14">*</sup></label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{'Enter City' | translate}}"
+                      formControlName="city"
+                      name="city"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid':
+                          isSubmitted &&
+                          applicantInformationForm.controls['city'].invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="isSubmitted && applicantInformationForm.controls['city'].errors?.['required']"
+                      class="text-danger"
+                    >
+                      {{"City is required" | translate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                  <div class="form-group">
+                    <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Parish" | translate}}<sup class="text-danger font-14">*</sup></label>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="{{'Enter Parish' | translate}}"
+                      formControlName="parish"
+                      name="parish"
+                      autocomplete="off"
+                      [ngClass]="{
+                        'is-invalid':
+                          isSubmitted &&
+                          applicantInformationForm.controls['parish'].invalid
+                      }"
+                    />
+                    <div
+                      *ngIf="isSubmitted && applicantInformationForm.controls['parish'].errors?.['required']"
+                      class="text-danger"
+                    >
+                      {{"Parish is required" | translate}}
+                    </div>
+                  </div>
+                </div> -->
+
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Neighborhood" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Enter Neighborhood' | translate }}"
+                        name="neighborhood"
+                        formControlName="neighborhood"
+                        autocomplete="off"
+                        [ngClass]="{
+                          'is-invalid':
+                            isSubmitted &&
+                            applicantInformationForm.controls['neighborhood']
+                              .invalid
+                        }"
+                      />
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['neighborhood'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Neighborhood is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Zip Code" | translate
+                      }}</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{ 'Enter Zip Code' | translate }}"
+                        name="zip_code"
+                        formControlName="zip_code"
+                        autocomplete="off"
+                        maxlength="6"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Home Status" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{ 'text-primary': selectedHomeStatus }"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedHomeStatus
+                              ? (selectedHomeStatus | translate)
+                              : ("Home Status" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li *ngFor="let homeStatus of homeSatusOptions">
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="home_status"
+                                    formControlName="home_status"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        homeStatus.value,
+                                        'home_status'
+                                      )
+                                    "
+                                    id="{{ homeStatus.id }}"
+                                    value="{{ homeStatus.id }}"
+                                    [checked]="homeStatus.value == selectedSex"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ homeStatus.id }}"
+                                    >{{ homeStatus.value | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['home_status'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Home status is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Move-in-Date" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <input
+                        #moveInDate
+                        class="form-control input-meeting-date"
+                        type="text"
+                        placeholder="{{ 'Enter Date' | translate }}"
+                        (keydown)="(false)"
+                        bsDatepicker
+                        [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                        name="move_in_date"
+                        formControlName="move_in_date"
+                        autocomplete="off"
+                      />
+                      <img
+                        (click)="moveInDate.click()"
+                        src="assets/images/calender.svg"
+                        class="input-icon"
+                      />
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['move_in_date'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Move in date is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item bg-transparent">
+            <h2
+              class="accordion-header"
+              (click)="selectAccordian('employment', 2)"
+              id="report-3"
+            >
+              <button
+                class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#report3"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                [ngClass]="{
+                  collapsed: accordianName.EMPLOYMENT != selectedAccordian
+                }"
+              >
+                {{ "Employment" | translate }}
+              </button>
+            </h2>
+            <div
+              id="report3"
+              class="accordion-collapse collapse"
+              aria-labelledby="report-3"
+              data-bs-parent="#report-accordian"
+              [ngClass]="
+                accordianName.EMPLOYMENT === selectedAccordian && isOpened
+                  ? 'show'
+                  : ''
+              "
+            >
+              <div class="accordion-body px-0">
+                <div class="row">
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Employment Type" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{ 'text-primary': selectedEmploymentType }"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedEmploymentType
+                              ? (selectedEmploymentType | translate)
+                              : ("Employment Type" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="let employmentType of employmentTypeOptions"
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="employment_type"
+                                    formControlName="employment_type"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        employmentType.value,
+                                        'employment_type'
+                                      )
+                                    "
+                                    id="{{ employmentType.id }}"
+                                    value="{{ employmentType.id }}"
+                                    [checked]="
+                                      employmentType.value ==
+                                      selectedEmploymentType
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ employmentType.id }}"
+                                    >{{
+                                      employmentType.value | translate
+                                    }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['employment_type'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Employment Type is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Type of Business" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{ 'text-primary': selectedtypeOfBusiness }"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedtypeOfBusiness
+                              ? (selectedtypeOfBusiness | translate)
+                              : ("Type of Business" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li *ngFor="let typesOfBusiness of typesOfBusinesses">
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="type_of_business"
+                                    formControlName="type_of_business"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        typesOfBusiness.value,
+                                        'type_of_business'
+                                      )
+                                    "
+                                    id="{{ typesOfBusiness.id }}"
+                                    value="{{ typesOfBusiness.id }}"
+                                    [checked]="
+                                      typesOfBusiness.value ==
+                                      selectedtypeOfBusiness
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ typesOfBusiness.id }}"
+                                    >{{
+                                      typesOfBusiness.value | translate
+                                    }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['type_of_business'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Type of Business is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{ "Business Activities" | translate
+                        }}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary': selectedBusinessActivity
+                          }"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedBusinessActivity
+                              ? (selectedBusinessActivity | translate)
+                              : ("Business Activity" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="let businessActivity of businessActivities"
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="business_activity"
+                                    formControlName="business_activity"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        businessActivity.value,
+                                        'business_activity'
+                                      )
+                                    "
+                                    id="{{ businessActivity.id }}"
+                                    value="{{ businessActivity.id }}"
+                                    [checked]="
+                                      businessActivity.value ==
+                                      selectedBusinessActivity
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ businessActivity.id }}"
+                                    >{{
+                                      businessActivity.value | translate
+                                    }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['business_activity'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Business Activity is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="selectedEmploymentTypeId === 'employed'">
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Company Name" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Company Name' | translate }}"
+                          name="company_name"
+                          formControlName="company_name"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['company_name']
+                                .invalid
+                          }"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['company_name'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Company name is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Job Title" | translate}}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown text-primary font-14 fw-regular"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          autocomplete="off"
+                        >
+                          {{
+                            selectedJobTitle ? (selectedJobTitle | translate) : ("Job Title" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li *ngFor="let jobTitle of jobTitleOptions">
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="job_title"
+                                    formControlName="job_title"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        jobTitle.value,
+                                        'job_title'
+                                      )
+                                    "
+                                    id="{{ jobTitle.id }}"
+                                    value="{{ jobTitle.id }}"
+                                    [checked]="
+                                      jobTitle.value == selectedJobTitle
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ jobTitle.id }}"
+                                    >{{ jobTitle.value | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['job_title'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{"Job Title is required" | translate}}
+                      </div>
+                    </div>
+                  </div> -->
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Starting Date At This Job" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          #startDate
+                          class="form-control input-meeting-date"
+                          type="text"
+                          placeholder="{{ 'Enter Date' | translate }}"
+                          (keydown)="(false)"
+                          bsDatepicker
+                          [maxDate]="maxDate"
+                          [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                          name="start_date_job"
+                          formControlName="start_date_job"
+                          autocomplete="off"
+                        />
+                        <img
+                          (click)="startDate.click()"
+                          src="assets/images/calender.svg"
+                          class="input-icon"
+                        />
+
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['start_date_job'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Start Date is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Position" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Position' | translate }}"
+                          name="position"
+                          formControlName="position"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['position']
+                                .invalid
+                          }"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['position'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Position is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Economy Activity" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white multipledata-hide dropdown-toggle btn-dropdown text-primary font-14 fw-regular"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <span class="multipledata-hide">
+                              {{
+                                selectedEconomicActivity
+                                  ? (selectedEconomicActivity | translate)
+                                  : ("Economy Activity" | translate)
+                              }}
+                            </span>
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="
+                                let economicActivity of economicActivityOptions
+                              "
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="economic_activity"
+                                      formControlName="economic_activity"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          economicActivity.value,
+                                          'economic_activity',
+                                          economicActivity.ecoValue
+                                        )
+                                      "
+                                      id="{{ economicActivity.id }}"
+                                      value="{{ economicActivity.value }}"
+                                      [checked]="
+                                        economicActivity.value ===
+                                        selectedEconomicActivity
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ economicActivity.id }}"
+                                      >{{
+                                        economicActivity.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['economic_activity'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Economy Activity is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Monthly Income" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="text">
+                          <input
+                            type="text"
+                            class="form-control"
+                            PriceDirective
+                            style="color: #2f779c"
+                            placeholder="{{
+                              'Enter Monthly Income' | translate
+                            }}"
+                            name="monthly_income"
+                            formControlName="monthly_income"
+                            (blur)="formatNumber($event)"
+                            (focus)="formatToNumber($event)"
+                            autocomplete="off"
+                            [ngClass]="{
+                              'is-invalid':
+                                isSubmitted &&
+                                applicantInformationForm.controls[
+                                  'monthly_income'
+                                ].invalid
+                            }"
+                          />
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Monthly income is required" | translate }}
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income'].errors?.['pattern']"
+                          class="text-danger"
+                        >
+                          {{ "Monthly income must be number" | translate }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Type of Contract" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{
+                              'text-primary': selectedTypeOfContract
+                            }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedTypeOfContract
+                                ? (selectedTypeOfContract | translate)
+                                : ("Type of Contract" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let contractType of typeOfContract">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="type_of_contract"
+                                      formControlName="type_of_contract"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          contractType.value,
+                                          'contract_type'
+                                        )
+                                      "
+                                      id="{{ contractType.id }}"
+                                      value="{{ contractType.id }}"
+                                      [checked]="
+                                        contractType.value ==
+                                        selectedTypeOfContract
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ contractType.id }}"
+                                      >{{
+                                        contractType.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['type_of_contract'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Type of contract is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Size of Company" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{
+                              'text-primary': selectedSizeOfCompany
+                            }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedSizeOfCompany
+                                ? (selectedSizeOfCompany | translate)
+                                : ("Size of Company" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="let sizeOfCompany of sizeOfCompanyOptions"
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="size_of_company"
+                                      formControlName="size_of_company"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          sizeOfCompany.value,
+                                          'size_of_company'
+                                        )
+                                      "
+                                      id="{{ sizeOfCompany.id }}"
+                                      value="{{ sizeOfCompany.id }}"
+                                      [checked]="
+                                        sizeOfCompany.value ==
+                                        selectedSizeOfCompany
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ sizeOfCompany.id }}"
+                                      >{{
+                                        sizeOfCompany.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['size_of_company'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Size of Company is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="selectedEmploymentTypeId === 'self_employed'"
+                  >
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Type Of Establishment" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{
+                              'text-primary': selectedTypeOfEstablishment
+                            }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedTypeOfEstablishment
+                                ? (selectedTypeOfEstablishment | translate)
+                                : ("Type Of Establishment" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="
+                                let typeOfEstablishment of typeOfEstablishmentOptions
+                              "
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="type_of_establishment"
+                                      formControlName="type_of_establishment"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          typeOfEstablishment.value,
+                                          'type_establishment',
+                                          typeOfEstablishment.id1
+                                        )
+                                      "
+                                      id="{{ typeOfEstablishment.id }}"
+                                      value="{{ typeOfEstablishment.id1 }}"
+                                      [checked]="
+                                        typeOfEstablishment.value ==
+                                        selectedTypeOfEstablishment
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ typeOfEstablishment.id }}"
+                                      >{{
+                                        typeOfEstablishment.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['type_of_establishment'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Type of establishment is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Select Document" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{ 'text-primary': selectedrucrimpe }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedrucrimpe
+                                ? (selectedrucrimpe | translate)
+                                : ("Select Document" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li *ngFor="let rucrimpe of rucrimpeOptions">
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="select_ruc_rimpe"
+                                      formControlName="select_ruc_rimpe"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          rucrimpe.value,
+                                          'number_of_ruc_rise'
+                                        )
+                                      "
+                                      id="{{ rucrimpe.id }}"
+                                      value="{{ rucrimpe.id }}"
+                                      [checked]="
+                                        rucrimpe.value == selectedrucrimpe
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ rucrimpe.id }}"
+                                      >{{ rucrimpe.value | translate }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['select_ruc_rimpe'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Document is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Number Of Your" | translate }}
+                          {{ selectedrucrimpe | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Number' | translate }}"
+                          OnlyNumber
+                          name="number_of_your_ruc_rimpe"
+                          formControlName="number_of_your_ruc_rimpe"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls[
+                                'number_of_your_ruc_rimpe'
+                              ].invalid
+                          }"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['number_of_your_ruc_rimpe'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Number of RUC/RIMPE is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Position" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Position' | translate }}"
+                          name="position"
+                          formControlName="position"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['position']
+                                .invalid
+                          }"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['position'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Position is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Economy Activity" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white multipledata-hide dropdown-toggle btn-dropdown text-primary font-14 fw-regular"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <span class="multipledata-hide">
+                              {{
+                                selectedEconomicActivity
+                                  ? (selectedEconomicActivity | translate)
+                                  : ("Economy Activity" | translate)
+                              }}
+                            </span>
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="
+                                let economicActivity of economicActivityOptions
+                              "
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="economic_activity"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          economicActivity.value,
+                                          'economic_activity',
+                                          economicActivity.ecoValue
+                                        )
+                                      "
+                                      id="{{ economicActivity.id }}"
+                                      [checked]="
+                                        economicActivity.value ===
+                                        selectedEconomicActivity
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ economicActivity.id }}"
+                                      >{{
+                                        economicActivity.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['economic_activity'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Economy Activity is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Monthly Income" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="text">
+                          <input
+                            type="text"
+                            PriceDirective
+                            class="form-control"
+                            style="color: #2f779c"
+                            placeholder="{{
+                              'Enter Monthly Income' | translate
+                            }}"
+                            name="monthly_income"
+                            formControlName="monthly_income"
+                            autocomplete="off"
+                            (blur)="formatNumber($event)"
+                            (focus)="formatToNumber($event)"
+                            [ngClass]="{
+                              'is-invalid':
+                                isSubmitted &&
+                                applicantInformationForm.controls[
+                                  'monthly_income'
+                                ].invalid
+                            }"
+                          />
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Monthly income is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Company Phone Number" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <ngx-intl-tel-input
+                          [cssClass]="'form-control w-100'"
+                          [preferredCountries]="preferredCountries"
+                          [enableAutoCountrySelect]="true"
+                          [enablePlaceholder]="true"
+                          [searchCountryFlag]="true"
+                          [searchCountryField]="[
+                            SearchCountryField.Iso2,
+                            SearchCountryField.Name
+                          ]"
+                          [selectFirstCountry]="false"
+                          [selectedCountryISO]="CountryISO.Ecuador"
+                          [maxLength]="15"
+                          [phoneValidation]="true"
+                          [separateDialCode]="separateDialCode"
+                          [numberFormat]="PhoneNumberFormat.National"
+                          (countryChange)="clearCountrySearchBox()"
+                          name="company_phone_no"
+                          formControlName="company_phone_no"
+                          autocomplete="off"
+                        >
+                        </ngx-intl-tel-input>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['company_phone_no'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Company phone number is required" | translate }}
+                        </div>
+                        <div
+                          *ngIf="
+                            isSubmitted &&
+                            applicantInformationForm.controls[
+                              'company_phone_no'
+                            ].errors
+                          "
+                          class="text-danger"
+                        >
+                          {{ "Enter valid company phone number" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Entry Date" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          #entryDate
+                          class="form-control input-meeting-date"
+                          type="text"
+                          placeholder="{{ 'Enter Date' | translate }}"
+                          (keydown)="(false)"
+                          bsDatepicker
+                          [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                          formControlName="entry_date"
+                          autocomplete="off"
+                        />
+                        <img
+                          (click)="entryDate.click()"
+                          src="assets/images/calender.svg"
+                          class="input-icon"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['entry_date'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Entry Date is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Company Name" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="{{ 'Enter Company Name' | translate }}"
+                          name="company_name"
+                          formControlName="company_name"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['company_name']
+                                .invalid
+                          }"
+                          autocomplete="off"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['company_name'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Company name is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                      <div class="form-group position-relative">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Size of Company" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <div class="doropdown_radio" ngbDropdown>
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                            [ngClass]="{
+                              'text-primary': selectedSizeOfCompany
+                            }"
+                            type="button"
+                            id="vehicle-type23"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            {{
+                              selectedSizeOfCompany
+                                ? (selectedSizeOfCompany | translate)
+                                : ("Size of Company" | translate)
+                            }}
+                          </button>
+                          <ul
+                            ngbDropdownMenu
+                            aria-labelledby="vehicle-type23"
+                            class="dropdown-menu vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                          >
+                            <li
+                              *ngFor="let sizeOfCompany of sizeOfCompanyOptions"
+                            >
+                              <a class="dropdown-item" ngbDropdownItem>
+                                <div
+                                  class="radio-check checkbox-check br-12 me-3"
+                                >
+                                  <div class="form-check form-check-inline">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="size_of_company"
+                                      formControlName="size_of_company"
+                                      (change)="
+                                        selectValue(
+                                          $event,
+                                          sizeOfCompany.value,
+                                          'size_of_company'
+                                        )
+                                      "
+                                      id="{{ sizeOfCompany.id }}"
+                                      value="{{ sizeOfCompany.id }}"
+                                      [checked]="
+                                        sizeOfCompany.value ==
+                                        selectedSizeOfCompany
+                                      "
+                                    />
+                                    <label
+                                      class="form-check-label"
+                                      for="{{ sizeOfCompany.id }}"
+                                      >{{
+                                        sizeOfCompany.value | translate
+                                      }}</label
+                                    >
+                                    <span class="dot-checkmark"></span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['size_of_company'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Size of Company is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <!-- <ng-container *ngIf="selectedEmploymentTypeId === 'retired'">
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Retired Since" | translate}}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <input
+                        #retiredDate
+                        class="form-control input-meeting-date"
+                        type="text"
+                        placeholder="{{'Enter Date' | translate}}"
+                        (keydown)="(false)"
+                        bsDatepicker
+                        [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                        name="retired_since"
+                        formControlName="retired_since"
+                      />
+                      <img
+                        (click)="retiredDate.click()"
+                        src="assets/images/calender.svg"
+                        class="input-icon"
+                      />
+
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['retired_since'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{"Retired date is required" | translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Economy Activity" | translate
+                      }}<sup class="text-danger font-14">*</sup></label>
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white multipledata-hide dropdown-toggle btn-dropdown text-primary font-14 fw-regular"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedEconomicActivity
+                              ? (selectedEconomicActivity | translate)
+                              : ("Economy Activity" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="
+                              let economicActivity of economicActivityOptions
+                            "
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="economic_activity"
+                                    formControlName="economic_activity"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        economicActivity.value,
+                                        'economic_activity',
+                                        economicActivity.ecoValue
+                                      )
+                                    "
+                                    id="{{ economicActivity.id }}"
+                                    value="{{ economicActivity.value }}"
+                                    [checked]="
+                                      economicActivity.value ===
+                                      selectedEconomicActivity
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ economicActivity.id }}"
+                                    >{{
+                                      economicActivity.value | translate
+                                    }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['economic_activity'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Economy Activity is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Monthly Income" | translate}}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="text">
+                        <input
+                          type="text"
+                          PriceDirective
+                          (input)="formatNumber($event)"
+                          class="form-control"
+                          style="color: #2f779c"
+                          placeholder="{{'Enter Monthly Income' | translate}}"
+                          name="monthly_income"
+                          formControlName="monthly_income"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls[
+                                'monthly_income'
+                              ].invalid
+                          }"
+                        />
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{"Monthly income is required" | translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Company Name" | translate}}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="{{'Enter Company Name' | translate}}"
+                        name="company_name"
+                        formControlName="company_name"
+                        [ngClass]="{
+                          'is-invalid':
+                            isSubmitted &&
+                            applicantInformationForm.controls['company_name']
+                              .invalid
+                        }"
+                        autocomplete="off"                      />
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['company_name'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{"Company name is required" | translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4 col-lg-8 col-xl-4">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                        >{{"Size of Company" | translate}}<sup class="text-danger font-14">*</sup></label
+                      >
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown text-primary font-14 fw-regular"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedSizeOfCompany
+                              ? (selectedSizeOfCompany | translate)
+                              : ("Size of Company" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu  vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="let sizeOfCompany of sizeOfCompanyOptions"
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="size_of_company"
+                                    formControlName="size_of_company"
+                                    (change)="
+                                      selectValue(
+                                        $event,
+                                        sizeOfCompany.value,
+                                        'size_of_company'
+                                      )
+                                    "
+                                    id="{{ sizeOfCompany.id }}"
+                                    value="{{ sizeOfCompany.id }}"
+                                    [checked]="
+                                      sizeOfCompany.value ==
+                                      selectedSizeOfCompany
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ sizeOfCompany.id }}"
+                                    >{{ sizeOfCompany.value | translate }}</label
+                                  >
+                                  <span class="dot-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['size_of_company'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{"Size of Company is required" | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </ng-container> -->
+
+                  <ng-container>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-8">
+                      <div class="form-group">
+                        <label class="mb-xl-3 mb-lg-2 mb-1 d-block"
+                          >{{ "Address and Place of Work" | translate
+                          }}<sup class="text-danger font-14">*</sup></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control map"
+                          #workPlace
+                          placeholder="{{ 'Address' | translate }}"
+                          name="place_of_work"
+                          formControlName="place_of_work"
+                          autocomplete="off"
+                          [ngClass]="{
+                            'is-invalid':
+                              isSubmitted &&
+                              applicantInformationForm.controls['place_of_work']
+                                .invalid
+                          }"
+                        />
+                        <img
+                          src="assets/images/location.svg"
+                          class="input-icon"
+                        />
+                        <div
+                          *ngIf="isSubmitted && applicantInformationForm.controls['place_of_work'].errors?.['required']"
+                          class="text-danger"
+                        >
+                          {{ "Place of work is required" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item bg-transparent">
+            <h2
+              class="accordion-header"
+              (click)="selectAccordian('additional_income', 3)"
+              id="report-3"
+            >
+              <button
+                class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#report3"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                [ngClass]="{
+                  collapsed: accordianName.ADDITIONALINCOME != selectedAccordian
+                }"
+              >
+                {{ "Additional Income" | translate }}
+              </button>
+            </h2>
+            <div
+              id="report3"
+              class="accordion-collapse collapse"
+              aria-labelledby="report-3"
+              data-bs-parent="#report-accordian"
+              [ngClass]="
+                accordianName.ADDITIONALINCOME === selectedAccordian && isOpened
+                  ? 'show'
+                  : ''
+              "
+            >
+              <div class="accordion-body px-0">
+                <div class="row">
+                  <!-- <h2
+                    class="py-4 px-3 bg-transparent text-primary font-18 fw-semibold"
+                    id="report-3"
+                  >
+                    {{"Add additional income" | translate}}
+                  </h2> -->
+                  <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Economy Activity" | translate
+                      }}</label>
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary': selectedAdditionalEconomicActivity1
+                          }"
+                          type="button"
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedAdditionalEconomicActivity1
+                              ? (selectedAdditionalEconomicActivity1
+                                | translate)
+                              : ("Income 1" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="
+                              let economicActivity1 of filteredeconomicAdditionalActivityOptions1
+                            "
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="economic_activity_income_1"
+                                    (change)="
+                                      selectAdditionalEcnomicActivity(
+                                        $event,
+                                        economicActivity1.value,
+                                        'income_1',
+                                        economicActivity1.ecoValue1
+                                      )
+                                    "
+                                    id="{{ economicActivity1.id }}"
+                                    [checked]="
+                                      economicActivity1.value ===
+                                      selectedAdditionalEconomicActivity1
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ economicActivity1.id }}"
+                                    >{{
+                                      economicActivity1.value | translate
+                                    }}</label
+                                  >
+                                  <span class="check-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Monthly Income" | translate
+                      }}</label>
+                      <div class="text">
+                        <input
+                          type="text"
+                          PriceDirective
+                          (blur)="formatNumber($event, 'income_1')"
+                          (focus)="formatToNumber($event, 'income_1')"
+                          class="form-control"
+                          style="color: #2f779c"
+                          [readOnly]="!selectedAdditionalEconomicActivity1"
+                          placeholder="{{ 'Enter Monthly Income' | translate }}"
+                          name="monthly_income_1"
+                          formControlName="monthly_income_1"
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income_1'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Monthly income 1 is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Economy Activity" | translate
+                      }}</label>
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary': selectedAdditionalEconomicActivity2
+                          }"
+                          type="button"
+                          id="vehicle-type23"
+                          [disabled]="!selectedAdditionalEconomicActivity1"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedAdditionalEconomicActivity2
+                              ? (selectedAdditionalEconomicActivity2
+                                | translate)
+                              : ("Income 2" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="
+                              let economicActivity2 of filteredeconomicAdditionalActivityOptions2
+                            "
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="economic_activity_income_2"
+                                    (change)="
+                                      selectAdditionalEcnomicActivity(
+                                        $event,
+                                        economicActivity2.value,
+                                        'income_2',
+                                        economicActivity2.ecoValue2
+                                      )
+                                    "
+                                    id="{{ economicActivity2.id }}"
+                                    [checked]="
+                                      economicActivity2.value ===
+                                      selectedAdditionalEconomicActivity2
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ economicActivity2.id }}"
+                                    >{{
+                                      economicActivity2.value | translate
+                                    }}</label
+                                  >
+                                  <span class="check-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Monthly Income" | translate
+                      }}</label>
+                      <div class="text">
+                        <input
+                          type="text"
+                          PriceDirective
+                          (blur)="formatNumber($event, 'income_2')"
+                          (focus)="formatToNumber($event, 'income_2')"
+                          class="form-control"
+                          [readOnly]="!selectedAdditionalEconomicActivity2"
+                          style="color: #2f779c"
+                          placeholder="{{ 'Enter Monthly Income' | translate }}"
+                          name="monthly_income_2"
+                          formControlName="monthly_income_2"
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income_2'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Monthly income 2 is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+                    <div class="form-group position-relative">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Economy Activity" | translate
+                      }}</label>
+                      <div class="doropdown_radio" ngbDropdown>
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-white dropdown-toggle btn-dropdown font-14 fw-regular"
+                          [ngClass]="{
+                            'text-primary': selectedAdditionalEconomicActivity3
+                          }"
+                          type="button"
+                          [disabled]="
+                            !selectedAdditionalEconomicActivity1 ||
+                            !selectedAdditionalEconomicActivity2
+                          "
+                          id="vehicle-type23"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{
+                            selectedAdditionalEconomicActivity3
+                              ? (selectedAdditionalEconomicActivity3
+                                | translate)
+                              : ("Income 3" | translate)
+                          }}
+                        </button>
+                        <ul
+                          ngbDropdownMenu
+                          aria-labelledby="vehicle-type23"
+                          class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3"
+                        >
+                          <li
+                            *ngFor="
+                              let economicActivity3 of filteredeconomicAdditionalActivityOptions3
+                            "
+                          >
+                            <a class="dropdown-item" ngbDropdownItem>
+                              <div
+                                class="radio-check checkbox-check br-12 me-3"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="economic_activity_income_3"
+                                    (change)="
+                                      selectAdditionalEcnomicActivity(
+                                        $event,
+                                        economicActivity3.value,
+                                        'income_3',
+                                        economicActivity3.ecoValue3
+                                      )
+                                    "
+                                    id="{{ economicActivity3.id }}"
+                                    [checked]="
+                                      economicActivity3.value ==
+                                      selectedAdditionalEconomicActivity3
+                                    "
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    for="{{ economicActivity3.id }}"
+                                    >{{
+                                      economicActivity3.value | translate
+                                    }}</label
+                                  >
+                                  <span class="check-checkmark"></span>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                      <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{
+                        "Monthly Income" | translate
+                      }}</label>
+                      <div class="text">
+                        <input
+                          type="text"
+                          PriceDirective
+                          (blur)="formatNumber($event, 'income_3')"
+                          (focus)="formatToNumber($event, 'income_3')"
+                          class="form-control"
+                          [readOnly]="!selectedAdditionalEconomicActivity3"
+                          style="color: #2f779c"
+                          placeholder="{{ 'Enter Monthly Income' | translate }}"
+                          name="monthly_income_3"
+                          formControlName="monthly_income_3"
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div
+                        *ngIf="isSubmitted && applicantInformationForm.controls['monthly_income_3'].errors?.['required']"
+                        class="text-danger"
+                      >
+                        {{ "Monthly income 3 is required" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 d-sm-flex">
+          <button
+            type="button"
+            (click)="setPreviousStep()"
+            class="btn primary-btn-outline btn-sm btn--small me-sm-3"
+          >
+            {{ "Previous" | translate }}
+          </button>
+          <button
+            class="btn primary-btn border-1 btn-sm btn--small mt-3 mt-sm-0"
+            data-bs-toggle="modal"
+            data-bs-target="#becomesellerConfirmModal"
+            type="submit"
+          >
+            {{ "Next" | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

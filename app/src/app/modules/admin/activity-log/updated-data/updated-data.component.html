@@ -1,0 +1,172 @@
+<section class="section admin_add__user mb-4 bg-blue">
+  <div class="jakay-container">
+    <div class="back-to-page mb-3 d-flex">
+      <span class="c-pointer" (click)="back()"
+        ><img src="assets/images/backarrow.svg"
+      /></span>
+      <h3 class="mb-3 ms-3 font-38 text-primary fw-semibold">
+        {{"Updated Details" | translate}}
+      </h3>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-12 mb-4">
+        <div class="bg-white p-3 br-15">
+          <div class="table__header bg-blue br-15 px-4 py-4">
+            <h2 class="font-28 text-primary fw-semibold col">
+              {{"Data Information" | translate}}
+            </h2>
+          </div>
+          <div class="row p-4">
+            <div
+              class="col-4 col-md-3"
+              *ngFor="let values of updatedValue | keyvalue"
+            >
+              <div class="mb-4">
+                <span class="label text-primary-light font-14">{{
+                 (( values.key | removeUnderscore) | titlecase) | translate
+                }}</span>
+                <p
+                  class="data text-primary-light text-break font-16 fw-semibold text-decoration-line-through"
+                  *ngIf="
+                    values.value.old != null && !isObject(values.value.old)
+                  "
+                >
+                  {{ values.value.old | removeUnderscore }}
+                </p>
+                <div *ngIf="isObject(values.value.old)">
+                  <p
+                    *ngFor="let val of $any(values.value.old) | keyvalue"
+                    class="data text-primary-light font-16 fw-semibold text-decoration-line-through"
+                  >
+                    {{ (val.key | removeUnderscore) | titlecase | translate}} :
+                    {{ val.value | removeUnderscore }}
+                  </p>
+                </div>
+                <p
+                  class="data text-primary-light font-16 fw-semibold text-decoration-line-through"
+                  *ngIf="values.value.old == null"
+                >
+                  -
+                </p>
+                <p
+                  *ngIf="
+                    values.value.new != null && !isObject(values.value.new)
+                  "
+                  class="data text-primary text-break font-18 fw-semibold"
+                >
+                  {{ values.value.new | removeUnderscore  }}
+                </p>
+                <p
+                  *ngIf="values.value.new == null"
+                  class="data text-primary font-18 fw-semibold"
+                >
+                  -
+                </p>
+                <div *ngIf="isObject(values.value.new)">
+                  <p
+                    *ngFor="let val of $any(values.value.new) | keyvalue"
+                    class="data text-primary font-18 fw-semibold"
+                  >
+                    {{ (val.key | removeUnderscore) | titlecase | translate}}  :
+                    {{ val.value | removeUnderscore }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="admin__activity--log-table">
+            <div class="admin__activity--log-table-row"> -->
+          <!-- <div
+                class="row-item"
+                *ngFor="let values of updatedValue | keyvalue"
+              >
+                <span class="label text-primary-light font-14">{{
+                  values.key
+                }}</span>
+                <p
+                  class="data text-primary font-18 fw-bold text-decoration-line-through"
+                >
+                  {{ values.value.old ? values.value.old : "-" }}
+                </p>
+                <p class="data text-primary font-18 fw-bold">
+                  {{ values.value.new ? values.value.new : "-" }}
+                </p>
+              </div> -->
+
+          <!-- <div class="row-item">
+                <span class="label text-primary-light font-14">Last Name</span>
+                <p class="data text-primary font-18 fw-bold">Smith</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14"
+                  >Email Address</span
+                >
+                <p class="data text-primary font-18 fw-bold">
+                  andrew.smith@gmail.com
+                </p>
+              </div> -->
+          <!-- </div> -->
+          <!-- <div class="admin__activity--log-table-row">
+              <div class="row-item">
+                <span class="label text-primary-light font-14"
+                  >Phone Number</span
+                >
+                <p class="data text-primary font-18 fw-bold">+1 415 5552671</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14">Gender</span>
+                <p class="data text-primary font-18 fw-bold">Male</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14"
+                  >Date of Birth</span
+                >
+                <p class="data text-primary font-18 fw-bold">13 Mar 1994</p>
+              </div>
+            </div>
+            <div class="admin__activity--log-table-row">
+              <div class="row-item">
+                <span class="label text-primary-light font-14">Province</span>
+                <p class="data text-primary font-18 fw-bold">Leicestershire</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14">City</span>
+                <p class="data text-primary font-18 fw-bold">
+                  Market Harborough
+                </p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14">Parish</span>
+                <p class="data text-primary font-18 fw-bold">Inaquito</p>
+              </div>
+            </div>
+            <div class="admin__activity--log-table-row">
+              <div class="row-item">
+                <span class="label text-primary-light font-14"
+                  >Expert License</span
+                >
+                <p class="data text-primary font-18 fw-bold">AF1234</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14">ID Number</span>
+                <p class="data text-primary font-18 fw-bold">Jones</p>
+              </div>
+              <div class="row-item">
+                <span class="label text-primary-light font-14">First Name</span>
+                <p class="data text-primary font-18 fw-bold">ID012909324</p>
+              </div>
+            </div>
+            <div class="admin__activity--log-table-row">
+              <div class="row-item">
+                <span class="label text-primary-light font-14">Address</span>
+                <p class="data text-primary font-18 fw-bold">
+                  2884 Single Street, Waltham, Massachusetts United States
+                </p>
+              </div>
+            </div> -->
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

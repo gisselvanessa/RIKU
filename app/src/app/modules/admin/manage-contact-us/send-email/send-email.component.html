@@ -1,0 +1,62 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<form (ngSubmit)="sendData()">
+  <div class="modal-body border-0">
+    <h3 class="modal-title w-100 text-primary fw-semibold mb-3 font-28">
+      {{"Send Email" | translate}}
+    </h3>
+    <div class="mail-form">
+      <div class="form-group">
+        <label class="font-14 text-primary-light mb-2">{{"Subject" | translate}}</label>
+        <input type="text" class="form-control" [(ngModel)]="emailSubject" name="subject"
+          placeholder="{{'Enter Subject' | translate}}" #emailsubject="ngModel"
+          required>
+          <div *ngIf="emailsubject.touched && emailsubject?.errors?.['required']">
+            <div class="text-danger">
+              {{"Please enter subject" | translate}}
+            </div>
+          </div>
+      </div>
+      <div class="form-group">
+        <label class="font-14 text-primary-light mb-2">{{"Admin Reply" | translate}}*</label>
+        <textarea
+          [(ngModel)]="message"
+          name="message"
+          #message1="ngModel"
+          class="font-16 text-primary textarea"
+          required
+        ></textarea>
+        <div *ngIf="message1.touched">
+          <div class="text-danger" *ngIf="message1?.errors?.['required']">
+            {{"Please Enter Closing Message" | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-start border-0 mb-5">
+    <button
+      type="submit"
+      [disabled]="message1.invalid"
+      class="btn primary-btn me-4"
+    >
+      {{"Send Email" | translate}}
+    </button>
+    <button
+      class="btn primary-btn-outline"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="activeModal.dismiss('Cross click')"
+      type="button"
+    >
+      {{"Cancel" | translate}}
+    </button>
+  </div>
+</form>

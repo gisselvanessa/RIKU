@@ -1,0 +1,61 @@
+@import "../../../../variables";
+@import "../../../../function";
+
+.forgot-pass-modal{
+    &.changed-modal{
+        .modal-dialog{
+            max-width: 550px;
+            @include for-phone-only{
+                max-width: 380px;
+                margin: 0 auto;
+            }
+        }
+        .round-icon-wrp{
+            i{
+                font-size: 40px;
+            }
+        }
+    }
+    &.mobile-verification-modal{
+        .form-group{
+            margin-bottom: 40px;
+        }
+    }
+    .modal-dialog{
+        max-width: 800px;
+        @include for-desktop{
+            max-width: 900px;
+        }
+        @include for-phone-only{
+            max-width: 390px;
+            margin: 0 auto;
+        }
+    }
+    .modal-footer{
+        padding-bottom: 100px;
+        @include for-phone-only{
+            padding-bottom: 40px;
+            .btn{
+                padding:15px 80px;
+            }
+        }
+        
+    }
+    .modal-header{
+        @include for-phone-only{
+            padding-bottom: 0px!important;
+        }
+    }
+}
+
+.left-side-logo{
+    @include for-phone-only{
+        text-align: center;
+    }
+}
+
+.font-sm-10{
+    @include for-phone-only{
+        font-size: 12px;
+    }
+}

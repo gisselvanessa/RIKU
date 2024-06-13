@@ -1,0 +1,191 @@
+<div class="col-lg-12 mt-4">
+  <div class="bg-white br-12 p-4">
+    <div class="d-flex align-items-start justify-content-between p-4">
+      <h5 class="font-18 text-primary fw-regular">
+        {{ "Recently added vehicle" | translate }}
+      </h5>
+      <div class="d-inline-flex align-items-center">
+        <div class="condition-tabs data-sorting-tabs">
+          <div class="form-group mb-0">
+            <div class="tabs-list br-12">
+              <ul class="nav nav-pills" id="Condition-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    [ngClass]="{ active: selectedTab == 'all' }"
+                    (click)="selectTab('all')"
+                    id="Condition-all-tab"
+                    type="button"
+                    role="tab"
+                    aria-controls="Condition-all"
+                    aria-selected="true"
+                  >
+                    {{ "All" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    [ngClass]="{ active: selectedTab == 'new' }"
+                    (click)="selectTab('new')"
+                    type="button"
+                    role="tab"
+                    aria-controls="Condition-new"
+                    aria-selected="false"
+                  >
+                    {{ "New" | translate }}
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    [ngClass]="{ active: selectedTab == 'used' }"
+                    (click)="selectTab('used')"
+                    type="button"
+                    role="tab"
+                    aria-controls="Condition-used"
+                    aria-selected="false"
+                  >
+                    {{ "Used" | translate }}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <a
+          routerLink="/admin/vehicles/vehicle-list"
+          class="font-14 fw-medium text-underline ms-5 text-secondary"
+          >{{ "View All" | translate }}</a
+        >
+      </div>
+    </div>
+    <div class="admin__listing--cards vehicle__listing--cards buyer-cards">
+      <div class="tab-content pb-5" id="Condition-tabContent">
+        <div class="tab-pane show" id="recently-added-vehicles" role="tabpanel">
+          <div class="table-responsive admin--listing-table bg-white br-12 p-3">
+            <table class="table mb-0 p-1">
+              <thead>
+                <th>
+                  <span>{{ "Image" | translate }}</span>
+                </th>
+                <th>
+                  <span (click)="setSorting('MAKE')"
+                    >{{ "Vehicle Name" | translate
+                    }}<img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th>
+                  <span>{{ "Condition" | translate }}</span>
+                </th>
+                <th>
+                  <span (click)="setSorting('PRICE')"
+                    >{{ "Price" | translate
+                    }}<img
+                      src="assets/images/vehicle-list/sorting-arrow.svg"
+                      class="ms-2"
+                  /></span>
+                </th>
+                <th>
+                  <span>{{ "Status" | translate }}</span>
+                </th>
+                <th>
+                  <span>{{ "Actions" | translate }}</span>
+                </th>
+              </thead>
+              <tbody *ngIf="modulePermissions.can_list; else notFound">
+                <ng-container *ngIf="!loading; else loadingTemplate">
+                  <ng-container
+                    *ngIf="vehicleList.length > 0; else noRecordsTemplate"
+                  >
+                    <tr *ngFor="let vehicle of vehicleList">
+                      <td>
+                        <div class="small-img-list">
+                          <ng-container *ngIf="vehicle.cover_img?.url">
+                            <img [src]="vehicle.cover_img?.url" />
+                          </ng-container>
+                          <ng-container *ngIf="!vehicle.cover_img?.url">
+                            <img src="assets/images/no_preview.jpeg" />
+                          </ng-container>
+                        </div>
+                      </td>
+
+                      <td>
+                        {{ vehicle.brand?.name }},
+                        {{ vehicle.brand_model?.model }},
+                        {{ vehicle.vehicle_details?.year }}
+                      </td>
+                      <td>
+                        {{ vehicle.vehicle_details?.condition | titlecase | translate }}
+                      </td>
+                      <td>${{ vehicle.price | spanishNumber }}</td>
+                      <td>
+                        <ng-container *ngIf="vehicle.status == 'pending'">
+                          <label class="pending-approval">{{
+                            "Awaiting Approval" | translate
+                          }}</label>
+                        </ng-container>
+                        <ng-container *ngIf="vehicle.status == 'approved'">
+                          <label class="approved">{{
+                            "Approved" | translate
+                          }}</label>
+                        </ng-container>
+                        <ng-container *ngIf="vehicle.status == 'rejected'">
+                          <label class="rejected">{{
+                            "Rejected" | translate
+                          }}</label>
+                        </ng-container>
+                      </td>
+                      <td class="action-class">
+                        <a
+                          href="javascript:void(0)"
+                          *ngIf="modulePermissions.can_view_details"
+                          routerLink="/admin/vehicles/vehicle-details/{{
+                            vehicle.uuid
+                          }}"
+                        >
+                          <img src="assets/images/eye-open.svg"
+                        /></a>
+                        <a
+                          href="javascript:void(0);"
+                          *ngIf="modulePermissions.can_delete"
+                          (click)="deleteVehicle(vehicle.uuid)"
+                        >
+                          <img
+                            src="assets/images/vehicle-list/del-icon.svg"
+                            class="ms-3"
+                          />
+                        </a>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-template #noRecordsTemplate>
+                    <tr class="text-center">
+                      <td colspan="14">{{ "No records found" | translate }}</td>
+                    </tr>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingTemplate>
+                  <tr class="text-center">
+                    <td colspan="14">
+                      <app-loader></app-loader>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+              <ng-template #notFound>
+                <tbody>
+                  <tr class="text-center">
+                    <td colspan="14">{{ errorMessage | translate }}</td>
+                  </tr>
+                </tbody>
+              </ng-template>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

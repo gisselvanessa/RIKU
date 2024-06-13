@@ -1,0 +1,443 @@
+<ng-container *ngIf="step !== 3 && step !== 6; else seperateStep">
+
+    <div class="row justify-content-between">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div class="d-inline-flex flex-grow-1 align-items-center box-heading-wrp">
+                <h4 class="text-secondary font-22">{{stepsStepper[step].title | translate}}</h4>
+                <div class="form-check form-check-inline check-bg-none" *ngIf="stepsStepper[step].marskAsComplete || vehicleProcedureData.status === 'completed'; else uncheck">
+                    <input class="form-check-input custom-checkbox" type="checkbox" name="mark-complete"
+                        id="mark-complete" value="mark-complete" checked disabled>
+                    <label class="form-check-label h-auto  mark-completed-opacity" for="mark-complete">{{"Mark As Complete" | translate}}</label>
+                    <span class="check-checkmark"></span>
+                </div>
+                <ng-template #uncheck>
+                    <div class="px-2">
+                        <span
+                            *ngIf="isApiCalled"
+                            class="spinner-border spinner-border-sm mr-2"
+                            role="status"
+                            aria-hidden="true">
+                        </span>
+                    </div>
+                    <!-- <div class="form-check form-check-inline check-bg-none"> -->
+                    <div *ngIf="!(step === 4 && !vehicleProcedureData.payment_confirmation.is_confirmed)" class="form-check form-check-inline check-bg-none"> <!-- Conditional so that the button disappears only when step==4 and when the payment is not confirmed -->
+                        <form [formGroup]="markAsComplateForm">
+                            <input class="form-check-input custom-checkbox" type="checkbox" name="mark-complete"
+                                id="mark-complete" value="mark-complete"  formControlName="checkMark" (change)="checkValue($event)">
+                            <label class="form-check-label h-auto" for="mark-complete">{{"Mark As Complete" | translate}}</label>
+                            <span class="check-checkmark"></span>
+                        </form>
+                    </div>
+                </ng-template>
+            </div>
+            <p class="text-secondary font-16">{{stepsStepper[step].isStepCompleted ? ('Completed' | translate):('Expected' | translate)}} {{"Time" | translate}}:<span class="fw-semibold"> {{stepsStepper[step].isStepCompleted ? stepsStepper[step].daysToCompelate : '3 Days' }}</span></p>
+        </div>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+            <h5 class="text-primary font-16 fw-semibold mb-4 underline-wrp">{{"Required Documents" | translate}}</h5>
+            <div class="check-form">
+                <ng-container *ngIf="!stepsStepper[step].marskAsComplete; else docList">
+                    <div class="radio-check checkbox-check br-12 me-3 py-2" *ngFor="let list of stepsStepper[step].docList | keyvalue: originalOrder; let i = index">
+                        <div class="form-check form-check-inline check-bg-none">
+                            <input
+                                class="form-check-input custom-checkbox"
+                                type="checkbox"
+                                name="request-doc"
+                                id="resignation-policy{{i}}"
+                                value="{{list.value}}"
+                                [checked]="selectedDocExist(list.value)"
+                                (click)="selecDocList(list.value)"
+                            >
+                            <label class="form-check-label" for="resignation-policy{{i}}">{{list.key | translate}}</label>
+                            <span class="check-checkmark"></span>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #docList>
+                    <div class="radio-check checkbox-check br-12 me-3 py-2" *ngFor="let list of stepsStepper[step].docList | keyvalue: originalOrder; let i = index">
+                        <div class="form-check form-check-inline check-bg-none">
+                            <input
+                                class="form-check-input custom-checkbox"
+                                type="checkbox"
+                                name="request-doc"
+                                id="resignation-policy{{i}}"
+                                value="{{list.value}}"
+                                [checked]="stepsStepper[step].selectedDocList.indexOf(list.value) > -1"
+                                disabled
+                            >
+                            <label class="form-check-label" for="resignation-policy{{i}}">{{list.key | translate}}</label>
+                            <span class="check-checkmark"></span>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <div *ngIf="!stepsStepper[step].isValid && !stepsStepper[step].isFormValid">
+                <p class="text-danger">{{stepsStepper[step].message | translate}}</p>
+            </div>
+        </div>
+        <div class="col-xl-7 col-lg-6 col-md-12 border-left">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h5 class="text-primary font-16 fw-semibold underline-wrp mb-0">{{"Uploaded Documents" | translate}}</h5>
+            </div>
+
+                <div class="upload-receipt-box"  *ngIf="vehicleProcedureData.status !== 'completed' && step === 4 ">
+                    <div class="d-flex align-items-start">
+                        <div class="upload-button me-4" *ngIf="!stepsStepper[step].marskAsComplete">
+                            <input
+                                type="file"
+                                #uploadReceipt
+                                (change)="onFileChange($event)"
+                                class="d-none"
+                                accept="image/*, application/pdf"
+                            >
+                            <span
+                                *ngIf="isReceiptUploading"
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+                            <button (click)="uploadReceipt.click()"><img src="./assets/images/upload-icon.svg"></button>
+                        </div>
+                        
+                        <!-- <ng-container *ngIf="step === 4 && stepsStepper[step].uploadedImage && stepsStepper[step].uploadedImage.length > 0">
+                            <div class="me-3 document-uploded-wrp mb-4 position-relative"  *ngFor="let item of stepsStepper[step].uploadedImage; let i = index;">
+                            <div class="position-relative">
+                                <div class="uploded-document">
+                                    <a class="d-block" [href]="item.url" target="_blank">
+                                    <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url">
+                                    <img *ngIf="getFileType(item.url) == 'pdf'" src="./assets/images/pdf_icon.png">
+                                    <img *ngIf="getFileType(item.url) == 'doc'" src="./assets/images/doc_icon.png">
+                                    </a>
+                                </div>
+                                <span
+                                    class="delete-doc  c-pointer"
+                                    (click)="deleteDocument(item.id, i)"
+                                    *ngIf="!stepsStepper[step].marskAsComplete"
+                                >
+                                    &times;
+                                </span>
+                            </div>
+                            <a class="download-icon c-pointer"  (click)="downloadFile(item.url)"><img src="./assets/images/expert-evolution/white-download.svg"></a>
+                        </div>
+                        </ng-container> -->
+                    </div>
+                    <!-- <ng-container  *ngIf="step === 4 && stepsStepper[step].uploadedImage && stepsStepper[step].uploadedImage.length === 0">
+                      <p class="font-22 fw-light text-purple mt-2 text-center">
+                          {{"Documents are not uploaded yet from Buyer/Seller/Dealer side" | translate}}.</p>
+                    </ng-container> -->
+                </div>
+                <br>
+                <app-documents
+                          
+                        [vehicleProcedureData]="vehicleProcedureData?.steps[step]"
+                        [vehicleProcedureId]="vehicleProcedureId"
+                        [isCompleted]="vehicleProcedureData.status !== 'completed' ? (!stepsStepper[step].marskAsComplete ? true : false) : false"
+                        [stepsStepper]="stepsStepper"
+                        [step]="step"
+                        (deletedData)="deletedData($event)"
+                    ></app-documents>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #seperateStep>
+    <div class="row justify-content-between">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div class="d-inline-flex flex-grow-1 align-items-center box-heading-wrp">
+                <h4 class="text-secondary font-22"  *ngIf="step === 3">{{"Transfer of money to the seller" | translate}}</h4>
+                <h4 class="text-secondary font-22"  *ngIf="step === 6">{{"Delivery of the registration to the client" | translate}}</h4>
+                <div class="form-check form-check-inline check-bg-none" *ngIf="stepsStepper[step].marskAsComplete || vehicleProcedureData.status === 'completed'; else uncheck">
+                    <input class="form-check-input custom-checkbox" type="checkbox" name="mark-complete"
+                        id="mark-complete" value="mark-complete" checked disabled>
+                    <label class="form-check-label h-auto mark-completed-opacity" for="mark-complete">{{"Mark As Complete" | translate}}</label>
+                    <span class="check-checkmark"></span>
+                </div>
+                <ng-template #uncheck>
+                    <div class="px-2">
+                        <span
+                            *ngIf="isApiCalled"
+                            class="spinner-border spinner-border-sm mr-2"
+                            role="status"
+                            aria-hidden="true">
+                        </span>
+                    </div>
+                    <div class="form-check form-check-inline check-bg-none">
+                        <form [formGroup]="markAsComplateForm">
+                            <input class="form-check-input custom-checkbox" type="checkbox" name="mark-complete"
+                                id="mark-complete" value="mark-complete"  formControlName="checkMark" (change)="checkValuewithImage($event)">
+                            <label class="form-check-label h-auto" for="mark-complete">{{"Mark As Complete" | translate}}</label>
+                            <span class="check-checkmark"></span>
+                        </form>
+                    </div>
+                </ng-template>
+            </div>
+            <p class="text-secondary font-16">
+                {{stepsStepper[step].isStepCompleted ? ('Completed' | translate):('Expected' | translate)}} {{"Time" | translate}}:
+                <span class="fw-semibold">  {{stepsStepper[step].isStepCompleted ? stepsStepper[step].daysToCompelate : '3 Days' }} </span>
+            </p>
+        </div>
+
+        <div class="upload-receipt-box">
+            <p class="font-14 text-primary mb-4">{{"Payment Receipt" | translate}}</p>
+            <div class="d-flex align-items-start">
+                <div class="upload-button me-4" *ngIf="vehicleProcedureData.status !== 'completed' && !stepsStepper[step].marskAsComplete ">
+                    <input
+                        type="file"
+                        #uploadReceipt
+                        (change)="onFileChange($event)"
+                        class="d-none"
+                        accept="image/*, application/pdf"
+                    >
+                    <span
+                        *ngIf="isReceiptUploading"
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true">
+                    </span>
+                    <button (click)="uploadReceipt.click()"><img src="./assets/images/upload-icon.svg"></button>
+                </div>
+                <ng-container *ngIf="step === 3 && stepsStepper[step].uploadedImage && stepsStepper[step].uploadedImage.length > 0">
+                  <div class="document-uploded-wrp mb-4 position-relative" *ngFor="let item of stepsStepper[step].uploadedImage; let i = index;">
+                    <div class="position-relative">
+                      <div class="uploded-document">
+                        <a class="d-block" [href]="item.url" target="_blank">
+                          <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url">
+                          <img *ngIf="getFileType(item.url) == 'pdf'" src="./assets/images/pdf_icon.png">
+                          <img *ngIf="getFileType(item.url) == 'doc'" src="./assets/images/doc_icon.png">
+                        </a>
+                      </div>
+                      <span class="delete-doc  c-pointer" (click)="deleteDocument(item.id, i)"
+                        *ngIf="!stepsStepper[step].marskAsComplete">
+                        &times;
+                      </span>
+                    </div>
+                    <!-- <p class="font-10 fw-light text-purple mt-2">{{fileName(TransferOfMoneyReceipt.imageURL)}}</p> -->
+                    <a class="download-icon c-pointer" (click)="downloadFile(item.url)"><img
+                        src="./assets/images/expert-evolution/white-download.svg"></a>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="step === 6 && stepsStepper[step].uploadedImage && stepsStepper[step].uploadedImage.length > 0">
+                  <div class="document-uploded-wrp mb-4 position-relative"  *ngFor="let item of stepsStepper[step].uploadedImage; let i = index;">
+                    <div class="position-relative">
+                        <div class="uploded-document">
+                          <a class="d-block" [href]="item.url" target="_blank">
+                            <img *ngIf="getFileType(item.url) == 'image'" [src]="item.url">
+                            <img *ngIf="getFileType(item.url) == 'pdf'" src="./assets/images/pdf_icon.png">
+                            <img *ngIf="getFileType(item.url) == 'doc'" src="./assets/images/doc_icon.png">
+                          </a>
+                        </div>
+                        <span
+                            class="delete-doc  c-pointer"
+                            (click)="deleteDocument(item.id, i)"
+                            *ngIf="!stepsStepper[step].marskAsComplete"
+                        >
+                            &times;
+                        </span>
+                    </div>
+                    <!-- <p class="font-10 fw-light text-purple mt-2">{{fileName(DeliveryOfRegistrationReceipt.imageURL)}}</p> -->
+                    <a class="download-icon c-pointer"  (click)="downloadFile(item.url)"><img src="./assets/images/expert-evolution/white-download.svg"></a>
+                </div>
+                </ng-container>
+            </div>
+            <p
+                class="font-14 mb-4 text-danger"
+                *ngIf="step === 3 && formSubmitted && meetingDetailForm.controls['asset_key'].invalid && !stepsStepper[step].uploadedImage?.length"
+            > {{stepsStepper[step].isImageMessage | translate }}</p>
+            <p
+                class="font-14 mb-4 text-danger"
+                *ngIf="!stepsStepper[step].uploadedImage.length && step === 6 && isReceiptError"
+            > {{stepsStepper[step].isImageMessage | translate}}</p>
+        </div>
+        <div class="upload-receipt-box" *ngIf="step === 3">
+            <form [formGroup]="meetingDetailForm" #scheduleMeetingForm="ngForm">
+                <div class="row align-items-start">
+                    <ng-container  *ngIf="stepsStepper[step].marskAsComplete; else changeTime">
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Transaction Amount" | translate}} $</label>
+                                <div class="text">
+                                    <input type="text" disabled readonly
+                                        class="form-control "
+                                        placeholder="Enter Amount"
+                                        [value]="meetingDetailForm.value.amount"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Date" | translate}}</label>
+                                <input type="text" class="form-control input-meeting-date" disabled readonly [value]="getDate(meetingDetailForm.value.transfer_date)" placeholder="Enter Date">
+                                <img src="./assets/images/calender.svg" class="input-icon">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Time" | translate}}</label>
+                                <input type="text" class="form-control" placeholder="Enter Time"
+                                    [value]="meetingDetailForm.value.transfer_time | uppercase" disabled readonly>
+                                    <img src="./assets/images/time.svg" class="input-icon">
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #changeTime>
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Transaction Amount" | translate}} $</label>
+                                <div class="text">
+                                    <input type="text"
+                                        formControlName="amount"
+                                        class="form-control "
+                                        placeholder="{{'Enter Amount' | translate}}"
+                                        value="$55641.00"
+                                        [ngClass]="{
+                                            'is-invalid':
+                                            formSubmitted &&
+                                            !meetingDetailForm.controls['amount'].valid
+                                        }"
+                                        >
+                                    </div>
+                                <div
+                                    class="text-danger"
+                                    *ngIf="
+                                        formSubmitted &&
+                                        meetingDetailForm.controls['amount'].invalid"
+                                >
+                                {{"Amount is required" | translate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Date" | translate}}</label>
+                                <input
+                                    #meetingDate
+                                    class="form-control input-meeting-date"
+                                    type="text"
+                                    placeholder="{{'Enter Date' | translate}}"
+                                    bsDatepicker
+                                    [maxDate]="maxDate"
+                                    [bsConfig]="{ dateInputFormat: 'DD-MMMM-YYYY' }"
+                                    [ngClass]="{
+                                        'is-invalid':
+                                        formSubmitted &&
+                                        !meetingDetailForm.controls['transfer_date'].valid,
+                                        'input-meeting-date-time': completedStep > step
+                                    }"
+
+                                    formControlName="transfer_date"
+                                    readonly
+                                />
+                                <img
+                                    (click)="meetingDate.click()"
+                                    *ngIf="completedStep < step"
+                                    src="assets/images/calender.svg"
+                                    class="input-icon"
+                                />
+                                <div
+                                    class="text-danger"
+                                    *ngIf="
+                                        formSubmitted &&
+                                        meetingDetailForm.controls['transfer_date'].invalid"
+                                >
+                                {{"Date is required" | translate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-6 col-xl-3">
+                            <div class="form-group">
+                                <label class="mb-xl-3 mb-lg-2 mb-1 d-block">{{"Time" | translate}}</label>
+                                <input
+                                #meetingTime
+                                class="form-control input-meeting-date"
+                                type="text"
+                                readonly
+                                placeholder="{{'Enter Time' | translate}}"
+                                (focus)="timeDrop.toggle()"
+                                formControlName="transfer_time"
+                                [ngClass]="{
+                                    'is-invalid':
+                                    formSubmitted &&
+                                    !meetingDetailForm.controls['transfer_time'].valid,
+                                    'input-meeting-date-time': completedStep > step
+                                }"
+                                />
+                                <img
+                                src="assets/images/time.svg"
+                                (click)="timeDrop.toggle()"
+                                class="input-icon"
+                                />
+                                <div ngbDropdown #timeDrop="ngbDropdown" class="doropdown_radio">
+                                <ul ngbDropdownMenu class="dropdown-menu br-12 px-3 dropdown-scroll">
+                                    <li>
+                                    <div class="form-group search-grp">
+                                        <div class="position-relative">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="{{'Search Time' | translate}}"
+                                            [(ngModel)]="searchTime"
+                                            [ngModelOptions]="{ standalone: true }"
+                                        />
+                                        <img
+                                            src="assets/images/vehicle-list/search-blue.svg"
+                                            class="search-icon"
+                                        />
+                                        </div>
+                                    </div>
+                                    </li>
+                                    <li *ngFor="let time of timeList | filter : searchTime">
+                                    <a
+                                        ngbDropdownItem
+                                        class="dropdown-item"
+                                        href="javascript:void(0)"
+                                    >
+                                        <div class="radio-check checkbox-check br-12 me-3 py-2">
+                                        <div class="form-check form-check-inline">
+                                            <input
+                                             class="form-check-input custom-checkbox"
+                                            type="radio"
+                                            name="location"
+                                            (change)="setMeetingTime($event)"
+                                            id="{{ time }}"
+                                            value="{{ time }}"
+                                            />
+                                            <label class="form-check-label" for="{{ time }}">{{
+                                            time
+                                            }}</label>
+                                            <span class="dot-checkmark"></span>
+                                        </div>
+                                        </div>
+                                    </a>
+                                    </li>
+                                </ul>
+                                </div>
+                                <div
+                                class="text-danger"
+                                *ngIf="
+                                    formSubmitted &&
+                                    meetingDetailForm.controls['transfer_time'].invalid
+                                "
+                                >
+                                {{"Time is required" | translate}}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<div class="btn-grp mt-5 pt-5 d-flex">
+    <ng-container  *ngIf="vehicleProcedureData.status === 'completed'; else showCompleteButton">
+        <button class="btn primary-btn me-3 btn-lg border-1"  *ngIf="step < 6; else backToList" (click)="viewNextScreen()" > {{"Next" | translate}} </button>
+        <ng-template #backToList>
+            <button class="btn primary-btn me-3 btn-lg border-1" (click)="goToListing()"> {{"Back to List" | translate}} </button>
+        </ng-template>
+    </ng-container>
+    <ng-template #showCompleteButton>
+        <button class="btn primary-btn me-3 btn-lg border-1" (click)="viewNextScreen()" [disabled]="!stepsStepper[step].marskAsComplete || step == 3 && !vehicleProcedureData.payment_confirmation.is_confirmed && vehicleProcedureData.current_step !='tax_payment_orders'"> {{"Next" | translate}} </button>
+    </ng-template>
+    <button class="btn primary-btn-outline btn-lg"  *ngIf="step" (click)="viewPreviousScreen()"> {{"Previous" | translate}}</button>
+</div>

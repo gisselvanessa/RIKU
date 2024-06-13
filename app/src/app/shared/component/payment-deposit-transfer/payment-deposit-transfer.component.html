@@ -1,0 +1,84 @@
+<div class="mb-4">
+  <!-- <span (click)="back()"><img src="assets/images/backarrow.svg" /></span> -->
+  <div class="section-header">
+    <h3 class="mb-3  text-primary fw-semibold">
+      {{ "Bank Details" | translate }}
+    </h3>
+
+    <p class="font-16 fw-bold font-sm-10 text-primary">
+      {{ "Bank Account Information" | translate }}
+    </p>
+    <div class="col-2 principal-img">
+        <!-- <img
+          [src]="currentOrder?.vehicle?.primary_image"
+          width="100%"
+          class="vehicle-det-images"
+        /> -->
+        <img
+          [src]="currentExpertReview?.vehicle_information?.images[0]"
+          width="100%"
+          class="vehicle-det-images"
+        />
+      </div>
+  </div>
+  <div *ngFor="let detail of bankDetails" class="row mb-3">
+    <div class="col-md-6 col-sm_12">
+      <div class="bg-white pb-2 px-3 br-12 shw-card">
+        <div class=" mb-0 mb-xl-3">
+          <!-- <input
+            class="form-check-input"
+            type="radio"
+            name="payment"
+            id="{{ detail.bank_name }}"
+            value="{{ detail.bank_name }}"
+            (click)="selectPaymentBank($event)"
+            [checked]="selectedPaymentBank == detail.bank_name"
+          /> -->
+          <label class="form-check-label text-primary fw-bold mt-2" for="{{ detail.bank_name }}">
+            {{ detail.bank_name }}
+          </label>
+          <!-- <span class="dot-checkmark"></span> -->
+        </div>
+
+        <div class="row">
+          <div class="col-3">
+            <img
+              src="{{ detail.bank_logo }}"
+              alt="{{ detail.bank_name }}"
+              width="100px"
+              class="img-fluid"
+            />
+          </div>
+          <div class="col-9">
+            <div class="row">
+              <div class="col-6">
+
+                <p class="mb-3 font-14 text-primary fw-semibold">{{ "Account Type" | translate }}:</p>
+                <p class="mb-3 font-14 text-primary fw-semibold">{{ "Account Number" | translate }}:</p>
+                <p class="mb-3 font-14 text-primary fw-semibold">{{ "Account Name" | translate }}:</p>
+              </div>
+              <div class="col-6">
+
+                <p class="mb-3 font-14 text-primary fw-bold">
+                  {{ detail.type_account }}
+                </p>
+                <p class="mb-3 font-14 text-primary fw-bold">
+                  {{ detail.account_number }}
+                </p>
+                <p class="mb-3 font-14 text-primary fw-bold">
+                  {{ detail.account_name }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 d-flex justify-content-end">
+        <a class="fw-bold" href="../../../../assets/images/RIKU_TRANSFERENCIA_BANCARIA.pdf" download="Instrucciones.pdf">Descargar Instrucciones</a>
+    </div>
+  </div>
+
+</div>

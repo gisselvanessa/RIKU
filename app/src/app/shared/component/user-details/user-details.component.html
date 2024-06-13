@@ -1,0 +1,766 @@
+<div *ngIf="userType?.includes('seller') || userType?.includes('user')">
+  <section class="section admin_add__user bg-blue">
+    <div class="jakay-container">
+      <div
+        class="d-flex section-header flex-wrap justify-content-between w-100 align-items-center"
+      >
+        <div class="d-flex align-items-center mb-3">
+          <div class="back-to-page d-flex">
+            <span>
+              <a href="javascript:void(0)" (click)="goback()"
+                ><img src="assets/images/backarrow.svg" /></a
+            ></span>
+          </div>
+          <h3
+            class="ms-3 font-38 text-primary fw-semibold"
+            *ngIf="
+              loggedInUserType === 'seller' || loggedInUserType === 'user'
+            "
+          >
+            {{ "My Profile" | translate }}
+          </h3>
+          <h3
+            class="ms-3 font-38 text-primary fw-semibold"
+            *ngIf="
+              loggedInUserType === 'admin' || loggedInUserType === 'super_admin'
+            "
+          >
+            {{ "User Details" | translate }}
+          </h3>
+        </div>
+        <div
+          class="d-flex mb-3 ms-auto"
+          *ngIf="loggedInUserType === 'seller' || loggedInUserType === 'user'"
+        >
+          <button
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Edit" | translate }}
+          </button>
+        </div>
+        <div
+          class="d-flex mb-3 ms-auto"
+          *ngIf="
+            loggedInUserType === 'admin' || loggedInUserType === 'super_admin'
+          "
+        >
+          <button
+            *ngIf="modulePermissions.can_edit"
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Edit" | translate }}
+          </button>
+          <button
+            *ngIf="modulePermissions.can_export"
+            class="btn-outline-purple ms-5 text-primary font-14"
+            (click)="downloadUserDetails()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/user-detail/download-icon.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Download" | translate }}
+          </button>
+          <button
+            *ngIf="modulePermissions.can_delete"
+            class="btn-outline-purple ms-5 text-danger font-14"
+            data-bs-toggle="modal"
+            data-bs-target="#deletevehicleModal"
+            (click)="deleteUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/vehicle-list/del-icon.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Delete" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="admin_user-detail" #userPdf>
+        <div class="row justify-content-between">
+          <div class="col-xl-2 col-lg-4 text-center">
+            <div
+              class="add__user-img mb-4 mb-lg-0"
+              *ngIf="!userDetails.profile_pic?.download_url"
+            >
+              <div class="admin__add-img">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                  alt="admin-img"
+                />
+              </div>
+            </div>
+            <div
+              class="add__user-img mb-4 mb-lg-0"
+              *ngIf="userDetails.profile_pic?.download_url"
+            >
+              <div class="admin__add-img">
+                <img
+                  [src]="userDetails.profile_pic.download_url"
+                  alt="admin-img"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-9 col-lg-8">
+            <div class="bg-white p-4 br-12">
+              <div class="row admin_detail-wrp">
+                <div class="col-12">
+                  <div class="form-group d-flex align-items-center">
+                    <p class="text-primary-light font-20">
+                      {{ "User Type" | translate }}:
+                      <span class="text-secondary ms-2 font-22">
+                        {{ (userType | ucWords) | translate }}</span
+                      >
+                    </p>
+                    <!-- <div class="ms-auto" *ngIf="(loggedInUserType === 'seller' || loggedInUserType === 'user') && userDetails?.role?.length == 1">
+                      <ng-container *ngIf="loggedInUserType === 'user'; else becomeSeller">
+                        <a href="javascript:void(0)" class="text-secondary font-22" (click)="openBseller('seller');">Become a Seller</a>
+                        <button class="btn primary-btn me-3 mb-2 border-1" type="submit" (click)="openBseller('seller');">
+                          {{ "Become a Seller" | translate }}
+                        </button>
+                      </ng-container>
+                      <ng-template #becomeSeller>
+                        <a href="javascript:void(0)" class="text-secondary font-22" (click)="openBseller('user');">Become a Buyer</a>
+                        <button class="btn primary-btn me-3 mb-2 border-1" type="submit" (click)="openBseller('user');">
+                          {{ "Become a Buyer" | translate }}
+                        </button>
+                      </ng-template>
+                    </div> -->
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2"
+                      >{{ "Name" | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.first_name | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Surname" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.last_name | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Username" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold text-username">
+                      {{ userDetails.user_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Birthdate" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ getDate(userDetails.dob) }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Email" | translate
+                    }}</label>
+                    <p class="text-primary text-break font-18 mb-0 fw-semibold">
+                      {{ userDetails.email }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.country_code }} {{ userDetails.mobile_no }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Gender" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.gender | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-xl-2 col-sm-6 col-12"
+                  *ngIf="loggedInUserType === 'admin'"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Status" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.status | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Address" | translate
+                    }}</label>
+
+                    <p
+                      class="text-primary text-break font-18 mb-0 fw-semibold"
+                      *ngIf="
+                        userDetails.address?.address?.includes(
+                          userDetails.address?.parish
+                        ) &&
+                          userDetails.address?.address?.includes(
+                            userDetails.address?.city
+                          ) &&
+                          userDetails.address?.address?.includes(
+                            userDetails.address?.province
+                          );
+                        else userDetail
+                      "
+                    >
+                      {{
+                        userDetails.address?.address
+                          ? (userDetails.address?.address).split(",").join(", ")
+                          : " "
+                      }}
+                    </p>
+                    <ng-template #userDetail>
+                      <p
+                        class="text-primary text-break font-18 mb-0 fw-semibold"
+                      >
+                        {{
+                          userDetails.address?.address
+                            ? userDetails.address?.address + ", "
+                            : " "
+                        }}
+                        {{
+                          userDetails.address?.parish
+                            ? userDetails.address?.parish + ", "
+                            : " "
+                        }}
+                        {{
+                          userDetails.address?.city
+                            ? userDetails.address?.city + ", "
+                            : " "
+                        }}
+                        {{
+                          userDetails.address?.province
+                            ? userDetails.address?.province
+                            : " "
+                        }}
+                      </p>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <!-- <div
+                  class="col-xl-3 col-sm-6 col-12"
+                  *ngIf="userType.toString().includes('seller')"
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Vehicle Types" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-18 mb-0 fw-semibold"
+                      *ngFor="let vehicleType of userDetails.vehicle_types"
+                    >
+                      {{
+                        vehicleType == "commercial_vehicles"
+                          ? ("Commercial Vehicles" | translate)
+                          : ("Cars" | translate)
+                      }}
+                    </p>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div *ngIf="userType?.toString() === 'dealer'">
+  <section class="section admin_add__user bg-blue">
+    <div class="jakay-container">
+      <div
+        class="d-flex section-header flex-wrap justify-content-between w-100 align-items-center"
+      >
+        <div class="d-flex align-items-center mb-3">
+          <div class="back-to-page d-flex">
+            <span>
+              <a href="javascript:void(0)" (click)="goback()"
+                ><img src="assets/images/backarrow.svg" /></a
+            ></span>
+          </div>
+          <h3
+            class="ms-3 font-38 text-primary fw-semibold"
+            *ngIf="
+              loggedInUserType === 'admin' || loggedInUserType === 'super_admin'
+            "
+          >
+            {{ "User Details" | translate }}
+          </h3>
+          <h3
+            class="ms-3 font-38 text-primary fw-semibold"
+            *ngIf="loggedInUserType === 'dealer'"
+          >
+            {{ "My Profile" | translate }}
+          </h3>
+        </div>
+        <div class="d-flex mb-3 ms-auto" *ngIf="loggedInUserType === 'dealer'">
+          <button
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Edit" | translate }}
+          </button>
+        </div>
+        <div
+          class="d-flex mb-3 ms-auto"
+          *ngIf="
+            loggedInUserType === 'admin' || loggedInUserType === 'super_admin'
+          "
+        >
+          <button
+            *ngIf="modulePermissions.can_edit"
+            class="btn-outline-purple text-primary font-14"
+            (click)="editUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/view_vehicle/edit_purple.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Edit" | translate }}
+          </button>
+          <button
+            *ngIf="modulePermissions.can_export"
+            class="btn-outline-purple ms-5 text-primary font-14"
+            (click)="downloadUserDetails()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/user-detail/download-icon.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Download" | translate }}
+          </button>
+          <button
+            *ngIf="modulePermissions.can_delete"
+            class="btn-outline-purple ms-5 text-danger font-14"
+            data-bs-toggle="modal"
+            data-bs-target="#deletevehicleModal"
+            (click)="deleteUser()"
+          >
+            <img
+              class="me-2"
+              src="assets/images/vehicle-list/del-icon.svg"
+              width="28px"
+              height="28px"
+              alt=""
+            />{{ "Delete" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="admin_user-detail" #userPdf>
+        <div class="row justify-content-between">
+          <div class="col-xl-2 col-lg-4 text-center">
+            <div
+              class="add__user-img mb-4 mb-lg-0"
+              *ngIf="!userDetails.profile_pic?.download_url"
+            >
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                alt="admin-img"
+              />
+            </div>
+            <div
+              class="add__user-img mb-4 mb-lg-0"
+              *ngIf="userDetails.profile_pic?.download_url"
+            >
+              <img
+                [src]="userDetails.profile_pic?.download_url"
+                alt="admin-img"
+              />
+            </div>
+          </div>
+          <div class="col-xl-9 col-lg-8">
+            <h5 class="font-22 text-primary fw-semibold mb-4">
+              {{ "Account Representative Information" | translate }}
+            </h5>
+            <div class="bg-white p-4 br-12 mb-5 pb-3">
+              <div class="row admin_detail-wrp">
+                <div class="col-12">
+                  <div class="form-group">
+                    <p class="text-primary-light font-20">
+                      {{ "User Type" | translate }}:
+                      <span class="text-secondary ms-2 font-22">{{
+                        userType.toString() | titlecase | translate
+                      }} </span>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">
+                      {{ "Name" | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.first_name | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Surname" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.last_name | titlecase }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Email" | translate
+                    }}</label>
+                    <p class="text-primary text-break font-18 mb-0 fw-semibold">
+                      {{ userDetails.email }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Mobile Number" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.country_code }} {{ userDetails.mobile_no }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Gender" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.gender | titlecase }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="font-22 text-primary fw-semibold mb-4">
+              {{ "Dealership Information" | translate }}
+            </h5>
+            <div class="bg-white br-12 p-4">
+              <div class="row">
+                <div class="col-xl-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">
+                      {{ "Username" | translate }}</label
+                    >
+                    <p class="text-primary font-18 mb-0 fw-semibold text-username">
+                      {{ userDetails.user_name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Company Name" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.company_name }}
+                    </p>
+                  </div>
+                </div>
+                <!-- <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Vehicle Types" | translate
+                    }}</label>
+                    <p
+                      class="text-primary font-18 mb-0 fw-semibold"
+                      *ngFor="let vehicleType of userDetails.vehicle_types"
+                    >
+                      {{
+                        vehicleType == "commercial_vehicles"
+                          ? ("Commercial Vehicles" | translate)
+                          : ("Cars" | translate)
+                      }}
+                    </p>
+                  </div>
+                </div> -->
+                <div
+                  class="col-xl-2 col-sm-6 col-12"
+                  *ngIf="
+                    loggedInUserType === 'admin' ||
+                    loggedInUserType === 'super_admin'
+                  "
+                >
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Status" | translate
+                    }}</label>
+                    <p class="text-primary font-18 mb-0 fw-semibold">
+                      {{ userDetails.status }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-14 d-block mb-2">{{
+                      "Address" | translate
+                    }}</label>
+                    <p
+                      class="text-primary text-break font-18 mb-0 fw-semibold"
+                      *ngIf="
+                        userDetails.address?.address?.includes(
+                          userDetails.address?.parish
+                        ) &&
+                          userDetails.address?.address?.includes(
+                            userDetails.address?.city
+                          ) &&
+                          userDetails.address?.address?.includes(
+                            userDetails.address?.province
+                          );
+                        else userDetail
+                      "
+                    >
+                      {{
+                        (userDetails.address?.address
+                          ? userDetails.address?.address
+                          : ""
+                        )
+                          .split(",")
+                          .join(", ")
+                      }}
+                    </p>
+                    <ng-template #userDetail>
+                      <p
+                        class="text-primary text-break font-18 mb-0 fw-semibold"
+                      >
+                        {{
+                          userDetails.address?.address
+                            ? (userDetails.address?.address)
+                                .split(",")
+                                .join(", ") + ", "
+                            : " "
+                        }}
+                        {{
+                          userDetails.address?.parish
+                            ? userDetails.address?.parish + ", "
+                            : " "
+                        }}
+                        {{
+                          userDetails.address?.city
+                            ? userDetails.address?.city + ", "
+                            : ""
+                        }}
+                        {{
+                          userDetails.address?.province
+                            ? userDetails.address?.province
+                            : ""
+                        }}
+                      </p>
+                    </ng-template>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label class="text-primary-light font-16 d-block mb-2">{{
+                      "Uploaded Documents" | translate
+                    }}</label>
+                    <div class="d-flex">
+                      <div *ngIf="userDetails?.ruc_doc !== null">
+                        <div
+                          *ngFor="
+                            let rucDoc of userDetails?.ruc_doc;
+                            let j = index
+                          "
+                        >
+                          <p
+                            class="vehicle-img-wrp mb-0 text-primary-light font-12"
+                          >
+                            <ng-container
+                              *ngIf="
+                                getFileType(rucDoc?.download_url) == 'image'
+                              "
+                            >
+                              <a
+                                href="{{ rucDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  style="
+                                    top: 792px;
+                                    left: 873px;
+                                    width: 68px;
+                                    height: 68px;
+                                    border-radius: 12px;
+                                    opacity: 1;
+                                  "
+                                  [src]="imageSrcForRucDoc[j]"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="getFileType(rucDoc?.download_url) == 'pdf'"
+                            >
+                              <a
+                                href="{{ rucDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/pdf_icon.png"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="getFileType(rucDoc?.download_url) == 'doc'"
+                            >
+                              <a
+                                href="{{ rucDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/doc_icon.png"
+                              /></a>
+                            </ng-container>
+                            {{ "RUC Document" | translate }}
+                          </p>
+                        </div>
+                      </div>
+                      <div *ngIf="userDetails?.ruc_doc == null">
+                        <p
+                          class="vehicle-img-wrp mb-0 text-primary-light font-12 ms-5"
+                        >
+                          {{ "No RUC Documents Uploaded" | translate }}
+                        </p>
+                      </div>
+                      <div *ngIf="userDetails?.legal_doc !== null">
+                        <div
+                          *ngFor="
+                            let legalDoc of userDetails?.legal_doc;
+                            let j = index
+                          "
+                        >
+                          <p
+                            class="vehicle-img-wrp mb-0 text-primary-light font-12 ms-5"
+                          >
+                            <ng-container
+                              *ngIf="
+                                getFileType(legalDoc?.download_url) == 'image'
+                              "
+                            >
+                              <a
+                                href="{{ legalDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  style="
+                                    top: 792px;
+                                    left: 873px;
+                                    width: 68px;
+                                    height: 68px;
+                                    border-radius: 12px;
+                                    opacity: 1;
+                                  "
+                                  [src]="imageSrcForLegalDoc[j]"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="
+                                getFileType(legalDoc?.download_url) == 'pdf'
+                              "
+                            >
+                              <a
+                                href="{{ legalDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/pdf_icon.png"
+                              /></a>
+                            </ng-container>
+                            <ng-container
+                              *ngIf="
+                                getFileType(legalDoc?.download_url) == 'doc'
+                              "
+                            >
+                              <a
+                                href="{{ legalDoc.download_url }}"
+                                target="_blank"
+                                ><img
+                                  class="br-12"
+                                  src="assets/images/doc_icon.png"
+                              /></a>
+                            </ng-container>
+                            {{ "Legal Document" | translate }}
+                          </p>
+                        </div>
+                      </div>
+                      <div *ngIf="userDetails?.legal_doc === null">
+                        <p
+                          class="vehicle-img-wrp mb-0 text-primary-light font-12 ms-5"
+                        >
+                          {{ "No Legal Documents Uploaded" | translate }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

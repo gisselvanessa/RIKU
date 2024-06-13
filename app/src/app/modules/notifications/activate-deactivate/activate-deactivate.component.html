@@ -1,0 +1,65 @@
+<div class="modal-header border-0">
+  <button
+    type="button"
+    class="btn-close p-md-4 p-2"
+    data-bs-dismiss="modal"
+    (click)="activeModal.dismiss('cancel')"
+    aria-label="Close"
+  ></button>
+</div>
+<div>
+  <div class="modal-body border-0">
+    <div *ngIf="notificationData.type === 'notification'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{notificationData.is_allowed?('Allow' | translate):('Stop' | translate)}} {{"Notifications" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to" | translate}} {{notificationData.is_allowed?('allow' | translate):('stop' | translate)}} {{"notifications" | translate}}?
+      </p>
+    </div>
+    <div *ngIf="notificationData.type === 'read'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Real All Notifications" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to read all notifications" | translate}}?
+      </p>
+    </div>
+    <div *ngIf="notificationData.type === 'delete'">
+      <h3 class="modal-title text-center w-100 text-primary fw-semibold mb-2">
+        {{"Delete all Notifications" | translate}}
+      </h3>
+      <p class="text-center font-14 text-primary-light mb-3">
+        {{"Are you sure you want to delete all notifications" | translate}}?
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-center border-0 mb-5">
+    <button
+      class="btn btn-outline-purple"
+      (click)="activeModal.dismiss('cancel')"
+      type="button"
+    >
+      No
+    </button> 
+    <button
+      type="submit"
+      class="btn primary-btn"
+      data-bs-dismiss="modal"
+      data-bs-toggle="modal"
+      (click)="onSubmit()"
+      data-bs-target="#deleteconfirmModal"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      {{"Yes" | translate}}, 
+      <span *ngIf="notificationData.type === 'notification'">{{notificationData.is_allowed?('Allow' | translate):('Stop' | translate)}}</span>
+      <span *ngIf="notificationData.type === 'read'">{{"Read All" | translate}}</span>
+      <span *ngIf="notificationData.type === 'delete'">{{"Delete All" | translate}}</span>      
+    </button>
+  </div>
+</div>

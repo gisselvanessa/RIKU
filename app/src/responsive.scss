@@ -1,0 +1,254 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+@import "variables";
+@import "function";
+
+@include for-tablet-landscape-only {
+  .landing__banner-desc {
+    .tab-content {
+      button {
+        img {
+          width: 60px !important;
+        }
+      }
+
+      .detail-wrp {
+        width: 28%;
+        justify-content: start !important;
+
+        img {
+          margin-right: 0.8rem !important;
+        }
+
+        .modal-detail {
+          label {
+            font-size: 18px !important;
+          }
+        }
+      }
+    }
+
+    h5 {
+      min-height: unset !important;
+      margin-bottom: 30px !important;
+    }
+
+    .car-banner-image {
+      position: relative !important;
+      top: 0;
+      margin-bottom: 20px;
+    }
+  }
+  //seller info dealerinfo
+  .seller__info--box {
+    text-align: center;
+  }
+
+  //blog detail
+  .card-vid {
+    max-width: 100% !important;
+  }
+
+  //eidt profile
+  .change_mobile_number {
+    top: 35px !important;
+  }
+  .admin__add-img {
+    margin: 0 auto;
+  }
+}
+
+@include for-tablet-only {
+  .landing__banner-desc {
+    .tab-content {
+      button {
+        img {
+          width: 80px !important;
+        }
+      }
+
+      .detail-wrp {
+        width: 50%;
+        justify-content: start !important;
+
+        img {
+          margin-right: 0.8rem !important;
+        }
+
+        .modal-detail {
+          label {
+            font-size: 16px !important;
+          }
+        }
+      }
+    }
+
+    span.border-right {
+      border-right: 0px !important;
+      height: 1px !important;
+      width: 50% !important;
+      margin-bottom: 5px !important;
+      border-bottom: 1px solid #d8cfda;
+    }
+  }
+
+  .view-vehicle__details .car_details .car_model {
+    font-size: 2.2rem !important;
+  }
+
+  .view-vehicle__details .car_details .car_price {
+    font-size: 2.7rem !important;
+  }
+
+  .like-details {
+    margin-bottom: 10px;
+
+    img {
+      width: 20px;
+    }
+
+    span {
+      font-size: 18px !important;
+    }
+  }
+  .basic-box {
+    padding: 15px 8px !important;
+    flex-direction: column;
+    align-items: start !important;
+
+    p {
+      font-size: 18px !important;
+    }
+
+    h5 {
+      font-size: 20px !important;
+    }
+  }
+  .buyyer__tabs {
+    .nav-pills {
+      flex-direction: column;
+    }
+  }
+
+  //expert review
+  .expert-steps {
+    .steps-wrp {
+      flex-direction: column;
+      .step {
+        align-items: start !important;
+        flex-direction: column;
+        .step-round {
+          width: 30px !important;
+          height: 30px !important;
+          h6 {
+            font-size: 18px !important;
+            bottom: -5px !important;
+            left: 45px !important;
+          }
+        }
+        .line {
+          width: 30px !important;
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+  //edit profile
+}
+
+@include for-phone-only {
+  .brand-logo {
+    max-width: 80% !important;
+  }
+
+  // homepage
+  .landing__banner-desc {
+    .tab-content {
+      button {
+        img {
+          width: 50px !important;
+        }
+      }
+
+      .detail-wrp {
+        width: 100%;
+        justify-content: start !important;
+      }
+
+      span.border-right {
+        width: 100% !important;
+      }
+    }
+
+    h5 {
+      min-height: unset !important;
+      margin-bottom: 30px !important;
+    }
+
+    .car-banner-image {
+      position: relative !important;
+      top: 0;
+      margin-bottom: 20px;
+    }
+
+    ul.nav-tabs .nav-link {
+      padding: 15px 25px !important;
+    }
+  }
+
+  .overview-detail,
+  .review-card-wrp {
+    p {
+      font-size: 18px !important;
+    }
+  }
+
+  // end home page
+
+  // vehicle listing byuer
+  .buyer-filter-dropdown .filter-dropdown {
+    width: 300px;
+  }
+
+  // end vehicle listing byuer
+  // vehicle detail byuer
+
+  .view-vehicle__details
+    .swiper-container-wrapper
+    .gallery-thumbs
+    .swiper-slide
+    img {
+    height: 80px !important;
+  }
+
+  .view-vehicle__details .car_details .car_model {
+    font-size: 2rem !important;
+  }
+
+  .view-vehicle__details .car_details .car_price {
+    font-size: 2.5rem !important;
+  }
+
+  .like-details {
+    margin-bottom: 10px;
+
+    img {
+      width: 20px;
+    }
+
+    span {
+      font-size: 15px !important;
+    }
+  }
+
+  .basic-box {
+    p {
+      font-size: 15px !important;
+    }
+
+    h5 {
+      font-size: 18px !important;
+    }
+  }
+}

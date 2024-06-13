@@ -1,0 +1,266 @@
+<div class="report__accordion">
+  <h4
+    class="text-secondary font-24 fw-semibold title bottom-border-style mt-4 mt-xl-5"
+  >
+    {{ "State Of Conservation Of The Vehicle" | translate }}
+  </h4>
+  <ng-container *ngFor="let section of StateOfConversation; let index = index">
+    <div class="accordion-item bg-transparent">
+      <h2
+        *ngIf="page === 'add'"
+        class="accordion-header"
+        (click)="selectedAccordians(section.value)"
+        [attr.id]="'report-' + (index + 4)"
+      >
+        <button
+          class="accordion-button py-4 px-0 bg-transparent text-primary font-22 fw-semibold collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#report' + (index + 4)"
+          aria-expanded="false"
+          aria-controls="collapseOne"
+          [ngClass]="{ collapsed: section.value != selectAccordian }"
+        >
+          <!-- <ng-container *ngIf="page === currentPageState">
+            <div *ngIf="stepsCompleted.indexOf(section.value) > -1">V</div>
+          </ng-container> -->
+          {{ section.title | translate }}
+        </button>
+      </h2>
+
+      <h5 *ngIf="page === 'view'" class="accordian-header mb-3">
+        {{ section.title | translate }}
+      </h5>
+      <div *ngIf="page === 'add'">
+        <div
+          [attr.id]="'report' + (index + 4)"
+          [ngClass]="section.value === selectAccordian ? 'show' : ''"
+          class="accordion-collapse collapse"
+          [attr.aria-labelledby]="'report-' + (index + 4)"
+          data-bs-parent="#report-accordian"
+        >
+          <div class="accordion-body px-0">
+            <div class="table-responsive bg-white br-12 p-3 report-table">
+              <table class="table mb-0 table--state">
+                <thead>
+                  <tr>
+                    <th>{{ "Characteristics" | translate }}</th>
+                    <th class="text-center">{{ "Okay" | translate }}</th>
+                    <th class="text-center">{{ "Regular" | translate }}</th>
+                    <th class="text-center">{{ "Bad" | translate }}</th>
+                    <th class="text-center">{{ "N/A" | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of section.table_row; let i = index">
+                    <td>
+                      {{ row.title | translate }}
+                    </td>
+                    <td class="text-center">
+                      <label
+                        class="form-inline-check"
+                        [attr.for]="section.value + row.characteristics + '1'"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          (change)="checkedValue(index, i, 'okay')"
+                          [attr.name]="section.value + row.characteristics"
+                          [attr.id]="section.value + row.characteristics + '1'"
+                          value="{{ row.characteristics }}"
+                          [checked]="row.okay ? true : false"
+                          [disabled]="statusOfReview == 'completed'"
+                        />
+                        <span
+                          class="control-checkmark"
+                          [ngClass]="{ error: row.isError }"
+                        ></span>
+                      </label>
+                    </td>
+                    <td class="text-center">
+                      <label
+                        class="form-inline-check"
+                        [attr.for]="section.value + row.characteristics + '2'"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          (change)="checkedValue(index, i, 'regular')"
+                          [attr.name]="section.value + row.characteristics"
+                          [attr.id]="section.value + row.characteristics + '2'"
+                          value="{{ row.characteristics }}"
+                          [checked]="row.regular ? true : false"
+                          [disabled]="statusOfReview == 'completed'"
+                        />
+                        <span
+                          class="control-checkmark"
+                          [ngClass]="{ error: row.isError }"
+                        ></span>
+                      </label>
+                    </td>
+                    <td class="text-center">
+                      <label
+                        class="form-inline-check"
+                        [attr.for]="section.value + row.characteristics + '3'"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [attr.name]="section.value + row.characteristics"
+                          [attr.id]="section.value + row.characteristics + '3'"
+                          value="{{ row.characteristics }}"
+                          [checked]="row.bad ? true : false"
+                          [disabled]="statusOfReview == 'completed'"
+                          (change)="checkedValue(index, i, 'bad')"
+                        />
+                        <span
+                          class="control-checkmark"
+                          [ngClass]="{ error: row.isError }"
+                        ></span>
+                      </label>
+                    </td>
+                    <td class="text-center">
+                      <label
+                        class="form-inline-check"
+                        [attr.for]="section.value + row.characteristics + '4'"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          [attr.name]="section.value + row.characteristics"
+                          [attr.id]="section.value + row.characteristics + '4'"
+                          value="{{ row.characteristics }}"
+                          [checked]="row.NA ? true : false"
+                          [disabled]="statusOfReview == 'completed'"
+                          (change)="checkedValue(index, i, 'NA')"
+                        />
+                        <span
+                          class="control-checkmark"
+                          [ngClass]="{ error: row.isError }"
+                        ></span>
+                      </label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-12 mt-5 mb-3" *ngIf="page === 'add'">
+              <button
+                (click)="saveState(index)"
+                class="btn primary-btn btn-md me-3 border-1"
+                [disabled]="statusOfReview == 'completed'"
+              >
+                {{ "Save" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="page === 'view'">
+        <div class="accordion-body px-0 mb-4 mb-xl-5">
+          <div class="table-responsive bg-white br-12 p-3 report-table">
+            <table class="table mb-0 table--state">
+              <thead>
+                <tr>
+                  <th>{{ "Characteristics" | translate }}</th>
+                  <th class="text-center">{{ "Okay" | translate }}</th>
+                  <th class="text-center">{{ "Regular" | translate }}</th>
+                  <th class="text-center">{{ "Bad" | translate }}</th>
+                  <th class="text-center">{{ "N/A" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of section.table_row; let i = index">
+                  <td>
+                    {{ row.title | translate }}
+                  </td>
+                  <td class="text-center">
+                    <label
+                      class="form-inline-check"
+                      [attr.for]="section.value + row.characteristics + '1'"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        [attr.name]="section.value + row.characteristics"
+                        [attr.id]="section.value + row.characteristics + '1'"
+                        value="{{ row.characteristics }}"
+                        [checked]="row.okay ? true : false"
+                        [disabled]="page === 'view'"
+                      />
+                      <span
+                        class="control-checkmark"
+                        [ngClass]="{ error: row.isError }"
+                      ></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label
+                      class="form-inline-check"
+                      [attr.for]="section.value + row.characteristics + '2'"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        [attr.name]="section.value + row.characteristics"
+                        [attr.id]="section.value + row.characteristics + '2'"
+                        value="{{ row.characteristics }}"
+                        [checked]="row.regular ? true : false"
+                        [disabled]="page === 'view'"
+                      />
+                      <span
+                        class="control-checkmark"
+                        [ngClass]="{ error: row.isError }"
+                      ></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label
+                      class="form-inline-check"
+                      [attr.for]="section.value + row.characteristics + '3'"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        [attr.name]="section.value + row.characteristics"
+                        [attr.id]="section.value + row.characteristics + '3'"
+                        value="{{ row.characteristics }}"
+                        [checked]="row.bad ? true : false"
+                        [disabled]="page === 'view'"
+                      />
+                      <span
+                        class="control-checkmark"
+                        [ngClass]="{ error: row.isError }"
+                      ></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label
+                      class="form-inline-check"
+                      [attr.for]="section.value + row.characteristics + '4'"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        [attr.name]="section.value + row.characteristics"
+                        [attr.id]="section.value + row.characteristics + '4'"
+                        value="{{ row.characteristics }}"
+                        [checked]="row.NA ? true : false"
+                        [disabled]="page === 'view'"
+                      />
+                      <span
+                        class="control-checkmark"
+                        [ngClass]="{ error: row.isError }"
+                      ></span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr *ngIf="page === 'view' && index+1 < StateOfConversation.length">
+  </ng-container>
+</div>

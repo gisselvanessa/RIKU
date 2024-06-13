@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-12">
+    <div class="bg-white br-12 p-4">
+      <div class="d-flex align-items-start justify-content-between">
+        <h5 class="font-18 text-primary fw-bold mt-2">{{ 'Earnings' | translate }}</h5>
+        <div class="filter-box cusotmer-heading ms-3">
+          <div class="form-group position-relative mb-0">
+            <div ngbDropdown class="doropdown_radio" [autoClose]="true">
+              <button ngbDropdownToggle class="btn btn-white dropdownP-toggle btn-dropdown font-14 text-color fw-regular multipledata-hide"
+                type="button" id="filter" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ earningStartDate | date: 'MMMM dd, yyyy' }} - {{ earningEndDate | date: 'MMMM dd, yyyy' }} &nbsp;<img
+                  src="assets/images/solar_calendar-broken.svg" class="input-icon">
+              </button>
+              <ul ngbDropdownMenu
+                class="dropdown-menu dropdown-scroll vehicle-type-menu vehicle-dropdown-menu br-12 px-3">
+                <li *ngFor="let filter of filters">
+                  <a ngbDropdownItem class="dropdown-item font-14" href="javascript:void(0)" [ngClass]="{
+                                  'selected-dropdown-item':
+                                  earningStatFilter == filter
+                                }" (click)="onChangeEarningFilter(filter)">{{ filter | translate }}</a>
+                </li>
+              </ul>
+            </div>
+            <span bsDaterangepicker #drp="bsDaterangepicker" placement="right" [maxDate]="today" [bsConfig]="bsConfig"
+            [bsValue]="bsRangeValue" (bsValueChange)="getEarningDateValues($event)"></span>
+          </div>
+        </div>
+      </div>
+      <div class="data-wrp">
+        <div class="chart-container"  *ngIf="totalEarnings && totalEarnings.length > 0">
+          <canvas id="dealerLineChart"></canvas>
+        </div>
+
+        <p  *ngIf="totalEarnings && totalEarnings.length == 0" class="font-14 text-primary p-4">{{ 'No records available for this duration' | translate }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

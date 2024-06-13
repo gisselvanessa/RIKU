@@ -1,0 +1,130 @@
+@import "../../../../function";
+@import "../../../../variables";
+
+.background-image {
+  height: 1000px !important;
+  border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+
+  .jakay-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .logo {
+    position: absolute;
+    transform: translateX(-50%);
+    top: 12px;
+    left: 50%;
+    width: 115px;
+    @include for-tablet-portrait-up {
+      top: 30px;
+      width: 115px;
+    }
+    @include for-tablet-landscape-up {
+      top: 90px;
+      width: 230px;
+    }
+  }
+
+  h1 {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    color: $white;
+    z-index: 1;
+
+    @include for-tablet-portrait-up {
+      left: 25px;
+      bottom: 45px;
+      right:25px
+    }
+
+    @include for-tablet-landscape-up {
+      left: 25px;
+      bottom: 75px;
+      right:25px
+    }
+
+    @include for-big-desktop {
+      left: 35px;
+      bottom: 75px;
+      right:35px
+    }
+  }
+
+  @include for-tablet-portrait-up {
+    height: 400px;
+  }
+
+  @include for-tablet-landscape-up {
+    height: 95vh;
+  }
+
+  &:after {
+    content: "";
+    background: linear-gradient(0deg, #4E1F4FBF 0%, #4E1F4F00 100%);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    height: 50%;
+    z-index: 0;
+  }
+}
+
+.left-side-logo {
+  @include for-phone-only {
+    text-align: center;
+  }
+}
+
+.font-sm-10 {
+  @include for-phone-only {
+    font-size: 12px;
+  }
+}
+
+.horizontal-line {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+
+  span {
+    padding: 0 10px;
+  }
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: rgb(137 112 143 / 32%);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    transform: translateY(-50%);
+  }
+}
+
+
+.custom-checkbox {
+  position: relative !important;
+  // top: 16px !important;
+  top: 5px !important;
+  left: 25px !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+}
+
+.custom-checkbox-label{
+  position: relative !important;
+  top: -30px !important;
+}
+.align-justify{
+  word-break: break-word;
+}

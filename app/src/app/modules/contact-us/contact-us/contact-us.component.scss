@@ -1,0 +1,33 @@
+@import "../../../../function";
+@import "../../../../variables";
+
+// scss for contact page //
+.contact {
+  &__info {
+    background-image: url('../../../../assets/images/contact/contact_bg.png'); //url(/assets/images/contact/contact_bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 650px;
+    width: 100%;
+    border-radius: 32px;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    &-social {
+      & *+* {
+        margin-left: 1rem;
+      }
+
+      & .social_link {
+        color: $white;
+      }
+    }
+  }
+}
+
+.invalid-feedback {
+  display: block !important;
+}

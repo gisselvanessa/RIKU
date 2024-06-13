@@ -1,0 +1,204 @@
+<section class="section bg-blue section-p-100">
+  <div class="jakay-container">
+    <div class="back-to-page d-flex">
+      <span>
+        <a href="javascript:void(0);" (click)="location.back()">
+          <img src="./assets/images/backarrow.svg" />
+        </a>
+      </span>
+      <div class="ms-3 section-header">
+        <h3 class="mb-3 font-38 text-primary fw-semibold">
+          {{ "Vehicle Procedure" | translate }}
+        </h3>
+        <p class="text-primary-light font-14">
+         {{ "ProcedureDetailDescription" | translate }}
+        </p>
+      </div>
+    </div>
+    <div
+      class="vehicle__steps order-steps d-flex align-items-center justify-content-center"
+    >
+      <div class="steps-wrp">
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 0 || status == 'completed',
+            highlighted:
+              highlightedStep === 0 && highlightedStep < currentCompletedStep,
+            active: step == 0
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >1
+              <h6 class="text-center text-break">
+                {{ "Request for Documents" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 1 || status == 'completed',
+            highlighted:
+              highlightedStep === 1 && highlightedStep < currentCompletedStep,
+            active: step == 1
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >2
+              <h6 class="text-center text-break">
+                {{ "Contract Development" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 2 || status == 'completed',
+            highlighted:
+              highlightedStep === 2 && highlightedStep < currentCompletedStep,
+            active: step == 2
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >3
+              <h6 class="text-center">{{ "Notary" | translate }}</h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 3 || status == 'completed',
+            highlighted:
+              highlightedStep === 3 && highlightedStep < currentCompletedStep,
+            active: step == 3
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >4
+              <h6 class="text-center text-break">
+                {{ "Transfer of money to the seller" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 4 || status == 'completed',
+            highlighted:
+              highlightedStep === 4 && highlightedStep < currentCompletedStep,
+            active: step == 4
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >5
+              <h6 class="text-center text-break">
+                {{ "Vehicle tax payment orders" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 5 || status == 'completed',
+            highlighted:
+              highlightedStep === 5 && highlightedStep < currentCompletedStep,
+            active: step == 5
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >6
+              <h6 class="text-center text-break">
+                {{ "National transit agency" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+        <div
+          class="step mb-md-0 mb-3"
+          [ngClass]="{
+            completed: currentCompletedStep > 6 || status == 'completed',
+            highlighted:
+              highlightedStep === 6 && highlightedStep < currentCompletedStep,
+            active: step == 6
+          }"
+        >
+          <div>
+            <span class="step-round"
+              >7
+              <h6 class="text-center text-break">
+                {{ "Delivery of the registration to the client" | translate }}
+              </h6></span
+            >
+          </div>
+          <span class="line"></span>
+        </div>
+      </div>
+    </div>
+    <div class="order-process__wrapper">
+      <div class="step-1">
+        <div class="d-flex justify-content-between">
+          <h3 class="text-primary font-24 mb-5 fw-semibold">
+            {{ "Vehicle Procedure" | translate }}
+          </h3>
+          <div class="d-flex ms-md-3 mt-3 mt-sm-0 ms-auto" *ngIf="status">
+            <p
+              class="label in-progress d-inline-block d-lg-block nowrap"
+              *ngIf="status == 'in_progress'"
+            >
+              {{ "In Progress" | translate }}
+            </p>
+            <p
+              class="label complete d-inline-block d-lg-block nowrap"
+              *ngIf="status == 'confirmed' || status == 'completed'"
+            >
+              {{ "Complete" | translate }}
+            </p>
+            <p
+              class="label cancelled d-inline-block d-lg-block nowrap"
+              *ngIf="status == 'cancelled' || status == 'rejected'"
+            >
+              {{ "Canceled" | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="procedure-main-wrp">
+          <div class="procedure-box">
+            <ng-container *ngIf="loading; else showLoader">
+              <request-for-doc
+                #RequestForDocComponent
+                [vehicleProcedureData]="vehicleProcedureData"
+                [vehicleProcedureId]="vehicleProcedureId"
+                (currentStep)="viewScreenAsPerCurrentStep($event)"
+                (heighlightedScreen)="highlightedScreen($event)"
+                (currentCompletedStep)="currentCompletedSteps($event)"
+                (currentStatus)="updateStatus($event)"
+              >
+              </request-for-doc>
+            </ng-container>
+            <ng-template #showLoader>
+              <app-loader></app-loader>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

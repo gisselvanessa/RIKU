@@ -1,0 +1,466 @@
+<section class="section bg-blue section-p-100">
+  <div class="jakay-container">
+    <div class="back-to-page d-flex">
+      <span (click)="back()" class="c-pointer"><img src="assets/images/backarrow.svg" /></span>
+      <h3 class="ms-3 section-header font-38 text-primary fw-semibold"> {{ 'Chat' | translate }}</h3>
+    </div>
+    <ng-container *ngIf="isConversationCreated; else loadConversation">
+      <div class="chat-wrp" *ngIf="userType === 'buyer'">
+        <div class="row">
+          <div class="col-lg-5">
+            <div class="bg-white br-12 p-xl-4 p-lg-3 h-100">
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input type="text" class="form-control" placeholder="{{ 'Search by seller/dealer name' | translate }}"
+                    [(ngModel)]="searchValue" />
+                  <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                </div>
+              </div>
+              <div class="chat-user-wrp" *ngIf="!loading; else loadingTemplate">
+                <ng-container *ngIf="conversationList | filter : searchValue as convoList">
+                  <div *ngFor="let conversation of convoList; let i = index">
+                    <div class="bg-white br-12 chat_user-detail-wrp py-2 px-3 mb-2"
+                      [ngClass]="{ 'selected-user': selectedChat === i }">
+                      <div class="d-flex align-items-center w-100 user-online c-pointer" [ngClass]="{
+                                'user-online': conversation.participant_2.is_online
+                              }" (click)="openChat(i)">
+                        <div class="user-img-wrp" *ngIf="!conversation.participant_2.profile_pic">
+                          <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                            alt="admin-img" />
+                        </div>
+                        <div class="user-img-wrp" *ngIf="conversation.participant_2.profile_pic">
+                          <img src="{{ conversation.participant_2.profile_pic }}" />
+                        </div>
+                        <div class="ms-3">
+                          <h4 class="text-primary font-18 fw-semibold mb-2">
+                            {{
+                            conversation.participant_2.first_name | titlecase
+                            }}
+                            {{ conversation.participant_2.last_name | titlecase }}
+                          </h4>
+                          <p class="text-primary-light font-14">
+                            {{
+                            conversation.last_message?.message?.length > 20
+                            ? (conversation.last_message?.message
+                            | slice : 0 : 20) + "...."
+                            : conversation.last_message?.message
+                            }}
+                          </p>
+                        </div>
+                        <h5 class="text-primary-light font-18 flex-grow-1 text-end">
+                          {{
+                          conversation.last_message?.created
+                          | date : "shortTime"
+                          }}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="convoList?.length === 0">
+                    <div class="bg-white br-12 p-xl-4 p-lg-3 h-100 d-flex align-items-center">
+                      <h2 class="text-primary-light font-18 flex-grow-1 text-center">
+                        <!-- No chats available -->
+                        {{ 'No chats available' | translate }}
+                      </h2>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="chat-user-wrp">
+                <ng-template #loadingTemplate>
+                  <app-loader></app-loader>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7" *ngIf="!conversationScreen">
+            <div class="bg-white br-12 p-xl-4 p-lg-3 h-100 d-flex align-items-center">
+              <h2 class="text-primary-light font-18 flex-grow-1 text-center">
+                {{ 'Choose Conversation' | translate }}
+              </h2>
+            </div>
+          </div>
+
+          <div class="col-lg-7" *ngIf="conversationScreen">
+            <div class="bg-white br-12 p-xl-4 p-lg-3">
+              <div class="d-flex align-items-center justify-content-between chat-header">
+                <div class="d-inline-flex align-items-center" style="cursor: pointer" (click)="openUserDetail()">
+                  <div class="user-img-wrp" *ngIf="!conversationScreen.profile_pic">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                      alt="admin-img" />
+                  </div>
+                  <div class="user-img-wrp" *ngIf="conversationScreen.profile_pic">
+                    <img src="{{ conversationScreen.profile_pic }}" />
+                  </div>
+                  <div class="ms-3">
+                    <h4 class="text-primary font-18 fw-semibold mb-2">
+                      {{ conversationScreen.first_name | titlecase }}
+                      {{ conversationScreen.last_name | titlecase }}
+                    </h4>
+                    <p class="text-primary-light font-14">
+                      {{ (conversationScreen.type.toString() | translate) | titlecase }}
+                      <span class="dot-mark" *ngIf="conversationScreen.is_online">{{"online" | translate}}</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="bg-white br-22 chat-btn-grp set-min-width">
+                  <img src="assets/images/phone-icon.svg" (click)="makeCall(conversationScreen)" class="me-3 c-pointer" />
+                  <a ngbDropdown #menuList="ngbDropdown" class="navbar-right-link d-flex align-items-center"
+                    placement="bottom-right" href="javascript:void(0)" (click)="menuList.toggle()">
+                    <img src="assets/images/three-dots.svg" class="ms-3" />
+                    <ul ngbDropdownMenu class="dropdown-menu ms-0 chat-dropdown vehicle-dropdown-menu br-12 py-3 px-2"
+                      aria-labelledby="vehicle-type">
+                      <li class="ms-0">
+                        <button ngbDropdownItem (click)="openUserDetail()">
+                          {{ 'User Details' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0">
+                        <button ngbDropdownItem (click)="deleteConversation(selectedChat)">
+                          {{ 'Delete Conversation' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0" *ngIf="blockDetails?.length === 0">
+                        <button ngbDropdownItem (click)="blockUser(conversationScreen.user_id, 'block')">
+                          {{ 'Block' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0" *ngIf="blockDetails.length != 0">
+                        <button ngbDropdownItem (click)="
+                                                blockUser(conversationScreen.user_id, 'unblock')
+                                              ">
+                          {{ 'Unblock' | translate }}
+                        </button>
+                      </li>
+                    </ul>
+                  </a>
+                  <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                          data-bs-target="javascript:void(0)navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                          aria-label="Toggle navigation" (click)="toggleCollapsed()">
+                          <span class="navbar-toggler-icon"></span>
+                        </button> -->
+                </div>
+              </div>
+              <div class="msg-section" #messageContainer>
+                <ng-container *ngFor="let message of conversationMessages; let last = last">
+                  <div [ngClass]="{
+                            'incomming-msg': message.author != userId,
+                            'outgoing-msg justify-content-end': message.author == userId
+                          }" class="chat-msg-wrp incomming-msg d-flex mb-3">
+                    <div class="msg-user-img user-img-wrp" *ngIf="message.author != userId">
+                      <div *ngIf="!conversationScreen.profile_pic">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                          alt="admin-img" />
+                      </div>
+                      <div *ngIf="conversationScreen.profile_pic">
+                        <img src="{{ conversationScreen.profile_pic }}" />
+                      </div>
+                    </div>
+                    <div class="msg-wrp ms-3">
+                      <p class="font-16 mb-0 p-3">
+                        {{ message.message }}
+                        {{ last ? scrollToBottom() : "" }}
+                      </p>
+                      <span class="text-primary-light font-12 mt-3">{{
+                        message.created | date : "short"
+                        }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="type-msg" *ngIf="blockDetails.length > 0">
+                <h4 class="text-danger text-center font-18 fw-semibold mb-2">
+                  {{ 'You blocked this contact' | translate }}. {{ 'Tap to' | translate }}
+                  <button (click)="blockUser(conversationScreen.user_id, 'unblock')">
+                    <span class="text-danger font-18 fw-semibold">
+                      <u> {{ 'Unblock' | translate }} </u>
+                    </span>
+                  </button>
+                </h4>
+              </div>
+
+              <div class="type-msg" *ngIf="blockDetails?.length === 0">
+                <form #messageForm="ngForm" (ngSubmit)="sendMessage($event)">
+                  <textarea class="font-16" placeholder="{{'Type a message' | translate}}" name="message"
+                    [(ngModel)]="message" autocomplete="off" (keyup.enter)="sendMessage($event)"></textarea>
+                  <button class="btn send-btn primary-btn" type="submit">
+                    {{ 'Send' | translate }} <img src="assets/images/send.svg" class="ms-2" />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-wrp" *ngIf="userType === 'seller' || userType === 'dealer'">
+        <div class="row">
+          <div class="col-lg-5">
+            <div class="bg-white br-12 p-xl-4 p-lg-3 h-100">
+              <div class="form-group search-grp">
+                <div class="position-relative">
+                  <input type="text" class="form-control" placeholder="{{'search by buyer name' | translate}}"
+                    [(ngModel)]="searchValue" />
+                  <img src="assets/images/vehicle-list/search-blue.svg" class="search-icon" />
+                </div>
+              </div>
+              <div class="chat-user-wrp" *ngIf="!loading;else loadingTemplate">
+                <ng-container *ngIf="conversationList | filter : searchValue as convoList">
+                  <div *ngFor="let conversation of convoList; let i = index">
+                    <div class="bg-white br-12 chat_user-detail-wrp py-2 selected-user px-3 mb-2"
+                      [ngClass]="{ 'selected-user': selectedChat === i }">
+                      <div class="d-flex align-items-center w-100" [ngClass]="{
+                                'user-online': conversation.participant_1.is_online
+                              }" (click)="openChat(i)" style="cursor: pointer">
+                        <div class="user-img-wrp" *ngIf="!conversation.participant_1.profile_pic">
+                          <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                            alt="admin-img" />
+                        </div>
+                        <div class="user-img-wrp" *ngIf="conversation.participant_1.profile_pic">
+                          <img src="{{ conversation.participant_1.profile_pic }}" />
+                        </div>
+                        <div class="ms-3">
+                          <h4 class="text-primary font-18 fw-semibold mb-2">
+                            {{
+                            conversation.participant_1.first_name | titlecase
+                            }}
+                            {{ conversation.participant_1.last_name | titlecase }}
+                          </h4>
+                          <p class="text-primary-light font-14">
+                            {{
+                            conversation.last_message?.message?.length > 20
+                            ? (conversation.last_message?.message
+                            | slice : 0 : 20) + "...."
+                            : conversation.last_message?.message
+                            }}
+                          </p>
+                        </div>
+                        <h5 class="text-primary-light font-18 flex-grow-1 text-end">
+                          {{
+                          conversation.last_message?.created
+                          | date : "shortTime"
+                          }}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="convoList?.length === 0">
+                    <div class="bg-white br-12 p-xl-4 p-lg-3 h-100 d-flex align-items-center">
+                      <h2 class="text-primary-light font-18 flex-grow-1 text-center">
+                        {{ 'No chats available' | translate }}
+                      </h2>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="chat-user-wrp">
+                <ng-template #loadingTemplate>
+                  <app-loader></app-loader>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7" *ngIf="!conversationScreen">
+            <div class="bg-white br-12 p-xl-4 p-lg-3 h-100 d-flex align-items-center">
+              <h2 class="text-primary-light font-18 flex-grow-1 text-center">
+                {{ 'Choose Conversation' | translate }}
+              </h2>
+            </div>
+          </div>
+          <div class="col-lg-7" *ngIf="conversationScreen">
+            <div class="bg-white br-12 p-xl-4 p-lg-3">
+              <div class="d-flex align-items-center justify-content-between chat-header">
+                <div class="d-inline-flex align-items-center" style="cursor: pointer" (click)="openUserDetail()">
+                  <div class="user-img-wrp" *ngIf="!conversationScreen.profile_pic">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                      alt="admin-img" />
+                  </div>
+                  <div class="user-img-wrp" *ngIf="conversationScreen.profile_pic">
+                    <img src="{{ conversationScreen.profile_pic }}" />
+                  </div>
+                  <div class="ms-3">
+                    <h4 class="text-primary font-18 fw-semibold mb-2">
+                      {{ conversationScreen.first_name | titlecase }}
+                      {{ conversationScreen.last_name | titlecase }}
+                    </h4>
+                    <p class="text-primary-light font-14">
+                      {{ conversationScreen.type.toString() | titlecase | translate }}
+                      <span class="dot-mark" *ngIf="conversationScreen.is_online">online</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="bg-white br-22 chat-btn-grp">
+                  <a ngbDropdown #menuList="ngbDropdown" class="navbar-right-link d-flex align-items-center"
+                    placement="bottom-right" href="javascript:void(0)">
+                    <img src="assets/images/three-dots.svg" class="ms-3" (click)="menuList.toggle()" />
+                    <ul ngbDropdownMenu class="dropdown-menu ms-0 chat-dropdown vehicle-dropdown-menu br-12 py-3 px-2"
+                      aria-labelledby="vehicle-type">
+                      <li class="ms-0">
+                        <button ngbDropdownItem (click)="openUserDetail()">
+                          {{ 'User Details' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0">
+                        <button ngbDropdownItem (click)="deleteConversation(selectedChat)">
+                          {{ 'Delete Conversation' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0" *ngIf="blockDetails?.length === 0">
+                        <button ngbDropdownItem (click)="blockUser(conversationScreen.user_id, 'block')">
+                          {{ 'Block' | translate }}
+                        </button>
+                      </li>
+                      <li class="ms-0" *ngIf="blockDetails?.length != 0">
+                        <button ngbDropdownItem (click)="
+                                  blockUser(conversationScreen.user_id, 'unblock')
+                                ">
+                          {{ 'Unblock' | translate }}
+                        </button>
+                      </li>
+                    </ul>
+                  </a>
+                </div>
+              </div>
+              <div class="msg-section" #messageContainer>
+                <ng-container *ngFor="let message of conversationMessages; let last = last">
+                  <div [ngClass]="{
+                            'incomming-msg': message.author != userId,
+                            'outgoing-msg justify-content-end':
+                              message.author == userId
+                          }" class="chat-msg-wrp incomming-msg d-flex mb-3">
+                    <div class="msg-user-img user-img-wrp" *ngIf="message.author != userId">
+                      <div *ngIf="!conversationScreen.profile_pic">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                          alt="admin-img" />
+                      </div>
+                      <div *ngIf="conversationScreen.profile_pic">
+                        <img src="{{ conversationScreen.profile_pic }}" />
+                      </div>
+                    </div>
+                    <div class="msg-wrp ms-3">
+                      <p class="font-16 mb-0 p-3">
+                        {{ message.message }}
+                        {{ last ? scrollToBottom() : "" }}
+                      </p>
+                      <span class="text-primary-light font-12 mt-3">{{
+                        message.created | date : "short"
+                        }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="type-msg" *ngIf="blockDetails.length > 0">
+                <h4 class="text-danger text-center font-18 fw-semibold mb-2">
+                  {{ 'You blocked this contact' | translate }}. {{ 'Tap to' | translate }}
+                  <button (click)="blockUser(conversationScreen.user_id, 'unblock')">
+                    <span class="text-danger font-18 fw-semibold">
+                      <u> {{ 'Unblock' | translate }}. </u>
+                    </span>
+                  </button>
+                </h4>
+              </div>
+              <div class="type-msg" *ngIf="blockDetails?.length === 0">
+                <form #messageForm="ngForm" (ngSubmit)="sendMessage($event)">
+                  <textarea class="font-16" placeholder="{{'Type a message' | translate}}" name="message"
+                    [(ngModel)]="message" autocomplete="off" (keyup.enter)="sendMessage($event)"></textarea>
+                  <button class="btn send-btn primary-btn" type="submit">
+                    {{ 'Send' | translate }} <img src="assets/images/send.svg" class="ms-2" />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #openUserDetails let-d="dismiss">
+        <div class="modal-content br-32" *ngIf="isLoaded; else loading">
+          <div class="modal-header border-0">
+            <button type="button" class="btn-close p-md-4 p-2" data-bs-dismiss="modal" aria-label="Close"
+              (click)="d('cross Click')"></button>
+          </div>
+          <div class="modal-body border-0 px-4 px-lg-5" *ngIf="isLoaded; else loading">
+            <h3 class="modal-title text-center mb-3 mb-lg-4 w-100 text-primary fw-semibold mb-2">
+              {{ 'User Information' | translate }}
+            </h3>
+            <div class="profile-img-wrap text-center" *ngIf="!userProfileDetails.profile_pic">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4LGG-gYqabwWUAzq-BGPk_Iht9HRR6iz3Q6iH59O4nQ&s"
+                alt="profile-pic" class="img-fluid" />
+            </div>
+            <div class="profile-img-wrap text-center" *ngIf="userProfileDetails.profile_pic">
+              <img src="{{ userProfileDetails.profile_pic }}" alt="profile-pic" class="img-fluid" />
+            </div>
+            <div class="row mt-4">
+              <div class="col-lg-4 col-sm-6">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{ 'User ID' | translate }}</label>
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ userProfileDetails.first_name | titlecase }}
+                    {{ userProfileDetails.last_name | titlecase }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{ 'User Type' | translate }}</label>
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ userProfileDetails.type.toString() | titlecase | translate }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6 text-start text-lg-end mb-4">
+                <a class="contact-wrp">
+                  <img *ngIf="userType === 'buyer'" src="assets/images/profile-contact.svg" style="cursor: pointer"
+                    (click)="d('cross Click'); makeCall(conversationScreen)" alt="" />
+                </a>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{ 'Dealership Location' | translate }}</label>
+
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{
+                    !userProfileDetails.address.parish
+                    ? ""
+                    : (userProfileDetails.address.parish | titlecase)
+                    }},
+                    {{
+                    !userProfileDetails.address.city
+                    ? ""
+                    : (userProfileDetails.address.city | titlecase)
+                    }},
+                    {{
+                    !userProfileDetails.address.province
+                    ? ""
+                    : (userProfileDetails.address.city | titlecase)
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label class="text-primary-light font-14 d-block mb-2">{{ 'Total Ratings' | translate }}</label>
+                  <p class="text-primary font-18 mb-0 fw-semibold">
+                    {{ userProfileDetails.ratings.totalRatings }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #loading>
+          <app-loader></app-loader>
+        </ng-template>
+      </ng-template>
+    </ng-container>
+    <ng-template #loadConversation>
+      <div class="text-center text-primary">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{ "Please wait while we are getting conversations for you" | translate }}
+      </div>
+    </ng-template>
+  </div>
+</section>

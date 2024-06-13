@@ -1,0 +1,30 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.blog-detail__filter-label{
+    ul{
+        li{
+            background-color: rgba(47, 119, 156, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 15px 20px;
+            min-width: 140px;
+            width: 1px;
+            text-align: center;
+            display: inline-block;
+            margin-right: 15px;
+        }
+    }
+}
+.blog-detail__media__image-video{
+    max-width: 480px;
+    max-height: 290px;
+    min-width: 200px;
+    min-height:200px;
+    overflow: hidden;
+    img{
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+}

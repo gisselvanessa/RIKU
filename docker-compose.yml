@@ -1,0 +1,14 @@
+services:
+  angular-app:
+    image: node:16.10.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"    
+    volumes:
+      - ./app:/app
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:

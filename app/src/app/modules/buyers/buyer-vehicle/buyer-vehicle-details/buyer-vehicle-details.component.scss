@@ -1,0 +1,1112 @@
+@import "../../../../../function";
+@import "../../../../../variables";
+
+.view-vehicle {
+  background-color: $bg-blue;
+  padding-bottom: 80px;
+
+  &__details {
+    & .car_details {
+      & .car_model {
+        font-size: 2.5rem;
+        margin-bottom: 14px;
+      }
+
+      & .car_price {
+        font-size: 2em;
+        color: $dark-orange !important;
+   
+            @media (max-width: 1400px){
+                font-size: 1.5em !important;
+            }
+          
+      }
+    }
+
+    & .details_labels {
+      label {
+        font-size: 1.25rem;
+        background-color: $secondary-color-10;
+        padding: 3px 3px;
+        min-width: 80px;
+        border-radius: 5px;
+        text-align: center;
+        color: $secondary-color;
+      }
+    }
+
+    & .details-btn-grp {
+      & *+* {
+        margin-left: 22px;
+      }
+
+      .btn-outline-purple {
+        border: 1px solid $bg-purple;
+
+        background-color: transparent;
+        color: $bg-purple;
+        padding: 12px 5px;
+        min-width: 160px;
+        font-size: 18px;
+        border-radius: 8px;
+      }
+
+      .btn-outline-red {
+        border: 1px solid $red-2;
+        background-color: transparent;
+        color: $red-2;
+        padding: 12px 5px;
+        min-width: 160px;
+        font-size: 18px;
+        border-radius: 8px;
+      }
+    }
+
+    & //  swipper start //
+
+    .swiper-container-wrapper {
+      .swiper-container {
+        overflow: hidden;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+
+        &-wrapper {
+          display: flex;
+          flex-flow: column nowrap;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: transparent !important;
+          background-size: 46px;
+          height: 46px;
+          width: 46px;
+          background-repeat: no-repeat;
+        }
+
+        .swiper-button-prev {
+          background-image: url("../../../../../assets/images/arrow_left_purple2.png") !important;
+        }
+
+        .swiper-button-next {
+          background-image: url("../../../../../assets/images/arrow_right_purple2.png") !important;
+        }
+      }
+
+      .swiper-slide {
+        text-align: center;
+        border-radius: 32px;
+        // border: 3px solid;
+
+        & img {
+          width: 100%;
+          height: 460px;
+          border-radius: 32px;
+          object-fit: cover;
+        }
+      }
+
+      .gallery-top {
+        position: relative;
+        width: 100%;
+      }
+
+      .gallery-thumbs {
+        width: 100%;
+        // height: 25vh;
+        padding-top: 10px;
+        margin-top: 30px;
+
+        .swiper-wrapper {
+          flex-direction: row !important;
+          width: 80%;
+          // justify-content: space-between;
+        }
+
+        .swiper-slide {
+          width: 17%;
+          height: 100% !important;
+          border-radius: 15px;
+          background-color: transparent;
+
+          & img {
+            height: 117px;
+            border-radius: 15px;
+            object-fit: cover;
+          }
+        }
+
+        .swiper-slide-thumb-active img {
+          box-shadow: 0px 6px 10px #2f769b80;
+          border: 1px solid #2f779c;
+          border-radius: 15px;
+          padding: 2px;
+          background-color: transparent;
+        }
+      }
+    }
+
+    //   swipper end//
+  }
+}
+
+.details_labels .details__label {
+  font-size: 1rem;
+  background-color: rgba(47, 119, 156, 0.1);
+  padding: 5px;
+  min-width: 100px;
+  border-radius: 5px;
+  text-align: center;
+  color: #2f779c;
+}
+
+//  basic section //
+.basic {
+  &-box {
+    box-shadow: 0px 3px 16px #00000029;
+    border-radius: 30px;
+    padding: 50px 35px;
+    padding-bottom: 35px;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &--rechange {
+      padding: 20px !important;
+      display: block;
+      align-items: unset;
+      justify-content: unset;
+      flex-wrap: unset;
+
+      @include for-tablet-portrait-up {
+        padding: 50px 35px !important;
+      }
+    }
+
+    & .basic-feature {
+      padding: 0 15px;
+      margin-bottom: 15px;
+    }
+
+    & h5 {
+      font-size: 1.9rem;
+      margin-top: 14px;
+      word-break: break-word;
+    }
+  }
+}
+
+// range slider for price //
+.price-range-slider1 {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 10px;
+
+  & .custom-slider1 {
+    & .ngx-slider {
+      .ngx-slider-bar {
+        //background: rgb(235, 164, 58);
+        background: #994c98;
+      }
+
+      & .ngx-slider-selection {
+        background: rgb(216, 213, 209);
+      }
+
+      & .ngx-slider-pointer {
+        background: #994c98;
+        border-color: #994c98;
+      }
+
+      & .ngx-slider-bubble {
+        text-align: center;
+        display: block;
+        line-height: 1;
+        padding: 4px 9px;
+        color: #994c98;
+        border-radius: 0.125rem;
+        background: #fff;
+        font-size: 1rem;
+        border-radius: 12px;
+        bottom: 25px;
+        transform: translate(-50%, 0);
+        box-shadow: 0px 3px 6px rgb(0 0 0 / 16%);
+        min-width: 75px;
+
+        &::before {
+          position: absolute;
+          content: "";
+          left: 50%;
+          bottom: -8px;
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border: 4px solid transparent;
+          border-top-color: #fff;
+        }
+      }
+
+      .ngx-slider-bubble.ngx-slider-limit {
+        bottom: -25px !important;
+        min-width: unset;
+        padding: unset;
+        background-color: transparent;
+        box-shadow: none;
+        font-size: 1rem;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      & .ngx-slider-active {
+        border-color: #994c98;
+
+        &:after {
+          background: white;
+        }
+      }
+    }
+  }
+
+  & .price-tooltip {
+    position: absolute;
+    top: -25px;
+
+    & span {
+      position: absolute;
+      text-align: center;
+      display: block;
+      line-height: 1;
+      padding: 4px 9px;
+      // padding: 5px;
+      color: #e98d69;
+      border-radius: 0.125rem;
+      background: #fff;
+      font-size: 1.25rem;
+      border-radius: 15px;
+      left: 50%;
+      transform: translate(-50%, 0);
+      box-shadow: 0px 3px 6px #00000029;
+
+      &:before {
+        position: absolute;
+        content: "";
+        left: 50%;
+        bottom: -8px;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border: 4px solid transparent;
+        border-top-color: #fff;
+      }
+    }
+  }
+}
+
+// specification section //
+
+.specifications {
+  margin-bottom: 80px;
+
+  &__wrapper {
+    background-color: $bg-blue;
+    padding: 4rem 4.9rem;
+    border-radius: 30px;
+
+    @include for-tablet-landscape-only {
+      padding: 3.5rem;
+    }
+
+    &--img {
+      width: 70px;
+    }
+
+    &--text {
+      label {
+        color: $primary-color;
+        font-size: 1rem;
+      }
+
+      h5 {
+        color: $thired-color;
+        font-size: 1.45rem;
+
+        @include for-tablet-portrait-up {
+          font-size: 1.7rem;
+        }
+      }
+    }
+  }
+}
+
+.description {
+  margin-bottom: 40px;
+
+  @include for-tablet-portrait-up {
+    margin-bottom: 80px;
+  }
+}
+
+.jakay {
+  &-container {
+    &--spacing {
+      padding-top: 40px;
+      padding-bottom: 40px;
+
+      @include for-tablet-portrait-up {
+        padding-top: 50px;
+        padding-bottom: 50px;
+      }
+
+      @include for-desktop {
+        padding-top: 80px;
+        padding-bottom: 80px;
+      }
+    }
+  }
+}
+
+// highlights section //
+.highlights {
+  margin-bottom: 80px;
+
+  &__box {
+    box-shadow: 0px 3px 16px #00000029;
+    border-radius: 30px;
+    padding: 18px 24px;
+
+    @include for-phone-only-up {
+      padding: 48px 58px;
+    }
+
+    &--list {
+      padding: 0;
+      margin: 0;
+      border: 0;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+
+    &--items {
+      background-image: url(../../../../../assets/images/view_vehicle/single_green_check.svg);
+      background-repeat: no-repeat;
+      background-size: 13px;
+      padding-left: 30px;
+      // margin: 10px 0;
+      margin-top: 10px;
+    }
+  }
+}
+
+.buyer-cards .card_img-fav {
+  width: 35px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  padding: 4px 9px;
+}
+
+// buyer side vehicle list  css //
+
+.buyyer {
+  &__view-vehicle {
+    & .round-head-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & img {
+        width: 25px;
+        height: 25px;
+      }
+    }
+
+    & .details-btn-grp {
+      & *+* {
+        margin-left: 0;
+      }
+
+      display: flex;
+      justify-content: space-between;
+
+      & button {
+        width: 100%;
+        height: 54px !important;
+        padding: 20px;
+      }
+    }
+
+    & .btn-lone {
+      background-image: url(../../../../../assets/images/view_vehicle/btn-orange.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 54px;
+    }
+
+    & .debt__details {
+      @include for-laptop {
+        border-left: 0.5px solid $purple-grey;
+        padding-left: 2.5rem;
+      }
+
+      &--box {
+        box-shadow: 0px 3px 16px #00000029;
+        margin-top: 1.25rem;
+        border-radius: 12px;
+
+        @include for-tablet-portrait-up {
+          border-radius: 32px;
+          -webkit-border-radius: 32px;
+          -moz-border-radius: 32px;
+          -ms-border-radius: 32px;
+          -o-border-radius: 32px;
+        }
+
+        @include for-laptop {
+          border-radius: 12px;
+        }
+
+        & .details-head {
+          // background: url(../../../../../assets/images/view_vehicle/card-orange.png) 0% 0% no-repeat padding-box;
+          background: url(../../../../../assets/images/view_vehicle/card-purple.png) 0% 0% no-repeat padding-box;
+          background-size: cover;
+          padding: 20px 30px;
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+
+          @include for-tablet-portrait-up {
+            border-top-left-radius: 32px;
+            border-top-right-radius: 32px;
+          }
+
+          @include for-laptop {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+          }
+
+          & h5 {
+            font-size: 1.75rem;
+          }
+        }
+
+        & .details-body {
+          padding: 20px 30px;
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+
+          & .price-range-input {
+            &::-webkit-slider-thumb {
+              width: 23px;
+              height: 23px;
+            }
+
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__tabs {
+    &--btngrp {
+      box-shadow: 0px 3px 16px #00000029;
+      border-radius: 12px;
+      padding: 20px 50px;
+      background-color: $white;
+
+      & .nav-link {
+        border-radius: 0;
+        padding: 0.5rem 0;
+
+        &.active {
+          border-bottom: 1px solid $secondary-color !important;
+          color: $secondary-color !important;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.seller__details {
+  padding-left: 2.5rem;
+
+  @include for-tablet-landscape-only {
+    padding-left: 0;
+  }
+
+  &--box {
+    margin-top: 1.25rem;
+
+    & .details-head {
+      border-bottom: 0.5px solid $purple-grey;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+}
+
+.vehicle__listing {
+  &.swiper {
+    padding-bottom: 180px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: unset;
+    bottom: 15%;
+    transform: unset;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    border-radius: 8px;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+
+    &:after {
+      font-size: 25px;
+    }
+
+    &:hover {
+      background-color: $primary-color;
+      color: $white;
+      transition: 0.15s all ease-in-out;
+    }
+  }
+
+  .swiper-button-prev {
+    left: unset;
+    right: 6%;
+  }
+
+  .swiper-button-next {
+    left: unset;
+    right: 0;
+  }
+
+  .view_vehicle-btn {
+    left: 1%;
+    top: unset;
+    bottom: 15%;
+    position: absolute;
+    min-width: 280px;
+  }
+}
+
+.seller__info--box {
+  background-color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 3px 16px rgb(0 0 0 / 16%);
+  border-radius: 12px;
+  padding: 1rem;
+
+  @include for-tablet-portrait-up {
+    padding: 1.875rem;
+  }
+}
+
+@include for-tablet-portrait-up {
+  .font {
+    &-md {
+      &-34 {
+        font-size: 34px !important;
+      }
+
+      &-24 {
+        font-size: 24px !important;
+      }
+    }
+  }
+
+  .section {
+    &-header {
+      font-size: 1.7rem;
+    }
+  }
+}
+
+.unsave {
+  top: 544px;
+  left: 1064px;
+  width: 93px;
+  height: 18px;
+  text-align: left;
+  font: normal normal normal 14px/18px Lexend;
+  letter-spacing: 0.14px;
+  color: #e98d69;
+  opacity: 1;
+}
+
+// listing cards css for slider //
+
+.vehicle__listing--cards .listing_cards {
+  border-radius: 32px;
+}
+
+.vehicle__listing--cards .listing_cards:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 32px;
+  transition: all ease-in-out 0.5s;
+}
+
+.vehicle__listing--cards .card_img {
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+}
+
+.vehicle__listing--cards .card_img img {
+  width: 100%;
+}
+
+.vehicle__listing--cards .card_text-box {
+  background-color: #fff;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+
+.vehicle__listing--cards .card_text-box .details_labels .details__label {
+  font-size: 1rem;
+  background-color: rgba(47, 119, 156, 0.1);
+  padding: 5px;
+  min-width: 100px;
+  border-radius: 10px;
+  text-align: center;
+  color: $primary-color;
+}
+
+.vehicle__listing--cards .card_text-box .details_location-date p img {
+  width: 16px;
+}
+
+.vehicle__listing--cards .card_text-box .details-btn-grp {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-top: 1px solid #dee2e6;
+}
+
+.vehicle__listing--cards .card_text-box .details-btn-grp .btn-outline-purple,
+.vehicle__listing--cards .card_text-box .details-btn-grp .btn-outline-red {
+  width: 50%;
+  text-align: center;
+}
+
+.bg-blue {
+  background-color: #eef4f7;
+}
+
+.vehicle__listing {
+  &-slider {
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      top: unset;
+      bottom: 15%;
+      transform: unset;
+      color: $primary-color;
+      border: 1px solid $primary-color;
+      border-radius: 8px;
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+
+      &:after {
+        font-size: 25px;
+      }
+
+      &:hover {
+        background-color: $primary-color;
+        color: $white;
+        transition: 0.15s all ease-in-out;
+      }
+    }
+
+    .swiper-button-prev {
+      left: unset;
+      right: 6%;
+
+      @include for-laptop-only {
+        right: 12%;
+      }
+
+      @include for-tablet-only {
+        right: 16%;
+      }
+
+      @include for-phone-only {
+        right: 20%;
+      }
+    }
+
+    .swiper-button-next {
+      left: unset;
+      right: 0;
+    }
+
+    .view_vehicle-btn {
+      left: 1%;
+      top: unset;
+      bottom: 15%;
+      position: absolute;
+      min-width: 280px;
+
+      @include for-tablet-only {
+        left: 0;
+        min-width: 200px;
+      }
+
+      @include for-phone-only {
+        min-width: 140px;
+        padding-inline: 30px;
+      }
+    }
+
+    & .review {
+      &-swiper {
+        padding-bottom: 180px;
+      }
+
+      &--swiper {
+        padding-bottom: 146px;
+
+        @include for-phone-only-up {
+          padding-bottom: 66px;
+        }
+
+        & .card {
+          &_img {
+            overflow: hidden;
+            max-height: 280px;
+            height: 280px;
+
+            @include for-phone-only-up {
+              max-height: 390px;
+              height: 390px;
+            }
+
+            @include for-desktop {
+              max-height: 410px;
+              height: 410px;
+            }
+
+            & .img {
+              &-fluid {
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+          }
+        }
+
+        & .view {
+          &_vehicle {
+            &-btn {
+              left: unset;
+              bottom: 0;
+
+              @include for-phone-only-up {
+                bottom: unset;
+              }
+            }
+          }
+        }
+
+        & .swiper {
+          &-button {
+            &-prev {
+              bottom: 80px;
+              right: 80px;
+
+              @include for-phone-only-up {
+                bottom: 0;
+              }
+            }
+
+            &-next {
+              bottom: 80px;
+
+              @include for-phone-only-up {
+                bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal-btn-close {
+  position: absolute;
+  right: 2%;
+  top: 17%;
+}
+
+.swiper-customise-modal img {
+  height: 600px !important;
+}
+
+.loan-type-tabs {
+  .tabs-list {
+    border: 1px solid #caced5;
+    border-radius: 5px;
+    width: fit-content;
+    background-color: $white;
+  }
+
+  .nav-item {
+    padding: 5px 10px;
+    width: 50%;
+  }
+
+  .nav-link {
+    padding: 6px 20px;
+    font-size: 14px;
+    color: $thired-color;
+    width: 100%;
+
+    @include for-phone-only {
+      width: 100%;
+    }
+
+    &.active {
+      background-color: #994c98;
+      color: $white;
+    }
+  }
+}
+
+.buyer {
+  &-detail {
+    &--swiper {
+      & .swiper {
+        &-slide {
+          height: 240px;
+          max-height: 240px;
+
+          & .pointer {
+            height: 100% !important;
+            max-height: 240px;
+          }
+
+          @include for-phone-only-up {
+            height: 340px;
+            max-height: 340px;
+
+            & .pointer {
+              height: 100% !important;
+              max-height: 340px;
+            }
+          }
+
+          @include for-desktop {
+            height: 460px;
+            max-height: 460px;
+
+            & .pointer {
+              height: 100% !important;
+              max-height: 460px;
+            }
+          }
+
+          &-visible {
+            height: 60px !important;
+
+            & .pointer {
+              height: 100% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.sb-wrapper {
+  // background-color: red;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.instagram-btn {
+  background-color: #D43089;
+  width: 56px;
+  height: 56px;
+  border-radius: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.process-label-available {
+  background-color: #14ae5c;
+  border-radius: 5px;
+  color: $white;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.process-label-unavailable {
+  background-color: #ED1C24;
+  border-radius: 5px;
+  color: $white;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.process-label-purchasep {
+  background-color: #EC8F67;
+  border-radius: 5px;
+  color: $white;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.stock-container {
+  border-radius: 10px;
+  background-color: $white;
+}
+
+.color {
+  height: 25px;
+  width: 25px;
+  background-color: blue;
+  border-radius: 100px;
+}
+
+.title {
+  color: $dark-orange;
+}
+
+.note-container {
+  background-color: $secondary-color;
+  max-width: 445px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding-inline: 32px;
+  padding-block: 16px;
+
+  p {
+    color: white;
+  }
+}
+
+.card-one {
+  padding-inline: 5%;
+}
+
+.card-four {
+  padding-inline: 10%;
+}
+
+@media only screen and (min-width: 768px) {
+  .note-container {
+    margin-left: 96px !important;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .view-vehicle__details .swiper-container-wrapper .gallery-thumbs .swiper-wrapper {
+    flex-direction: row !important;
+    width: 100%;
+  }
+
+  .view-vehicle__details .swiper-container-wrapper .swiper-container .custom-button.swiper-button-next {
+    right: 0;
+    top: calc(50% + 10px)
+  }
+
+  .view-vehicle__details .swiper-container-wrapper .swiper-container .custom-button.swiper-button-prev {
+    left: 0;
+    top: calc(50% + 10px)
+  }
+
+  .view-vehicle__details .swiper-container-wrapper .swiper-wrapper-cont {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 1420px) {
+
+  .view-vehicle__details .swiper-container-wrapper .swiper-container .swiper-button-next,
+  .view-vehicle__details .swiper-container-wrapper .swiper-container .swiper-button-prev {
+    height: 35px;
+    width: 35px;
+    background-size: 35px;
+
+  }
+
+  .swiper-free-mode>.swiper-wrapper {
+    transition-timing-function: ease-out;
+    margin: 0;
+  }
+}
+
+.swiper-container.gallery-thumbs {
+  position: relative;
+}
+
+.preview.swiper-button-next {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.custom-button.swiper-button-next {
+  // right: 95px;
+  right: 10%; //agregado para centrar
+  top: calc(50% + 10px)
+}
+
+.custom-button.swiper-button-prev {
+  // left: 0;
+  left: 10%; //agregado para centrar
+  top: calc(50% + 10px)
+}
+
+.swiper-free-mode>.swiper-wrapper {
+  transition-timing-function: ease-out;
+  margin: 0;
+}
+
+.view-vehicle__details .swiper-container-wrapper .swiper-container .custom-button.swiper-button-next,
+.view-vehicle__details .swiper-container-wrapper .swiper-container .custom-button.swiper-button-prev {
+  height: 35px;
+  width: 35px;
+  background-size: 35px;
+}
+
+.swiper-wrapper-cont {
+  // margin-left: 5px;
+  display: flex; //agregado para centrar
+  justify-content: center; //agregado para centrar
+}
+.bg-purple {
+  background-color: $light-purple;
+  border-radius: 5px;
+  color: $white;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}

@@ -1,0 +1,61 @@
+@import "../../../../function";
+@import "../../../../variables";
+
+.bg-blue {
+  background-color: #EEF4F7;
+}
+
+.search-grp {
+  border: solid 1px #D5DCE6;
+  border-radius: 5px;
+
+  & .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+  }
+
+  & .search-btn {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+  }
+}
+
+.faq{
+  &__accordion{
+    padding-bottom: 50px;
+    &  .accordion-item{
+      border: none;
+      border-bottom: 0.5px solid $purple-grey;
+
+
+    }
+  }
+  &__sub-accordion{
+    & .accordion-button{
+      box-shadow: none;
+      &::after{
+       
+        background-image:  url(/assets/images/contact/round-plus.svg);
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+      }
+      &:not(.collapsed)::after{
+        background-image:  url(/assets/images/contact/round-minus.svg);
+
+      }
+    }
+  }
+}
+
+.line-32{
+  line-height: 32px;
+}
+
+.box-shadow{
+  box-shadow: 0px 3px 10px #B1A0B470;
+}
